@@ -35,6 +35,7 @@ namespace TimeWorkTracking
         private void Form1_Load(object sender, EventArgs e)
         {
             //  GetList();
+            tbServerTWT.Text = Properties.Settings.Default.twtServerName;
             tbDatabaseTWT.Text = Properties.Settings.Default.twtDatabase;
             cbAutentificationTWT.DataSource = Properties.Settings.Default.twtAuthentication;
             cbAutentificationTWT.SelectedItem = Properties.Settings.Default.twtAuthenticationDef;
@@ -207,6 +208,7 @@ namespace TimeWorkTracking
 //test Connrection TWT (TimeWorkTracking database )
         private void btTestConnectionTwt_Click(object sender, EventArgs e)
         {
+            Properties.Settings.Default.twtServerName= tbServerTWT.Text;
             Properties.Settings.Default.twtDatabase= tbDatabaseTWT.Text;
             Properties.Settings.Default.twtAuthenticationDef= cbAutentificationTWT.SelectedText;
             Properties.Settings.Default.twtLogin= tbUserNameTWT.Text;

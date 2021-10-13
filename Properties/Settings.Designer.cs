@@ -84,30 +84,39 @@ namespace TimeWorkTracking.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:40001")]
         public string pacsHost {
             get {
                 return ((string)(this["pacsHost"]));
             }
+            set {
+                this["pacsHost"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("web_api_read")]
         public string pascLogin {
             get {
                 return ((string)(this["pascLogin"]));
             }
+            set {
+                this["pascLogin"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("ric")]
         public string pacsPassword {
             get {
                 return ((string)(this["pacsPassword"]));
+            }
+            set {
+                this["pacsPassword"] = value;
             }
         }
         
@@ -120,6 +129,30 @@ namespace TimeWorkTracking.Properties {
             }
             set {
                 this["twtAuthenticationDef"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string twtConnectionSrting {
+            get {
+                return ((string)(this["twtConnectionSrting"]));
+            }
+            set {
+                this["twtConnectionSrting"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string pacsConnectionString {
+            get {
+                return ((string)(this["pacsConnectionString"]));
+            }
+            set {
+                this["pacsConnectionString"] = value;
             }
         }
     }

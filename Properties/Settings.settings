@@ -21,17 +21,23 @@
   &lt;string&gt;SQL Server Autentification&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
-    <Setting Name="pacsHost" Type="System.String" Scope="Application">
+    <Setting Name="pacsHost" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://localhost:40001</Value>
     </Setting>
-    <Setting Name="pascLogin" Type="System.String" Scope="Application">
+    <Setting Name="pascLogin" Type="System.String" Scope="User">
       <Value Profile="(Default)">web_api_read</Value>
     </Setting>
-    <Setting Name="pacsPassword" Type="System.String" Scope="Application">
+    <Setting Name="pacsPassword" Type="System.String" Scope="User">
       <Value Profile="(Default)">ric</Value>
     </Setting>
     <Setting Name="twtAuthenticationDef" Type="System.String" Scope="User">
       <Value Profile="(Default)">Windows Autentification</Value>
+    </Setting>
+    <Setting Name="twtConnectionSrting" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="pacsConnectionString" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>
