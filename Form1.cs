@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient; //For SQL Connection
 
@@ -34,7 +34,12 @@ namespace TimeWorkTracking
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-          //  GetList();
+            //  GetList();
+            tbDatabaseTWT.Text = Properties.Settings.Default.twtDatabase;
+            cbAutentificationTWT.DataSource = Properties.Settings.Default.twtAuthentication;
+            cbAutentificationTWT.SelectedItem = Properties.Settings.Default.twtAuthenticationDef;
+            tbUserNameTWT.Text = Properties.Settings.Default.twtLogin;
+            tbPasswordTWT.Text = Properties.Settings.Default.twtPassword;
         }
 
         private void button1_Click(object sender, EventArgs e) //insert
@@ -151,8 +156,20 @@ namespace TimeWorkTracking
         private void connect_db_Click(object sender, EventArgs e)
         {
 
+/*
+            using Microsoft.Data.ConnectionUI;
 
-                string connectionString = GetConnectionString();
+            DataConnectionDialog dcd = new Microsoft.Data.ConnectionUI.DataConnectionDialog();
+            DataSource.AddStandardDataSources(dcd);
+            if (DataConnectionDialog.Show(dcd) == DialogResult.OK)
+            {
+                string cons = dcd.ConnectionString;
+            }
+*/
+
+
+
+            string connectionString = GetConnectionString();
 
                 using (SqlConnection connection = new SqlConnection())
                 {
@@ -174,5 +191,29 @@ namespace TimeWorkTracking
         {
             var ch = CheckDatabase("TimeWorkTracking");
         }
+
+        private void tabRegistration_Click(object sender, EventArgs e)
+        {
+
+        }
+//events
+        private void cbAutentificationTWT_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            bool auth = cbAutentificationTWT.Text== "SQL Server Autentification" ? true : false;
+            tbUserNameTWT.Enabled = auth;
+            tbPasswordTWT.Enabled = auth;
+        }
+
+//test Connrection TWT (TimeWorkTracking database )
+        private void btTestConnectionTwt_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.twtDatabase= tbDatabaseTWT.Text;
+            Properties.Settings.Default.twtAuthenticationDef= cbAutentificationTWT.SelectedText;
+            Properties.Settings.Default.twtLogin= tbUserNameTWT.Text;
+            Properties.Settings.Default.twtPassword= tbPasswordTWT.Text;
+
+            Properties.Settings.Default.Save();
+        }
+
     }
 }

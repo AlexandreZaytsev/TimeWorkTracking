@@ -1,7 +1,37 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TimeWorkTracking.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="twtServerName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">localhost</Value>
+    </Setting>
+    <Setting Name="twtDatabase" Type="System.String" Scope="User">
+      <Value Profile="(Default)">TimeWorkTracking</Value>
+    </Setting>
+    <Setting Name="twtLogin" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="twtPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="twtAuthentication" Type="System.Collections.Specialized.StringCollection" Scope="Application">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;Windows Autentification&lt;/string&gt;
+  &lt;string&gt;SQL Server Autentification&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="pacsHost" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://localhost:40001</Value>
+    </Setting>
+    <Setting Name="pascLogin" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">web_api_read</Value>
+    </Setting>
+    <Setting Name="pacsPassword" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ric</Value>
+    </Setting>
+    <Setting Name="twtAuthenticationDef" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Windows Autentification</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>
