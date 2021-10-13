@@ -106,7 +106,7 @@ namespace TimeWorkTracking
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(116, 34);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(132, 22);
             this.textBox1.TabIndex = 3;
@@ -114,7 +114,7 @@ namespace TimeWorkTracking
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(116, 78);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(4);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(132, 22);
             this.textBox2.TabIndex = 4;
@@ -122,7 +122,7 @@ namespace TimeWorkTracking
             // textBox3
             // 
             this.textBox3.Location = new System.Drawing.Point(116, 124);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox3.Margin = new System.Windows.Forms.Padding(4);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(132, 22);
             this.textBox3.TabIndex = 5;
@@ -130,7 +130,7 @@ namespace TimeWorkTracking
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(316, 21);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(100, 28);
             this.button1.TabIndex = 6;
@@ -141,7 +141,7 @@ namespace TimeWorkTracking
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(316, 73);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(100, 28);
             this.button2.TabIndex = 7;
@@ -152,7 +152,7 @@ namespace TimeWorkTracking
             // button3
             // 
             this.button3.Location = new System.Drawing.Point(316, 119);
-            this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button3.Margin = new System.Windows.Forms.Padding(4);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(100, 28);
             this.button3.TabIndex = 8;
@@ -164,7 +164,7 @@ namespace TimeWorkTracking
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(29, 181);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.Size = new System.Drawing.Size(421, 347);
@@ -173,7 +173,7 @@ namespace TimeWorkTracking
             // new_db
             // 
             this.new_db.Location = new System.Drawing.Point(979, 54);
-            this.new_db.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.new_db.Margin = new System.Windows.Forms.Padding(4);
             this.new_db.Name = "new_db";
             this.new_db.Size = new System.Drawing.Size(100, 28);
             this.new_db.TabIndex = 10;
@@ -184,7 +184,7 @@ namespace TimeWorkTracking
             // connect_db
             // 
             this.connect_db.Location = new System.Drawing.Point(704, 55);
-            this.connect_db.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.connect_db.Margin = new System.Windows.Forms.Padding(4);
             this.connect_db.Name = "connect_db";
             this.connect_db.Size = new System.Drawing.Size(100, 28);
             this.connect_db.TabIndex = 11;
@@ -195,7 +195,7 @@ namespace TimeWorkTracking
             // button4
             // 
             this.button4.Location = new System.Drawing.Point(699, 180);
-            this.button4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button4.Margin = new System.Windows.Forms.Padding(4);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(100, 28);
             this.button4.TabIndex = 12;
@@ -205,26 +205,29 @@ namespace TimeWorkTracking
             // 
             // tabForm
             // 
+            this.tabForm.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
             this.tabForm.Controls.Add(this.tabRegistration);
             this.tabForm.Controls.Add(this.tabReport);
             this.tabForm.Controls.Add(this.tabSetting);
-            this.tabForm.HotTrack = true;
+            this.tabForm.ItemSize = new System.Drawing.Size(120, 22);
             this.tabForm.Location = new System.Drawing.Point(583, 124);
-            this.tabForm.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+            this.tabForm.Margin = new System.Windows.Forms.Padding(5);
             this.tabForm.Name = "tabForm";
             this.tabForm.Padding = new System.Drawing.Point(1, 1);
+            this.tabForm.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.tabForm.SelectedIndex = 0;
             this.tabForm.Size = new System.Drawing.Size(617, 571);
+            this.tabForm.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabForm.TabIndex = 13;
             // 
             // tabRegistration
             // 
             this.tabRegistration.BackColor = System.Drawing.Color.Transparent;
-            this.tabRegistration.Location = new System.Drawing.Point(4, 23);
-            this.tabRegistration.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabRegistration.Location = new System.Drawing.Point(4, 26);
+            this.tabRegistration.Margin = new System.Windows.Forms.Padding(4);
             this.tabRegistration.Name = "tabRegistration";
-            this.tabRegistration.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabRegistration.Size = new System.Drawing.Size(609, 544);
+            this.tabRegistration.Padding = new System.Windows.Forms.Padding(4);
+            this.tabRegistration.Size = new System.Drawing.Size(609, 541);
             this.tabRegistration.TabIndex = 0;
             this.tabRegistration.Text = "Регистрация";
             this.tabRegistration.Click += new System.EventHandler(this.tabRegistration_Click);
@@ -232,11 +235,11 @@ namespace TimeWorkTracking
             // tabReport
             // 
             this.tabReport.BackColor = System.Drawing.Color.Transparent;
-            this.tabReport.Location = new System.Drawing.Point(4, 23);
-            this.tabReport.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabReport.Location = new System.Drawing.Point(4, 26);
+            this.tabReport.Margin = new System.Windows.Forms.Padding(4);
             this.tabReport.Name = "tabReport";
-            this.tabReport.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabReport.Size = new System.Drawing.Size(609, 544);
+            this.tabReport.Padding = new System.Windows.Forms.Padding(4);
+            this.tabReport.Size = new System.Drawing.Size(609, 541);
             this.tabReport.TabIndex = 1;
             this.tabReport.Text = "Отчеты";
             // 
@@ -245,11 +248,11 @@ namespace TimeWorkTracking
             this.tabSetting.BackColor = System.Drawing.Color.Transparent;
             this.tabSetting.Controls.Add(this.groupBox2);
             this.tabSetting.Controls.Add(this.groupBox1);
-            this.tabSetting.Location = new System.Drawing.Point(4, 23);
+            this.tabSetting.Location = new System.Drawing.Point(4, 26);
             this.tabSetting.Margin = new System.Windows.Forms.Padding(1);
             this.tabSetting.Name = "tabSetting";
             this.tabSetting.Padding = new System.Windows.Forms.Padding(1);
-            this.tabSetting.Size = new System.Drawing.Size(609, 544);
+            this.tabSetting.Size = new System.Drawing.Size(609, 541);
             this.tabSetting.TabIndex = 2;
             this.tabSetting.Text = "Настройки";
             // 
@@ -423,6 +426,7 @@ namespace TimeWorkTracking
             this.cbAutentificationTWT.Name = "cbAutentificationTWT";
             this.cbAutentificationTWT.Size = new System.Drawing.Size(261, 24);
             this.cbAutentificationTWT.TabIndex = 4;
+            this.cbAutentificationTWT.SelectedIndexChanged += new System.EventHandler(this.cbAutentificationTWT_SelectedIndexChanged);
             // 
             // label5
             // 
@@ -481,7 +485,7 @@ namespace TimeWorkTracking
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
