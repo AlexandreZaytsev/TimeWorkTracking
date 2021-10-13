@@ -223,6 +223,7 @@ namespace TimeWorkTracking
             // tabRegistration
             // 
             this.tabRegistration.BackColor = System.Drawing.Color.Transparent;
+            this.tabRegistration.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tabRegistration.Location = new System.Drawing.Point(4, 26);
             this.tabRegistration.Margin = new System.Windows.Forms.Padding(4);
             this.tabRegistration.Name = "tabRegistration";
@@ -235,6 +236,7 @@ namespace TimeWorkTracking
             // tabReport
             // 
             this.tabReport.BackColor = System.Drawing.Color.Transparent;
+            this.tabReport.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tabReport.Location = new System.Drawing.Point(4, 26);
             this.tabReport.Margin = new System.Windows.Forms.Padding(4);
             this.tabReport.Name = "tabReport";
@@ -246,6 +248,7 @@ namespace TimeWorkTracking
             // tabSetting
             // 
             this.tabSetting.BackColor = System.Drawing.Color.Transparent;
+            this.tabSetting.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tabSetting.Controls.Add(this.groupBox2);
             this.tabSetting.Controls.Add(this.groupBox1);
             this.tabSetting.Location = new System.Drawing.Point(4, 26);
