@@ -35,12 +35,21 @@ namespace TimeWorkTracking
         private void Form1_Load(object sender, EventArgs e)
         {
             //  GetList();
+
+            //Read Setting
+            //TimeWorkTracking DataBase
             tbServerTWT.Text = Properties.Settings.Default.twtServerName;
             tbDatabaseTWT.Text = Properties.Settings.Default.twtDatabase;
             cbAutentificationTWT.DataSource = Properties.Settings.Default.twtAuthentication;
             cbAutentificationTWT.SelectedItem = Properties.Settings.Default.twtAuthenticationDef;
             tbUserNameTWT.Text = Properties.Settings.Default.twtLogin;
             tbPasswordTWT.Text = Properties.Settings.Default.twtPassword;
+
+            //PACS DataBase
+            tbHostNamePACS.Text = Properties.Settings.Default.pacsHost;
+            tbUserNamePACS.Text = Properties.Settings.Default.pascLogin;
+            tbPasswordPASC.Text = Properties.Settings.Default.pacsPassword;
+
         }
 
         private void button1_Click(object sender, EventArgs e) //insert
@@ -208,15 +217,28 @@ namespace TimeWorkTracking
 //test Connrection TWT (TimeWorkTracking database )
         private void btTestConnectionTwt_Click(object sender, EventArgs e)
         {
+            //TimeWorkTracking DataBase
             Properties.Settings.Default.twtServerName= tbServerTWT.Text;
             Properties.Settings.Default.twtDatabase= tbDatabaseTWT.Text;
             Properties.Settings.Default.twtAuthenticationDef= cbAutentificationTWT.SelectedText;
             Properties.Settings.Default.twtLogin= tbUserNameTWT.Text;
             Properties.Settings.Default.twtPassword= tbPasswordTWT.Text;
 
+//            twtConnectionSrting
+
             Properties.Settings.Default.Save();
         }
 
+        private void btTestConnectionPacs_Click(object sender, EventArgs e)
+        {
+            //PACS DataBase
+            Properties.Settings.Default.pacsHost=tbHostNamePACS.Text;
+            Properties.Settings.Default.pascLogin=tbUserNamePACS.Text;
+            Properties.Settings.Default.pacsPassword=tbPasswordPASC.Text;
 
+//            pacsConnectionString
+
+            Properties.Settings.Default.Save();
+        }
     }
 }
