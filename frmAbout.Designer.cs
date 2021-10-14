@@ -1,7 +1,7 @@
 ﻿
 namespace TimeWorkTracking
 {
-    partial class AboutBox1
+    partial class frmAbout
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -28,7 +28,7 @@ namespace TimeWorkTracking
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutBox1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAbout));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.logoPictureBox = new System.Windows.Forms.PictureBox();
             this.labelProductName = new System.Windows.Forms.Label();
@@ -150,7 +150,7 @@ namespace TimeWorkTracking
             this.okButton.TabIndex = 24;
             this.okButton.Text = "&ОК";
             // 
-            // AboutBox1
+            // frmAbout
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -160,7 +160,7 @@ namespace TimeWorkTracking
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "AboutBox1";
+            this.Name = "frmAbout";
             this.Padding = new System.Windows.Forms.Padding(9);
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

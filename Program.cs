@@ -15,26 +15,9 @@ namespace TimeWorkTracking
         [STAThread]
         static void Main()
         {
-
-            /*
-            Console.WriteLine("Getting Connection ...");
-            SqlConnection conn = DBUtils.GetDBConnection();
-            try
-            {
-                Console.WriteLine("Openning Connection ...");
-                conn.Open();
-                Console.WriteLine("Connection successful!");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: " + e.Message);
-            }
-            Console.Read();
-            */
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new frmMain());
         }
     }
 }

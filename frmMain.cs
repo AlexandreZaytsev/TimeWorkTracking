@@ -11,9 +11,9 @@ using System.Data.SqlClient; //For SQL Connection
 
 namespace TimeWorkTracking
 {
-    public partial class Form1 : Form
+    public partial class frmMain : Form
     {
-        public Form1()
+        public frmMain()
         {
             InitializeComponent();
         }
@@ -45,10 +45,16 @@ namespace TimeWorkTracking
             tbUserNameTWT.Text = Properties.Settings.Default.twtLogin;
             tbPasswordTWT.Text = Properties.Settings.Default.twtPassword;
 
+
             //PACS DataBase
             tbHostNamePACS.Text = Properties.Settings.Default.pacsHost;
             tbUserNamePACS.Text = Properties.Settings.Default.pascLogin;
             tbPasswordPASC.Text = Properties.Settings.Default.pacsPassword;
+
+            btCreateDBTwt.Visible = false;
+
+           // btTestConnectionTwt_Click(null, null);
+
 
         }
 
@@ -217,16 +223,34 @@ namespace TimeWorkTracking
 //test Connrection TWT (TimeWorkTracking database )
         private void btTestConnectionTwt_Click(object sender, EventArgs e)
         {
+            string statusDB = DataBase.GetSqlConnection(cbAutentificationTWT.Text, tbServerTWT.Text, tbDatabaseTWT.Text, tbUserNameTWT.Text, tbPasswordTWT.Text);
+            switch (statusDB) 
+            {
+                case "-1":      //бд не существует
+                    statusDB = "";
+                    picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.no;
+                    btCreateDBTwt.Visible = true;
+                    break;
+                case "-9":      //соединение установить не удалось
+                    statusDB = "";
+                    picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.no;
+                    btCreateDBTwt.Visible = false;
+                    break;
+                default:        //все чики-пуки
+                    picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.ok;
+                    btCreateDBTwt.Visible = false;
+                    break;
+            }
+                
+            Properties.Settings.Default.twtConnectionSrting = statusDB;
             //TimeWorkTracking DataBase
             Properties.Settings.Default.twtServerName= tbServerTWT.Text;
             Properties.Settings.Default.twtDatabase= tbDatabaseTWT.Text;
-            Properties.Settings.Default.twtAuthenticationDef= cbAutentificationTWT.SelectedText;
+            Properties.Settings.Default.twtAuthenticationDef= cbAutentificationTWT.Text;
             Properties.Settings.Default.twtLogin= tbUserNameTWT.Text;
             Properties.Settings.Default.twtPassword= tbPasswordTWT.Text;
-
-//            twtConnectionSrting
-
             Properties.Settings.Default.Save();
+
         }
 
         private void btTestConnectionPacs_Click(object sender, EventArgs e)
