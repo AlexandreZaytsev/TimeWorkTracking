@@ -5,6 +5,7 @@ using System.Text;
 //using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using System.Data;
 
 namespace TimeWorkTracking
 {
@@ -28,6 +29,39 @@ namespace TimeWorkTracking
            Console.Read();
            */
 
+        //Создать БД
+        public static bool CreateDataBase(string connectionString, string databasename) 
+        {
+            bool ret = false;
+            string cmdText = "CREATE DATABASE @database";
+            using (var sqlConnection = new SqlConnection(connectionString))
+            {
+                using (var sqlCmd = new SqlCommand(cmdText, sqlConnection))
+                {
+                    sqlCmd.Parameters.Add("@database", System.Data.SqlDbType.NVarChar).Value = databasename;
+                    try
+                    {
+                        sqlConnection.Open();
+                        sqlCmd.ExecuteNonQuery();
+                        MessageBox.Show("База данных создана", "Создание Базы Данных", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        ret = true;
+                    }
+                    catch (System.Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString(), "MyProgram", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    finally
+                    {
+                        if (sqlConnection.State == ConnectionState.Open)
+                        {
+                            sqlConnection.Close();
+                        }
+                    }
+                }
+            }
+            return ret;
+        }
+        //Создать строку подключения
         public static string GetSqlConnection(string autehtification, string datasource, string database, string username, string password) 
         {
             string connectionString;
@@ -46,7 +80,7 @@ namespace TimeWorkTracking
                     break;
             }
 
-            var cmdText = "select count(*) from master.dbo.sysdatabases where name=@database";
+            string cmdText = "select count(*) from master.dbo.sysdatabases where name=@database";
 
             using (var sqlConnection = new SqlConnection(connectionString))
             {
@@ -81,12 +115,20 @@ namespace TimeWorkTracking
                             connectionString = "-1";
                         }
                     }
+                    /*
+                    catch (System.Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString(), "MyProgram", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    */
                     catch (SqlException ex)
                     {
                         for (int i = 0; i < ex.Errors.Count; i++)
                         {
+                            //https://docs.microsoft.com/ru-ru/sql/relational-databases/errors-events/database-engine-events-and-errors?view=sql-server-ver15#errors-4000-to-4999
                             errorMessages.Append("Index #" + i + "\n" +
                                 "Message: " + ex.Errors[i].Message + "\n" +
+                                "Number: " + ex.Errors[i].Number + "\n" +
                                 "LineNumber: " + ex.Errors[i].LineNumber + "\n" +
                                 "Source: " + ex.Errors[i].Source + "\n" +
                                 "Procedure: " + ex.Errors[i].Procedure + "\n");
