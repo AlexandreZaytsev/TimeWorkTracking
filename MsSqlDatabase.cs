@@ -5,6 +5,7 @@ using System.Text;
 //using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using System.Data;
 
 namespace TimeWorkTracking
 {
@@ -135,21 +136,10 @@ namespace TimeWorkTracking
            Console.Read();
            */
 
-        public static string CheckSqlConnect(string connectionString) 
+        public static string GetSqlConnection(string autehtification, string datasource, string database, string username, string password) 
         {
-            if (ConnectExists(connectionString))
-            {
-                if (DatabaseExists(connectionString))
-                    return connectionString;
-                else
-                    return "-1";
-            }
-            else
-                return "-9";
-
-/*
-
-                StringBuilder errorMessages = new StringBuilder();
+            string connectionString;
+            StringBuilder errorMessages = new StringBuilder();
 
             switch (autehtification)
             {
@@ -164,7 +154,7 @@ namespace TimeWorkTracking
                     break;
             }
 
-            var cmdText = "select count(*) from master.dbo.sysdatabases where name=@database";
+            string cmdText = "select count(*) from master.dbo.sysdatabases where name=@database";
 
             using (var sqlConnection = new SqlConnection(connectionString))
             {
@@ -199,12 +189,20 @@ namespace TimeWorkTracking
                             connectionString = "-1";
                         }
                     }
+                    /*
+                    catch (System.Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString(), "MyProgram", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    */
                     catch (SqlException ex)
                     {
                         for (int i = 0; i < ex.Errors.Count; i++)
                         {
+                            //https://docs.microsoft.com/ru-ru/sql/relational-databases/errors-events/database-engine-events-and-errors?view=sql-server-ver15#errors-4000-to-4999
                             errorMessages.Append("Index #" + i + "\n" +
                                 "Message: " + ex.Errors[i].Message + "\n" +
+                                "Number: " + ex.Errors[i].Number + "\n" +
                                 "LineNumber: " + ex.Errors[i].LineNumber + "\n" +
                                 "Source: " + ex.Errors[i].Source + "\n" +
                                 "Procedure: " + ex.Errors[i].Procedure + "\n");

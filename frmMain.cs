@@ -292,5 +292,17 @@ namespace TimeWorkTracking
 
             Properties.Settings.Default.Save();
         }
+//создать бд
+        private void btCreateDBTwt_Click(object sender, EventArgs e)
+        {
+            string connectionstring = Properties.Settings.Default.twtConnectionSrting;
+            if (connectionstring != "" && tbDatabaseTWT.Text!="") 
+            {
+                if (DataBase.CreateDataBase(connectionstring, tbDatabaseTWT.Text))
+                {
+                    btCreateDBTwt.Visible = false;
+                }
+            }
+        }
     }
 }
