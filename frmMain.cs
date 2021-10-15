@@ -44,9 +44,14 @@ namespace TimeWorkTracking
                 cbAutentificationTWT.SelectedItem = Properties.Settings.Default.twtAuthenticationDef;
             else
                 cbAutentificationTWT.SelectedItem= "Windows Autentification";
+
             tbUserNameTWT.Text = Properties.Settings.Default.twtLogin;
             tbPasswordTWT.Text = Properties.Settings.Default.twtPassword;
 
+            if (Properties.Settings.Default.twtConnectionSrting!="")
+                picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.ok;
+            else
+                picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.no;
 
             //PACS DataBase
             tbHostNamePACS.Text = Properties.Settings.Default.pacsHost;
@@ -214,7 +219,7 @@ namespace TimeWorkTracking
 //events
         private void cbAutentificationTWT_SelectedIndexChanged(object sender, EventArgs e)
         {
-            bool auth = cbAutentificationTWT.Text== "SQL Server Autentification" ? true : false;
+            bool auth = cbAutentificationTWT.Text== "SQL Server Autentification";   //если да то true если нет то false
             tbUserNameTWT.Enabled = auth;
             tbPasswordTWT.Enabled = auth;
         }
@@ -256,13 +261,13 @@ namespace TimeWorkTracking
                     Messages.Append("Соединение:" + "\n" +
                                 $"\tСервер: {tbServerTWT.Text}" + "\n" +
                                 $"\tАутентификация: {cbAutentificationTWT.Text}" + "\n" + msg +
-                                $"\tБаза данных: {tbDatabaseTWT.Text}" + "\n\n" +
+                                $"\tБаза данных: {tbDatabaseTWT.Text}" + "\n" +
                                 "установить не удалось");
                     break;
                 default:        //все чики-пуки
                     picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.ok;
                     btCreateDBTwt.Visible = false;
-                    Messages.Append("Соединение устанолено");
+                    Messages.Append("Соединение установлено");
                     break;
             }
             MessageBox.Show(Messages.ToString(),
@@ -298,10 +303,10 @@ namespace TimeWorkTracking
             string connectionstring = Properties.Settings.Default.twtConnectionSrting;
             if (connectionstring != "" && tbDatabaseTWT.Text!="") 
             {
-     //           if (MsSqlDatabase.CreateDataBase(connectionstring, tbDatabaseTWT.Text))
-     //           {
-     //               btCreateDBTwt.Visible = false;
-     //           }
+             //   if (MsSqlDatabase.CreateDataBase(connectionstring))
+             //   {
+             //       btCreateDBTwt.Visible = false;
+             //   }
             }
         }
     }

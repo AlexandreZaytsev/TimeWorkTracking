@@ -43,9 +43,11 @@ namespace TimeWorkTracking
         {
             bool ret = false;
             StringBuilder errorMessages = new StringBuilder();
-            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
-       //     var databaseName = sqlConnectionStringBuilder.InitialCatalog;
-            sqlConnectionStringBuilder.InitialCatalog = "master";
+            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString)
+            {
+                //     var databaseName = sqlConnectionStringBuilder.InitialCatalog;
+                InitialCatalog = "master"
+            };
             using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
             {
                 try
