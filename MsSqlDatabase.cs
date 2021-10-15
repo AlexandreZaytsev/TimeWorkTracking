@@ -116,31 +116,21 @@ namespace TimeWorkTracking
             }
         }
 
-
-        //**************
-
-
-        /*
-           Console.WriteLine("Getting Connection ...");
-           SqlConnection conn = DBUtils.GetDBConnection();
-           try
-           {
-               Console.WriteLine("Openning Connection ...");
-               conn.Open();
-               Console.WriteLine("Connection successful!");
-           }
-           catch (Exception e)
-           {
-               Console.WriteLine("Error: " + e.Message);
-           }
-           Console.Read();
-           */
-
-        public static string GetSqlConnection(string autehtification, string datasource, string database, string username, string password) 
+        public static string GetSqlConnection(string connectionString) 
         {
-            string connectionString;
-            StringBuilder errorMessages = new StringBuilder();
-
+            if (ConnectExists(connectionString))
+            {
+                if (DatabaseExists(connectionString))
+                    return connectionString;
+                else
+                    return "-1";
+            }
+            else
+                return "-9";
+            
+            //string connectionString;
+           // StringBuilder errorMessages = new StringBuilder();
+            /*
             switch (autehtification)
             {
                 case "SQL Server Autentification":
@@ -155,7 +145,8 @@ namespace TimeWorkTracking
             }
 
             string cmdText = "select count(*) from master.dbo.sysdatabases where name=@database";
-
+            */
+            /*
             using (var sqlConnection = new SqlConnection(connectionString))
             {
                 using (var sqlCmd = new SqlCommand(cmdText, sqlConnection))
@@ -189,13 +180,15 @@ namespace TimeWorkTracking
                             connectionString = "-1";
                         }
                     }
+                    */
                     /*
                     catch (System.Exception ex)
                     {
                         MessageBox.Show(ex.ToString(), "MyProgram", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     */
-                    catch (SqlException ex)
+            /*  
+            catch (SqlException ex)
                     {
                         for (int i = 0; i < ex.Errors.Count; i++)
                         {
@@ -215,24 +208,16 @@ namespace TimeWorkTracking
                     }
                     finally
                     {
-
-                        if (rdr != null)
-                        {
-                            rdr.Close();                        //close the reader
-                        }
-
                         if (sqlConnection != null)
                         {
                             sqlConnection.Close();                         //Close the connection
                         }
                     }
+            */  
+   //         }
+     //       }
 
-
-
-                }
-            }
-
-            */
+         
 
 
 
@@ -277,18 +262,7 @@ namespace TimeWorkTracking
                                 }
                 */
  
-      //      return connectionString;
+     //       return connectionString;
         }
-
-
-    public static void GetDBConnection()
-        {
-            string datasource = @".\SQLEXPRESS";
-            string username = @"RIC\zaytsev";// "sa";
-            string password = "";// "1234";
-  //          return DataBase.GetDBConnection(datasource, database, username, password);
-            string database = "TimeWorkTracking";
-        }
-
     }
 }
