@@ -40,7 +40,10 @@ namespace TimeWorkTracking
             //TimeWorkTracking DataBase
             tbServerTWT.Text = Properties.Settings.Default.twtServerName;
             tbDatabaseTWT.Text = Properties.Settings.Default.twtDatabase;
-            cbAutentificationTWT.SelectedItem = Properties.Settings.Default.twtAuthenticationDef;
+            if (Properties.Settings.Default.twtAuthenticationDef!="") 
+                cbAutentificationTWT.SelectedItem = Properties.Settings.Default.twtAuthenticationDef;
+            else
+                cbAutentificationTWT.SelectedItem= "Windows Autentification";
             tbUserNameTWT.Text = Properties.Settings.Default.twtLogin;
             tbPasswordTWT.Text = Properties.Settings.Default.twtPassword;
 
@@ -94,7 +97,7 @@ namespace TimeWorkTracking
         {
             String str;
             SqlConnection myConn = new SqlConnection("Server=localhost;Integrated security=SSPI;database=master");
-
+/*
             str = "CREATE DATABASE MyDatabase ON PRIMARY " +
              "(NAME = TimeWorkTracking_dt, " +
              "FILENAME = 'C:\\MyDatabaseData.mdf', " +
@@ -104,7 +107,7 @@ namespace TimeWorkTracking
              "SIZE = 1MB, " +
              "MAXSIZE = 5MB, " +
              "FILEGROWTH = 10%)";
-
+*/
             str = "CREATE DATABASE TimeWorkTracking_dt";
 
             SqlCommand myCommand = new SqlCommand(str, myConn);
@@ -202,10 +205,7 @@ namespace TimeWorkTracking
 
         }
 
-        private void button4_Click_1(object sender, EventArgs e)
-        {
-            var ch = CheckDatabase("TimeWorkTracking");
-        }
+
 
         private void tabRegistration_Click(object sender, EventArgs e)
         {

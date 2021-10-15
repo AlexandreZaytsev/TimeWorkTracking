@@ -41,7 +41,6 @@ namespace TimeWorkTracking
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.new_db = new System.Windows.Forms.Button();
             this.connect_db = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
             this.tabForm = new System.Windows.Forms.TabControl();
             this.tabRegistration = new System.Windows.Forms.TabPage();
             this.tabReport = new System.Windows.Forms.TabPage();
@@ -187,16 +186,6 @@ namespace TimeWorkTracking
             this.connect_db.UseVisualStyleBackColor = true;
             this.connect_db.Click += new System.EventHandler(this.connect_db_Click);
             // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(524, 146);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 12;
-            this.button4.Text = "check_db";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click_1);
-            // 
             // tabForm
             // 
             this.tabForm.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
@@ -204,7 +193,7 @@ namespace TimeWorkTracking
             this.tabForm.Controls.Add(this.tabReport);
             this.tabForm.Controls.Add(this.tabSetting);
             this.tabForm.ItemSize = new System.Drawing.Size(120, 22);
-            this.tabForm.Location = new System.Drawing.Point(437, 101);
+            this.tabForm.Location = new System.Drawing.Point(413, 127);
             this.tabForm.Margin = new System.Windows.Forms.Padding(4);
             this.tabForm.Name = "tabForm";
             this.tabForm.Padding = new System.Drawing.Point(1, 1);
@@ -509,7 +498,6 @@ namespace TimeWorkTracking
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1000, 586);
             this.Controls.Add(this.tabForm);
-            this.Controls.Add(this.button4);
             this.Controls.Add(this.connect_db);
             this.Controls.Add(this.new_db);
             this.Controls.Add(this.dataGridView1);
@@ -553,7 +541,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button new_db;
         private System.Windows.Forms.Button connect_db;
-        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.TabControl tabForm;
         private System.Windows.Forms.TabPage tabRegistration;
         private System.Windows.Forms.TabPage tabReport;
@@ -575,7 +562,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox cbAutentificationTWT;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox tbDatabaseTWT;
         private System.Windows.Forms.Button btTestConnectionTwt;
         private System.Windows.Forms.Button btCreateDBTwt;
