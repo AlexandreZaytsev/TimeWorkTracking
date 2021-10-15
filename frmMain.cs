@@ -273,7 +273,7 @@ namespace TimeWorkTracking
             MessageBox.Show(Messages.ToString(),
                             "Подключение к Базе Данных",
                              MessageBoxButtons.OK,
-                             MessageBoxIcon.Exclamation);
+                             MessageBoxIcon.Warning);
                 
             Properties.Settings.Default.twtConnectionSrting = statusDB;
             //TimeWorkTracking DataBase
@@ -308,6 +308,22 @@ namespace TimeWorkTracking
              //       btCreateDBTwt.Visible = false;
              //   }
             }
+        }
+
+        //открыть окно настроек
+        private void picSetting_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void picSetting_MouseUp(object sender, MouseEventArgs e)
+        {
+           picSetting.BackColor= System.Drawing.SystemColors.Control;
+        }
+
+        private void picSetting_MouseDown(object sender, MouseEventArgs e)
+        {
+            picSetting.BackColor = System.Drawing.SystemColors.ControlDark;
         }
     }
 }
