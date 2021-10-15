@@ -50,7 +50,7 @@
     <Compile Include="frmAbout.Designer.cs">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataBase.cs" />
+    <Compile Include="MsSqlDatabase.cs" />
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,10 +96,10 @@
     <None Include="Resources\db_err.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ok.png" />
+    <None Include="Resources\no.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\no.png" />
+    <None Include="Resources\ok.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

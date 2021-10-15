@@ -29,6 +29,7 @@ namespace TimeWorkTracking
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -47,6 +48,7 @@ namespace TimeWorkTracking
             this.tabReport = new System.Windows.Forms.TabPage();
             this.tabSetting = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label13 = new System.Windows.Forms.Label();
             this.tbPasswordPASC = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.tbUserNamePACS = new System.Windows.Forms.TextBox();
@@ -56,7 +58,9 @@ namespace TimeWorkTracking
             this.btTestConnectionPacs = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label12 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.btCreateDBTwt = new System.Windows.Forms.Button();
+            this.tbDatabaseTWT = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.tbPasswordTWT = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -64,20 +68,17 @@ namespace TimeWorkTracking
             this.cbAutentificationTWT = new System.Windows.Forms.ComboBox();
             this.tbServerTWT = new System.Windows.Forms.TextBox();
             this.tbUserNameTWT = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.tbDatabaseTWT = new System.Windows.Forms.TextBox();
             this.btTestConnectionTwt = new System.Windows.Forms.Button();
-            this.picStatusTWT = new System.Windows.Forms.PictureBox();
-            this.label13 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.picStatusTWT = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabForm.SuspendLayout();
             this.tabSetting.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picStatusTWT)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picStatusTWT)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -268,6 +269,15 @@ namespace TimeWorkTracking
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(8, 16);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(187, 13);
+            this.label13.TabIndex = 15;
+            this.label13.Text = "Подключение к СКУД web Сервису";
+            // 
             // tbPasswordPASC
             // 
             this.tbPasswordPASC.Location = new System.Drawing.Point(98, 86);
@@ -360,6 +370,15 @@ namespace TimeWorkTracking
             this.label12.TabIndex = 13;
             this.label12.Text = "Подключение к SQL базе днных";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(9, 141);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(84, 13);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "Database Name";
+            // 
             // btCreateDBTwt
             // 
             this.btCreateDBTwt.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
@@ -369,6 +388,14 @@ namespace TimeWorkTracking
             this.btCreateDBTwt.TabIndex = 11;
             this.btCreateDBTwt.Text = "Создать БД";
             this.btCreateDBTwt.UseVisualStyleBackColor = true;
+            // 
+            // tbDatabaseTWT
+            // 
+            this.tbDatabaseTWT.BackColor = System.Drawing.Color.FloralWhite;
+            this.tbDatabaseTWT.Location = new System.Drawing.Point(99, 138);
+            this.tbDatabaseTWT.Name = "tbDatabaseTWT";
+            this.tbDatabaseTWT.Size = new System.Drawing.Size(197, 20);
+            this.tbDatabaseTWT.TabIndex = 1;
             // 
             // label11
             // 
@@ -409,6 +436,9 @@ namespace TimeWorkTracking
             // 
             this.cbAutentificationTWT.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAutentificationTWT.FormattingEnabled = true;
+            this.cbAutentificationTWT.Items.AddRange(new object[] {
+            "Windows Autentification",
+            "SQL Server Autentification"});
             this.cbAutentificationTWT.Location = new System.Drawing.Point(99, 65);
             this.cbAutentificationTWT.Name = "cbAutentificationTWT";
             this.cbAutentificationTWT.Size = new System.Drawing.Size(197, 21);
@@ -429,15 +459,6 @@ namespace TimeWorkTracking
             this.tbUserNameTWT.Size = new System.Drawing.Size(197, 20);
             this.tbUserNameTWT.TabIndex = 6;
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(9, 141);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(84, 13);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "Database Name";
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -446,14 +467,6 @@ namespace TimeWorkTracking
             this.label6.Size = new System.Drawing.Size(60, 13);
             this.label6.TabIndex = 5;
             this.label6.Text = "User Name";
-            // 
-            // tbDatabaseTWT
-            // 
-            this.tbDatabaseTWT.BackColor = System.Drawing.Color.FloralWhite;
-            this.tbDatabaseTWT.Location = new System.Drawing.Point(99, 138);
-            this.tbDatabaseTWT.Name = "tbDatabaseTWT";
-            this.tbDatabaseTWT.Size = new System.Drawing.Size(197, 20);
-            this.tbDatabaseTWT.TabIndex = 1;
             // 
             // btTestConnectionTwt
             // 
@@ -466,28 +479,9 @@ namespace TimeWorkTracking
             this.btTestConnectionTwt.UseVisualStyleBackColor = true;
             this.btTestConnectionTwt.Click += new System.EventHandler(this.btTestConnectionTwt_Click);
             // 
-            // picStatusTWT
-            // 
-            this.picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.no;
-            this.picStatusTWT.Location = new System.Drawing.Point(273, 10);
-            this.picStatusTWT.Name = "picStatusTWT";
-            this.picStatusTWT.Size = new System.Drawing.Size(23, 23);
-            this.picStatusTWT.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picStatusTWT.TabIndex = 12;
-            this.picStatusTWT.TabStop = false;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(8, 16);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(187, 13);
-            this.label13.TabIndex = 15;
-            this.label13.Text = "Подключение к СКУД web Сервису";
-            // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::TimeWorkTracking.Properties.Resources.no;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(272, 11);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(23, 23);
@@ -495,11 +489,21 @@ namespace TimeWorkTracking
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;
             // 
+            // picStatusTWT
+            // 
+            this.picStatusTWT.Image = ((System.Drawing.Image)(resources.GetObject("picStatusTWT.Image")));
+            this.picStatusTWT.Location = new System.Drawing.Point(273, 10);
+            this.picStatusTWT.Name = "picStatusTWT";
+            this.picStatusTWT.Size = new System.Drawing.Size(23, 23);
+            this.picStatusTWT.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picStatusTWT.TabIndex = 12;
+            this.picStatusTWT.TabStop = false;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1200, 618);
+            this.ClientSize = new System.Drawing.Size(922, 618);
             this.Controls.Add(this.tabForm);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.connect_db);
@@ -524,8 +528,8 @@ namespace TimeWorkTracking
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picStatusTWT)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picStatusTWT)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -8,8 +8,115 @@ using System.Windows.Forms;
 
 namespace TimeWorkTracking
 {
-    class DataBase
+    class MsSqlDatabase
     {
+        //пересоздать БД 
+        public void Create(string connectionstring)
+        {
+            if (DatabaseExists(connectionstring))
+            {
+                DropDatabase(connectionstring);
+            }
+            CreateDatabase(connectionstring);
+        }
+
+        //создать БД по строке подключения
+        private static void CreateDatabase(string connectionString)
+        {
+            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+            var databaseName = sqlConnectionStringBuilder.InitialCatalog;
+            sqlConnectionStringBuilder.InitialCatalog = "master";
+            using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
+            {
+                sqlConnection.Open();
+                using (var sqlCommand = sqlConnection.CreateCommand())
+                {
+                    sqlCommand.CommandText = $"CREATE DATABASE {databaseName}";
+                    sqlCommand.ExecuteNonQuery();
+                }
+            }
+        }
+
+        //проверить что соединение есть в принципе
+        private static bool ConnectExists(string connectionString)
+        {
+            bool ret = false;
+            StringBuilder errorMessages = new StringBuilder();
+            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+            var databaseName = sqlConnectionStringBuilder.InitialCatalog;
+            sqlConnectionStringBuilder.InitialCatalog = "master";
+            using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
+            {
+                try
+                {
+                    sqlConnection.Open();
+                    ret = true;
+                }
+                catch (SqlException ex)
+                {
+                    for (int i = 0; i < ex.Errors.Count; i++)
+                    {
+                        errorMessages.Append("Index #" + i + "\n" +
+                            "Message: " + ex.Errors[i].Message + "\n" +
+                            "Number: " + ex.Errors[i].Number + "\n" +
+                            "LineNumber: " + ex.Errors[i].LineNumber + "\n" +
+                            "Source: " + ex.Errors[i].Source + "\n" +
+                            "Procedure: " + ex.Errors[i].Procedure + "\n");
+                    }
+                    MessageBox.Show(errorMessages.ToString(),
+                                   "Подключение к Базе Данных",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Exclamation);
+                }
+                finally
+                {
+                    if (sqlConnection != null)
+                    {
+                        sqlConnection.Close();                         //Close the connection
+                    }
+                }
+                return ret;
+            }
+        }
+
+        //проверить что бд существует
+        private static bool DatabaseExists(string connectionString)
+        {
+            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+            var databaseName = sqlConnectionStringBuilder.InitialCatalog;
+            sqlConnectionStringBuilder.InitialCatalog = "master";
+            using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
+            {
+                sqlConnection.Open();
+                using (var command = sqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"SELECT db_id('{databaseName}')";
+                    return command.ExecuteScalar() != DBNull.Value;
+                }
+            }
+        }
+        //удалить бд
+        private static void DropDatabase(string connectionString)
+        {
+            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+            var databaseName = sqlConnectionStringBuilder.InitialCatalog;
+            sqlConnectionStringBuilder.InitialCatalog = "master";
+            using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
+            {
+               sqlConnection.Open();
+               using (var sqlCommand = sqlConnection.CreateCommand())
+               {
+                   sqlCommand.CommandText = $@"
+                    ALTER DATABASE {databaseName} SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+                    DROP DATABASE [{databaseName}]
+                ";
+                    sqlCommand.ExecuteNonQuery();
+                }
+            }
+        }
+
+
+        //**************
 
 
         /*
@@ -28,10 +135,21 @@ namespace TimeWorkTracking
            Console.Read();
            */
 
-        public static string GetSqlConnection(string autehtification, string datasource, string database, string username, string password) 
+        public static string CheckSqlConnect(string connectionString) 
         {
-            string connectionString;
-            StringBuilder errorMessages = new StringBuilder();
+            if (ConnectExists(connectionString))
+            {
+                if (DatabaseExists(connectionString))
+                    return connectionString;
+                else
+                    return "-1";
+            }
+            else
+                return "-9";
+
+/*
+
+                StringBuilder errorMessages = new StringBuilder();
 
             switch (autehtification)
             {
@@ -99,12 +217,12 @@ namespace TimeWorkTracking
                     }
                     finally
                     {
-/*
+
                         if (rdr != null)
                         {
                             rdr.Close();                        //close the reader
                         }
-*/
+
                         if (sqlConnection != null)
                         {
                             sqlConnection.Close();                         //Close the connection
@@ -116,7 +234,7 @@ namespace TimeWorkTracking
                 }
             }
 
-
+            */
 
 
 
@@ -161,7 +279,7 @@ namespace TimeWorkTracking
                                 }
                 */
  
-            return connectionString;
+      //      return connectionString;
         }
 
 
