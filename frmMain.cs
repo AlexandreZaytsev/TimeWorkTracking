@@ -237,7 +237,7 @@ namespace TimeWorkTracking
                     break;
             }
 
-            string statusDB = MsSqlDatabase.CheckSqlConnect(connectionString);
+            string statusDB = MsSqlDatabase.GetSqlConnection(connectionString);
             switch (statusDB) 
             {
                 case "-1":      //бд не существует
@@ -298,10 +298,10 @@ namespace TimeWorkTracking
             string connectionstring = Properties.Settings.Default.twtConnectionSrting;
             if (connectionstring != "" && tbDatabaseTWT.Text!="") 
             {
-                if (DataBase.CreateDataBase(connectionstring, tbDatabaseTWT.Text))
-                {
-                    btCreateDBTwt.Visible = false;
-                }
+     //           if (MsSqlDatabase.CreateDataBase(connectionstring, tbDatabaseTWT.Text))
+     //           {
+     //               btCreateDBTwt.Visible = false;
+     //           }
             }
         }
     }
