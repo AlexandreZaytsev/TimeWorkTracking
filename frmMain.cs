@@ -200,7 +200,7 @@ namespace TimeWorkTracking
         //открыть окно настроек
         private void picSetting_Click(object sender, EventArgs e)
         {
-            frmSetting frm = new frmSetting();
+            frmDataBaseSQL frm = new frmDataBaseSQL();
             frm.ShowDialog();
         }
 /*
@@ -221,9 +221,15 @@ namespace TimeWorkTracking
             aboutBox.ShowDialog(this);
         }
 
-        private void toolStripSplitButton1_Click(object sender, EventArgs e)
+        private void tsbtDataBaseSQL_ButtonClick(object sender, EventArgs e)
         {
-            frmSetting frm = new frmSetting();
+            frmDataBaseSQL frm = new frmDataBaseSQL();
+            frm.ShowDialog();
+        }
+
+        private void tsbtDataBasePACS_Click(object sender, EventArgs e)
+        {
+            frmDataBasePACS frm = new frmDataBasePACS();
             frm.ShowDialog();
         }
     }

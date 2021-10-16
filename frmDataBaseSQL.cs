@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace TimeWorkTracking
 {
-    public partial class frmSetting : Form
+    public partial class frmDataBaseSQL : Form
     {
-        public frmSetting()
+        public frmDataBaseSQL()
         {
             InitializeComponent();
         }
@@ -35,10 +35,7 @@ namespace TimeWorkTracking
             else
                 picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.no;
 
-            //PACS DataBase
-            tbHostNamePACS.Text = Properties.Settings.Default.pacsHost;
-            tbUserNamePACS.Text = Properties.Settings.Default.pascLogin;
-            tbPasswordPASC.Text = Properties.Settings.Default.pacsPassword;
+
 
             btCreateDBTwt.Visible = false;
 
@@ -115,18 +112,7 @@ namespace TimeWorkTracking
             Properties.Settings.Default.Save();
         }
 
-        //test Connrection CREL (web сервис PACS)
-        private void btTestConnectionPacs_Click(object sender, EventArgs e)
-        {
-            //PACS DataBase
-            Properties.Settings.Default.pacsHost = tbHostNamePACS.Text;
-            Properties.Settings.Default.pascLogin = tbUserNamePACS.Text;
-            Properties.Settings.Default.pacsPassword = tbPasswordPASC.Text;
 
-            //            pacsConnectionString
-
-            Properties.Settings.Default.Save();
-        }
 
         //создать бд
         private void btCreateDBTwt_Click(object sender, EventArgs e)

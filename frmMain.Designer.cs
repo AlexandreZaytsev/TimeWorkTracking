@@ -43,6 +43,9 @@ namespace TimeWorkTracking
             this.new_db = new System.Windows.Forms.Button();
             this.connect_db = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.tsbtDataBaseSQL = new System.Windows.Forms.ToolStripSplitButton();
+            this.tsbtDataBasePACS = new System.Windows.Forms.ToolStripSplitButton();
+            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripSplitButton1 = new System.Windows.Forms.ToolStripSplitButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -171,6 +174,9 @@ namespace TimeWorkTracking
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsbtDataBaseSQL,
+            this.tsbtDataBasePACS,
+            this.toolStripProgressBar1,
             this.toolStripSplitButton1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 436);
             this.statusStrip1.Name = "statusStrip1";
@@ -178,16 +184,40 @@ namespace TimeWorkTracking
             this.statusStrip1.TabIndex = 15;
             this.statusStrip1.Text = "statusStrip1";
             // 
+            // tsbtDataBaseSQL
+            // 
+            this.tsbtDataBaseSQL.DropDownButtonWidth = 0;
+            this.tsbtDataBaseSQL.Image = global::TimeWorkTracking.Properties.Resources.no;
+            this.tsbtDataBaseSQL.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtDataBaseSQL.Name = "tsbtDataBaseSQL";
+            this.tsbtDataBaseSQL.Size = new System.Drawing.Size(152, 24);
+            this.tsbtDataBaseSQL.Text = "База данных SQL";
+            this.tsbtDataBaseSQL.ButtonClick += new System.EventHandler(this.tsbtDataBaseSQL_ButtonClick);
+            // 
+            // tsbtDataBasePACS
+            // 
+            this.tsbtDataBasePACS.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.tsbtDataBasePACS.DropDownButtonWidth = 0;
+            this.tsbtDataBasePACS.Image = global::TimeWorkTracking.Properties.Resources.no;
+            this.tsbtDataBasePACS.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtDataBasePACS.Name = "tsbtDataBasePACS";
+            this.tsbtDataBasePACS.Size = new System.Drawing.Size(163, 24);
+            this.tsbtDataBasePACS.Text = "База данных СКУД";
+            this.tsbtDataBasePACS.Click += new System.EventHandler(this.tsbtDataBasePACS_Click);
+            // 
+            // toolStripProgressBar1
+            // 
+            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
+            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 18);
+            // 
             // toolStripSplitButton1
             // 
-            this.toolStripSplitButton1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripSplitButton1.DropDownButtonWidth = 0;
-            this.toolStripSplitButton1.Image = global::TimeWorkTracking.Properties.Resources.setting;
+            this.toolStripSplitButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripSplitButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton1.Image")));
             this.toolStripSplitButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripSplitButton1.Name = "toolStripSplitButton1";
-            this.toolStripSplitButton1.Size = new System.Drawing.Size(109, 24);
-            this.toolStripSplitButton1.Text = "Настройки";
-            this.toolStripSplitButton1.Click += new System.EventHandler(this.toolStripSplitButton1_Click);
+            this.toolStripSplitButton1.Size = new System.Drawing.Size(39, 24);
+            this.toolStripSplitButton1.Text = "toolStripSplitButton1";
             // 
             // frmMain
             // 
@@ -239,6 +269,9 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Button new_db;
         private System.Windows.Forms.Button connect_db;
         private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripSplitButton tsbtDataBasePACS;
+        private System.Windows.Forms.ToolStripSplitButton tsbtDataBaseSQL;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton1;
     }
 }
