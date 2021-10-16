@@ -37,9 +37,35 @@ namespace TimeWorkTracking
                 }
             }
         }
+        //проверить соединение 
+        public static bool CheckConnectWithConnectionStr(string connectionString)
+        {
+            bool ret = false;
+            if (connectionString != "")
+            {
+                StringBuilder errorMessages = new StringBuilder();
+                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+                using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
+                {
+                    try
+                    {
+                        sqlConnection.Open();
+                        ret = true;
+                    }
+                    finally
+                    {
+                        if (sqlConnection != null)
+                        {
+                            sqlConnection.Close();                         //Close the connection
+                        }
+                    }
+                }   
+            }
+            return ret;
+        }
 
-        //проверить что соединение есть в принципе
-        private static bool ConnectExists(string connectionString)
+            //проверить что соединение есть в принципе
+            private static bool ConnectExists(string connectionString)
         {
             bool ret = false;
             StringBuilder errorMessages = new StringBuilder();

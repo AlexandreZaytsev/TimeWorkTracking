@@ -15,6 +15,10 @@ namespace TimeWorkTracking
     {
         public frmMain()
         {
+            //подписка события внешних форм 
+            CallBack_FrmDataBaseSQL_outEvent.callbackEventHandler = new CallBack_FrmDataBaseSQL_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
+            CallBack_FrmDataBasePACS_outEvent.callbackEventHandler = new CallBack_FrmDataBasePACS_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
+
             InitializeComponent();
         }
         SqlConnection con;
@@ -35,8 +39,7 @@ namespace TimeWorkTracking
         private void Form1_Load(object sender, EventArgs e)
         {
             //  GetList();
-
-
+            CheckConnects();           //проверить соединение с базами
 
 
         }
@@ -197,12 +200,7 @@ namespace TimeWorkTracking
 
 
 
-        //открыть окно настроек
-        private void picSetting_Click(object sender, EventArgs e)
-        {
-            frmDataBaseSQL frm = new frmDataBaseSQL();
-            frm.ShowDialog();
-        }
+
 /*
         private void picSetting_MouseUp(object sender, MouseEventArgs e)
         {
@@ -224,13 +222,74 @@ namespace TimeWorkTracking
         private void tsbtDataBaseSQL_ButtonClick(object sender, EventArgs e)
         {
             frmDataBaseSQL frm = new frmDataBaseSQL();
+            frm.Owner = this;
+            CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
             frm.ShowDialog();
         }
 
         private void tsbtDataBasePACS_Click(object sender, EventArgs e)
         {
             frmDataBasePACS frm = new frmDataBasePACS();
+            frm.Owner = this;
+            CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
             frm.ShowDialog();
         }
+
+        //проверить соединение с базами
+        private void CheckConnects()
+        {
+            if (MsSqlDatabase.CheckConnectWithConnectionStr(Properties.Settings.Default.twtConnectionSrting))
+                this.tsbtDataBaseSQL.Image = Properties.Resources.ok;
+            else
+                this.tsbtDataBaseSQL.Image = Properties.Resources.no;
+        }
+
+        /*--------------------------------------------------------------------------------------------  
+        CALLBACK InPut (подписка на внешние сообщения)
+        --------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// Callbacks the reload.
+        /// входящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров
+        /// </summary>
+        /// <param name="controlName">имя CTRL</param>
+        /// <param name="controlParentName">имя родителя CNTRL</param>
+        /// <param name="param">параметры ключ-значение.</param>
+        private void CallbackReload(string controlName, string controlParentName, Dictionary<String, String> param)
+        {
+            CheckConnects();
+            /*
+            if (param.Count() != 0)
+            {
+                Control[] cntrl = this.FilterControls(c => c.Name != null && c.Name.Equals(controlName) && c is DataGridView);
+                ((DataGridView)cntrl[0]).DataSource = param;
+            }
+            */
+        }
+
+    }
+
+
+
+    /*--------------------------------------------------------------------------------------------  
+        CALLBACK OutPut (собственные сообщения)
+    --------------------------------------------------------------------------------------------*/
+    //general notification
+    /// <summary>
+    /// CallBack_GetParam
+    /// исходящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров 
+    /// </summary>
+    public static class CallBack_FrmMain_outEvent
+    {
+        /// <summary>
+        /// Delegate callbackEvent
+        /// </summary>
+        /// <param name="controlName">имя CTRL</param>
+        /// <param name="controlParentName">имя родителя CNTRL</param>
+        /// <param name="parameterPairs">параметры ключ-значение</param>
+        public delegate void callbackEvent(string controlName, string controlParentName, Dictionary<String, String> parameterPairs);
+        /// <summary>
+        /// The callback event handler
+        /// </summary>
+        public static callbackEvent callbackEventHandler;
     }
 }

@@ -13,10 +13,12 @@ namespace TimeWorkTracking
     {
         public frmDataBaseSQL()
         {
+            //подписка события внешних форм 
+            CallBack_FrmMain_outEvent.callbackEventHandler = new CallBack_FrmMain_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
             InitializeComponent();
         }
 
-        private void tabSetting_Selected(object sender, TabControlEventArgs e)
+        private void frmDataBaseSQL_Load(object sender, EventArgs e)
         {
             //Read Setting
             //TimeWorkTracking DataBase
@@ -110,6 +112,8 @@ namespace TimeWorkTracking
             Properties.Settings.Default.twtPassword = tbPasswordTWT.Text;
 
             Properties.Settings.Default.Save();
+
+            CallBack_FrmDataBaseSQL_outEvent.callbackEventHandler("", "", null);  //send a general notification
         }
 
 
@@ -126,5 +130,50 @@ namespace TimeWorkTracking
                 //   }
             }
         }
+
+        /*--------------------------------------------------------------------------------------------  
+        CALLBACK InPut (подписка на внешние сообщения)
+        --------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// Callbacks the reload.
+        /// входящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров
+        /// </summary>
+        /// <param name="controlName">имя CTRL</param>
+        /// <param name="controlParentName">имя родителя CNTRL</param>
+        /// <param name="param">параметры ключ-значение.</param>
+        private void CallbackReload(string controlName, string controlParentName, Dictionary<String, String> param)
+        {
+            /*
+            if (param.Count() != 0)
+            {
+                Control[] cntrl = this.FilterControls(c => c.Name != null && c.Name.Equals(controlName) && c is DataGridView);
+                ((DataGridView)cntrl[0]).DataSource = param;
+            }
+            */
+        }
+    }
+
+
+    /*--------------------------------------------------------------------------------------------  
+    CALLBACK OutPut (собственные сообщения)
+    --------------------------------------------------------------------------------------------*/
+    //general notification
+    /// <summary>
+    /// CallBack_GetParam
+    /// исходящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров 
+    /// </summary>
+    public static class CallBack_FrmDataBaseSQL_outEvent
+    {
+        /// <summary>
+        /// Delegate callbackEvent
+        /// </summary>
+        /// <param name="controlName">имя CTRL</param>
+        /// <param name="controlParentName">имя родителя CNTRL</param>
+        /// <param name="parameterPairs">параметры ключ-значение</param>
+        public delegate void callbackEvent(string controlName, string controlParentName, Dictionary<String, String> parameterPairs);
+        /// <summary>
+        /// The callback event handler
+        /// </summary>
+        public static callbackEvent callbackEventHandler;
     }
 }
