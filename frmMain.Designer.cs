@@ -29,6 +29,7 @@ namespace TimeWorkTracking
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -41,14 +42,10 @@ namespace TimeWorkTracking
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.new_db = new System.Windows.Forms.Button();
             this.connect_db = new System.Windows.Forms.Button();
-            this.tabForm = new System.Windows.Forms.TabControl();
-            this.tabRegistration = new System.Windows.Forms.TabPage();
-            this.tabReport = new System.Windows.Forms.TabPage();
-            this.tabSetting = new System.Windows.Forms.TabPage();
-            this.picSetting = new System.Windows.Forms.PictureBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripSplitButton1 = new System.Windows.Forms.ToolStripSplitButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.tabForm.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picSetting)).BeginInit();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -84,7 +81,7 @@ namespace TimeWorkTracking
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(116, 34);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(132, 22);
             this.textBox1.TabIndex = 3;
@@ -92,7 +89,7 @@ namespace TimeWorkTracking
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(116, 78);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(4);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(132, 22);
             this.textBox2.TabIndex = 4;
@@ -100,7 +97,7 @@ namespace TimeWorkTracking
             // textBox3
             // 
             this.textBox3.Location = new System.Drawing.Point(116, 124);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox3.Margin = new System.Windows.Forms.Padding(4);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(132, 22);
             this.textBox3.TabIndex = 5;
@@ -108,7 +105,7 @@ namespace TimeWorkTracking
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(316, 21);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(100, 28);
             this.button1.TabIndex = 6;
@@ -119,7 +116,7 @@ namespace TimeWorkTracking
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(316, 73);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(100, 28);
             this.button2.TabIndex = 7;
@@ -130,7 +127,7 @@ namespace TimeWorkTracking
             // button3
             // 
             this.button3.Location = new System.Drawing.Point(316, 119);
-            this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button3.Margin = new System.Windows.Forms.Padding(4);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(100, 28);
             this.button3.TabIndex = 8;
@@ -142,16 +139,16 @@ namespace TimeWorkTracking
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(29, 181);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.Size = new System.Drawing.Size(421, 347);
+            this.dataGridView1.Size = new System.Drawing.Size(421, 148);
             this.dataGridView1.TabIndex = 9;
             // 
             // new_db
             // 
             this.new_db.Location = new System.Drawing.Point(979, 54);
-            this.new_db.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.new_db.Margin = new System.Windows.Forms.Padding(4);
             this.new_db.Name = "new_db";
             this.new_db.Size = new System.Drawing.Size(100, 28);
             this.new_db.TabIndex = 10;
@@ -162,7 +159,7 @@ namespace TimeWorkTracking
             // connect_db
             // 
             this.connect_db.Location = new System.Drawing.Point(704, 55);
-            this.connect_db.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.connect_db.Margin = new System.Windows.Forms.Padding(4);
             this.connect_db.Name = "connect_db";
             this.connect_db.Size = new System.Drawing.Size(100, 28);
             this.connect_db.TabIndex = 11;
@@ -170,84 +167,34 @@ namespace TimeWorkTracking
             this.connect_db.UseVisualStyleBackColor = true;
             this.connect_db.Click += new System.EventHandler(this.connect_db_Click);
             // 
-            // tabForm
+            // statusStrip1
             // 
-            this.tabForm.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.tabForm.Controls.Add(this.tabRegistration);
-            this.tabForm.Controls.Add(this.tabReport);
-            this.tabForm.Controls.Add(this.tabSetting);
-            this.tabForm.ItemSize = new System.Drawing.Size(120, 22);
-            this.tabForm.Location = new System.Drawing.Point(551, 156);
-            this.tabForm.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
-            this.tabForm.Name = "tabForm";
-            this.tabForm.Padding = new System.Drawing.Point(1, 1);
-            this.tabForm.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.tabForm.SelectedIndex = 0;
-            this.tabForm.Size = new System.Drawing.Size(617, 495);
-            this.tabForm.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-            this.tabForm.TabIndex = 13;
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripSplitButton1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 436);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(916, 26);
+            this.statusStrip1.TabIndex = 15;
+            this.statusStrip1.Text = "statusStrip1";
             // 
-            // tabRegistration
+            // toolStripSplitButton1
             // 
-            this.tabRegistration.BackColor = System.Drawing.Color.Transparent;
-            this.tabRegistration.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tabRegistration.Location = new System.Drawing.Point(4, 26);
-            this.tabRegistration.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabRegistration.Name = "tabRegistration";
-            this.tabRegistration.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabRegistration.Size = new System.Drawing.Size(609, 465);
-            this.tabRegistration.TabIndex = 0;
-            this.tabRegistration.Text = "Регистрация";
-            this.tabRegistration.Click += new System.EventHandler(this.tabRegistration_Click);
-            // 
-            // tabReport
-            // 
-            this.tabReport.BackColor = System.Drawing.Color.Transparent;
-            this.tabReport.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tabReport.Location = new System.Drawing.Point(4, 26);
-            this.tabReport.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabReport.Name = "tabReport";
-            this.tabReport.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabReport.Size = new System.Drawing.Size(609, 465);
-            this.tabReport.TabIndex = 1;
-            this.tabReport.Text = "Отчеты";
-            // 
-            // tabSetting
-            // 
-            this.tabSetting.BackColor = System.Drawing.Color.Transparent;
-            this.tabSetting.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tabSetting.Location = new System.Drawing.Point(4, 26);
-            this.tabSetting.Margin = new System.Windows.Forms.Padding(1);
-            this.tabSetting.Name = "tabSetting";
-            this.tabSetting.Padding = new System.Windows.Forms.Padding(1);
-            this.tabSetting.Size = new System.Drawing.Size(609, 465);
-            this.tabSetting.TabIndex = 2;
-            this.tabSetting.Text = "Настройки";
-            // 
-            // picSetting
-            // 
-            this.picSetting.BackColor = System.Drawing.SystemColors.Control;
-            this.picSetting.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.picSetting.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picSetting.Image = global::TimeWorkTracking.Properties.Resources.setting;
-            this.picSetting.Location = new System.Drawing.Point(1164, 34);
-            this.picSetting.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.picSetting.Name = "picSetting";
-            this.picSetting.Size = new System.Drawing.Size(39, 33);
-            this.picSetting.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picSetting.TabIndex = 14;
-            this.picSetting.TabStop = false;
-            this.picSetting.Click += new System.EventHandler(this.picSetting_Click);
-            this.picSetting.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picSetting_MouseDown);
-            this.picSetting.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picSetting_MouseUp);
+            this.toolStripSplitButton1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripSplitButton1.DropDownButtonWidth = 0;
+            this.toolStripSplitButton1.Image = global::TimeWorkTracking.Properties.Resources.setting;
+            this.toolStripSplitButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripSplitButton1.Name = "toolStripSplitButton1";
+            this.toolStripSplitButton1.Size = new System.Drawing.Size(109, 24);
+            this.toolStripSplitButton1.Text = "Настройки";
+            this.toolStripSplitButton1.Click += new System.EventHandler(this.toolStripSplitButton1_Click);
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1333, 721);
-            this.Controls.Add(this.picSetting);
-            this.Controls.Add(this.tabForm);
+            this.ClientSize = new System.Drawing.Size(916, 462);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.connect_db);
             this.Controls.Add(this.new_db);
             this.Controls.Add(this.dataGridView1);
@@ -260,13 +207,18 @@ namespace TimeWorkTracking
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.HelpButton = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "frmMain";
-            this.Text = "Form1";
+            this.Text = "Учет рабочего времени";
+            this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.frmMain_HelpButtonClicked);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.tabForm.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picSetting)).EndInit();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -286,11 +238,8 @@ namespace TimeWorkTracking
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button new_db;
         private System.Windows.Forms.Button connect_db;
-        private System.Windows.Forms.TabControl tabForm;
-        private System.Windows.Forms.TabPage tabRegistration;
-        private System.Windows.Forms.TabPage tabReport;
-        private System.Windows.Forms.TabPage tabSetting;
-        private System.Windows.Forms.PictureBox picSetting;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton1;
     }
 }
 

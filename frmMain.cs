@@ -201,9 +201,9 @@ namespace TimeWorkTracking
         private void picSetting_Click(object sender, EventArgs e)
         {
             frmSetting frm = new frmSetting();
-            frm.Show();
+            frm.ShowDialog();
         }
-
+/*
         private void picSetting_MouseUp(object sender, MouseEventArgs e)
         {
            picSetting.BackColor= System.Drawing.SystemColors.Control;
@@ -212,6 +212,19 @@ namespace TimeWorkTracking
         private void picSetting_MouseDown(object sender, MouseEventArgs e)
         {
             picSetting.BackColor = System.Drawing.SystemColors.ControlDark;
+        }
+*/
+        //кнока help
+        private void frmMain_HelpButtonClicked(object sender, CancelEventArgs e)
+        {
+            frmAbout aboutBox = new frmAbout();
+            aboutBox.ShowDialog(this);
+        }
+
+        private void toolStripSplitButton1_Click(object sender, EventArgs e)
+        {
+            frmSetting frm = new frmSetting();
+            frm.ShowDialog();
         }
     }
 }
