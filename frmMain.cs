@@ -41,7 +41,6 @@ namespace TimeWorkTracking
             //  GetList();
             CheckConnects();           //проверить соединение с базами
 
-
         }
 
         private void button1_Click(object sender, EventArgs e) //insert
