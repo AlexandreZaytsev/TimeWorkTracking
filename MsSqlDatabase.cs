@@ -33,10 +33,66 @@ namespace TimeWorkTracking
                 sqlConnection.Open();
                 using (var sqlCommand = sqlConnection.CreateCommand())
                 {
-                    sqlCommand.CommandText = "CREATE TABLE Users (" +
-                        "Id INT PRIMARY KEY IDENTITY, " +
-                        "Age INT NOT NULL, " +
-                        "Name NVARCHAR(100) NOT NULL" +
+                    //первичные таблицы
+                    //Подразделение
+                    sqlCommand.CommandText = "CREATE TABLE Department (" +
+                        "Id int PRIMARY KEY IDENTITY, " +
+                        "Name NVARCHAR(150) NOT NULL UNIQUE " +
+                        ")";
+                    sqlCommand.ExecuteNonQuery();
+                    //Должность
+                    sqlCommand.CommandText = "CREATE TABLE Post (" +
+                        "Id int PRIMARY KEY IDENTITY, " +
+                        "Name NVARCHAR(150) NOT NULL UNIQUE " +
+                        ")";
+                    sqlCommand.ExecuteNonQuery();
+                    //вставляем данные
+                    sqlCommand.CommandText = "INSERT INTO Post(Name) VALUES " +
+                        "(N'Ассистент менеджера'), " +
+                        "(N'Бухгалтер'), " +
+                        "(N'Ведущий инженер'), " +
+                        "(N'Ведущий менеджер'), " +
+                        "(N'Главный Бухгалтер'), " +
+                        "(N'Дизайнер'), " +
+                        "(N'Инженер'), " +
+                        "(N'Курьер'), " +
+                        "(N'Логист'), " +
+                        "(N'Менеджер'), " +
+                        "(N'Руководитель'), " +
+                        "(N'Руководитель департамента'), " +
+                        "(N'Руководитель направления'), " +
+                        "(N'Руководитель учебного центра'), " +
+                        "(N'Секретарь'), " +
+                        "(N'Системный администратор'), " +
+                        "(N'Юрист'), " +
+                        "(N'Ведущий менеджер отдела продаж'), " +
+                        "(N'Заместитель генерального директора'), " +
+                        "(N'и.о. Руководителя')";
+                    sqlCommand.ExecuteNonQuery();
+
+                    //График работы
+                    sqlCommand.CommandText = "CREATE TABLE Rate (" +
+                        "Id int PRIMARY KEY IDENTITY, " +
+                        "Name NVARCHAR(150) NOT NULL UNIQUE " +
+                        ")";
+                    sqlCommand.ExecuteNonQuery();
+                    //вставляем данные
+                    sqlCommand.CommandText = "INSERT INTO Rate(Name) VALUES " +
+                        "(N'Почасовой'), " +
+                        "(N'Поминутный')";
+                    sqlCommand.ExecuteNonQuery();
+                    //смешанные таблицы
+                    //Пользователь
+                    sqlCommand.CommandText = "CREATE TABLE User (" +
+                        "Id bigint PRIMARY KEY IDENTITY, " +
+                        "UserId NVARCHAR(50) NOT NULL UNIQUE, " +
+                        "Name NVARCHAR(150) NOT NULL UNIQUE, " +
+                        "Derartment bigint NOT NULL FOREIGN KEY REFERENCES Department(Id), " +
+                        "Post bigint NOT NULL FOREIGN KEY REFERENCES Post(Id), " +
+                        "TimeStart time NOT NULL, " +
+                        "TimeStoptime NOT NULL, " +
+                        "Rate bigint NOT NULL FOREIGN KEY REFERENCES Rate(Id), " +
+                        "Use bit NOT NULL " +
                         ")";
                     sqlCommand.ExecuteNonQuery();
                 }
