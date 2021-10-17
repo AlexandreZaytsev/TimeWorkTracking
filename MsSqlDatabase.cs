@@ -106,7 +106,7 @@ namespace TimeWorkTracking
                         "TimeStop time NOT NULL, " +
                         "RateId int NOT NULL FOREIGN KEY REFERENCES Rate(Id), " +
                         "Uses bit NOT NULL " +
-                        ")";
+                        ")"; 
                     sqlCommand.ExecuteNonQuery();
                 }
             }
