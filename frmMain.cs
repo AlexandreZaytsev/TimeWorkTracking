@@ -255,7 +255,7 @@ namespace TimeWorkTracking
         /// <param name="param">параметры ключ-значение.</param>
         private void CallbackReload(string controlName, string controlParentName, Dictionary<String, String> param)
         {
-            CheckConnects();
+            CheckConnects();        //проверить соединение с базами
             /*
             if (param.Count() != 0)
             {

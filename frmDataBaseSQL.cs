@@ -32,12 +32,7 @@ namespace TimeWorkTracking
             tbUserNameTWT.Text = Properties.Settings.Default.twtLogin;
             tbPasswordTWT.Text = Properties.Settings.Default.twtPassword;
 
-            if (Properties.Settings.Default.twtConnectionSrting != "")
-                picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.ok;
-            else
-                picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.no;
-
-
+            CheckConnects();        //проверить соединение с базами
 
             btCreateDBTwt.Visible = false;
 
@@ -52,11 +47,17 @@ namespace TimeWorkTracking
             tbPasswordTWT.Enabled = auth;
         }
 
+
         //test Connrection TWT (TimeWorkTracking database )
         private void btTestConnectionTwt_Click(object sender, EventArgs e)
         {
+            TestFormConnectionTwt();        //проверить соединение по настройкам формы
+        }
+
+        //полчить строку соединения по настройкам формы
+        private string GetFormConnectionString() 
+        {
             string connectionString;
-            StringBuilder Messages = new StringBuilder();
             switch (cbAutentificationTWT.Text)
             {
                 case "SQL Server Autentification":
@@ -69,7 +70,14 @@ namespace TimeWorkTracking
                     connectionString = "";
                     break;
             }
+            return connectionString;
+        }
 
+        //проверить соединение по настройкам формы
+        private void TestFormConnectionTwt()
+        {
+            string connectionString = GetFormConnectionString();        //полчить строку соединения по настройкам формы
+            StringBuilder Messages = new StringBuilder();
             string statusDB = MsSqlDatabase.GetSqlConnection(connectionString);
             switch (statusDB)
             {
@@ -121,14 +129,21 @@ namespace TimeWorkTracking
         //создать бд
         private void btCreateDBTwt_Click(object sender, EventArgs e)
         {
-            string connectionstring = Properties.Settings.Default.twtConnectionSrting;
-            if (connectionstring != "" && tbDatabaseTWT.Text != "")
+            string connectionString = GetFormConnectionString();        //полчить строку соединения по настройкам формы
+            if (connectionString !="" && tbDatabaseTWT.Text != "")
             {
-                //   if (MsSqlDatabase.CreateDataBase(connectionstring))
-                //   {
-                //       btCreateDBTwt.Visible = false;
-                //   }
+                MsSqlDatabase.CreateDataBase(connectionString);
+                TestFormConnectionTwt();                                //проверить соединение по настройкам формы
             }
+        }
+
+        //проверить соединение с базами
+        private void CheckConnects()
+        {
+            if (MsSqlDatabase.CheckConnectWithConnectionStr(Properties.Settings.Default.twtConnectionSrting))
+                this.picStatusTWT.Image = Properties.Resources.ok;
+            else
+                this.picStatusTWT.Image = Properties.Resources.no;
         }
 
         /*--------------------------------------------------------------------------------------------  
