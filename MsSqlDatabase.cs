@@ -40,6 +40,19 @@ namespace TimeWorkTracking
                         "Name NVARCHAR(150) NOT NULL UNIQUE " +
                         ")";
                     sqlCommand.ExecuteNonQuery();
+                    //вставляем данные
+                    sqlCommand.CommandText = "INSERT INTO Department(Name) VALUES " +
+                        "(N'Бухгалтерия'), " +
+                        "(N'Департамент закупок и договоров'), " +
+                        "(N'Департамент маркетинга'), " +
+                        "(N'Департамент обеспечения бизнеса'), " +
+                        "(N'Департамент продаж'), " +
+                        "(N'Департамент Тендерных и Конкурсных поставок'), " +
+                        "(N'Департамент технической поддержки'), " +
+                        "(N'Департамент ЧПУ'), " +
+                        "(N'Общее руководство'), " +
+                        "(N'Представительство Академия САПР и ГИС')";
+                    sqlCommand.ExecuteNonQuery();
                     //Должность
                     sqlCommand.CommandText = "CREATE TABLE Post (" +
                         "Id int PRIMARY KEY IDENTITY, " +
@@ -83,16 +96,16 @@ namespace TimeWorkTracking
                     sqlCommand.ExecuteNonQuery();
                     //смешанные таблицы
                     //Пользователь
-                    sqlCommand.CommandText = "CREATE TABLE User (" +
+                    sqlCommand.CommandText = "CREATE TABLE Users (" +
                         "Id bigint PRIMARY KEY IDENTITY, " +
                         "UserId NVARCHAR(50) NOT NULL UNIQUE, " +
                         "Name NVARCHAR(150) NOT NULL UNIQUE, " +
-                        "Derartment bigint NOT NULL FOREIGN KEY REFERENCES Department(Id), " +
-                        "Post bigint NOT NULL FOREIGN KEY REFERENCES Post(Id), " +
+                        "DerartmentId int NOT NULL FOREIGN KEY REFERENCES Department(Id), " +
+                        "PostId int NOT NULL FOREIGN KEY REFERENCES Post(Id), " +
                         "TimeStart time NOT NULL, " +
-                        "TimeStoptime NOT NULL, " +
-                        "Rate bigint NOT NULL FOREIGN KEY REFERENCES Rate(Id), " +
-                        "Use bit NOT NULL " +
+                        "TimeStop time NOT NULL, " +
+                        "RateId int NOT NULL FOREIGN KEY REFERENCES Rate(Id), " +
+                        "Uses bit NOT NULL " +
                         ")";
                     sqlCommand.ExecuteNonQuery();
                 }
