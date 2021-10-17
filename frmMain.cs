@@ -228,8 +228,10 @@ namespace TimeWorkTracking
 
         private void tsbtDataBasePACS_Click(object sender, EventArgs e)
         {
-            frmDataBasePACS frm = new frmDataBasePACS();
-            frm.Owner = this;
+            frmDataBasePACS frm = new frmDataBasePACS
+            {
+                Owner = this
+            };
             CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
             frm.ShowDialog();
         }
