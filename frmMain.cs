@@ -224,7 +224,7 @@ str = "CREATE DATABASE TimeWorkTracking_dt";
             aboutBox.ShowDialog(this);
         }
 
-        private void tsbtDataBaseSQL_ButtonClick(object sender, EventArgs e)
+        private void tsbtDataBaseSQL_Click(object sender, EventArgs e)
         {
             frmDataBaseSQL frm = new frmDataBaseSQL();
             frm.Owner = this;
