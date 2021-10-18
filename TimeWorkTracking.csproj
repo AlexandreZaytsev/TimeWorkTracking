@@ -132,6 +132,11 @@
     <None Include="Resources\twt.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\users.png" />
+    <None Include="Resources\calendar.png" />
+    <None Include="Resources\report.png" />
+    <None Include="Resources\mark.png" />
+    <None Include="Resources\specmark.png" />
     <Content Include="twt.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
