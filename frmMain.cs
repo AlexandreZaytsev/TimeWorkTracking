@@ -9,6 +9,12 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient; //For SQL Connection
 
+/*
+ * tooltip for split
+https://stackoverflow.com/questions/4657394/is-it-possible-to-change-toolstripmenuitem-tooltip-font/4669343#4669343
+
+*/
+
 namespace TimeWorkTracking
 {
     public partial class frmMain : Form
@@ -91,7 +97,7 @@ namespace TimeWorkTracking
              "MAXSIZE = 5MB, " +
              "FILEGROWTH = 10%)";
 */
-            str = "CREATE DATABASE TimeWorkTracking_dt";
+str = "CREATE DATABASE TimeWorkTracking_dt";
 
             SqlCommand myCommand = new SqlCommand(str, myConn);
             try

@@ -93,6 +93,26 @@ namespace TimeWorkTracking.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap form {
+            get {
+                object obj = ResourceManager.GetObject("form", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap heat {
+            get {
+                object obj = ResourceManager.GetObject("heat", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap mark {
             get {
                 object obj = ResourceManager.GetObject("mark", resourceCulture);
@@ -116,6 +136,16 @@ namespace TimeWorkTracking.Properties {
         internal static System.Drawing.Bitmap ok {
             get {
                 object obj = ResourceManager.GetObject("ok", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pass {
+            get {
+                object obj = ResourceManager.GetObject("pass", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

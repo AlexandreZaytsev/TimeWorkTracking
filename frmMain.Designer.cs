@@ -52,6 +52,9 @@ namespace TimeWorkTracking
             this.toolStripSplitButton2 = new System.Windows.Forms.ToolStripSplitButton();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripSplitButton1 = new System.Windows.Forms.ToolStripSplitButton();
+            this.toolStripSplitButton4 = new System.Windows.Forms.ToolStripSplitButton();
+            this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripSplitButton5 = new System.Windows.Forms.ToolStripSplitButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -175,11 +178,15 @@ namespace TimeWorkTracking
             this.toolStripSplitButton3,
             this.toolStripSplitButton2,
             this.toolStripStatusLabel3,
-            this.toolStripSplitButton1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 349);
+            this.toolStripSplitButton1,
+            this.toolStripSplitButton4,
+            this.toolStripStatusLabel4,
+            this.toolStripSplitButton5});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 539);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 10, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(687, 26);
+            this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.statusStrip1.Size = new System.Drawing.Size(635, 26);
             this.statusStrip1.TabIndex = 15;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -188,9 +195,11 @@ namespace TimeWorkTracking
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(46, 21);
             this.toolStripStatusLabel2.Text = "Статус:";
+            this.toolStripStatusLabel2.ToolTipText = "12431234";
             // 
             // tsbtDataBaseSQL
             // 
+            this.tsbtDataBaseSQL.AutoToolTip = false;
             this.tsbtDataBaseSQL.DropDownButtonWidth = 0;
             this.tsbtDataBaseSQL.Image = global::TimeWorkTracking.Properties.Resources.no;
             this.tsbtDataBaseSQL.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -203,22 +212,25 @@ namespace TimeWorkTracking
             // tsbtDataBasePACS
             // 
             this.tsbtDataBasePACS.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.tsbtDataBasePACS.AutoToolTip = false;
             this.tsbtDataBasePACS.DropDownButtonWidth = 0;
             this.tsbtDataBasePACS.Image = global::TimeWorkTracking.Properties.Resources.no;
             this.tsbtDataBasePACS.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbtDataBasePACS.Name = "tsbtDataBasePACS";
             this.tsbtDataBasePACS.Size = new System.Drawing.Size(80, 24);
             this.tsbtDataBasePACS.Text = "БД СКУД";
+            this.tsbtDataBasePACS.ToolTipText = "Подключение к web сервису СКУД";
             this.tsbtDataBasePACS.Click += new System.EventHandler(this.tsbtDataBasePACS_Click);
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(85, 21);
-            this.toolStripStatusLabel1.Text = "Справочники:";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(97, 21);
+            this.toolStripStatusLabel1.Text = "    Справочники:";
             // 
             // tsbtUsers
             // 
+            this.tsbtUsers.AutoToolTip = false;
             this.tsbtUsers.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsbtUsers.DropDownButtonWidth = 0;
             this.tsbtUsers.Image = global::TimeWorkTracking.Properties.Resources.users;
@@ -229,6 +241,7 @@ namespace TimeWorkTracking
             // 
             // toolStripSplitButton3
             // 
+            this.toolStripSplitButton3.AutoToolTip = false;
             this.toolStripSplitButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripSplitButton3.DropDownButtonWidth = 0;
             this.toolStripSplitButton3.Image = global::TimeWorkTracking.Properties.Resources.specmark;
@@ -239,6 +252,7 @@ namespace TimeWorkTracking
             // 
             // toolStripSplitButton2
             // 
+            this.toolStripSplitButton2.AutoToolTip = false;
             this.toolStripSplitButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripSplitButton2.DropDownButtonWidth = 0;
             this.toolStripSplitButton2.Image = global::TimeWorkTracking.Properties.Resources.calendar;
@@ -250,24 +264,56 @@ namespace TimeWorkTracking
             // toolStripStatusLabel3
             // 
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(51, 21);
-            this.toolStripStatusLabel3.Text = "Отчеты:";
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(121, 21);
+            this.toolStripStatusLabel3.Text = "    Печатные Формы:";
             // 
             // toolStripSplitButton1
             // 
             this.toolStripSplitButton1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripSplitButton1.AutoToolTip = false;
+            this.toolStripSplitButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripSplitButton1.DropDownButtonWidth = 0;
             this.toolStripSplitButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton1.Image")));
             this.toolStripSplitButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripSplitButton1.Name = "toolStripSplitButton1";
-            this.toolStripSplitButton1.Size = new System.Drawing.Size(116, 24);
+            this.toolStripSplitButton1.Size = new System.Drawing.Size(25, 24);
             this.toolStripSplitButton1.Text = "Посещаемость";
+            // 
+            // toolStripSplitButton4
+            // 
+            this.toolStripSplitButton4.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripSplitButton4.AutoToolTip = false;
+            this.toolStripSplitButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripSplitButton4.DropDownButtonWidth = 0;
+            this.toolStripSplitButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton4.Image")));
+            this.toolStripSplitButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripSplitButton4.Name = "toolStripSplitButton4";
+            this.toolStripSplitButton4.Size = new System.Drawing.Size(25, 24);
+            this.toolStripSplitButton4.Text = "Посещаемость";
+            // 
+            // toolStripStatusLabel4
+            // 
+            this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
+            this.toolStripStatusLabel4.Size = new System.Drawing.Size(54, 21);
+            this.toolStripStatusLabel4.Text = "    Отчет:";
+            // 
+            // toolStripSplitButton5
+            // 
+            this.toolStripSplitButton5.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripSplitButton5.AutoToolTip = false;
+            this.toolStripSplitButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripSplitButton5.DropDownButtonWidth = 0;
+            this.toolStripSplitButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton5.Image")));
+            this.toolStripSplitButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripSplitButton5.Name = "toolStripSplitButton5";
+            this.toolStripSplitButton5.Size = new System.Drawing.Size(25, 24);
+            this.toolStripSplitButton5.Text = "Посещаемость";
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(687, 375);
+            this.ClientSize = new System.Drawing.Size(635, 565);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.connect_db);
             this.Controls.Add(this.new_db);
@@ -321,6 +367,9 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton1;
         private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton2;
         private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton3;
+        private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton4;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
+        private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton5;
     }
 }
 
