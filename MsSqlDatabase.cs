@@ -34,31 +34,31 @@ namespace TimeWorkTracking
                 using (var sqlCommand = sqlConnection.CreateCommand())
                 {
                     //График работы (таблица для списка) Почасовой/Поминутный
-                    sqlCommand.CommandText = "CREATE TABLE WorkScheme (" +
+                    sqlCommand.CommandText = "CREATE TABLE UserWorkScheme (" +
                         "Id int PRIMARY KEY IDENTITY, " +
                         "Name NVARCHAR(150) NOT NULL UNIQUE" +
                         ")";
                     sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText = "INSERT INTO WorkScheme(Name) VALUES " +
+                    sqlCommand.CommandText = "INSERT INTO UserWorkScheme(Name) VALUES " +
                         "(N'Почасовой'), " +
                         "(N'Поминутный')";
                     sqlCommand.ExecuteNonQuery();
 
                     //Тип даты производственного календаря (таблица для списка) Выходной/Сокращенный
-                    sqlCommand.CommandText = "CREATE TABLE DateType (" +
+                    sqlCommand.CommandText = "CREATE TABLE CalendarDateType (" +
                         "Id int PRIMARY KEY IDENTITY, " +
                         "Name NVARCHAR(150) NOT NULL UNIQUE" +
                         ")";
                     sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText = "INSERT INTO DateType(Name) VALUES " +
+                    sqlCommand.CommandText = "INSERT INTO CalendarDateType(Name) VALUES " +
                         "(N'Выходной'), " +
                         "(N'Сокращенный')";
                     sqlCommand.ExecuteNonQuery();
 
                     //Наименование даты производственного календаря (таблица для списка) 
-                    sqlCommand.CommandText = "CREATE TABLE DateName (Id int PRIMARY KEY IDENTITY, Name NVARCHAR(150) NOT NULL UNIQUE, Note NVARCHAR(150))";
+                    sqlCommand.CommandText = "CREATE TABLE CalendarDateName (Id int PRIMARY KEY IDENTITY, Name NVARCHAR(150) NOT NULL UNIQUE, Note NVARCHAR(150))";
                     sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText = "INSERT INTO DateName(Name, Note) VALUES " +
+                    sqlCommand.CommandText = "INSERT INTO CalendarDateName(Name, Note) VALUES " +
                         "(N'Новый год', N'1 января'), " +
                         "(N'Новогодние каникулы', ''), " +
                         "(N'Рождество Христово', N'7 января'), " +
@@ -72,12 +72,12 @@ namespace TimeWorkTracking
                     sqlCommand.ExecuteNonQuery();
 
                     //Подразделение (таблица для списка)
-                    sqlCommand.CommandText = "CREATE TABLE Department (" +
+                    sqlCommand.CommandText = "CREATE TABLE UserDepartment (" +
                         "Id int PRIMARY KEY IDENTITY, " +
                         "Name NVARCHAR(150) NOT NULL UNIQUE " +
                         ")";
                     sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText = "INSERT INTO Department(Name) VALUES " +
+                    sqlCommand.CommandText = "INSERT INTO UserDepartment(Name) VALUES " +
                         "(N'Бухгалтерия'), " +
                         "(N'Департамент закупок и договоров'), " +
                         "(N'Департамент маркетинга'), " +
@@ -91,12 +91,12 @@ namespace TimeWorkTracking
                     sqlCommand.ExecuteNonQuery();
 
                     //Должность (таблица для списка)
-                    sqlCommand.CommandText = "CREATE TABLE Post (" +
+                    sqlCommand.CommandText = "CREATE TABLE UserPost (" +
                         "Id int PRIMARY KEY IDENTITY, " +
                         "Name NVARCHAR(150) NOT NULL UNIQUE " +
                         ")";
                     sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText = "INSERT INTO Post(Name) VALUES " +
+                    sqlCommand.CommandText = "INSERT INTO UserPost(Name) VALUES " +
                         "(N'Ассистент менеджера'), " +
                         "(N'Бухгалтер'), " +
                         "(N'Ведущий инженер'), " +
@@ -159,13 +159,13 @@ namespace TimeWorkTracking
                     sqlCommand.ExecuteNonQuery();
 
                     //Производственный Календарь (таблица использующая внешние данные)
-                    sqlCommand.CommandText = "CREATE TABLE ProductionCalendar (" +
+                    sqlCommand.CommandText = "CREATE TABLE Calendars (" +
                         "Id int PRIMARY KEY IDENTITY, " +
                         "ExchangeKey NVARCHAR(20) NOT NULL UNIQUE, " +
                         "OriginalDate Date NOT NULL UNIQUE, " +
                         "TransferDate Date NOT NULL, " +
-                        "DateTypeId int NOT NULL FOREIGN KEY REFERENCES DateType(Id), " +
-                        "DateNameId int NOT NULL FOREIGN KEY REFERENCES DateName(Id) " +
+                        "DateTypeId int NOT NULL FOREIGN KEY REFERENCES CalendarDateType(Id), " +
+                        "DateNameId int NOT NULL FOREIGN KEY REFERENCES CalendarDateName(Id) " +
                         ")";
                     sqlCommand.ExecuteNonQuery();
 
@@ -174,12 +174,12 @@ namespace TimeWorkTracking
                         "Id int PRIMARY KEY IDENTITY, " +
                         "ExchangeKey NVARCHAR(20) NOT NULL UNIQUE, " +
                         "Name NVARCHAR(150) NOT NULL UNIQUE, " +
-                        "DerartmentId int NOT NULL FOREIGN KEY REFERENCES Department(Id), " +
-                        "PostId int NOT NULL FOREIGN KEY REFERENCES Post(Id), " +
+                        "DerartmentId int NOT NULL FOREIGN KEY REFERENCES UserDepartment(Id), " +
+                        "PostId int NOT NULL FOREIGN KEY REFERENCES UserPost(Id), " +
                         "TimeStart time NOT NULL, " +
                         "TimeStop time NOT NULL, " +
                         "Lunch bit NOT NULL, " +
-                        "WorkSchemeId int NOT NULL FOREIGN KEY REFERENCES WorkScheme(Id), " +
+                        "WorkSchemeId int NOT NULL FOREIGN KEY REFERENCES UserWorkScheme(Id), " +
                         "Uses bit NOT NULL " +
                         ")"; 
                     sqlCommand.ExecuteNonQuery();
@@ -193,7 +193,7 @@ namespace TimeWorkTracking
                         "passTimeStart time NOT NULL, " +
                         "passTimeStop time NOT NULL, " +
                         "infoLunchId bit NOT NULL DEFAULT 1, " +
-                        "infoWorkSchemeId int NULL FOREIGN KEY REFERENCES WorkScheme(Id), " +
+                        "infoWorkSchemeId int NULL FOREIGN KEY REFERENCES UserWorkScheme(Id), " +
                         "timeScheduleFact int NOT NULL  DEFAULT 0, " +
                         "timeScheduleWithoutLunch int NOT NULL  DEFAULT 0, " +
                         "timeScheduleLess int NOT NULL DEFAULT 0, " +

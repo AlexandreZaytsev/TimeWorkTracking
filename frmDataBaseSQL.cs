@@ -51,7 +51,7 @@ namespace TimeWorkTracking
         //test Connrection TWT (TimeWorkTracking database )
         private void btTestConnectionTwt_Click(object sender, EventArgs e)
         {
-            TestFormConnectionTwt();        //проверить соединение по настройкам формы
+            bool ret=TestFormConnectionTwt();        //проверить соединение по настройкам формы
         }
 
         //полчить строку соединения по настройкам формы
@@ -74,8 +74,9 @@ namespace TimeWorkTracking
         }
 
         //проверить соединение по настройкам формы
-        private void TestFormConnectionTwt()
+        private Boolean TestFormConnectionTwt()
         {
+            bool ret = false;
             string connectionString = GetFormConnectionString();        //полчить строку соединения по настройкам формы
             StringBuilder Messages = new StringBuilder();
             string statusDB = MsSqlDatabase.GetSqlConnection(connectionString);
@@ -104,6 +105,7 @@ namespace TimeWorkTracking
                     picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.ok;
                     btCreateDBTwt.Visible = false;
                     Messages.Append("Соединение установлено");
+                    ret = true;
                     break;
             }
             MessageBox.Show(Messages.ToString(),
@@ -122,6 +124,7 @@ namespace TimeWorkTracking
             Properties.Settings.Default.Save();
 
             CallBack_FrmDataBaseSQL_outEvent.callbackEventHandler("", "", null);  //send a general notification
+            return ret;
         }
 
 
@@ -133,7 +136,8 @@ namespace TimeWorkTracking
             if (connectionString !="" && tbDatabaseTWT.Text != "")
             {
                 MsSqlDatabase.CreateDataBase(connectionString);
-                TestFormConnectionTwt();                                //проверить соединение по настройкам формы
+                if (TestFormConnectionTwt())                            //проверить соединение по настройкам формы
+                    this.Close();// Hide();                                        //закрыть форму
             }
         }
 
