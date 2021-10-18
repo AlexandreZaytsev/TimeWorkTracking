@@ -55,8 +55,17 @@ namespace TimeWorkTracking
             this.toolStripSplitButton4 = new System.Windows.Forms.ToolStripSplitButton();
             this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripSplitButton5 = new System.Windows.Forms.ToolStripSplitButton();
+            this.справочникСотрудникиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.справочникСпециальныеОтметкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.производственныйКалендарьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.енкеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.укенToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.укенToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.укенToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -182,11 +191,11 @@ namespace TimeWorkTracking
             this.toolStripSplitButton4,
             this.toolStripStatusLabel4,
             this.toolStripSplitButton5});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 539);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 599);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 10, 0);
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStrip1.Size = new System.Drawing.Size(635, 26);
+            this.statusStrip1.Size = new System.Drawing.Size(655, 26);
             this.statusStrip1.TabIndex = 15;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -232,11 +241,15 @@ namespace TimeWorkTracking
             // 
             this.tsbtUsers.AutoToolTip = false;
             this.tsbtUsers.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbtUsers.DropDownButtonWidth = 0;
+            this.tsbtUsers.DropDownButtonWidth = 14;
+            this.tsbtUsers.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.справочникСотрудникиToolStripMenuItem,
+            this.справочникСпециальныеОтметкиToolStripMenuItem,
+            this.производственныйКалендарьToolStripMenuItem});
             this.tsbtUsers.Image = global::TimeWorkTracking.Properties.Resources.users;
             this.tsbtUsers.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbtUsers.Name = "tsbtUsers";
-            this.tsbtUsers.Size = new System.Drawing.Size(25, 24);
+            this.tsbtUsers.Size = new System.Drawing.Size(39, 24);
             this.tsbtUsers.Text = "Пользователи";
             // 
             // toolStripSplitButton3
@@ -309,12 +322,73 @@ namespace TimeWorkTracking
             this.toolStripSplitButton5.Size = new System.Drawing.Size(25, 24);
             this.toolStripSplitButton5.Text = "Посещаемость";
             // 
+            // справочникСотрудникиToolStripMenuItem
+            // 
+            this.справочникСотрудникиToolStripMenuItem.Image = global::TimeWorkTracking.Properties.Resources.users;
+            this.справочникСотрудникиToolStripMenuItem.Name = "справочникСотрудникиToolStripMenuItem";
+            this.справочникСотрудникиToolStripMenuItem.Size = new System.Drawing.Size(273, 26);
+            this.справочникСотрудникиToolStripMenuItem.Text = "Справочник Сотрудники";
+            // 
+            // справочникСпециальныеОтметкиToolStripMenuItem
+            // 
+            this.справочникСпециальныеОтметкиToolStripMenuItem.Image = global::TimeWorkTracking.Properties.Resources.specmark;
+            this.справочникСпециальныеОтметкиToolStripMenuItem.Name = "справочникСпециальныеОтметкиToolStripMenuItem";
+            this.справочникСпециальныеОтметкиToolStripMenuItem.Size = new System.Drawing.Size(273, 26);
+            this.справочникСпециальныеОтметкиToolStripMenuItem.Text = "Справочник Специальные отметки";
+            // 
+            // производственныйКалендарьToolStripMenuItem
+            // 
+            this.производственныйКалендарьToolStripMenuItem.Image = global::TimeWorkTracking.Properties.Resources.calendar;
+            this.производственныйКалендарьToolStripMenuItem.Name = "производственныйКалендарьToolStripMenuItem";
+            this.производственныйКалендарьToolStripMenuItem.Size = new System.Drawing.Size(273, 26);
+            this.производственныйКалендарьToolStripMenuItem.Text = "Производственный календарь";
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.енкеToolStripMenuItem,
+            this.укенToolStripMenuItem,
+            this.укенToolStripMenuItem1,
+            this.укенToolStripMenuItem2});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.menuStrip1.Size = new System.Drawing.Size(655, 24);
+            this.menuStrip1.TabIndex = 16;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // енкеToolStripMenuItem
+            // 
+            this.енкеToolStripMenuItem.Name = "енкеToolStripMenuItem";
+            this.енкеToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.енкеToolStripMenuItem.Text = "енке";
+            // 
+            // укенToolStripMenuItem
+            // 
+            this.укенToolStripMenuItem.Name = "укенToolStripMenuItem";
+            this.укенToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.укенToolStripMenuItem.Text = "укен";
+            this.укенToolStripMenuItem.ToolTipText = "цукецукецуке ";
+            // 
+            // укенToolStripMenuItem1
+            // 
+            this.укенToolStripMenuItem1.Name = "укенToolStripMenuItem1";
+            this.укенToolStripMenuItem1.Size = new System.Drawing.Size(44, 20);
+            this.укенToolStripMenuItem1.Text = "укен";
+            // 
+            // укенToolStripMenuItem2
+            // 
+            this.укенToolStripMenuItem2.Name = "укенToolStripMenuItem2";
+            this.укенToolStripMenuItem2.Size = new System.Drawing.Size(44, 20);
+            this.укенToolStripMenuItem2.Text = "укен";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(635, 565);
+            this.ClientSize = new System.Drawing.Size(655, 625);
             this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.connect_db);
             this.Controls.Add(this.new_db);
             this.Controls.Add(this.dataGridView1);
@@ -329,6 +403,7 @@ namespace TimeWorkTracking
             this.Controls.Add(this.label1);
             this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmMain";
@@ -338,6 +413,8 @@ namespace TimeWorkTracking
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -370,6 +447,14 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton4;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
         private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton5;
+        private System.Windows.Forms.ToolStripMenuItem справочникСпециальныеОтметкиToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem справочникСотрудникиToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem производственныйКалендарьToolStripMenuItem;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem енкеToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem укенToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem укенToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem укенToolStripMenuItem2;
     }
 }
 
