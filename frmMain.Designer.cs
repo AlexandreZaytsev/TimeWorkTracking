@@ -47,7 +47,7 @@ namespace TimeWorkTracking
             this.tsbtDataBaseSQL = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsbtDataBasePACS = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsbtGuideUsers = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripDropDownButton3 = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -160,7 +160,7 @@ namespace TimeWorkTracking
             // 
             // new_db
             // 
-            this.new_db.Location = new System.Drawing.Point(979, 54);
+            this.new_db.Location = new System.Drawing.Point(471, 57);
             this.new_db.Margin = new System.Windows.Forms.Padding(4);
             this.new_db.Name = "new_db";
             this.new_db.Size = new System.Drawing.Size(100, 28);
@@ -171,7 +171,7 @@ namespace TimeWorkTracking
             // 
             // connect_db
             // 
-            this.connect_db.Location = new System.Drawing.Point(704, 55);
+            this.connect_db.Location = new System.Drawing.Point(471, 21);
             this.connect_db.Margin = new System.Windows.Forms.Padding(4);
             this.connect_db.Name = "connect_db";
             this.connect_db.Size = new System.Drawing.Size(100, 28);
@@ -188,7 +188,7 @@ namespace TimeWorkTracking
             this.tsbtDataBaseSQL,
             this.tsbtDataBasePACS,
             this.toolStripStatusLabel1,
-            this.toolStripDropDownButton1,
+            this.tsbtGuideUsers,
             this.toolStripDropDownButton2,
             this.toolStripDropDownButton3,
             this.toolStripStatusLabel3,
@@ -198,12 +198,12 @@ namespace TimeWorkTracking
             this.toolStripDropDownButton6,
             this.toolStripStatusLabel5,
             this.toolStripStatusLabel6});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 386);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 427);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 13, 0);
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStrip1.ShowItemToolTips = true;
-            this.statusStrip1.Size = new System.Drawing.Size(979, 26);
+            this.statusStrip1.Size = new System.Drawing.Size(882, 26);
             this.statusStrip1.TabIndex = 15;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -222,7 +222,7 @@ namespace TimeWorkTracking
             this.tsbtDataBaseSQL.ShowDropDownArrow = false;
             this.tsbtDataBaseSQL.Size = new System.Drawing.Size(82, 24);
             this.tsbtDataBaseSQL.Text = "БД SQL";
-            this.tsbtDataBaseSQL.ToolTipText = "Подключение к базе учета рабочего времениданных SQL";
+            this.tsbtDataBaseSQL.ToolTipText = "Подключение к SQL базе учета рабочего времени";
             this.tsbtDataBaseSQL.Click += new System.EventHandler(this.tsbtDataBaseSQL_Click);
             // 
             // tsbtDataBasePACS
@@ -240,20 +240,20 @@ namespace TimeWorkTracking
             // 
             this.toolStripStatusLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(320, 20);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(262, 20);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "    Справочники:";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // toolStripDropDownButton1
+            // tsbtGuideUsers
             // 
-            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripDropDownButton1.Image = global::TimeWorkTracking.Properties.Resources.users;
-            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.ShowDropDownArrow = false;
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(24, 24);
-            this.toolStripDropDownButton1.Text = "toolStripDropDownButton1";
+            this.tsbtGuideUsers.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbtGuideUsers.Image = global::TimeWorkTracking.Properties.Resources.users;
+            this.tsbtGuideUsers.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtGuideUsers.Name = "tsbtGuideUsers";
+            this.tsbtGuideUsers.ShowDropDownArrow = false;
+            this.tsbtGuideUsers.Size = new System.Drawing.Size(24, 24);
+            this.tsbtGuideUsers.Text = "Сотрудники";
             // 
             // toolStripDropDownButton2
             // 
@@ -263,7 +263,7 @@ namespace TimeWorkTracking
             this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
             this.toolStripDropDownButton2.ShowDropDownArrow = false;
             this.toolStripDropDownButton2.Size = new System.Drawing.Size(24, 24);
-            this.toolStripDropDownButton2.Text = "toolStripDropDownButton2";
+            this.toolStripDropDownButton2.Text = "Специальные отметки";
             // 
             // toolStripDropDownButton3
             // 
@@ -273,7 +273,7 @@ namespace TimeWorkTracking
             this.toolStripDropDownButton3.Name = "toolStripDropDownButton3";
             this.toolStripDropDownButton3.ShowDropDownArrow = false;
             this.toolStripDropDownButton3.Size = new System.Drawing.Size(24, 24);
-            this.toolStripDropDownButton3.Text = "toolStripDropDownButton3";
+            this.toolStripDropDownButton3.Text = "Производственный календарь";
             // 
             // toolStripStatusLabel3
             // 
@@ -290,7 +290,7 @@ namespace TimeWorkTracking
             this.toolStripDropDownButton4.Name = "toolStripDropDownButton4";
             this.toolStripDropDownButton4.ShowDropDownArrow = false;
             this.toolStripDropDownButton4.Size = new System.Drawing.Size(24, 24);
-            this.toolStripDropDownButton4.Text = "toolStripDropDownButton4";
+            this.toolStripDropDownButton4.Text = "Бланк Учета температуры";
             // 
             // toolStripDropDownButton5
             // 
@@ -300,7 +300,7 @@ namespace TimeWorkTracking
             this.toolStripDropDownButton5.Name = "toolStripDropDownButton5";
             this.toolStripDropDownButton5.ShowDropDownArrow = false;
             this.toolStripDropDownButton5.Size = new System.Drawing.Size(24, 24);
-            this.toolStripDropDownButton5.Text = "toolStripDropDownButton5";
+            this.toolStripDropDownButton5.Text = "Бланк Учета рабочего времени";
             // 
             // toolStripStatusLabel4
             // 
@@ -317,7 +317,7 @@ namespace TimeWorkTracking
             this.toolStripDropDownButton6.Name = "toolStripDropDownButton6";
             this.toolStripDropDownButton6.ShowDropDownArrow = false;
             this.toolStripDropDownButton6.Size = new System.Drawing.Size(24, 24);
-            this.toolStripDropDownButton6.Text = "toolStripDropDownButton6";
+            this.toolStripDropDownButton6.Text = "Итоговый отчет";
             // 
             // toolStripStatusLabel5
             // 
@@ -334,7 +334,7 @@ namespace TimeWorkTracking
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(979, 412);
+            this.ClientSize = new System.Drawing.Size(882, 453);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.connect_db);
             this.Controls.Add(this.new_db);
@@ -353,6 +353,7 @@ namespace TimeWorkTracking
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(900, 500);
             this.Name = "frmMain";
             this.Text = "Учет рабочего времени";
             this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.frmMain_HelpButtonClicked);
@@ -384,7 +385,7 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripDropDownButton tsbtGuideUsers;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton2;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton3;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton4;
