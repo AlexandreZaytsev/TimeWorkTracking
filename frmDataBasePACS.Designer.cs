@@ -146,7 +146,7 @@ namespace TimeWorkTracking
             this.Controls.Add(this.label10);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "frmDataBasePACS";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "СКУД Настройка соединения ";
             this.Load += new System.EventHandler(this.frmDataBasePACS_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

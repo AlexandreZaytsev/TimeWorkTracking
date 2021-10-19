@@ -215,7 +215,7 @@ namespace TimeWorkTracking
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmDataBaseSQL";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "SQL Настройка соединения ";
             this.Load += new System.EventHandler(this.frmDataBaseSQL_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picStatusTWT)).EndInit();
