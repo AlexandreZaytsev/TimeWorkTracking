@@ -265,11 +265,18 @@ namespace TimeWorkTracking
             using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
             {
                 sqlConnection.Open();
+                /*
                 using (var command = sqlConnection.CreateCommand())
                 {
                     command.CommandText = $"SELECT db_id('{databaseName}')";
                     return command.ExecuteScalar() != DBNull.Value;
                 }
+                */
+                using (SqlCommand cmd = new SqlCommand($"SELECT db_id('{databaseName}')", sqlConnection)) 
+                {
+                    return cmd.ExecuteScalar() != DBNull.Value;
+                }
+
             }
         }
 
@@ -288,7 +295,7 @@ namespace TimeWorkTracking
                         sqlConnection.Open();
                         ret = true;
                     }
-                    catch (SqlException ex)
+                    catch (SqlException)
                     { }
                     finally
                     {
