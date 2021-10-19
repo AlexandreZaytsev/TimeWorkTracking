@@ -272,53 +272,9 @@ namespace TimeWorkTracking
                 }
             }
         }
-        //удалить бд
-        private static void DropDatabase(string connectionString)
-        {
-            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
-            var databaseName = sqlConnectionStringBuilder.InitialCatalog;
-            sqlConnectionStringBuilder.InitialCatalog = "master";
-            using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
-            {
-               sqlConnection.Open();
-               using (var sqlCommand = sqlConnection.CreateCommand())
-               {
-                   sqlCommand.CommandText = $@"
-                    ALTER DATABASE {databaseName} SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-                    DROP DATABASE [{databaseName}]
-                ";
-                    sqlCommand.ExecuteNonQuery();
-                }
-            }
-        }
 
-        //PUBLIC
-
-
-        //пересоздать БД 
-        public static void CreateDataBase(string connectionstring)
-        {
-            if (DatabaseExists(connectionstring))
-            {
-                DropDatabase(connectionstring);
-            }
-            CreateDatabase(connectionstring); 
-        }
-        public static string GetSqlConnection(string connectionString) 
-        {
-            if (ConnectExists(connectionString))
-            {
-                if (DatabaseExists(connectionString))
-                    return connectionString;
-                else
-                    return "-1";        //база данных не существует
-            }
-            else
-                return "-9";            //соединение установить не удалось
-        }
-
-        //проверить соединение по строке подключения
-        public static bool CheckConnectWithConnectionStr(string connectionString)
+        //проверить что и соединение и бд существует
+        private static bool FullConnectExists(string connectionString)
         {
             bool ret = false;
             if (connectionString != "")
@@ -345,5 +301,85 @@ namespace TimeWorkTracking
             }
             return ret;
         }
+
+        //выполнить запрос и вернуть DataSet
+        private static DataTable GetTableRequest(string connectionString, string tableName)
+        {
+            
+            DataSet ds= new DataSet(); 
+            using (var sqlConnection = new SqlConnection(connectionString))
+            {
+                SqlDataAdapter da = new SqlDataAdapter("Select * From " + tableName, sqlConnection);
+                sqlConnection.Open();
+                da.Fill(ds, tableName);
+                sqlConnection.Close();
+            }
+            return ds.Tables[tableName];
+        }
+
+        //удалить бд
+        private static void DropDatabase(string connectionString)
+        {
+            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+            var databaseName = sqlConnectionStringBuilder.InitialCatalog;
+            sqlConnectionStringBuilder.InitialCatalog = "master";
+            using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
+            {
+               sqlConnection.Open();
+               using (var sqlCommand = sqlConnection.CreateCommand())
+               {
+                   sqlCommand.CommandText = $@"
+                    ALTER DATABASE {databaseName} SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+                    DROP DATABASE [{databaseName}]
+                ";
+                    sqlCommand.ExecuteNonQuery();
+                }
+            }
+        }
+
+
+
+
+        //PUBLIC------------------------------------------------------------------------
+
+
+        //пересоздать БД 
+        public static void CreateDataBase(string connectionstring)
+        {
+            if (DatabaseExists(connectionstring))
+            {
+                DropDatabase(connectionstring);
+            }
+            CreateDatabase(connectionstring); 
+        }
+
+        //проверить соединение отдельно по соединению (на базе master) и по имени базы в списке баз
+        //выдать расшифровку ошибок
+        public static string GetSqlConnection(string connectionString) 
+        {
+            if (ConnectExists(connectionString))
+            {
+                if (DatabaseExists(connectionString))
+                    return connectionString;
+                else
+                    return "-1";        //база данных не существует
+            }
+            else
+                return "-9";            //соединение установить не удалось
+        }
+
+        //проверить соединение сразу по строке подключения
+        //без выдачи ошибок
+        public static bool CheckConnectWithConnectionStr(string connectionString)
+        {
+            return FullConnectExists(connectionString);
+        }
+
+        //выполнить запрос и вернуть DataSet
+        public static DataTable TableRequest(string connectionString, string tableName)
+        {
+            return GetTableRequest(connectionString, tableName);
+        }
+
     }
 }

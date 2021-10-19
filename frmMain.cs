@@ -45,6 +45,7 @@ namespace TimeWorkTracking
         private void Form1_Load(object sender, EventArgs e)
         {
             //  GetList();
+            dataGridView1.DataSource = MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "SpecialMarks");
             CheckConnects();           //проверить соединение с базами
 
         }
@@ -82,44 +83,7 @@ namespace TimeWorkTracking
             GetList();
         }
 
-        private void button4_Click(object sender, EventArgs e)
-        {
-            String str;
-            SqlConnection myConn = new SqlConnection("Server=localhost;Integrated security=SSPI;database=master");
-/*
-            str = "CREATE DATABASE MyDatabase ON PRIMARY " +
-             "(NAME = TimeWorkTracking_dt, " +
-             "FILENAME = 'C:\\MyDatabaseData.mdf', " +
-             "SIZE = 2MB, MAXSIZE = 10MB, FILEGROWTH = 10%)" +
-             "LOG ON (NAME = MyDatabase_Log, " +
-             "FILENAME = 'C:\\MyDatabaseLog.ldf', " +
-             "SIZE = 1MB, " +
-             "MAXSIZE = 5MB, " +
-             "FILEGROWTH = 10%)";
-*/
-str = "CREATE DATABASE TimeWorkTracking_dt";
-
-            SqlCommand myCommand = new SqlCommand(str, myConn);
-            try
-            {
-                myConn.Open();
-                myCommand.ExecuteNonQuery();
-                MessageBox.Show("DataBase is Created Successfully", "MyProgram", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (System.Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "MyProgram", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            finally
-            {
-                if (myConn.State == ConnectionState.Open)
-                {
-                    myConn.Close();
-                }
-            }
-        }
-
-        static private string GetConnectionString()
+         static private string GetConnectionString()
         {
             // To avoid storing the connection string in your code,
             // you can retrieve it from a configuration file.
@@ -159,59 +123,12 @@ str = "CREATE DATABASE TimeWorkTracking_dt";
 
         }
 
-
-        private void connect_db_Click(object sender, EventArgs e)
-        {
-
-/*
-            using Microsoft.Data.ConnectionUI;
-
-            DataConnectionDialog dcd = new Microsoft.Data.ConnectionUI.DataConnectionDialog();
-            DataSource.AddStandardDataSources(dcd);
-            if (DataConnectionDialog.Show(dcd) == DialogResult.OK)
-            {
-                string cons = dcd.ConnectionString;
-            }
-*/
-
-
-
-            string connectionString = GetConnectionString();
-
-                using (SqlConnection connection = new SqlConnection())
-                {
-                    connection.ConnectionString = connectionString;
-
-                    connection.Open();
-
-                    Console.WriteLine("State: {0}", connection.State);
-                    Console.WriteLine("ConnectionString: {0}",
-                        connection.ConnectionString);
-                }
-
-
-
-
-        }
-
-
-
-        private void tabRegistration_Click(object sender, EventArgs e)
-        {
-
-        }
 //events
-
-
-
-
-
 /*
         private void picSetting_MouseUp(object sender, MouseEventArgs e)
         {
            picSetting.BackColor= System.Drawing.SystemColors.Control;
         }
-
         private void picSetting_MouseDown(object sender, MouseEventArgs e)
         {
             picSetting.BackColor = System.Drawing.SystemColors.ControlDark;

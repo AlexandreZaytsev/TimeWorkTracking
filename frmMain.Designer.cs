@@ -40,8 +40,6 @@ namespace TimeWorkTracking
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.new_db = new System.Windows.Forms.Button();
-            this.connect_db = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsbtDataBaseSQL = new System.Windows.Forms.ToolStripDropDownButton();
@@ -157,28 +155,6 @@ namespace TimeWorkTracking
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.Size = new System.Drawing.Size(421, 148);
             this.dataGridView1.TabIndex = 9;
-            // 
-            // new_db
-            // 
-            this.new_db.Location = new System.Drawing.Point(471, 57);
-            this.new_db.Margin = new System.Windows.Forms.Padding(4);
-            this.new_db.Name = "new_db";
-            this.new_db.Size = new System.Drawing.Size(100, 28);
-            this.new_db.TabIndex = 10;
-            this.new_db.Text = "new_db";
-            this.new_db.UseVisualStyleBackColor = true;
-            this.new_db.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // connect_db
-            // 
-            this.connect_db.Location = new System.Drawing.Point(471, 21);
-            this.connect_db.Margin = new System.Windows.Forms.Padding(4);
-            this.connect_db.Name = "connect_db";
-            this.connect_db.Size = new System.Drawing.Size(100, 28);
-            this.connect_db.TabIndex = 11;
-            this.connect_db.Text = "connect_db";
-            this.connect_db.UseVisualStyleBackColor = true;
-            this.connect_db.Click += new System.EventHandler(this.connect_db_Click);
             // 
             // statusStrip1
             // 
@@ -336,8 +312,6 @@ namespace TimeWorkTracking
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(882, 453);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.connect_db);
-            this.Controls.Add(this.new_db);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -378,8 +352,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Button new_db;
-        private System.Windows.Forms.Button connect_db;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
