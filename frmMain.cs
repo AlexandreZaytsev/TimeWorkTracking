@@ -45,7 +45,7 @@ namespace TimeWorkTracking
         private void Form1_Load(object sender, EventArgs e)
         {
             //  GetList();
-            dataGridView1.DataSource = MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "SpecialMarks");
+            dataGridView1.DataSource = MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "Select * From SpecialMarks");
             CheckConnects();           //проверить соединение с базами
 
         }
@@ -143,19 +143,21 @@ namespace TimeWorkTracking
 
         private void tsbtDataBaseSQL_Click(object sender, EventArgs e)
         {
-            frmDataBaseSQL frm = new frmDataBaseSQL();
-            frm.Owner = this;
+            frmDataBaseSQL frm = new frmDataBaseSQL {Owner = this};
             CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
             frm.ShowDialog();
         }
 
         private void tsbtDataBasePACS_Click(object sender, EventArgs e)
         {
-            frmDataBasePACS frm = new frmDataBasePACS
-            {
-                Owner = this
-            };
+            frmDataBasePACS frm = new frmDataBasePACS {Owner = this};
             CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
+            frm.ShowDialog();
+        }
+
+        private void tsbtGuideMarks_Click(object sender, EventArgs e)
+        {
+            frmSpecialMarks frm = new frmSpecialMarks { Owner = this };
             frm.ShowDialog();
         }
 
@@ -189,6 +191,7 @@ namespace TimeWorkTracking
             }
             */
         }
+
 
     }
 

@@ -310,10 +310,24 @@ namespace TimeWorkTracking
         }
 
         //выполнить запрос и вернуть DataSet
-        private static DataTable GetTableRequest(string connectionString, string tableName)
+        private static DataTable GetTableRequest(string connectionString, string sqlRequest)
         {
             
-            DataSet ds= new DataSet(); 
+            DataSet ds= new DataSet();  // Создаем объект Dataset
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                // Создаем объект DataAdapter
+                SqlDataAdapter adapter = new SqlDataAdapter(sqlRequest, connectionString);
+                // Создаем объект Dataset
+                //DataSet ds = new DataSet();
+                
+                adapter.Fill(ds);       // Заполняем Dataset
+                // Отображаем данные
+  //              dataGridView1.DataSource = ds.Tables[0];
+            }
+/*
             using (var sqlConnection = new SqlConnection(connectionString))
             {
                 SqlDataAdapter da = new SqlDataAdapter("Select * From " + tableName, sqlConnection);
@@ -321,7 +335,8 @@ namespace TimeWorkTracking
                 da.Fill(ds, tableName);
                 sqlConnection.Close();
             }
-            return ds.Tables[tableName];
+ */
+            return ds.Tables[0]; //ds.Tables[tableName];    // Возвращаем объект Dataset
         }
 
         //удалить бд
@@ -383,9 +398,9 @@ namespace TimeWorkTracking
         }
 
         //выполнить запрос и вернуть DataSet
-        public static DataTable TableRequest(string connectionString, string tableName)
+        public static DataTable TableRequest(string connectionString, string sqlRequest)
         {
-            return GetTableRequest(connectionString, tableName);
+            return GetTableRequest(connectionString, sqlRequest);
         }
 
     }
