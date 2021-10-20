@@ -29,6 +29,7 @@ namespace TimeWorkTracking
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSpecialMarks));
             this.dgDataBase = new System.Windows.Forms.DataGridView();
             this.splitContainerEdit = new System.Windows.Forms.SplitContainer();
@@ -40,6 +41,7 @@ namespace TimeWorkTracking
             this.name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.note = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lstDataBase = new System.Windows.Forms.ListBox();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgDataBase)).BeginInit();
             this.splitContainerEdit.Panel1.SuspendLayout();
             this.splitContainerEdit.Panel2.SuspendLayout();
@@ -52,14 +54,17 @@ namespace TimeWorkTracking
             this.dgDataBase.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgDataBase.Dock = System.Windows.Forms.DockStyle.Top;
             this.dgDataBase.Location = new System.Drawing.Point(0, 0);
+            this.dgDataBase.Margin = new System.Windows.Forms.Padding(4);
             this.dgDataBase.Name = "dgDataBase";
-            this.dgDataBase.Size = new System.Drawing.Size(325, 170);
+            this.dgDataBase.RowHeadersWidth = 51;
+            this.dgDataBase.Size = new System.Drawing.Size(433, 209);
             this.dgDataBase.TabIndex = 0;
             // 
             // splitContainerEdit
             // 
             this.splitContainerEdit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainerEdit.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerEdit.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainerEdit.Name = "splitContainerEdit";
             // 
             // splitContainerEdit.Panel1
@@ -71,15 +76,17 @@ namespace TimeWorkTracking
             // 
             this.splitContainerEdit.Panel2.Controls.Add(this.lstwDataBase);
             this.splitContainerEdit.Panel2.Controls.Add(this.lstDataBase);
-            this.splitContainerEdit.Size = new System.Drawing.Size(1082, 438);
-            this.splitContainerEdit.SplitterDistance = 325;
+            this.splitContainerEdit.Size = new System.Drawing.Size(1443, 539);
+            this.splitContainerEdit.SplitterDistance = 433;
+            this.splitContainerEdit.SplitterWidth = 5;
             this.splitContainerEdit.TabIndex = 1;
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(70, 194);
+            this.numericUpDown1.Location = new System.Drawing.Point(93, 239);
+            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(50, 20);
+            this.numericUpDown1.Size = new System.Drawing.Size(67, 22);
             this.numericUpDown1.TabIndex = 1;
             // 
             // lstwDataBase
@@ -93,12 +100,13 @@ namespace TimeWorkTracking
             this.note});
             this.lstwDataBase.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lstwDataBase.HideSelection = false;
-            this.lstwDataBase.Location = new System.Drawing.Point(21, 136);
+            this.lstwDataBase.Location = new System.Drawing.Point(28, 167);
+            this.lstwDataBase.Margin = new System.Windows.Forms.Padding(4);
             this.lstwDataBase.Name = "lstwDataBase";
-            this.lstwDataBase.Size = new System.Drawing.Size(720, 290);
+            this.lstwDataBase.Size = new System.Drawing.Size(959, 356);
             this.lstwDataBase.TabIndex = 1;
             this.lstwDataBase.UseCompatibleStateImageBehavior = false;
-            this.lstwDataBase.View = System.Windows.Forms.View.Details;
+            this.lstwDataBase.View = System.Windows.Forms.View.SmallIcon;
             this.lstwDataBase.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstwDataBase_ColumnClick);
             this.lstwDataBase.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.lstwDataBase_ColumnWidthChanging);
             this.lstwDataBase.ItemActivate += new System.EventHandler(this.lstwDataBase_ItemActivate);
@@ -108,7 +116,7 @@ namespace TimeWorkTracking
             // 
             this.used.Text = "";
             this.used.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.used.Width = 25;
+            this.used.Width = 29;
             // 
             // num
             // 
@@ -134,19 +142,42 @@ namespace TimeWorkTracking
             // lstDataBase
             // 
             this.lstDataBase.FormattingEnabled = true;
-            this.lstDataBase.Location = new System.Drawing.Point(3, 12);
+            this.lstDataBase.ItemHeight = 16;
+            this.lstDataBase.Location = new System.Drawing.Point(4, 15);
+            this.lstDataBase.Margin = new System.Windows.Forms.Padding(4);
             this.lstDataBase.Name = "lstDataBase";
-            this.lstDataBase.Size = new System.Drawing.Size(232, 95);
+            this.lstDataBase.Size = new System.Drawing.Size(308, 116);
             this.lstDataBase.TabIndex = 0;
+            // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "setting.ico");
+            this.imageList1.Images.SetKeyName(1, "on1_.png");
+            this.imageList1.Images.SetKeyName(2, "off_.png");
+            this.imageList1.Images.SetKeyName(3, "on3.png");
+            this.imageList1.Images.SetKeyName(4, "off3.png");
+            this.imageList1.Images.SetKeyName(5, "on2.png");
+            this.imageList1.Images.SetKeyName(6, "off2.png");
+            this.imageList1.Images.SetKeyName(7, "off1_.png");
+            this.imageList1.Images.SetKeyName(8, "on_.png");
+            this.imageList1.Images.SetKeyName(9, "on.png");
+            this.imageList1.Images.SetKeyName(10, "off.png");
+            this.imageList1.Images.SetKeyName(11, "sel_.png");
+            this.imageList1.Images.SetKeyName(12, "twt.ico");
+            this.imageList1.Images.SetKeyName(13, "sel.png");
+            this.imageList1.Images.SetKeyName(14, "ok.png");
             // 
             // frmSpecialMarks
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1082, 438);
+            this.ClientSize = new System.Drawing.Size(1443, 539);
             this.Controls.Add(this.splitContainerEdit);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmSpecialMarks";
             this.Text = "Специальные отметки";
             this.Load += new System.EventHandler(this.frmSpecialMarks_Load);
@@ -171,5 +202,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ColumnHeader name;
         private System.Windows.Forms.ColumnHeader note;
         private System.Windows.Forms.ColumnHeader used;
+        private System.Windows.Forms.ImageList imageList1;
     }
 }

@@ -150,6 +150,9 @@
     <None Include="Resources\heat.png" />
     <None Include="Resources\form.png" />
     <None Include="Resources\pass.png" />
+    <None Include="Resources\sel.png" />
+    <None Include="Resources\off_.png" />
+    <None Include="Resources\on_.png" />
     <Content Include="twt.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

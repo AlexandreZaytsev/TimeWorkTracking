@@ -16,6 +16,9 @@ namespace TimeWorkTracking
         public frmSpecialMarks()
         {
             InitializeComponent();
+            lstwDataBase.SmallImageList = imageList1;
+
+
         }
 
         private void frmSpecialMarks_Load(object sender, EventArgs e)
@@ -70,7 +73,12 @@ namespace TimeWorkTracking
             // You can use the ListViewItemSorter property in combination
             // with the Sort method to perform custom sorting.
             _lvwItemComparer = new ListViewItemComparer();
+
+            _lvwItemComparer.SortColumn = 3;// 1;// e.Column;
+            _lvwItemComparer.Order = SortOrder.Ascending;
+
             this.lstwDataBase.ListViewItemSorter = _lvwItemComparer;
+
         }
 
         // Load Data from the DataSet into the ListView
@@ -90,9 +98,10 @@ namespace TimeWorkTracking
                 // Only row that have not been deleted
                 if (drow.RowState != DataRowState.Deleted)
                 {
+                    //                    listView1.Items[0].ImageIndex = 3;
                     // Define the list items
-                    ListViewItem lvi = new ListViewItem("",0);
-                    lvi.Text= (Boolean)drow["Uses"]? "l" : ""; 
+                    ListViewItem lvi = new ListViewItem(drow["Uses"].ToString(), 0);
+                    lvi.ImageIndex = (Boolean)drow["Uses"]? 1 : 2; 
                 //    lvi.Checked = (Boolean)drow["Uses"];
                     //       lvi.SubItems.Add(drow["Uses"].ToString());
                     lvi.SubItems.Add(drow["DigitalCode"].ToString());
