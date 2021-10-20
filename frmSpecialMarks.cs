@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -74,7 +76,7 @@ namespace TimeWorkTracking
             // with the Sort method to perform custom sorting.
             _lvwItemComparer = new ListViewItemComparer();
 
-            _lvwItemComparer.SortColumn = 3;// 1;// e.Column;
+            _lvwItemComparer.SortColumn = 5;// 1;// e.Column; (3 name)
             _lvwItemComparer.Order = SortOrder.Ascending;
 
             this.lstwDataBase.ListViewItemSorter = _lvwItemComparer;
@@ -108,7 +110,9 @@ namespace TimeWorkTracking
                     lvi.SubItems.Add(drow["LetterCode"].ToString());
                     lvi.SubItems.Add(drow["Name"].ToString());
                     lvi.SubItems.Add(drow["Note"].ToString());
+                    lvi.SubItems.Add(drow["id"].ToString().PadLeft(8, '0'));
                     lvi.SubItems.Add(drow["id"].ToString());
+
                     //  lvi.Checked = true;
 
                     // Add the list items to the ListView
@@ -146,28 +150,6 @@ namespace TimeWorkTracking
 
         private void lstwDataBase_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // MessageBox.Show(lstwDataBase.SelectedIndices[0].ToString());
-            /*
-              ListView.SelectedIndexCollection indices = lstwDataBase.SelectedIndices;
-              MessageBox.Show(indices.ToString());
-           */
-            //    MessageBox.Show(lstwDataBase.Items.IndexOf(lstwDataBase.SelectedItems[0]).ToString());
-
-            /*
-            if (lstwDataBase.FocusedItem == null) return;
-            int p = lstwDataBase.FocusedItem.Index;
-            MessageBox.Show(p.ToString());
-            */
-
-            /*
-
-                        int selectionindex = lstwDataBase.SelectedIndex();
-            if (selectionindex != -1) 
-            {
-                ListViewItem seletedItem = lstwDataBase.Items[selectionindex];
-                MessageBox.Show(selectionindex.ToString());
-            }
-            */
             int ind = lstwDataBase.SelectedIndex();
             if (ind >= 0)
                 MessageBox.Show(ind.ToString()+"\n"+
@@ -175,7 +157,8 @@ namespace TimeWorkTracking
                                 lstwDataBase.Items[ind].SubItems[2].ToString() + "\n" +
                                 lstwDataBase.Items[ind].SubItems[3].ToString() + "\n" +
                                 lstwDataBase.Items[ind].SubItems[4].ToString() + "\n" +
-                                lstwDataBase.Items[ind].SubItems[5].ToString() + "\n" 
+                                lstwDataBase.Items[ind].SubItems[5].ToString() + "\n" +
+                                lstwDataBase.Items[ind].SubItems[6].ToString() + "\n"
                                 );
 
             //             lstwDataBase.DeleteItem(lstwDataBase.SelectedIndex);
@@ -194,6 +177,115 @@ namespace TimeWorkTracking
         {
             e.Cancel = true;
             e.NewWidth = lstwDataBase.Columns[e.ColumnIndex].Width;
+        }
+        //изменение цвета заголовка
+        private void lstwDataBase_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            //включить OwnerDraw=true
+         //   e.Graphics.FillRectangle(Brushes.LightGray, e.Bounds);
+          //  e.DrawText();
+            
+            using (var sf = new StringFormat())
+            {
+                sf.Alignment = StringAlignment.Center;
+
+                using (var headerFont = new Font("Microsoft Sans Serif", 9, FontStyle.Bold))
+                {
+                    e.Graphics.FillRectangle(Brushes.LightGray, e.Bounds);
+                    e.Graphics.DrawString(e.Header.Text, headerFont,
+                        Brushes.Black, e.Bounds, sf);
+                }
+            }
+            
+        }
+
+        private void lstwDataBase_DrawItem(object sender, DrawListViewItemEventArgs e)
+        {
+            /*
+            if ((e.State & ListViewItemStates.Selected) != 0)
+            {
+                // Draw the background and focus rectangle for a selected item.
+                e.Graphics.FillRectangle(Brushes.Maroon, e.Bounds);
+                e.DrawFocusRectangle();
+            }
+            else
+            {
+                // Draw the background for an unselected item.
+                using (LinearGradientBrush brush =
+                    new LinearGradientBrush(e.Bounds, Color.Orange,
+                    Color.Maroon, LinearGradientMode.Horizontal))
+                {
+                    e.Graphics.FillRectangle(brush, e.Bounds);
+                }
+            }
+
+            // Draw the item text for views other than the Details view.
+            if (lstwDataBase.View != View.Details)
+            {
+                e.DrawText();
+            }
+            */
+        }
+
+        private void lstwDataBase_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            using (var sf = new StringFormat())
+            {
+                sf.Alignment = StringAlignment.Center;
+
+                using (var headerFont = new Font("Microsoft Sans Serif", 8, FontStyle.Regular))
+                {
+                   // e.Graphics.FillRectangle(Brushes.LightGray, e.Bounds);
+                    e.Graphics.DrawString(e.SubItem.Text, headerFont,
+                        Brushes.Black, e.Bounds, sf);
+                }
+            }
+            /*
+            TextFormatFlags flags = TextFormatFlags.Left;
+
+            using (StringFormat sf = new StringFormat())
+            {
+                // Store the column text alignment, letting it default
+                // to Left if it has not been set to Center or Right.
+                switch (e.Header.TextAlign)
+                {
+                    case HorizontalAlignment.Center:
+                        sf.Alignment = StringAlignment.Center;
+                        flags = TextFormatFlags.HorizontalCenter;
+                        break;
+                    case HorizontalAlignment.Right:
+                        sf.Alignment = StringAlignment.Far;
+                        flags = TextFormatFlags.Right;
+                        break;
+                }
+
+                // Draw the text and background for a subitem with a 
+                // negative value. 
+                double subItemValue;
+                if (e.ColumnIndex > 0 && Double.TryParse(
+                    e.SubItem.Text, NumberStyles.Currency,
+                    NumberFormatInfo.CurrentInfo, out subItemValue) &&
+                    subItemValue < 0)
+                {
+                    // Unless the item is selected, draw the standard 
+                    // background to make it stand out from the gradient.
+                    if ((e.ItemState & ListViewItemStates.Selected) == 0)
+                    {
+                        e.DrawBackground();
+                    }
+
+                    // Draw the subitem text in red to highlight it. 
+                    e.Graphics.DrawString(e.SubItem.Text,
+                        lstwDataBase.Font, Brushes.Red, e.Bounds, sf);
+
+                    return;
+                }
+
+                // Draw normal text for a subitem with a nonnegative 
+                // or nonnumerical value.
+                e.DrawText(flags);
+            }
+            */
         }
     }
 

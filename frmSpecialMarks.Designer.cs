@@ -98,10 +98,11 @@ namespace TimeWorkTracking
             this.code,
             this.name,
             this.note});
-            this.lstwDataBase.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lstwDataBase.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lstwDataBase.HideSelection = false;
             this.lstwDataBase.Location = new System.Drawing.Point(28, 167);
             this.lstwDataBase.Margin = new System.Windows.Forms.Padding(4);
+            this.lstwDataBase.MultiSelect = false;
             this.lstwDataBase.Name = "lstwDataBase";
             this.lstwDataBase.Size = new System.Drawing.Size(959, 356);
             this.lstwDataBase.TabIndex = 1;
@@ -109,6 +110,9 @@ namespace TimeWorkTracking
             this.lstwDataBase.View = System.Windows.Forms.View.SmallIcon;
             this.lstwDataBase.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstwDataBase_ColumnClick);
             this.lstwDataBase.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.lstwDataBase_ColumnWidthChanging);
+            this.lstwDataBase.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.lstwDataBase_DrawColumnHeader);
+            this.lstwDataBase.DrawItem += new System.Windows.Forms.DrawListViewItemEventHandler(this.lstwDataBase_DrawItem);
+            this.lstwDataBase.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.lstwDataBase_DrawSubItem);
             this.lstwDataBase.ItemActivate += new System.EventHandler(this.lstwDataBase_ItemActivate);
             this.lstwDataBase.SelectedIndexChanged += new System.EventHandler(this.lstwDataBase_SelectedIndexChanged);
             // 
