@@ -92,7 +92,6 @@ namespace TimeWorkTracking
             this.code,
             this.name,
             this.note});
-            this.lstwDataBase.HideSelection = false;
             this.lstwDataBase.Location = new System.Drawing.Point(21, 136);
             this.lstwDataBase.Name = "lstwDataBase";
             this.lstwDataBase.Size = new System.Drawing.Size(720, 290);

@@ -94,7 +94,7 @@ namespace TimeWorkTracking
                     ListViewItem lvi = new ListViewItem("",0);
                     lvi.Checked = (Boolean)drow["Uses"];
                     //       lvi.SubItems.Add(drow["Uses"].ToString());
-                    lvi.SubItems.Add(drow["id"].ToString());
+                   // lvi.SubItems.Add(drow["id"].ToString());
                     lvi.SubItems.Add(drow["DigitalCode"].ToString());
                     lvi.SubItems.Add(drow["LetterCode"].ToString());
                     lvi.SubItems.Add(drow["Name"].ToString());
@@ -164,8 +164,8 @@ namespace TimeWorkTracking
                                 lstwDataBase.Items[ind].SubItems[1].ToString() +"\n"+
                                 lstwDataBase.Items[ind].SubItems[2].ToString() + "\n" +
                                 lstwDataBase.Items[ind].SubItems[3].ToString() + "\n" +
-                                lstwDataBase.Items[ind].SubItems[4].ToString() + "\n" +
-                                lstwDataBase.Items[ind].SubItems[5].ToString() + "\n"
+                                lstwDataBase.Items[ind].SubItems[4].ToString() + "\n" //+
+                            //    lstwDataBase.Items[ind].SubItems[5].ToString() + "\n" 
                                 );
 
             //             lstwDataBase.DeleteItem(lstwDataBase.SelectedIndex);
@@ -187,7 +187,11 @@ namespace TimeWorkTracking
         }
     }
 
+    /*----------------------------------------------------------------------------------------------------------
+     *  РАСШИРЕНИЯ
+     -----------------------------------------------------------------------------------------------------------*/
 
+    //получить номер выделенной строки
     public static class Extension
     {
         public static int SelectedIndex(this ListView listView)
