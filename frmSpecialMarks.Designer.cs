@@ -33,8 +33,13 @@ namespace TimeWorkTracking
             this.dgDataBase = new System.Windows.Forms.DataGridView();
             this.splitContainerEdit = new System.Windows.Forms.SplitContainer();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.lstDataBase = new System.Windows.Forms.ListBox();
             this.lstwDataBase = new System.Windows.Forms.ListView();
+            this.used = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.num = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.code = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.note = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lstDataBase = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgDataBase)).BeginInit();
             this.splitContainerEdit.Panel1.SuspendLayout();
             this.splitContainerEdit.Panel2.SuspendLayout();
@@ -77,6 +82,55 @@ namespace TimeWorkTracking
             this.numericUpDown1.Size = new System.Drawing.Size(50, 20);
             this.numericUpDown1.TabIndex = 1;
             // 
+            // lstwDataBase
+            // 
+            this.lstwDataBase.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstwDataBase.CheckBoxes = true;
+            this.lstwDataBase.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.used,
+            this.num,
+            this.code,
+            this.name,
+            this.note});
+            this.lstwDataBase.HideSelection = false;
+            this.lstwDataBase.Location = new System.Drawing.Point(21, 136);
+            this.lstwDataBase.Name = "lstwDataBase";
+            this.lstwDataBase.Size = new System.Drawing.Size(720, 290);
+            this.lstwDataBase.TabIndex = 1;
+            this.lstwDataBase.UseCompatibleStateImageBehavior = false;
+            this.lstwDataBase.View = System.Windows.Forms.View.Details;
+            this.lstwDataBase.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstwDataBase_ColumnClick);
+            this.lstwDataBase.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.lstwDataBase_ColumnWidthChanging);
+            this.lstwDataBase.ItemActivate += new System.EventHandler(this.lstwDataBase_ItemActivate);
+            this.lstwDataBase.SelectedIndexChanged += new System.EventHandler(this.lstwDataBase_SelectedIndexChanged);
+            // 
+            // used
+            // 
+            this.used.Text = "";
+            this.used.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.used.Width = 25;
+            // 
+            // num
+            // 
+            this.num.Text = "№";
+            this.num.Width = 25;
+            // 
+            // code
+            // 
+            this.code.Text = "Код";
+            this.code.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.code.Width = 35;
+            // 
+            // name
+            // 
+            this.name.Text = "Наименование";
+            this.name.Width = 200;
+            // 
+            // note
+            // 
+            this.note.Text = "Расшифровка";
+            this.note.Width = 250;
+            // 
             // lstDataBase
             // 
             this.lstDataBase.FormattingEnabled = true;
@@ -84,16 +138,6 @@ namespace TimeWorkTracking
             this.lstDataBase.Name = "lstDataBase";
             this.lstDataBase.Size = new System.Drawing.Size(232, 95);
             this.lstDataBase.TabIndex = 0;
-            // 
-            // lstwDataBase
-            // 
-            this.lstwDataBase.HideSelection = false;
-            this.lstwDataBase.Location = new System.Drawing.Point(21, 136);
-            this.lstwDataBase.Name = "lstwDataBase";
-            this.lstwDataBase.Size = new System.Drawing.Size(720, 290);
-            this.lstwDataBase.TabIndex = 1;
-            this.lstwDataBase.UseCompatibleStateImageBehavior = false;
-            this.lstwDataBase.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstwDataBase_ColumnClick);
             // 
             // frmSpecialMarks
             // 
@@ -122,5 +166,10 @@ namespace TimeWorkTracking
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.ListBox lstDataBase;
         private System.Windows.Forms.ListView lstwDataBase;
+        private System.Windows.Forms.ColumnHeader num;
+        private System.Windows.Forms.ColumnHeader code;
+        private System.Windows.Forms.ColumnHeader name;
+        private System.Windows.Forms.ColumnHeader note;
+        private System.Windows.Forms.ColumnHeader used;
     }
 }

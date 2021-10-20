@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+
 namespace TimeWorkTracking
 {
     public partial class frmSpecialMarks : Form
@@ -56,13 +57,14 @@ namespace TimeWorkTracking
             lstwDataBase.GridLines = true;                  // Display grid lines.
             lstwDataBase.Sorting = SortOrder.Ascending;     // Sort the items in the list in ascending order.
 
+/*
             // Attach Subitems to the ListView
             lstwDataBase.Columns.Add("Digital", 25, HorizontalAlignment.Left);
             lstwDataBase.Columns.Add("Letter", 35, HorizontalAlignment.Left);
             lstwDataBase.Columns.Add("Name", 100, HorizontalAlignment.Left);
             lstwDataBase.Columns.Add("FullName", 200, HorizontalAlignment.Left);
             lstwDataBase.Columns.Add("Use", 20, HorizontalAlignment.Left);
-
+*/
             // The ListViewItemSorter property allows you to specify the
             // object that performs the sorting of items in the ListView.
             // You can use the ListViewItemSorter property in combination
@@ -89,11 +91,15 @@ namespace TimeWorkTracking
                 if (drow.RowState != DataRowState.Deleted)
                 {
                     // Define the list items
-                    ListViewItem lvi = new ListViewItem(drow["DigitalCode"].ToString());
+                    ListViewItem lvi = new ListViewItem("",0);
+                    lvi.Checked = (Boolean)drow["Uses"];
+                    //       lvi.SubItems.Add(drow["Uses"].ToString());
+                    lvi.SubItems.Add(drow["id"].ToString());
+                    lvi.SubItems.Add(drow["DigitalCode"].ToString());
                     lvi.SubItems.Add(drow["LetterCode"].ToString());
                     lvi.SubItems.Add(drow["Name"].ToString());
                     lvi.SubItems.Add(drow["Note"].ToString());
-                    lvi.SubItems.Add(drow["Uses"].ToString());
+                    //  lvi.Checked = true;
 
                     // Add the list items to the ListView
                     lstwDataBase.Items.Add(lvi);
@@ -126,6 +132,70 @@ namespace TimeWorkTracking
 
             // Perform the sort with these new sort options.
             this.lstwDataBase.Sort();
+        }
+
+        private void lstwDataBase_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // MessageBox.Show(lstwDataBase.SelectedIndices[0].ToString());
+            /*
+              ListView.SelectedIndexCollection indices = lstwDataBase.SelectedIndices;
+              MessageBox.Show(indices.ToString());
+           */
+            //    MessageBox.Show(lstwDataBase.Items.IndexOf(lstwDataBase.SelectedItems[0]).ToString());
+
+            /*
+            if (lstwDataBase.FocusedItem == null) return;
+            int p = lstwDataBase.FocusedItem.Index;
+            MessageBox.Show(p.ToString());
+            */
+
+            /*
+
+                        int selectionindex = lstwDataBase.SelectedIndex();
+            if (selectionindex != -1) 
+            {
+                ListViewItem seletedItem = lstwDataBase.Items[selectionindex];
+                MessageBox.Show(selectionindex.ToString());
+            }
+            */
+            int ind = lstwDataBase.SelectedIndex();
+            if (ind >= 0)
+                MessageBox.Show(ind.ToString()+"\n"+
+                                lstwDataBase.Items[ind].SubItems[1].ToString() +"\n"+
+                                lstwDataBase.Items[ind].SubItems[2].ToString() + "\n" +
+                                lstwDataBase.Items[ind].SubItems[3].ToString() + "\n" +
+                                lstwDataBase.Items[ind].SubItems[4].ToString() + "\n" +
+                                lstwDataBase.Items[ind].SubItems[5].ToString() + "\n"
+                                );
+
+            //             lstwDataBase.DeleteItem(lstwDataBase.SelectedIndex);
+
+
+        }
+
+        private void lstwDataBase_ItemActivate(object sender, EventArgs e)
+        {
+   //         MessageBox.Show(lstwDataBase.FocusedItem.SubItems[3].Text);
+        }
+
+
+        //запретить изменение размеров
+        private void lstwDataBase_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            e.Cancel = true;
+            e.NewWidth = lstwDataBase.Columns[e.ColumnIndex].Width;
+        }
+    }
+
+
+    public static class Extension
+    {
+        public static int SelectedIndex(this ListView listView)
+        {
+            if (listView.SelectedIndices.Count > 0)
+                return listView.SelectedIndices[0];
+            else
+                return -1;
         }
     }
 }
