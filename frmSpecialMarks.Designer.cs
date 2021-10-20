@@ -91,6 +91,7 @@ namespace TimeWorkTracking
             this.code,
             this.name,
             this.note});
+            this.lstwDataBase.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lstwDataBase.HideSelection = false;
             this.lstwDataBase.Location = new System.Drawing.Point(21, 136);
             this.lstwDataBase.Name = "lstwDataBase";

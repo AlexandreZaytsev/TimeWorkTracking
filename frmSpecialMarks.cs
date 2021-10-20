@@ -92,7 +92,8 @@ namespace TimeWorkTracking
                 {
                     // Define the list items
                     ListViewItem lvi = new ListViewItem("",0);
-                    lvi.Checked = (Boolean)drow["Uses"];
+                    lvi.Text= (Boolean)drow["Uses"]? "l" : "";
+                //    lvi.Checked = (Boolean)drow["Uses"];
                     //       lvi.SubItems.Add(drow["Uses"].ToString());
                     lvi.SubItems.Add(drow["DigitalCode"].ToString());
                     lvi.SubItems.Add(drow["LetterCode"].ToString());
