@@ -67,7 +67,7 @@ namespace TimeWorkTracking
             // 
             // tbPasswordPASC
             // 
-            this.tbPasswordPASC.Location = new System.Drawing.Point(153, 111);
+            this.tbPasswordPASC.Location = new System.Drawing.Point(153, 103);
             this.tbPasswordPASC.Margin = new System.Windows.Forms.Padding(4);
             this.tbPasswordPASC.Name = "tbPasswordPASC";
             this.tbPasswordPASC.Size = new System.Drawing.Size(293, 24);
@@ -76,7 +76,7 @@ namespace TimeWorkTracking
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(18, 115);
+            this.label9.Location = new System.Drawing.Point(18, 106);
             this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(75, 18);
@@ -85,8 +85,8 @@ namespace TimeWorkTracking
             // 
             // tbUserNamePACS
             // 
-            this.tbUserNamePACS.Location = new System.Drawing.Point(153, 77);
-            this.tbUserNamePACS.Margin = new System.Windows.Forms.Padding(4);
+            this.tbUserNamePACS.Location = new System.Drawing.Point(153, 74);
+            this.tbUserNamePACS.Margin = new System.Windows.Forms.Padding(1);
             this.tbUserNamePACS.Name = "tbUserNamePACS";
             this.tbUserNamePACS.Size = new System.Drawing.Size(293, 24);
             this.tbUserNamePACS.TabIndex = 10;
@@ -94,7 +94,7 @@ namespace TimeWorkTracking
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(18, 83);
+            this.label10.Location = new System.Drawing.Point(18, 77);
             this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(84, 18);
@@ -124,7 +124,7 @@ namespace TimeWorkTracking
             // btTestConnectionPacs
             // 
             this.btTestConnectionPacs.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btTestConnectionPacs.Location = new System.Drawing.Point(150, 143);
+            this.btTestConnectionPacs.Location = new System.Drawing.Point(150, 135);
             this.btTestConnectionPacs.Margin = new System.Windows.Forms.Padding(4);
             this.btTestConnectionPacs.Name = "btTestConnectionPacs";
             this.btTestConnectionPacs.Size = new System.Drawing.Size(296, 32);
@@ -146,15 +146,16 @@ namespace TimeWorkTracking
             this.mainPanelPACS.Controls.Add(this.label9);
             this.mainPanelPACS.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanelPACS.Location = new System.Drawing.Point(0, 0);
+            this.mainPanelPACS.Margin = new System.Windows.Forms.Padding(2);
             this.mainPanelPACS.Name = "mainPanelPACS";
-            this.mainPanelPACS.Size = new System.Drawing.Size(455, 186);
+            this.mainPanelPACS.Size = new System.Drawing.Size(455, 173);
             this.mainPanelPACS.TabIndex = 16;
             // 
             // frmDataBasePACS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(455, 186);
+            this.ClientSize = new System.Drawing.Size(455, 173);
             this.Controls.Add(this.mainPanelPACS);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
