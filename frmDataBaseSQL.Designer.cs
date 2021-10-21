@@ -44,13 +44,15 @@ namespace TimeWorkTracking
             this.tbUserNameTWT = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.btTestConnectionTwt = new System.Windows.Forms.Button();
+            this.mainPanelSQL = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.picStatusTWT)).BeginInit();
+            this.mainPanelSQL.SuspendLayout();
             this.SuspendLayout();
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(15, 189);
+            this.label14.Location = new System.Drawing.Point(12, 174);
             this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(71, 18);
@@ -61,17 +63,18 @@ namespace TimeWorkTracking
             // 
             this.label12.AutoSize = true;
             this.label12.BackColor = System.Drawing.Color.Gainsboro;
-            this.label12.Location = new System.Drawing.Point(15, 10);
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label12.Location = new System.Drawing.Point(13, 11);
             this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(235, 18);
+            this.label12.Size = new System.Drawing.Size(280, 20);
             this.label12.TabIndex = 13;
             this.label12.Text = "Подключение к SQL базе днных";
             // 
             // picStatusTWT
             // 
             this.picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.no;
-            this.picStatusTWT.Location = new System.Drawing.Point(416, 9);
+            this.picStatusTWT.Location = new System.Drawing.Point(414, 10);
             this.picStatusTWT.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.picStatusTWT.Name = "picStatusTWT";
             this.picStatusTWT.Size = new System.Drawing.Size(30, 28);
@@ -82,7 +85,7 @@ namespace TimeWorkTracking
             // btCreateDBTwt
             // 
             this.btCreateDBTwt.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btCreateDBTwt.Location = new System.Drawing.Point(19, 217);
+            this.btCreateDBTwt.Location = new System.Drawing.Point(16, 202);
             this.btCreateDBTwt.Margin = new System.Windows.Forms.Padding(4);
             this.btCreateDBTwt.Name = "btCreateDBTwt";
             this.btCreateDBTwt.Size = new System.Drawing.Size(122, 32);
@@ -94,7 +97,7 @@ namespace TimeWorkTracking
             // tbDatabaseTWT
             // 
             this.tbDatabaseTWT.BackColor = System.Drawing.Color.FloralWhite;
-            this.tbDatabaseTWT.Location = new System.Drawing.Point(151, 186);
+            this.tbDatabaseTWT.Location = new System.Drawing.Point(148, 171);
             this.tbDatabaseTWT.Margin = new System.Windows.Forms.Padding(4);
             this.tbDatabaseTWT.Name = "tbDatabaseTWT";
             this.tbDatabaseTWT.Size = new System.Drawing.Size(292, 24);
@@ -103,7 +106,7 @@ namespace TimeWorkTracking
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(15, 46);
+            this.label11.Location = new System.Drawing.Point(13, 47);
             this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(95, 18);
@@ -112,7 +115,7 @@ namespace TimeWorkTracking
             // 
             // tbPasswordTWT
             // 
-            this.tbPasswordTWT.Location = new System.Drawing.Point(150, 150);
+            this.tbPasswordTWT.Location = new System.Drawing.Point(148, 139);
             this.tbPasswordTWT.Margin = new System.Windows.Forms.Padding(4);
             this.tbPasswordTWT.Name = "tbPasswordTWT";
             this.tbPasswordTWT.PasswordChar = '*';
@@ -122,7 +125,7 @@ namespace TimeWorkTracking
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(15, 84);
+            this.label5.Location = new System.Drawing.Point(12, 78);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(102, 18);
@@ -132,7 +135,7 @@ namespace TimeWorkTracking
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(15, 153);
+            this.label7.Location = new System.Drawing.Point(13, 142);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(75, 18);
@@ -146,7 +149,7 @@ namespace TimeWorkTracking
             this.cbAutentificationTWT.Items.AddRange(new object[] {
             "SQL Server Autentification",
             "Windows Autentification"});
-            this.cbAutentificationTWT.Location = new System.Drawing.Point(151, 81);
+            this.cbAutentificationTWT.Location = new System.Drawing.Point(148, 75);
             this.cbAutentificationTWT.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbAutentificationTWT.Name = "cbAutentificationTWT";
             this.cbAutentificationTWT.Size = new System.Drawing.Size(293, 26);
@@ -155,7 +158,7 @@ namespace TimeWorkTracking
             // 
             // tbServerTWT
             // 
-            this.tbServerTWT.Location = new System.Drawing.Point(150, 44);
+            this.tbServerTWT.Location = new System.Drawing.Point(148, 45);
             this.tbServerTWT.Margin = new System.Windows.Forms.Padding(4);
             this.tbServerTWT.Name = "tbServerTWT";
             this.tbServerTWT.Size = new System.Drawing.Size(293, 24);
@@ -163,7 +166,7 @@ namespace TimeWorkTracking
             // 
             // tbUserNameTWT
             // 
-            this.tbUserNameTWT.Location = new System.Drawing.Point(150, 117);
+            this.tbUserNameTWT.Location = new System.Drawing.Point(148, 107);
             this.tbUserNameTWT.Margin = new System.Windows.Forms.Padding(4);
             this.tbUserNameTWT.Name = "tbUserNameTWT";
             this.tbUserNameTWT.Size = new System.Drawing.Size(293, 24);
@@ -172,7 +175,7 @@ namespace TimeWorkTracking
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(15, 122);
+            this.label6.Location = new System.Drawing.Point(13, 112);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(84, 18);
@@ -182,7 +185,7 @@ namespace TimeWorkTracking
             // btTestConnectionTwt
             // 
             this.btTestConnectionTwt.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btTestConnectionTwt.Location = new System.Drawing.Point(150, 217);
+            this.btTestConnectionTwt.Location = new System.Drawing.Point(147, 202);
             this.btTestConnectionTwt.Margin = new System.Windows.Forms.Padding(4);
             this.btTestConnectionTwt.Name = "btTestConnectionTwt";
             this.btTestConnectionTwt.Size = new System.Drawing.Size(296, 32);
@@ -191,25 +194,34 @@ namespace TimeWorkTracking
             this.btTestConnectionTwt.UseVisualStyleBackColor = true;
             this.btTestConnectionTwt.Click += new System.EventHandler(this.btTestConnectionTwt_Click);
             // 
+            // mainPanelSQL
+            // 
+            this.mainPanelSQL.Controls.Add(this.label12);
+            this.mainPanelSQL.Controls.Add(this.label14);
+            this.mainPanelSQL.Controls.Add(this.label7);
+            this.mainPanelSQL.Controls.Add(this.label5);
+            this.mainPanelSQL.Controls.Add(this.picStatusTWT);
+            this.mainPanelSQL.Controls.Add(this.cbAutentificationTWT);
+            this.mainPanelSQL.Controls.Add(this.btTestConnectionTwt);
+            this.mainPanelSQL.Controls.Add(this.tbPasswordTWT);
+            this.mainPanelSQL.Controls.Add(this.btCreateDBTwt);
+            this.mainPanelSQL.Controls.Add(this.tbServerTWT);
+            this.mainPanelSQL.Controls.Add(this.label6);
+            this.mainPanelSQL.Controls.Add(this.label11);
+            this.mainPanelSQL.Controls.Add(this.tbDatabaseTWT);
+            this.mainPanelSQL.Controls.Add(this.tbUserNameTWT);
+            this.mainPanelSQL.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainPanelSQL.Location = new System.Drawing.Point(0, 0);
+            this.mainPanelSQL.Name = "mainPanelSQL";
+            this.mainPanelSQL.Size = new System.Drawing.Size(457, 245);
+            this.mainPanelSQL.TabIndex = 15;
+            // 
             // frmDataBaseSQL
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(457, 259);
-            this.Controls.Add(this.label14);
-            this.Controls.Add(this.label12);
-            this.Controls.Add(this.picStatusTWT);
-            this.Controls.Add(this.btTestConnectionTwt);
-            this.Controls.Add(this.btCreateDBTwt);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.tbDatabaseTWT);
-            this.Controls.Add(this.tbUserNameTWT);
-            this.Controls.Add(this.label11);
-            this.Controls.Add(this.tbServerTWT);
-            this.Controls.Add(this.tbPasswordTWT);
-            this.Controls.Add(this.cbAutentificationTWT);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label7);
+            this.ClientSize = new System.Drawing.Size(457, 245);
+            this.Controls.Add(this.mainPanelSQL);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -220,8 +232,9 @@ namespace TimeWorkTracking
             this.Text = "SQL Настройка соединения ";
             this.Load += new System.EventHandler(this.frmDataBaseSQL_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picStatusTWT)).EndInit();
+            this.mainPanelSQL.ResumeLayout(false);
+            this.mainPanelSQL.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -240,5 +253,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.TextBox tbUserNameTWT;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btTestConnectionTwt;
+        private System.Windows.Forms.Panel mainPanelSQL;
     }
 }
