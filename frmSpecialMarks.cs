@@ -151,15 +151,24 @@ namespace TimeWorkTracking
         private void lstwDataBase_SelectedIndexChanged(object sender, EventArgs e)
         {
             int ind = lstwDataBase.SelectedIndex();
-            if (ind >= 0)
-                MessageBox.Show(ind.ToString()+"\n"+
-                                lstwDataBase.Items[ind].SubItems[1].ToString() +"\n"+
-                                lstwDataBase.Items[ind].SubItems[2].ToString() + "\n" +
-                                lstwDataBase.Items[ind].SubItems[3].ToString() + "\n" +
-                                lstwDataBase.Items[ind].SubItems[4].ToString() + "\n" +
-                                lstwDataBase.Items[ind].SubItems[5].ToString() + "\n" +
-                                lstwDataBase.Items[ind].SubItems[6].ToString() + "\n"
-                                );
+            if (ind >= 0) 
+            {
+                tbCodeDigital.Text = lstwDataBase.Items[ind].SubItems[1].Text;
+                tbCodeLetter.Text = lstwDataBase.Items[ind].SubItems[2].Text;
+                tbName.Text = lstwDataBase.Items[ind].SubItems[3].Text;
+                tbNote.Text = lstwDataBase.Items[ind].SubItems[4].Text;
+                chUse.Checked = lstwDataBase.Items[ind].Text=="True"?true:false;
+                /*
+                           MessageBox.Show(ind.ToString()+"\n"+
+                                               lstwDataBase.Items[ind].SubItems[1].ToString() +"\n"+
+                                               lstwDataBase.Items[ind].SubItems[2].ToString() + "\n" +
+                                               lstwDataBase.Items[ind].SubItems[3].ToString() + "\n" +
+                                               lstwDataBase.Items[ind].SubItems[4].ToString() + "\n" +
+                                               lstwDataBase.Items[ind].SubItems[5].ToString() + "\n" +
+                                               lstwDataBase.Items[ind].SubItems[6].ToString() + "\n"
+                                               );
+                */
+            }
 
             //             lstwDataBase.DeleteItem(lstwDataBase.SelectedIndex);
 
@@ -286,6 +295,15 @@ namespace TimeWorkTracking
                 e.DrawText(flags);
             }
             */
+        }
+
+        //чекбокс
+        private void chUse_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chUse.Checked)
+                chUse.ImageIndex = 1;
+            else
+                chUse.ImageIndex = 2;
         }
     }
 
