@@ -36,6 +36,11 @@ namespace TimeWorkTracking
 
                 InitializeListView();
                 LoadList(MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "Select * From Users"));
+
+                udBeforeH.Value = new DateTime(1965, 7, 28, 9, 0, 0);
+                udBeforeM.Value = new DateTime(1965, 7, 28, 9, 0, 0);
+                udAfterH.Value = new DateTime(1965, 7, 28, 18, 0, 0);
+                udAfterH.Value = new DateTime(1965, 7, 28, 18, 0, 0);
             }
         }
         // Initialize ListView

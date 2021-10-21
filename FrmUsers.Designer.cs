@@ -48,16 +48,16 @@ namespace TimeWorkTracking
             this.cbDepartment = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.domainUpDown3 = new System.Windows.Forms.DomainUpDown();
             this.cbName = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.domainUpDown4 = new System.Windows.Forms.DomainUpDown();
-            this.domainUpDown1 = new System.Windows.Forms.DomainUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.domainUpDown2 = new System.Windows.Forms.DomainUpDown();
             this.tbUserID = new System.Windows.Forms.TextBox();
+            this.udBeforeH = new System.Windows.Forms.DateTimePicker();
+            this.udBeforeM = new System.Windows.Forms.DateTimePicker();
+            this.udAfterH = new System.Windows.Forms.DateTimePicker();
+            this.udAfterM = new System.Windows.Forms.DateTimePicker();
             this.mainPanelUsers.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -81,7 +81,8 @@ namespace TimeWorkTracking
             // 
             // btUpdate
             // 
-            this.btUpdate.Location = new System.Drawing.Point(845, 273);
+            this.btUpdate.Enabled = false;
+            this.btUpdate.Location = new System.Drawing.Point(845, 276);
             this.btUpdate.Name = "btUpdate";
             this.btUpdate.Size = new System.Drawing.Size(120, 30);
             this.btUpdate.TabIndex = 21;
@@ -90,7 +91,8 @@ namespace TimeWorkTracking
             // 
             // btInsert
             // 
-            this.btInsert.Location = new System.Drawing.Point(488, 273);
+            this.btInsert.Enabled = false;
+            this.btInsert.Location = new System.Drawing.Point(472, 276);
             this.btInsert.Name = "btInsert";
             this.btInsert.Size = new System.Drawing.Size(120, 30);
             this.btInsert.TabIndex = 20;
@@ -163,28 +165,29 @@ namespace TimeWorkTracking
             // panel3
             // 
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.udAfterM);
+            this.panel3.Controls.Add(this.udAfterH);
+            this.panel3.Controls.Add(this.udBeforeM);
+            this.panel3.Controls.Add(this.udBeforeH);
             this.panel3.Controls.Add(this.label1);
             this.panel3.Controls.Add(this.panel2);
             this.panel3.Controls.Add(this.panel1);
-            this.panel3.Controls.Add(this.domainUpDown3);
             this.panel3.Controls.Add(this.cbName);
             this.panel3.Controls.Add(this.label7);
             this.panel3.Controls.Add(this.label4);
-            this.panel3.Controls.Add(this.domainUpDown4);
-            this.panel3.Controls.Add(this.domainUpDown1);
             this.panel3.Controls.Add(this.label6);
             this.panel3.Controls.Add(this.label5);
-            this.panel3.Controls.Add(this.domainUpDown2);
             this.panel3.Location = new System.Drawing.Point(472, 45);
+            this.panel3.Margin = new System.Windows.Forms.Padding(2);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(506, 222);
+            this.panel3.Size = new System.Drawing.Size(493, 222);
             this.panel3.TabIndex = 16;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(30, 12);
+            this.label1.Location = new System.Drawing.Point(22, 10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(47, 18);
             this.label1.TabIndex = 0;
@@ -196,7 +199,7 @@ namespace TimeWorkTracking
             this.panel2.Controls.Add(this.label8);
             this.panel2.Controls.Add(this.chbLunch);
             this.panel2.Controls.Add(this.cbSheme);
-            this.panel2.Location = new System.Drawing.Point(15, 164);
+            this.panel2.Location = new System.Drawing.Point(7, 162);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(477, 44);
             this.panel2.TabIndex = 15;
@@ -236,7 +239,7 @@ namespace TimeWorkTracking
             this.panel1.Controls.Add(this.cbDepartment);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(15, 41);
+            this.panel1.Location = new System.Drawing.Point(7, 39);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(477, 80);
             this.panel1.TabIndex = 2;
@@ -277,20 +280,10 @@ namespace TimeWorkTracking
             this.label2.TabIndex = 2;
             this.label2.Text = "Департамент";
             // 
-            // domainUpDown3
-            // 
-            this.domainUpDown3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.domainUpDown3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.domainUpDown3.Location = new System.Drawing.Point(414, 128);
-            this.domainUpDown3.Name = "domainUpDown3";
-            this.domainUpDown3.Size = new System.Drawing.Size(58, 30);
-            this.domainUpDown3.TabIndex = 11;
-            this.domainUpDown3.Text = "domainUpDown3";
-            // 
             // cbName
             // 
             this.cbName.FormattingEnabled = true;
-            this.cbName.Location = new System.Drawing.Point(154, 9);
+            this.cbName.Location = new System.Drawing.Point(146, 7);
             this.cbName.Name = "cbName";
             this.cbName.Size = new System.Drawing.Size(326, 26);
             this.cbName.TabIndex = 3;
@@ -299,7 +292,7 @@ namespace TimeWorkTracking
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label7.Location = new System.Drawing.Point(392, 130);
+            this.label7.Location = new System.Drawing.Point(384, 128);
             this.label7.Margin = new System.Windows.Forms.Padding(0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(19, 25);
@@ -309,37 +302,17 @@ namespace TimeWorkTracking
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(23, 135);
+            this.label4.Location = new System.Drawing.Point(15, 133);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(62, 18);
             this.label4.TabIndex = 4;
             this.label4.Text = "График";
             // 
-            // domainUpDown4
-            // 
-            this.domainUpDown4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.domainUpDown4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.domainUpDown4.Location = new System.Drawing.Point(331, 128);
-            this.domainUpDown4.Name = "domainUpDown4";
-            this.domainUpDown4.Size = new System.Drawing.Size(58, 30);
-            this.domainUpDown4.TabIndex = 9;
-            this.domainUpDown4.Text = "domainUpDown4";
-            // 
-            // domainUpDown1
-            // 
-            this.domainUpDown1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.domainUpDown1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.domainUpDown1.Location = new System.Drawing.Point(164, 128);
-            this.domainUpDown1.Name = "domainUpDown1";
-            this.domainUpDown1.Size = new System.Drawing.Size(58, 30);
-            this.domainUpDown1.TabIndex = 5;
-            this.domainUpDown1.Text = "domainUpDown1";
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label6.Location = new System.Drawing.Point(308, 130);
+            this.label6.Location = new System.Drawing.Point(300, 128);
             this.label6.Margin = new System.Windows.Forms.Padding(0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(20, 25);
@@ -350,22 +323,12 @@ namespace TimeWorkTracking
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(225, 130);
+            this.label5.Location = new System.Drawing.Point(217, 128);
             this.label5.Margin = new System.Windows.Forms.Padding(0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(19, 25);
             this.label5.TabIndex = 6;
             this.label5.Text = ":";
-            // 
-            // domainUpDown2
-            // 
-            this.domainUpDown2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.domainUpDown2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.domainUpDown2.Location = new System.Drawing.Point(247, 128);
-            this.domainUpDown2.Name = "domainUpDown2";
-            this.domainUpDown2.Size = new System.Drawing.Size(58, 30);
-            this.domainUpDown2.TabIndex = 7;
-            this.domainUpDown2.Text = "domainUpDown2";
             // 
             // tbUserID
             // 
@@ -375,6 +338,60 @@ namespace TimeWorkTracking
             this.tbUserID.Size = new System.Drawing.Size(156, 24);
             this.tbUserID.TabIndex = 22;
             this.tbUserID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // udBeforeH
+            // 
+            this.udBeforeH.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udBeforeH.Checked = false;
+            this.udBeforeH.CustomFormat = "HH";
+            this.udBeforeH.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udBeforeH.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.udBeforeH.Location = new System.Drawing.Point(158, 126);
+            this.udBeforeH.Name = "udBeforeH";
+            this.udBeforeH.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.udBeforeH.ShowUpDown = true;
+            this.udBeforeH.Size = new System.Drawing.Size(56, 30);
+            this.udBeforeH.TabIndex = 16;
+            this.udBeforeH.Value = new System.DateTime(2021, 10, 21, 9, 0, 0, 0);
+            // 
+            // udBeforeM
+            // 
+            this.udBeforeM.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udBeforeM.CustomFormat = "mm";
+            this.udBeforeM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udBeforeM.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.udBeforeM.Location = new System.Drawing.Point(239, 126);
+            this.udBeforeM.Name = "udBeforeM";
+            this.udBeforeM.ShowUpDown = true;
+            this.udBeforeM.Size = new System.Drawing.Size(56, 30);
+            this.udBeforeM.TabIndex = 17;
+            this.udBeforeM.Value = new System.DateTime(2021, 10, 21, 9, 0, 0, 0);
+            // 
+            // udAfterH
+            // 
+            this.udAfterH.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udAfterH.CustomFormat = "HH";
+            this.udAfterH.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udAfterH.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.udAfterH.Location = new System.Drawing.Point(323, 126);
+            this.udAfterH.Name = "udAfterH";
+            this.udAfterH.ShowUpDown = true;
+            this.udAfterH.Size = new System.Drawing.Size(56, 30);
+            this.udAfterH.TabIndex = 18;
+            this.udAfterH.Value = new System.DateTime(2021, 10, 21, 18, 0, 0, 0);
+            // 
+            // udAfterM
+            // 
+            this.udAfterM.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udAfterM.CustomFormat = "mm";
+            this.udAfterM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udAfterM.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.udAfterM.Location = new System.Drawing.Point(406, 126);
+            this.udAfterM.Name = "udAfterM";
+            this.udAfterM.ShowUpDown = true;
+            this.udAfterM.Size = new System.Drawing.Size(56, 30);
+            this.udAfterM.TabIndex = 19;
+            this.udAfterM.Value = new System.DateTime(2021, 10, 21, 18, 0, 0, 0);
             // 
             // frmUsers
             // 
@@ -408,13 +425,9 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DomainUpDown domainUpDown3;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.DomainUpDown domainUpDown4;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.DomainUpDown domainUpDown2;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.DomainUpDown domainUpDown1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel2;
@@ -427,5 +440,9 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Button btUpdate;
         private System.Windows.Forms.Button btInsert;
         private System.Windows.Forms.TextBox tbUserID;
+        private System.Windows.Forms.DateTimePicker udBeforeH;
+        private System.Windows.Forms.DateTimePicker udAfterM;
+        private System.Windows.Forms.DateTimePicker udAfterH;
+        private System.Windows.Forms.DateTimePicker udBeforeM;
     }
 }

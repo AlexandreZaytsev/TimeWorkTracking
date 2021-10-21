@@ -100,6 +100,7 @@ namespace TimeWorkTracking
             // 
             // btUpdate
             // 
+            this.btUpdate.Enabled = false;
             this.btUpdate.Location = new System.Drawing.Point(769, 264);
             this.btUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btUpdate.Name = "btUpdate";
@@ -110,6 +111,7 @@ namespace TimeWorkTracking
             // 
             // btInsert
             // 
+            this.btInsert.Enabled = false;
             this.btInsert.Location = new System.Drawing.Point(512, 264);
             this.btInsert.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btInsert.Name = "btInsert";
@@ -152,9 +154,9 @@ namespace TimeWorkTracking
             this.panel1.Controls.Add(this.tbNote);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Location = new System.Drawing.Point(512, 53);
-            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(377, 186);
+            this.panel1.Size = new System.Drawing.Size(377, 207);
             this.panel1.TabIndex = 17;
             // 
             // label1
@@ -162,6 +164,7 @@ namespace TimeWorkTracking
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label1.Location = new System.Drawing.Point(3, 9);
+            this.label1.Margin = new System.Windows.Forms.Padding(2);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(123, 18);
             this.label1.TabIndex = 2;
@@ -169,7 +172,7 @@ namespace TimeWorkTracking
             // 
             // tbCodeLetter
             // 
-            this.tbCodeLetter.Location = new System.Drawing.Point(318, 150);
+            this.tbCodeLetter.Location = new System.Drawing.Point(318, 157);
             this.tbCodeLetter.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbCodeLetter.Name = "tbCodeLetter";
             this.tbCodeLetter.Size = new System.Drawing.Size(47, 24);
@@ -178,7 +181,7 @@ namespace TimeWorkTracking
             // 
             // tbName
             // 
-            this.tbName.Location = new System.Drawing.Point(6, 29);
+            this.tbName.Location = new System.Drawing.Point(6, 31);
             this.tbName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbName.Name = "tbName";
             this.tbName.Size = new System.Drawing.Size(359, 24);
@@ -186,7 +189,7 @@ namespace TimeWorkTracking
             // 
             // tbCodeDigital
             // 
-            this.tbCodeDigital.Location = new System.Drawing.Point(136, 150);
+            this.tbCodeDigital.Location = new System.Drawing.Point(136, 157);
             this.tbCodeDigital.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbCodeDigital.Name = "tbCodeDigital";
             this.tbCodeDigital.Size = new System.Drawing.Size(47, 24);
@@ -196,7 +199,8 @@ namespace TimeWorkTracking
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 54);
+            this.label2.Location = new System.Drawing.Point(3, 59);
+            this.label2.Margin = new System.Windows.Forms.Padding(2);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(76, 18);
             this.label2.TabIndex = 4;
@@ -205,7 +209,7 @@ namespace TimeWorkTracking
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(189, 153);
+            this.label5.Location = new System.Drawing.Point(189, 160);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(114, 18);
             this.label5.TabIndex = 8;
@@ -213,7 +217,7 @@ namespace TimeWorkTracking
             // 
             // tbNote
             // 
-            this.tbNote.Location = new System.Drawing.Point(6, 74);
+            this.tbNote.Location = new System.Drawing.Point(6, 81);
             this.tbNote.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbNote.Multiline = true;
             this.tbNote.Name = "tbNote";
@@ -223,7 +227,7 @@ namespace TimeWorkTracking
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 153);
+            this.label4.Location = new System.Drawing.Point(3, 160);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(112, 18);
             this.label4.TabIndex = 7;
