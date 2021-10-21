@@ -1,7 +1,7 @@
 ﻿
 namespace TimeWorkTracking
 {
-    partial class FrmUsers
+    partial class frmUsers
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@ namespace TimeWorkTracking
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmUsers));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUsers));
             this.mainPanelUsers = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -52,7 +52,7 @@ namespace TimeWorkTracking
             this.chbLunch = new System.Windows.Forms.CheckBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.lstwDataBaseUsers = new System.Windows.Forms.ListView();
             this.imglStatus = new System.Windows.Forms.ImageList(this.components);
             this.chUse = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -68,7 +68,7 @@ namespace TimeWorkTracking
             this.mainPanelUsers.Controls.Add(this.button2);
             this.mainPanelUsers.Controls.Add(this.button1);
             this.mainPanelUsers.Controls.Add(this.chUse);
-            this.mainPanelUsers.Controls.Add(this.listView1);
+            this.mainPanelUsers.Controls.Add(this.lstwDataBaseUsers);
             this.mainPanelUsers.Controls.Add(this.panel3);
             this.mainPanelUsers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanelUsers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -81,7 +81,7 @@ namespace TimeWorkTracking
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(30, 16);
+            this.label1.Location = new System.Drawing.Point(30, 12);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(47, 18);
             this.label1.TabIndex = 0;
@@ -94,7 +94,7 @@ namespace TimeWorkTracking
             this.panel1.Controls.Add(this.cbDepartment);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(15, 45);
+            this.panel1.Location = new System.Drawing.Point(15, 41);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(477, 80);
             this.panel1.TabIndex = 2;
@@ -122,7 +122,7 @@ namespace TimeWorkTracking
             // cbName
             // 
             this.cbName.FormattingEnabled = true;
-            this.cbName.Location = new System.Drawing.Point(154, 13);
+            this.cbName.Location = new System.Drawing.Point(154, 9);
             this.cbName.Name = "cbName";
             this.cbName.Size = new System.Drawing.Size(326, 26);
             this.cbName.TabIndex = 3;
@@ -146,7 +146,7 @@ namespace TimeWorkTracking
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(23, 139);
+            this.label4.Location = new System.Drawing.Point(23, 135);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(62, 18);
             this.label4.TabIndex = 4;
@@ -156,7 +156,7 @@ namespace TimeWorkTracking
             // 
             this.domainUpDown1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.domainUpDown1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.domainUpDown1.Location = new System.Drawing.Point(164, 132);
+            this.domainUpDown1.Location = new System.Drawing.Point(164, 128);
             this.domainUpDown1.Name = "domainUpDown1";
             this.domainUpDown1.Size = new System.Drawing.Size(58, 30);
             this.domainUpDown1.TabIndex = 5;
@@ -166,7 +166,7 @@ namespace TimeWorkTracking
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(225, 134);
+            this.label5.Location = new System.Drawing.Point(225, 130);
             this.label5.Margin = new System.Windows.Forms.Padding(0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(19, 25);
@@ -177,7 +177,7 @@ namespace TimeWorkTracking
             // 
             this.domainUpDown2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.domainUpDown2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.domainUpDown2.Location = new System.Drawing.Point(247, 132);
+            this.domainUpDown2.Location = new System.Drawing.Point(247, 128);
             this.domainUpDown2.Name = "domainUpDown2";
             this.domainUpDown2.Size = new System.Drawing.Size(58, 30);
             this.domainUpDown2.TabIndex = 7;
@@ -187,7 +187,7 @@ namespace TimeWorkTracking
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label6.Location = new System.Drawing.Point(308, 134);
+            this.label6.Location = new System.Drawing.Point(308, 130);
             this.label6.Margin = new System.Windows.Forms.Padding(0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(20, 25);
@@ -198,7 +198,7 @@ namespace TimeWorkTracking
             // 
             this.domainUpDown3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.domainUpDown3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.domainUpDown3.Location = new System.Drawing.Point(414, 132);
+            this.domainUpDown3.Location = new System.Drawing.Point(414, 128);
             this.domainUpDown3.Name = "domainUpDown3";
             this.domainUpDown3.Size = new System.Drawing.Size(58, 30);
             this.domainUpDown3.TabIndex = 11;
@@ -208,7 +208,7 @@ namespace TimeWorkTracking
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label7.Location = new System.Drawing.Point(392, 134);
+            this.label7.Location = new System.Drawing.Point(392, 130);
             this.label7.Margin = new System.Windows.Forms.Padding(0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(19, 25);
@@ -219,7 +219,7 @@ namespace TimeWorkTracking
             // 
             this.domainUpDown4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.domainUpDown4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.domainUpDown4.Location = new System.Drawing.Point(331, 132);
+            this.domainUpDown4.Location = new System.Drawing.Point(331, 128);
             this.domainUpDown4.Name = "domainUpDown4";
             this.domainUpDown4.Size = new System.Drawing.Size(58, 30);
             this.domainUpDown4.TabIndex = 9;
@@ -259,7 +259,7 @@ namespace TimeWorkTracking
             this.panel2.Controls.Add(this.label8);
             this.panel2.Controls.Add(this.chbLunch);
             this.panel2.Controls.Add(this.cbSheme);
-            this.panel2.Location = new System.Drawing.Point(15, 168);
+            this.panel2.Location = new System.Drawing.Point(15, 164);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(477, 44);
             this.panel2.TabIndex = 15;
@@ -284,13 +284,16 @@ namespace TimeWorkTracking
             this.panel3.Size = new System.Drawing.Size(506, 222);
             this.panel3.TabIndex = 16;
             // 
-            // listView1
+            // lstwDataBaseUsers
             // 
-            this.listView1.Location = new System.Drawing.Point(12, 12);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(454, 294);
-            this.listView1.TabIndex = 18;
-            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.lstwDataBaseUsers.Location = new System.Drawing.Point(12, 12);
+            this.lstwDataBaseUsers.Name = "lstwDataBaseUsers";
+            this.lstwDataBaseUsers.Size = new System.Drawing.Size(454, 294);
+            this.lstwDataBaseUsers.TabIndex = 18;
+            this.lstwDataBaseUsers.UseCompatibleStateImageBehavior = false;
+            this.lstwDataBaseUsers.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstwDataBaseUsers_ColumnClick);
+            this.lstwDataBaseUsers.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.lstwDataBaseUsers_ColumnWidthChanging);
+            this.lstwDataBaseUsers.SelectedIndexChanged += new System.EventHandler(this.lstwDataBaseUsers_SelectedIndexChanged);
             // 
             // imglStatus
             // 
@@ -407,7 +410,7 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.CheckBox chbLunch;
         private System.Windows.Forms.ComboBox cbSheme;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView lstwDataBaseUsers;
         private System.Windows.Forms.ImageList imglStatus;
         private System.Windows.Forms.CheckBox chUse;
         private System.Windows.Forms.Button button2;

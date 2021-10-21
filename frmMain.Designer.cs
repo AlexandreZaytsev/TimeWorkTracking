@@ -1,7 +1,7 @@
 ﻿
 namespace TimeWorkTracking
 {
-    partial class FrmMain
+    partial class frmMain
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -29,7 +29,7 @@ namespace TimeWorkTracking
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -41,18 +41,18 @@ namespace TimeWorkTracking
             this.button3 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.ToolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.TsbtDataBaseSQL = new System.Windows.Forms.ToolStripDropDownButton();
-            this.TsbtDataBasePACS = new System.Windows.Forms.ToolStripDropDownButton();
-            this.ToolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.TsbtGuideUsers = new System.Windows.Forms.ToolStripDropDownButton();
-            this.TsbtGuideMarks = new System.Windows.Forms.ToolStripDropDownButton();
-            this.TsbtGuideCalendar = new System.Windows.Forms.ToolStripDropDownButton();
-            this.ToolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.TsbtFormHeatCheck = new System.Windows.Forms.ToolStripDropDownButton();
-            this.TsbtFormTimeCheck = new System.Windows.Forms.ToolStripDropDownButton();
-            this.ToolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.TsbtReportTotal = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsbtDataBaseSQL = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsbtDataBasePACS = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsbtGuideUsers = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsbtGuideMarks = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsbtGuideCalendar = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsbtFormHeatCheck = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsbtFormTimeCheck = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsbtReportTotal = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripStatusLabel5 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel6 = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -160,18 +160,18 @@ namespace TimeWorkTracking
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripStatusLabel2,
-            this.TsbtDataBaseSQL,
-            this.TsbtDataBasePACS,
-            this.ToolStripStatusLabel1,
-            this.TsbtGuideUsers,
-            this.TsbtGuideMarks,
-            this.TsbtGuideCalendar,
-            this.ToolStripStatusLabel3,
-            this.TsbtFormHeatCheck,
-            this.TsbtFormTimeCheck,
-            this.ToolStripStatusLabel4,
-            this.TsbtReportTotal,
+            this.toolStripStatusLabel2,
+            this.tsbtDataBaseSQL,
+            this.tsbtDataBasePACS,
+            this.toolStripStatusLabel1,
+            this.tsbtGuideUsers,
+            this.tsbtGuideMarks,
+            this.tsbtGuideCalendar,
+            this.toolStripStatusLabel3,
+            this.tsbtFormHeatCheck,
+            this.tsbtFormTimeCheck,
+            this.toolStripStatusLabel4,
+            this.tsbtReportTotal,
             this.toolStripStatusLabel5,
             this.toolStripStatusLabel6});
             this.statusStrip1.Location = new System.Drawing.Point(0, 436);
@@ -183,119 +183,119 @@ namespace TimeWorkTracking
             this.statusStrip1.TabIndex = 15;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // ToolStripStatusLabel2
+            // toolStripStatusLabel2
             // 
-            this.ToolStripStatusLabel2.Name = "ToolStripStatusLabel2";
-            this.ToolStripStatusLabel2.Size = new System.Drawing.Size(55, 20);
-            this.ToolStripStatusLabel2.Text = "Статус:";
-            this.ToolStripStatusLabel2.ToolTipText = "12431234";
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(55, 20);
+            this.toolStripStatusLabel2.Text = "Статус:";
+            this.toolStripStatusLabel2.ToolTipText = "12431234";
             // 
-            // TsbtDataBaseSQL
+            // tsbtDataBaseSQL
             // 
-            this.TsbtDataBaseSQL.Image = global::TimeWorkTracking.Properties.Resources.no;
-            this.TsbtDataBaseSQL.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.TsbtDataBaseSQL.Name = "TsbtDataBaseSQL";
-            this.TsbtDataBaseSQL.ShowDropDownArrow = false;
-            this.TsbtDataBaseSQL.Size = new System.Drawing.Size(82, 24);
-            this.TsbtDataBaseSQL.Text = "БД SQL";
-            this.TsbtDataBaseSQL.ToolTipText = "Подключение к SQL базе учета рабочего времени";
-            this.TsbtDataBaseSQL.Click += new System.EventHandler(this.tsbtDataBaseSQL_Click);
+            this.tsbtDataBaseSQL.Image = global::TimeWorkTracking.Properties.Resources.no;
+            this.tsbtDataBaseSQL.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtDataBaseSQL.Name = "tsbtDataBaseSQL";
+            this.tsbtDataBaseSQL.ShowDropDownArrow = false;
+            this.tsbtDataBaseSQL.Size = new System.Drawing.Size(82, 24);
+            this.tsbtDataBaseSQL.Text = "БД SQL";
+            this.tsbtDataBaseSQL.ToolTipText = "Подключение к SQL базе учета рабочего времени";
+            this.tsbtDataBaseSQL.Click += new System.EventHandler(this.tsbtDataBaseSQL_Click);
             // 
-            // TsbtDataBasePACS
+            // tsbtDataBasePACS
             // 
-            this.TsbtDataBasePACS.Image = global::TimeWorkTracking.Properties.Resources.no;
-            this.TsbtDataBasePACS.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.TsbtDataBasePACS.Name = "TsbtDataBasePACS";
-            this.TsbtDataBasePACS.ShowDropDownArrow = false;
-            this.TsbtDataBasePACS.Size = new System.Drawing.Size(93, 24);
-            this.TsbtDataBasePACS.Text = "БД СКУД";
-            this.TsbtDataBasePACS.ToolTipText = "Подключение к web сервису СКУД";
-            this.TsbtDataBasePACS.Click += new System.EventHandler(this.tsbtDataBasePACS_Click);
+            this.tsbtDataBasePACS.Image = global::TimeWorkTracking.Properties.Resources.no;
+            this.tsbtDataBasePACS.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtDataBasePACS.Name = "tsbtDataBasePACS";
+            this.tsbtDataBasePACS.ShowDropDownArrow = false;
+            this.tsbtDataBasePACS.Size = new System.Drawing.Size(93, 24);
+            this.tsbtDataBasePACS.Text = "БД СКУД";
+            this.tsbtDataBasePACS.ToolTipText = "Подключение к web сервису СКУД";
+            this.tsbtDataBasePACS.Click += new System.EventHandler(this.tsbtDataBasePACS_Click);
             // 
-            // ToolStripStatusLabel1
+            // toolStripStatusLabel1
             // 
-            this.ToolStripStatusLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1";
-            this.ToolStripStatusLabel1.Size = new System.Drawing.Size(225, 20);
-            this.ToolStripStatusLabel1.Spring = true;
-            this.ToolStripStatusLabel1.Text = "    Справочники:";
-            this.ToolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.toolStripStatusLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(225, 20);
+            this.toolStripStatusLabel1.Spring = true;
+            this.toolStripStatusLabel1.Text = "    Справочники:";
+            this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // TsbtGuideUsers
+            // tsbtGuideUsers
             // 
-            this.TsbtGuideUsers.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.TsbtGuideUsers.Image = global::TimeWorkTracking.Properties.Resources.users;
-            this.TsbtGuideUsers.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.TsbtGuideUsers.Name = "TsbtGuideUsers";
-            this.TsbtGuideUsers.ShowDropDownArrow = false;
-            this.TsbtGuideUsers.Size = new System.Drawing.Size(24, 24);
-            this.TsbtGuideUsers.Text = "Сотрудники";
-            this.TsbtGuideUsers.Click += new System.EventHandler(this.TsbtGuideUsers_Click);
+            this.tsbtGuideUsers.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbtGuideUsers.Image = global::TimeWorkTracking.Properties.Resources.users;
+            this.tsbtGuideUsers.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtGuideUsers.Name = "tsbtGuideUsers";
+            this.tsbtGuideUsers.ShowDropDownArrow = false;
+            this.tsbtGuideUsers.Size = new System.Drawing.Size(24, 24);
+            this.tsbtGuideUsers.Text = "Сотрудники";
+            this.tsbtGuideUsers.Click += new System.EventHandler(this.TsbtGuideUsers_Click);
             // 
-            // TsbtGuideMarks
+            // tsbtGuideMarks
             // 
-            this.TsbtGuideMarks.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.TsbtGuideMarks.Image = global::TimeWorkTracking.Properties.Resources.report;
-            this.TsbtGuideMarks.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.TsbtGuideMarks.Name = "TsbtGuideMarks";
-            this.TsbtGuideMarks.ShowDropDownArrow = false;
-            this.TsbtGuideMarks.Size = new System.Drawing.Size(24, 24);
-            this.TsbtGuideMarks.Text = "Специальные отметки";
-            this.TsbtGuideMarks.Click += new System.EventHandler(this.tsbtGuideMarks_Click);
+            this.tsbtGuideMarks.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbtGuideMarks.Image = global::TimeWorkTracking.Properties.Resources.report;
+            this.tsbtGuideMarks.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtGuideMarks.Name = "tsbtGuideMarks";
+            this.tsbtGuideMarks.ShowDropDownArrow = false;
+            this.tsbtGuideMarks.Size = new System.Drawing.Size(24, 24);
+            this.tsbtGuideMarks.Text = "Специальные отметки";
+            this.tsbtGuideMarks.Click += new System.EventHandler(this.tsbtGuideMarks_Click);
             // 
-            // TsbtGuideCalendar
+            // tsbtGuideCalendar
             // 
-            this.TsbtGuideCalendar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.TsbtGuideCalendar.Image = global::TimeWorkTracking.Properties.Resources.calendar;
-            this.TsbtGuideCalendar.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.TsbtGuideCalendar.Name = "TsbtGuideCalendar";
-            this.TsbtGuideCalendar.ShowDropDownArrow = false;
-            this.TsbtGuideCalendar.Size = new System.Drawing.Size(24, 24);
-            this.TsbtGuideCalendar.Text = "Производственный календарь";
+            this.tsbtGuideCalendar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbtGuideCalendar.Image = global::TimeWorkTracking.Properties.Resources.calendar;
+            this.tsbtGuideCalendar.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtGuideCalendar.Name = "tsbtGuideCalendar";
+            this.tsbtGuideCalendar.ShowDropDownArrow = false;
+            this.tsbtGuideCalendar.Size = new System.Drawing.Size(24, 24);
+            this.tsbtGuideCalendar.Text = "Производственный календарь";
             // 
-            // ToolStripStatusLabel3
+            // toolStripStatusLabel3
             // 
-            this.ToolStripStatusLabel3.Name = "ToolStripStatusLabel3";
-            this.ToolStripStatusLabel3.Size = new System.Drawing.Size(152, 20);
-            this.ToolStripStatusLabel3.Text = "    Печатные Формы:";
-            this.ToolStripStatusLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(152, 20);
+            this.toolStripStatusLabel3.Text = "    Печатные Формы:";
+            this.toolStripStatusLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // TsbtFormHeatCheck
+            // tsbtFormHeatCheck
             // 
-            this.TsbtFormHeatCheck.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.TsbtFormHeatCheck.Image = global::TimeWorkTracking.Properties.Resources.heat;
-            this.TsbtFormHeatCheck.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.TsbtFormHeatCheck.Name = "TsbtFormHeatCheck";
-            this.TsbtFormHeatCheck.ShowDropDownArrow = false;
-            this.TsbtFormHeatCheck.Size = new System.Drawing.Size(24, 24);
-            this.TsbtFormHeatCheck.Text = "Бланк Учета температуры";
+            this.tsbtFormHeatCheck.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbtFormHeatCheck.Image = global::TimeWorkTracking.Properties.Resources.heat;
+            this.tsbtFormHeatCheck.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtFormHeatCheck.Name = "tsbtFormHeatCheck";
+            this.tsbtFormHeatCheck.ShowDropDownArrow = false;
+            this.tsbtFormHeatCheck.Size = new System.Drawing.Size(24, 24);
+            this.tsbtFormHeatCheck.Text = "Бланк Учета температуры";
             // 
-            // TsbtFormTimeCheck
+            // tsbtFormTimeCheck
             // 
-            this.TsbtFormTimeCheck.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.TsbtFormTimeCheck.Image = global::TimeWorkTracking.Properties.Resources.form;
-            this.TsbtFormTimeCheck.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.TsbtFormTimeCheck.Name = "TsbtFormTimeCheck";
-            this.TsbtFormTimeCheck.ShowDropDownArrow = false;
-            this.TsbtFormTimeCheck.Size = new System.Drawing.Size(24, 24);
-            this.TsbtFormTimeCheck.Text = "Бланк Учета рабочего времени";
+            this.tsbtFormTimeCheck.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbtFormTimeCheck.Image = global::TimeWorkTracking.Properties.Resources.form;
+            this.tsbtFormTimeCheck.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtFormTimeCheck.Name = "tsbtFormTimeCheck";
+            this.tsbtFormTimeCheck.ShowDropDownArrow = false;
+            this.tsbtFormTimeCheck.Size = new System.Drawing.Size(24, 24);
+            this.tsbtFormTimeCheck.Text = "Бланк Учета рабочего времени";
             // 
-            // ToolStripStatusLabel4
+            // toolStripStatusLabel4
             // 
-            this.ToolStripStatusLabel4.Name = "ToolStripStatusLabel4";
-            this.ToolStripStatusLabel4.Size = new System.Drawing.Size(67, 20);
-            this.ToolStripStatusLabel4.Text = "    Отчет:";
-            this.ToolStripStatusLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
+            this.toolStripStatusLabel4.Size = new System.Drawing.Size(67, 20);
+            this.toolStripStatusLabel4.Text = "    Отчет:";
+            this.toolStripStatusLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // TsbtReportTotal
+            // tsbtReportTotal
             // 
-            this.TsbtReportTotal.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.TsbtReportTotal.Image = global::TimeWorkTracking.Properties.Resources.pass;
-            this.TsbtReportTotal.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.TsbtReportTotal.Name = "TsbtReportTotal";
-            this.TsbtReportTotal.ShowDropDownArrow = false;
-            this.TsbtReportTotal.Size = new System.Drawing.Size(24, 24);
-            this.TsbtReportTotal.Text = "Итоговый отчет";
+            this.tsbtReportTotal.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbtReportTotal.Image = global::TimeWorkTracking.Properties.Resources.pass;
+            this.tsbtReportTotal.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtReportTotal.Name = "tsbtReportTotal";
+            this.tsbtReportTotal.ShowDropDownArrow = false;
+            this.tsbtReportTotal.Size = new System.Drawing.Size(24, 24);
+            this.tsbtReportTotal.Text = "Итоговый отчет";
             // 
             // toolStripStatusLabel5
             // 
@@ -308,7 +308,7 @@ namespace TimeWorkTracking
             this.toolStripStatusLabel6.Size = new System.Drawing.Size(13, 20);
             this.toolStripStatusLabel6.Text = " ";
             // 
-            // FrmMain
+            // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -330,7 +330,7 @@ namespace TimeWorkTracking
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(899, 499);
-            this.Name = "FrmMain";
+            this.Name = "frmMain";
             this.Text = "Учет рабочего времени";
             this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.frmMain_HelpButtonClicked);
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -355,20 +355,20 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel ToolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripStatusLabel ToolStripStatusLabel2;
-        private System.Windows.Forms.ToolStripStatusLabel ToolStripStatusLabel3;
-        private System.Windows.Forms.ToolStripStatusLabel ToolStripStatusLabel4;
-        private System.Windows.Forms.ToolStripDropDownButton TsbtGuideUsers;
-        private System.Windows.Forms.ToolStripDropDownButton TsbtGuideMarks;
-        private System.Windows.Forms.ToolStripDropDownButton TsbtGuideCalendar;
-        private System.Windows.Forms.ToolStripDropDownButton TsbtFormHeatCheck;
-        private System.Windows.Forms.ToolStripDropDownButton TsbtFormTimeCheck;
-        private System.Windows.Forms.ToolStripDropDownButton TsbtReportTotal;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
+        private System.Windows.Forms.ToolStripDropDownButton tsbtGuideUsers;
+        private System.Windows.Forms.ToolStripDropDownButton tsbtGuideMarks;
+        private System.Windows.Forms.ToolStripDropDownButton tsbtGuideCalendar;
+        private System.Windows.Forms.ToolStripDropDownButton tsbtFormHeatCheck;
+        private System.Windows.Forms.ToolStripDropDownButton tsbtFormTimeCheck;
+        private System.Windows.Forms.ToolStripDropDownButton tsbtReportTotal;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel6;
-        private System.Windows.Forms.ToolStripDropDownButton TsbtDataBaseSQL;
-        private System.Windows.Forms.ToolStripDropDownButton TsbtDataBasePACS;
+        private System.Windows.Forms.ToolStripDropDownButton tsbtDataBaseSQL;
+        private System.Windows.Forms.ToolStripDropDownButton tsbtDataBasePACS;
     }
 }
 

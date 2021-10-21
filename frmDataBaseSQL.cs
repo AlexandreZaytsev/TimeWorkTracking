@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace TimeWorkTracking
 {
-    public partial class FrmDataBaseSQL : Form
+    public partial class frmDataBaseSQL : Form
     {
-        public FrmDataBaseSQL()
+        public frmDataBaseSQL()
         {
             //подписка события внешних форм 
             CallBack_FrmMain_outEvent.callbackEventHandler = new CallBack_FrmMain_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification

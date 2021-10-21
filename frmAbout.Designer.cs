@@ -1,7 +1,7 @@
 ﻿
 namespace TimeWorkTracking
 {
-    partial class FrmAbout
+    partial class frmAbout
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -28,7 +28,7 @@ namespace TimeWorkTracking
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAbout));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAbout));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.logoPictureBox = new System.Windows.Forms.PictureBox();
             this.labelProductName = new System.Windows.Forms.Label();

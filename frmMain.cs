@@ -17,9 +17,9 @@ https://stackoverflow.com/questions/4657394/is-it-possible-to-change-toolstripme
 
 namespace TimeWorkTracking
 {
-    public partial class FrmMain : Form
+    public partial class frmMain : Form
     {
-        public FrmMain()
+        public frmMain()
         {
             //подписка события внешних форм 
             CallBack_FrmDataBaseSQL_outEvent.callbackEventHandler = new CallBack_FrmDataBaseSQL_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
@@ -97,32 +97,32 @@ namespace TimeWorkTracking
         //кнока help
         private void frmMain_HelpButtonClicked(object sender, CancelEventArgs e)
         {
-            FrmAbout aboutBox = new FrmAbout();
+            frmAbout aboutBox = new frmAbout();
             aboutBox.ShowDialog(this);
         }
 
         private void tsbtDataBaseSQL_Click(object sender, EventArgs e)
         {
-            FrmDataBaseSQL frm = new FrmDataBaseSQL {Owner = this};
+            frmDataBaseSQL frm = new frmDataBaseSQL {Owner = this};
             CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
             frm.ShowDialog();
         }
 
         private void tsbtDataBasePACS_Click(object sender, EventArgs e)
         {
-            FrmDataBasePACS frm = new FrmDataBasePACS {Owner = this};
+            frmDataBasePACS frm = new frmDataBasePACS {Owner = this};
             CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
             frm.ShowDialog();
         }
 
         private void tsbtGuideMarks_Click(object sender, EventArgs e)
         {
-            FrmSpecialMarks frm = new FrmSpecialMarks { Owner = this };
+            frmSpecialMarks frm = new frmSpecialMarks { Owner = this };
             frm.ShowDialog();
         }
         private void TsbtGuideUsers_Click(object sender, EventArgs e)
         {
-            FrmUsers frm = new FrmUsers { Owner = this };
+            frmUsers frm = new frmUsers { Owner = this };
             frm.ShowDialog();
         }
 
@@ -130,9 +130,9 @@ namespace TimeWorkTracking
         private void CheckConnects()
         {
             if (MsSqlDatabase.CheckConnectWithConnectionStr(Properties.Settings.Default.twtConnectionSrting))
-                this.TsbtDataBaseSQL.Image = Properties.Resources.ok;
+                this.tsbtDataBaseSQL.Image = Properties.Resources.ok;
             else
-                this.TsbtDataBaseSQL.Image = Properties.Resources.no;
+                this.tsbtDataBaseSQL.Image = Properties.Resources.no;
         }
 
         /*--------------------------------------------------------------------------------------------  

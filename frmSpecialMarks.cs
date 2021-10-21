@@ -12,25 +12,19 @@ using System.Windows.Forms;
 
 namespace TimeWorkTracking
 {
-    public partial class FrmSpecialMarks : Form
+    public partial class frmSpecialMarks : Form
     {
         ListViewItemComparer _lvwItemComparer;
-        public FrmSpecialMarks()
+        public frmSpecialMarks()
         {
             InitializeComponent();
         }
 
         private void frmSpecialMarks_Load(object sender, EventArgs e)
         {
-            mainPanelMarks.Enabled = MsSqlDatabase.CheckConnectWithConnectionStr(Properties.Settings.Default.twtConnectionSrting);
-            if (mainPanelMarks.Enabled) 
+            mainPanelSpecialMarks.Enabled = MsSqlDatabase.CheckConnectWithConnectionStr(Properties.Settings.Default.twtConnectionSrting);
+            if (mainPanelSpecialMarks.Enabled) 
             {
-                dgDataBase.DataSource = MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "Select * From SpecialMarks");
-
-                lstDataBase.DisplayMember = "Name";
-                lstDataBase.ValueMember = "Name";
-                lstDataBase.DataSource = MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "Select * From SpecialMarks");
-
                 InitializeListView();
                 LoadList(MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "Select * From SpecialMarks"));
             }
@@ -38,12 +32,12 @@ namespace TimeWorkTracking
         // Initialize ListView
         private void InitializeListView()
         {
-            lstwDataBase.View = View.Details;               // Set the view to show details.
-            lstwDataBase.LabelEdit = true;                  // Allow the user to edit item text.
-            lstwDataBase.AllowColumnReorder = true;         // Allow the user to rearrange columns.
-            lstwDataBase.FullRowSelect = true;              // Select the item and subitems when selection is made.
-            lstwDataBase.GridLines = true;                  // Display grid lines.
-            lstwDataBase.Sorting = SortOrder.Ascending;     // Sort the items in the list in ascending order.
+            lstwDataBaseSpecialMarks.View = View.Details;               // Set the view to show details.
+            lstwDataBaseSpecialMarks.LabelEdit = true;                  // Allow the user to edit item text.
+            lstwDataBaseSpecialMarks.AllowColumnReorder = true;         // Allow the user to rearrange columns.
+            lstwDataBaseSpecialMarks.FullRowSelect = true;              // Select the item and subitems when selection is made.
+            lstwDataBaseSpecialMarks.GridLines = true;                  // Display grid lines.
+            lstwDataBaseSpecialMarks.Sorting = SortOrder.Ascending;     // Sort the items in the list in ascending order.
 
             // The ListViewItemSorter property allows you to specify the
             // object that performs the sorting of items in the ListView.
@@ -55,7 +49,7 @@ namespace TimeWorkTracking
                 Order = SortOrder.Ascending
             };
 
-            lstwDataBase.ListViewItemSorter = _lvwItemComparer;
+            lstwDataBaseSpecialMarks.ListViewItemSorter = _lvwItemComparer;
 
         }
 
@@ -66,7 +60,7 @@ namespace TimeWorkTracking
             //            DataTable dtable = _DataSet.Tables["Titles"];
 
             // Clear the ListView control
-            lstwDataBase.Items.Clear();
+            lstwDataBaseSpecialMarks.Items.Clear();
 
             // Display items in the ListView control
             for (int i = 0; i < dtable.Rows.Count; i++)
@@ -94,14 +88,13 @@ namespace TimeWorkTracking
                     //  lvi.Checked = true;
 
                     // Add the list items to the ListView
-                    lstwDataBase.Items.Add(lvi);
+                    lstwDataBaseSpecialMarks.Items.Add(lvi);
                 }
             }
         }
-
-        private void lstwDataBase_ColumnClick(object sender, ColumnClickEventArgs e)
+        //сортировка по заголовке столбца
+        private void lstwDataBaseSpecialMarks_ColumnClick(object sender, ColumnClickEventArgs e)
         {
-
             // Determine if clicked column is already the column that is being sorted.
             if (e.Column == _lvwItemComparer.SortColumn)
             {
@@ -123,136 +116,27 @@ namespace TimeWorkTracking
             }
 
             // Perform the sort with these new sort options.
-            this.lstwDataBase.Sort();
+            this.lstwDataBaseSpecialMarks.Sort();
         }
-
-        private void lstwDataBase_SelectedIndexChanged(object sender, EventArgs e)
+        //выбор значения из списка
+        private void lstwDataBaseSpecialMarks_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int ind = lstwDataBase.SelectedIndex();
+            int ind = lstwDataBaseSpecialMarks.SelectedIndex();
             if (ind >= 0) 
             {
-                tbCodeDigital.Text = lstwDataBase.Items[ind].SubItems[1].Text;
-                tbCodeLetter.Text = lstwDataBase.Items[ind].SubItems[2].Text;
-                tbName.Text = lstwDataBase.Items[ind].SubItems[3].Text;
-                tbNote.Text = lstwDataBase.Items[ind].SubItems[4].Text;
-                chUse.Checked = lstwDataBase.Items[ind].Text=="True";
+                tbCodeDigital.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[1].Text;
+                tbCodeLetter.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[2].Text;
+                tbName.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[3].Text;
+                tbNote.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[4].Text;
+                chUse.Checked = lstwDataBaseSpecialMarks.Items[ind].Text=="True";
             }
         }
 
         //запретить изменение размеров
-        private void lstwDataBase_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        private void lstwDataBaseSpecialMarks_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             e.Cancel = true;
-            e.NewWidth = lstwDataBase.Columns[e.ColumnIndex].Width;
-        }
-        //изменение цвета заголовка
-        private void lstwDataBase_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
-        {
-            //включить OwnerDraw=true
-         //   e.Graphics.FillRectangle(Brushes.LightGray, e.Bounds);
-          //  e.DrawText();
-            
-            using (var sf = new StringFormat())
-            {
-                sf.Alignment = StringAlignment.Center;
-
-                using (var headerFont = new Font("Microsoft Sans Serif", 9, FontStyle.Bold))
-                {
-                    e.Graphics.FillRectangle(Brushes.LightGray, e.Bounds);
-                    e.Graphics.DrawString(e.Header.Text, headerFont,
-                        Brushes.Black, e.Bounds, sf);
-                }
-            }
-            
-        }
-
-        private void lstwDataBase_DrawItem(object sender, DrawListViewItemEventArgs e)
-        {
-            /*
-            if ((e.State & ListViewItemStates.Selected) != 0)
-            {
-                // Draw the background and focus rectangle for a selected item.
-                e.Graphics.FillRectangle(Brushes.Maroon, e.Bounds);
-                e.DrawFocusRectangle();
-            }
-            else
-            {
-                // Draw the background for an unselected item.
-                using (LinearGradientBrush brush =
-                    new LinearGradientBrush(e.Bounds, Color.Orange,
-                    Color.Maroon, LinearGradientMode.Horizontal))
-                {
-                    e.Graphics.FillRectangle(brush, e.Bounds);
-                }
-            }
-
-            // Draw the item text for views other than the Details view.
-            if (lstwDataBase.View != View.Details)
-            {
-                e.DrawText();
-            }
-            */
-        }
-
-        private void lstwDataBase_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
-        {
-            using (var sf = new StringFormat())
-            {
-                sf.Alignment = StringAlignment.Center;
-
-                using (var headerFont = new Font("Microsoft Sans Serif", 8, FontStyle.Regular))
-                {
-                   // e.Graphics.FillRectangle(Brushes.LightGray, e.Bounds);
-                    e.Graphics.DrawString(e.SubItem.Text, headerFont,
-                        Brushes.Black, e.Bounds, sf);
-                }
-            }
-            /*
-            TextFormatFlags flags = TextFormatFlags.Left;
-
-            using (StringFormat sf = new StringFormat())
-            {
-                // Store the column text alignment, letting it default
-                // to Left if it has not been set to Center or Right.
-                switch (e.Header.TextAlign)
-                {
-                    case HorizontalAlignment.Center:
-                        sf.Alignment = StringAlignment.Center;
-                        flags = TextFormatFlags.HorizontalCenter;
-                        break;
-                    case HorizontalAlignment.Right:
-                        sf.Alignment = StringAlignment.Far;
-                        flags = TextFormatFlags.Right;
-                        break;
-                }
-
-                // Draw the text and background for a subitem with a 
-                // negative value. 
-                double subItemValue;
-                if (e.ColumnIndex > 0 && Double.TryParse(
-                    e.SubItem.Text, NumberStyles.Currency,
-                    NumberFormatInfo.CurrentInfo, out subItemValue) &&
-                    subItemValue < 0)
-                {
-                    // Unless the item is selected, draw the standard 
-                    // background to make it stand out from the gradient.
-                    if ((e.ItemState & ListViewItemStates.Selected) == 0)
-                    {
-                        e.DrawBackground();
-                    }
-
-                    // Draw the subitem text in red to highlight it. 
-                    e.Graphics.DrawString(e.SubItem.Text,
-                        lstwDataBase.Font, Brushes.Red, e.Bounds, sf);
-
-                    return;
-                }
-
-                // Draw normal text for a subitem with a nonnegative 
-                // or nonnumerical value.
-                e.DrawText(flags);
-            }
-            */
+            e.NewWidth = lstwDataBaseSpecialMarks.Columns[e.ColumnIndex].Width;
         }
 
         //чекбокс
@@ -262,22 +146,6 @@ namespace TimeWorkTracking
                 chUse.ImageIndex = 1;
             else
                 chUse.ImageIndex = 2;
-        }
-    }
-
-    /*----------------------------------------------------------------------------------------------------------
-     *  РАСШИРЕНИЯ
-     -----------------------------------------------------------------------------------------------------------*/
-
-    //получить номер выделенной строки
-    public static class Extension
-    {
-        public static int SelectedIndex(this ListView listView)
-        {
-            if (listView.SelectedIndices.Count > 0)
-                return listView.SelectedIndices[0];
-            else
-                return -1;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace TimeWorkTracking
         private SortOrder OrderOfSort;
 
         // Case insensitive comparer object
-        private CaseInsensitiveComparer ObjectCompare;
+        private readonly CaseInsensitiveComparer ObjectCompare;
 
         // Class constructor, initializes various elements
         public ListViewItemComparer()

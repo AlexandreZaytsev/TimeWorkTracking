@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace TimeWorkTracking
 {
-    partial class FrmAbout : Form
+    partial class frmAbout : Form
     {
-        public FrmAbout()
+        public frmAbout()
         {
             InitializeComponent();
             this.Text = String.Format("О программе {0}", AssemblyTitle);
