@@ -1,7 +1,7 @@
 ﻿
 namespace TimeWorkTracking
 {
-    partial class frmDataBaseSQL
+    partial class FrmDataBaseSQL
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@ namespace TimeWorkTracking
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDataBaseSQL));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDataBaseSQL));
             this.label14 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.picStatusTWT = new System.Windows.Forms.PictureBox();

@@ -12,21 +12,18 @@ using System.Windows.Forms;
 
 namespace TimeWorkTracking
 {
-    public partial class frmSpecialMarks : Form
+    public partial class FrmSpecialMarks : Form
     {
         ListViewItemComparer _lvwItemComparer;
-        public frmSpecialMarks()
+        public FrmSpecialMarks()
         {
             InitializeComponent();
-            lstwDataBase.SmallImageList = imglStatus;
-
-
         }
 
         private void frmSpecialMarks_Load(object sender, EventArgs e)
         {
-            splitContainerEdit.Enabled = MsSqlDatabase.CheckConnectWithConnectionStr(Properties.Settings.Default.twtConnectionSrting);
-            if (splitContainerEdit.Enabled) 
+            mainPanelMarks.Enabled = MsSqlDatabase.CheckConnectWithConnectionStr(Properties.Settings.Default.twtConnectionSrting);
+            if (mainPanelMarks.Enabled) 
             {
                 dgDataBase.DataSource = MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "Select * From SpecialMarks");
 
@@ -36,20 +33,6 @@ namespace TimeWorkTracking
 
                 InitializeListView();
                 LoadList(MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "Select * From SpecialMarks"));
-             //   lstwDataBase.DataBindings
-
-                /*
-                                                            "Id int PRIMARY KEY IDENTITY, " +
-                                        "DigitalCode NVARCHAR(4) NOT NULL, " +
-                                        "LetterCode NVARCHAR(4) NOT NULL, " +
-                                        "Name NVARCHAR(150) NOT NULL UNIQUE, " +
-                                        "Note NVARCHAR(1024) NULL, " +
-                                        "Uses bit NOT NULL " +
-                */
-
-
-
-
             }
         }
         // Initialize ListView
@@ -62,24 +45,17 @@ namespace TimeWorkTracking
             lstwDataBase.GridLines = true;                  // Display grid lines.
             lstwDataBase.Sorting = SortOrder.Ascending;     // Sort the items in the list in ascending order.
 
-/*
-            // Attach Subitems to the ListView
-            lstwDataBase.Columns.Add("Digital", 25, HorizontalAlignment.Left);
-            lstwDataBase.Columns.Add("Letter", 35, HorizontalAlignment.Left);
-            lstwDataBase.Columns.Add("Name", 100, HorizontalAlignment.Left);
-            lstwDataBase.Columns.Add("FullName", 200, HorizontalAlignment.Left);
-            lstwDataBase.Columns.Add("Use", 20, HorizontalAlignment.Left);
-*/
             // The ListViewItemSorter property allows you to specify the
             // object that performs the sorting of items in the ListView.
             // You can use the ListViewItemSorter property in combination
             // with the Sort method to perform custom sorting.
-            _lvwItemComparer = new ListViewItemComparer();
+            _lvwItemComparer = new ListViewItemComparer
+            {
+                SortColumn = 5,// 1;// e.Column; (3 name)
+                Order = SortOrder.Ascending
+            };
 
-            _lvwItemComparer.SortColumn = 5;// 1;// e.Column; (3 name)
-            _lvwItemComparer.Order = SortOrder.Ascending;
-
-            this.lstwDataBase.ListViewItemSorter = _lvwItemComparer;
+            lstwDataBase.ListViewItemSorter = _lvwItemComparer;
 
         }
 
@@ -102,9 +78,11 @@ namespace TimeWorkTracking
                 {
                     //                    listView1.Items[0].ImageIndex = 3;
                     // Define the list items
-                    ListViewItem lvi = new ListViewItem(drow["Uses"].ToString(), 0);
-                    lvi.ImageIndex = (Boolean)drow["Uses"]? 1 : 2; 
-                //    lvi.Checked = (Boolean)drow["Uses"];
+                    ListViewItem lvi = new ListViewItem(drow["Uses"].ToString(), 0)
+                    {
+                        ImageIndex = (Boolean)drow["Uses"] ? 1 : 2
+                    };
+                    //    lvi.Checked = (Boolean)drow["Uses"];
                     //       lvi.SubItems.Add(drow["Uses"].ToString());
                     lvi.SubItems.Add(drow["DigitalCode"].ToString());
                     lvi.SubItems.Add(drow["LetterCode"].ToString());
@@ -157,29 +135,9 @@ namespace TimeWorkTracking
                 tbCodeLetter.Text = lstwDataBase.Items[ind].SubItems[2].Text;
                 tbName.Text = lstwDataBase.Items[ind].SubItems[3].Text;
                 tbNote.Text = lstwDataBase.Items[ind].SubItems[4].Text;
-                chUse.Checked = lstwDataBase.Items[ind].Text=="True"?true:false;
-                /*
-                           MessageBox.Show(ind.ToString()+"\n"+
-                                               lstwDataBase.Items[ind].SubItems[1].ToString() +"\n"+
-                                               lstwDataBase.Items[ind].SubItems[2].ToString() + "\n" +
-                                               lstwDataBase.Items[ind].SubItems[3].ToString() + "\n" +
-                                               lstwDataBase.Items[ind].SubItems[4].ToString() + "\n" +
-                                               lstwDataBase.Items[ind].SubItems[5].ToString() + "\n" +
-                                               lstwDataBase.Items[ind].SubItems[6].ToString() + "\n"
-                                               );
-                */
+                chUse.Checked = lstwDataBase.Items[ind].Text=="True";
             }
-
-            //             lstwDataBase.DeleteItem(lstwDataBase.SelectedIndex);
-
-
         }
-
-        private void lstwDataBase_ItemActivate(object sender, EventArgs e)
-        {
-   //         MessageBox.Show(lstwDataBase.FocusedItem.SubItems[3].Text);
-        }
-
 
         //запретить изменение размеров
         private void lstwDataBase_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)

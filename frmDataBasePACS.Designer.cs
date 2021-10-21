@@ -1,7 +1,7 @@
 ﻿
 namespace TimeWorkTracking
 {
-    partial class frmDataBasePACS
+    partial class FrmDataBasePACS
     {
         /// <summary>
         /// Required designer variable.
@@ -37,7 +37,7 @@ namespace TimeWorkTracking
             this.label10 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.tbHostNamePACS = new System.Windows.Forms.TextBox();
-            this.btTestConnectionPacs = new System.Windows.Forms.Button();
+            this.BtTestConnectionPacs = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -118,17 +118,17 @@ namespace TimeWorkTracking
             this.tbHostNamePACS.Size = new System.Drawing.Size(261, 22);
             this.tbHostNamePACS.TabIndex = 3;
             // 
-            // btTestConnectionPacs
+            // BtTestConnectionPacs
             // 
-            this.btTestConnectionPacs.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btTestConnectionPacs.Location = new System.Drawing.Point(135, 126);
-            this.btTestConnectionPacs.Margin = new System.Windows.Forms.Padding(4);
-            this.btTestConnectionPacs.Name = "btTestConnectionPacs";
-            this.btTestConnectionPacs.Size = new System.Drawing.Size(263, 28);
-            this.btTestConnectionPacs.TabIndex = 1;
-            this.btTestConnectionPacs.Text = "Проверитиь соединение";
-            this.btTestConnectionPacs.UseVisualStyleBackColor = true;
-            this.btTestConnectionPacs.Click += new System.EventHandler(this.btTestConnectionPacs_Click_1);
+            this.BtTestConnectionPacs.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.BtTestConnectionPacs.Location = new System.Drawing.Point(135, 126);
+            this.BtTestConnectionPacs.Margin = new System.Windows.Forms.Padding(4);
+            this.BtTestConnectionPacs.Name = "BtTestConnectionPacs";
+            this.BtTestConnectionPacs.Size = new System.Drawing.Size(263, 28);
+            this.BtTestConnectionPacs.TabIndex = 1;
+            this.BtTestConnectionPacs.Text = "Проверитиь соединение";
+            this.BtTestConnectionPacs.UseVisualStyleBackColor = true;
+            this.BtTestConnectionPacs.Click += new System.EventHandler(this.btTestConnectionPacs_Click_1);
             // 
             // frmDataBasePACS
             // 
@@ -138,7 +138,7 @@ namespace TimeWorkTracking
             this.Controls.Add(this.label13);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.tbPasswordPASC);
-            this.Controls.Add(this.btTestConnectionPacs);
+            this.Controls.Add(this.BtTestConnectionPacs);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.tbHostNamePACS);
             this.Controls.Add(this.tbUserNamePACS);
@@ -164,6 +164,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox tbHostNamePACS;
-        private System.Windows.Forms.Button btTestConnectionPacs;
+        private System.Windows.Forms.Button BtTestConnectionPacs;
     }
 }

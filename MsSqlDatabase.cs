@@ -286,7 +286,7 @@ namespace TimeWorkTracking
             bool ret = false;
             if (connectionString != "")
             {
-                StringBuilder errorMessages = new StringBuilder();
+         //       StringBuilder errorMessages = new StringBuilder();
                 var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
                 using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
                 {

@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace TimeWorkTracking
 {
-    public partial class frmDataBasePACS : Form
+    public partial class FrmDataBasePACS : Form
     {
-        public frmDataBasePACS()
+        public FrmDataBasePACS()
         {
             //подписка события внешних форм 
             CallBack_FrmMain_outEvent.callbackEventHandler = new CallBack_FrmMain_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification

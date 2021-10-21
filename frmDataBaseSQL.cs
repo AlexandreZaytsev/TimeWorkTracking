@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace TimeWorkTracking
 {
-    public partial class frmDataBaseSQL : Form
+    public partial class FrmDataBaseSQL : Form
     {
-        public frmDataBaseSQL()
+        public FrmDataBaseSQL()
         {
             //подписка события внешних форм 
             CallBack_FrmMain_outEvent.callbackEventHandler = new CallBack_FrmMain_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
@@ -51,7 +51,7 @@ namespace TimeWorkTracking
         //test Connrection TWT (TimeWorkTracking database )
         private void btTestConnectionTwt_Click(object sender, EventArgs e)
         {
-            bool ret=TestFormConnectionTwt();        //проверить соединение по настройкам формы
+            TestFormConnectionTwt();        //проверить соединение по настройкам формы
         }
 
         //полчить строку соединения по настройкам формы

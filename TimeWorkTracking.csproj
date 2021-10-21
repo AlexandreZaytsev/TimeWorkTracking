@@ -31,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>IDE1006</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>twt.ico</ApplicationIcon>
@@ -47,54 +48,63 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmSpecialMarks.cs">
+    <Compile Include="FrmSpecialMarks.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmSpecialMarks.Designer.cs">
-      <DependentUpon>frmSpecialMarks.cs</DependentUpon>
+    <Compile Include="FrmSpecialMarks.Designer.cs">
+      <DependentUpon>FrmSpecialMarks.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmDataBasePACS.cs">
+    <Compile Include="FrmDataBasePACS.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmDataBasePACS.Designer.cs">
-      <DependentUpon>frmDataBasePACS.cs</DependentUpon>
+    <Compile Include="FrmDataBasePACS.Designer.cs">
+      <DependentUpon>FrmDataBasePACS.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmAbout.cs">
+    <Compile Include="FrmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmAbout.Designer.cs">
-      <DependentUpon>frmAbout.cs</DependentUpon>
+    <Compile Include="FrmAbout.Designer.cs">
+      <DependentUpon>FrmAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmDataBaseSQL.cs">
+    <Compile Include="FrmDataBaseSQL.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmDataBaseSQL.Designer.cs">
-      <DependentUpon>frmDataBaseSQL.cs</DependentUpon>
+    <Compile Include="FrmDataBaseSQL.Designer.cs">
+      <DependentUpon>FrmDataBaseSQL.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmUsers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmUsers.Designer.cs">
+      <DependentUpon>FrmUsers.cs</DependentUpon>
     </Compile>
     <Compile Include="ListViewItemComparer.cs" />
     <Compile Include="MsSqlDatabase.cs" />
-    <Compile Include="frmMain.cs">
+    <Compile Include="FrmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmMain.Designer.cs">
-      <DependentUpon>frmMain.cs</DependentUpon>
+    <Compile Include="FrmMain.Designer.cs">
+      <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="frmAbout.resx">
-      <DependentUpon>frmAbout.cs</DependentUpon>
+    <EmbeddedResource Include="FrmAbout.resx">
+      <DependentUpon>FrmAbout.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmDataBasePACS.resx">
-      <DependentUpon>frmDataBasePACS.cs</DependentUpon>
+    <EmbeddedResource Include="FrmDataBasePACS.resx">
+      <DependentUpon>FrmDataBasePACS.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmMain.resx">
-      <DependentUpon>frmMain.cs</DependentUpon>
+    <EmbeddedResource Include="FrmMain.resx">
+      <DependentUpon>FrmMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmDataBaseSQL.resx">
-      <DependentUpon>frmDataBaseSQL.cs</DependentUpon>
+    <EmbeddedResource Include="FrmDataBaseSQL.resx">
+      <DependentUpon>FrmDataBaseSQL.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmSpecialMarks.resx">
-      <DependentUpon>frmSpecialMarks.cs</DependentUpon>
+    <EmbeddedResource Include="FrmSpecialMarks.resx">
+      <DependentUpon>FrmSpecialMarks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmUsers.resx">
+      <DependentUpon>FrmUsers.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
