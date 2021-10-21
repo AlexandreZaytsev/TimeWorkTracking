@@ -36,7 +36,7 @@ namespace TimeWorkTracking
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.lstDataBase = new System.Windows.Forms.ListBox();
             this.chUse = new System.Windows.Forms.CheckBox();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.imglStatus = new System.Windows.Forms.ImageList(this.components);
             this.tbCodeLetter = new System.Windows.Forms.TextBox();
             this.tbCodeDigital = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -127,7 +127,7 @@ namespace TimeWorkTracking
             this.chUse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.chUse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.chUse.ImageIndex = 2;
-            this.chUse.ImageList = this.imageList1;
+            this.chUse.ImageList = this.imglStatus;
             this.chUse.Location = new System.Drawing.Point(690, 5);
             this.chUse.Name = "chUse";
             this.chUse.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -138,25 +138,35 @@ namespace TimeWorkTracking
             this.chUse.UseVisualStyleBackColor = true;
             this.chUse.CheckedChanged += new System.EventHandler(this.chUse_CheckedChanged);
             // 
-            // imageList1
+            // imglStatus
             // 
-            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "setting.ico");
-            this.imageList1.Images.SetKeyName(1, "on1_.png");
-            this.imageList1.Images.SetKeyName(2, "off_.png");
-            this.imageList1.Images.SetKeyName(3, "on3.png");
-            this.imageList1.Images.SetKeyName(4, "off3.png");
-            this.imageList1.Images.SetKeyName(5, "on2.png");
-            this.imageList1.Images.SetKeyName(6, "off2.png");
-            this.imageList1.Images.SetKeyName(7, "off1_.png");
-            this.imageList1.Images.SetKeyName(8, "on_.png");
-            this.imageList1.Images.SetKeyName(9, "on.png");
-            this.imageList1.Images.SetKeyName(10, "off.png");
-            this.imageList1.Images.SetKeyName(11, "sel_.png");
-            this.imageList1.Images.SetKeyName(12, "twt.ico");
-            this.imageList1.Images.SetKeyName(13, "sel.png");
-            this.imageList1.Images.SetKeyName(14, "ok.png");
+            this.imglStatus.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imglStatus.ImageStream")));
+            this.imglStatus.TransparentColor = System.Drawing.Color.Transparent;
+            this.imglStatus.Images.SetKeyName(0, "setting.ico");
+            this.imglStatus.Images.SetKeyName(1, "on5m.png");
+            this.imglStatus.Images.SetKeyName(2, "off5m.png");
+            this.imglStatus.Images.SetKeyName(3, "on5.png");
+            this.imglStatus.Images.SetKeyName(4, "off5.png");
+            this.imglStatus.Images.SetKeyName(5, "on5j.jpg");
+            this.imglStatus.Images.SetKeyName(6, "off5j.jpg");
+            this.imglStatus.Images.SetKeyName(7, "on5b.bmp");
+            this.imglStatus.Images.SetKeyName(8, "off5b.bmp");
+            this.imglStatus.Images.SetKeyName(9, "on4.png");
+            this.imglStatus.Images.SetKeyName(10, "off4.png");
+            this.imglStatus.Images.SetKeyName(11, "on1_.png");
+            this.imglStatus.Images.SetKeyName(12, "off1_.png");
+            this.imglStatus.Images.SetKeyName(13, "on2.png");
+            this.imglStatus.Images.SetKeyName(14, "off_.png");
+            this.imglStatus.Images.SetKeyName(15, "off2.png");
+            this.imglStatus.Images.SetKeyName(16, "on3.png");
+            this.imglStatus.Images.SetKeyName(17, "off3.png");
+            this.imglStatus.Images.SetKeyName(18, "on_.png");
+            this.imglStatus.Images.SetKeyName(19, "on.png");
+            this.imglStatus.Images.SetKeyName(20, "off.png");
+            this.imglStatus.Images.SetKeyName(21, "sel_.png");
+            this.imglStatus.Images.SetKeyName(22, "twt.ico");
+            this.imglStatus.Images.SetKeyName(23, "sel.png");
+            this.imglStatus.Images.SetKeyName(24, "ok.png");
             // 
             // tbCodeLetter
             // 
@@ -352,7 +362,7 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ColumnHeader code;
         private System.Windows.Forms.ColumnHeader name;
         private System.Windows.Forms.ColumnHeader used;
-        private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.ImageList imglStatus;
         private System.Windows.Forms.CheckBox chUse;
         private System.Windows.Forms.TextBox tbCodeLetter;
         private System.Windows.Forms.TextBox tbCodeDigital;

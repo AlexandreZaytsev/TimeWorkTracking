@@ -18,7 +18,7 @@ namespace TimeWorkTracking
         public frmSpecialMarks()
         {
             InitializeComponent();
-            lstwDataBase.SmallImageList = imageList1;
+            lstwDataBase.SmallImageList = imglStatus;
 
 
         }
