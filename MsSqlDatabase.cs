@@ -124,7 +124,7 @@ namespace TimeWorkTracking
 
                     //Специальные отметки (самостоятельная таблица)
                     sqlCommand.CommandText = "CREATE TABLE SpecialMarks (" +
-                        "nd int PRIMARY KEY IDENTITY, " +
+                        "id int PRIMARY KEY IDENTITY, " +
                         "digitalCode NVARCHAR(4) NOT NULL, " +                                          //числовой код 
                         "letterCode NVARCHAR(4) NOT NULL, " +                                           //строковый код
                         "name NVARCHAR(150) NOT NULL UNIQUE, " +                                        //*наименование
@@ -200,7 +200,7 @@ namespace TimeWorkTracking
                         "timeScheduleWithoutLunch int NOT NULL DEFAULT 0, " +                           //отработанное время без обеда (мин)
                         "timeScheduleLess int NOT NULL DEFAULT 0, " +                                   //время недоработки (мин)
                         "timeScheduleOver int NOT NULL DEFAULT 0, " +                                   //время переработки (мин)
-                        "specmarkNameId int NOT NULL FOREIGN KEY REFERENCES SpecialMarks(id), " +       //->ссылка на специальные отметки
+                        "specmarkId int NOT NULL FOREIGN KEY REFERENCES SpecialMarks(id), " +           //->ссылка на специальные отметки
                         "specmarkTimeStart Datetime NULL, " +                                           //датавремя начала действия специальных отметок
                         "specmarkTimeStop Datetime NULL, " +                                            //датавремя окончания специальных отметок
                         "specmarkNote NVARCHAR(1024) NULL, " +                                          //комментарий к специальным отметкам
