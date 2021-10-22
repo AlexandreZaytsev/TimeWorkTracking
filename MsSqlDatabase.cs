@@ -234,7 +234,9 @@ namespace TimeWorkTracking
                         ")";
                     sqlCommand.ExecuteNonQuery();
 
-                    //возвращает информацию пользователя по внешнему идентификатору   
+                    //возвращает данные для формы регистрации по запрашиваемой дате и активным пользователям
+                    // - если пользователь есть в истории проходов - время из истории (таблица EventsPass)
+                    // - если пользователя нет в истории проходов - время из рабочего графика (таблица Users)
                     sqlCommand.CommandText = "Create function twt_GetPassFormData(@bDate datetime, @extUserID varchar(20) = '') " +
                         "Returns table as Return " +
                         "Select " +
