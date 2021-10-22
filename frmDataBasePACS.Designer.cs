@@ -50,14 +50,14 @@ namespace TimeWorkTracking
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label13.Location = new System.Drawing.Point(17, 11);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(284, 20);
+            this.label13.Size = new System.Drawing.Size(226, 17);
             this.label13.TabIndex = 15;
             this.label13.Text = "Подключение web сервису СКУД";
             // 
             // pictureBox1
             // 
             this.pictureBox1.Image = global::TimeWorkTracking.Properties.Resources.no;
-            this.pictureBox1.Location = new System.Drawing.Point(416, 11);
+            this.pictureBox1.Location = new System.Drawing.Point(311, 5);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(30, 28);
@@ -67,37 +67,37 @@ namespace TimeWorkTracking
             // 
             // tbPasswordPASC
             // 
-            this.tbPasswordPASC.Location = new System.Drawing.Point(153, 103);
+            this.tbPasswordPASC.Location = new System.Drawing.Point(102, 97);
             this.tbPasswordPASC.Margin = new System.Windows.Forms.Padding(4);
             this.tbPasswordPASC.Name = "tbPasswordPASC";
-            this.tbPasswordPASC.Size = new System.Drawing.Size(293, 24);
+            this.tbPasswordPASC.Size = new System.Drawing.Size(239, 21);
             this.tbPasswordPASC.TabIndex = 12;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(18, 106);
+            this.label9.Location = new System.Drawing.Point(18, 100);
             this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(75, 18);
+            this.label9.Size = new System.Drawing.Size(61, 15);
             this.label9.TabIndex = 11;
             this.label9.Text = "Password";
             // 
             // tbUserNamePACS
             // 
-            this.tbUserNamePACS.Location = new System.Drawing.Point(153, 74);
+            this.tbUserNamePACS.Location = new System.Drawing.Point(102, 71);
             this.tbUserNamePACS.Margin = new System.Windows.Forms.Padding(1);
             this.tbUserNamePACS.Name = "tbUserNamePACS";
-            this.tbUserNamePACS.Size = new System.Drawing.Size(293, 24);
+            this.tbUserNamePACS.Size = new System.Drawing.Size(239, 21);
             this.tbUserNamePACS.TabIndex = 10;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(18, 77);
+            this.label10.Location = new System.Drawing.Point(18, 74);
             this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(84, 18);
+            this.label10.Size = new System.Drawing.Size(70, 15);
             this.label10.TabIndex = 9;
             this.label10.Text = "User Name";
             // 
@@ -105,29 +105,29 @@ namespace TimeWorkTracking
             // 
             this.label8.AccessibleName = "";
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(18, 49);
+            this.label8.Location = new System.Drawing.Point(17, 45);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(84, 18);
+            this.label8.Size = new System.Drawing.Size(69, 15);
             this.label8.TabIndex = 4;
             this.label8.Text = "Host Name";
             // 
             // tbHostNamePACS
             // 
             this.tbHostNamePACS.AccessibleName = "";
-            this.tbHostNamePACS.Location = new System.Drawing.Point(153, 45);
+            this.tbHostNamePACS.Location = new System.Drawing.Point(102, 42);
             this.tbHostNamePACS.Margin = new System.Windows.Forms.Padding(4);
             this.tbHostNamePACS.Name = "tbHostNamePACS";
-            this.tbHostNamePACS.Size = new System.Drawing.Size(293, 24);
+            this.tbHostNamePACS.Size = new System.Drawing.Size(239, 21);
             this.tbHostNamePACS.TabIndex = 3;
             // 
             // btTestConnectionPacs
             // 
             this.btTestConnectionPacs.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btTestConnectionPacs.Location = new System.Drawing.Point(150, 135);
+            this.btTestConnectionPacs.Location = new System.Drawing.Point(102, 126);
             this.btTestConnectionPacs.Margin = new System.Windows.Forms.Padding(4);
             this.btTestConnectionPacs.Name = "btTestConnectionPacs";
-            this.btTestConnectionPacs.Size = new System.Drawing.Size(296, 32);
+            this.btTestConnectionPacs.Size = new System.Drawing.Size(239, 30);
             this.btTestConnectionPacs.TabIndex = 1;
             this.btTestConnectionPacs.Text = "Проверитиь соединение";
             this.btTestConnectionPacs.UseVisualStyleBackColor = true;
@@ -148,14 +148,14 @@ namespace TimeWorkTracking
             this.mainPanelPACS.Location = new System.Drawing.Point(0, 0);
             this.mainPanelPACS.Margin = new System.Windows.Forms.Padding(2);
             this.mainPanelPACS.Name = "mainPanelPACS";
-            this.mainPanelPACS.Size = new System.Drawing.Size(455, 173);
+            this.mainPanelPACS.Size = new System.Drawing.Size(349, 163);
             this.mainPanelPACS.TabIndex = 16;
             // 
             // frmDataBasePACS
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(455, 173);
+            this.ClientSize = new System.Drawing.Size(349, 163);
             this.Controls.Add(this.mainPanelPACS);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
