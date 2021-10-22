@@ -176,13 +176,13 @@ namespace TimeWorkTracking
                         "id int PRIMARY KEY IDENTITY, " +
                         "extId NVARCHAR(20) NOT NULL UNIQUE, " +                                        //*внешний id для интеграции
                         "name NVARCHAR(150) NOT NULL UNIQUE, " +                                        //*наименование
-                        "derartmentId int NOT NULL FOREIGN KEY REFERENCES UserDepartment(id), " +       //->ссылка на департамент
+                        "departmentId int NOT NULL FOREIGN KEY REFERENCES UserDepartment(id), " +       //->ссылка на департамент
                         "postId int NOT NULL FOREIGN KEY REFERENCES UserPost(id), " +                   //->ссылка на должность
                         "timeStart time NULL, " +                                                       //время начала работы по графику (без даты)    
                         "timeStop time NULL, " +                                                        //время окончания работы по графику (без даты)
-                        "lunch bit NOT NULL DEFAULT true, " +                                           //флаг признака обеда
+                        "lunch bit DEFAULT 1, " +                                                       //флаг признака обеда
                         "workSchemeId int NOT NULL FOREIGN KEY REFERENCES UserWorkScheme(id), " +       //->ссылка на схему работы
-                        "uses bit NOT NULL DEFAULT true " +                                             //флаг доступа для использования
+                        "uses bit DEFAULT 1 " +                                                         //флаг доступа для использования
                         ")"; 
                     sqlCommand.ExecuteNonQuery();
 
@@ -190,22 +190,23 @@ namespace TimeWorkTracking
                     sqlCommand.CommandText = "CREATE TABLE EventsPass (" +
                         "id bigint PRIMARY KEY IDENTITY, " +
                         "author NVARCHAR(150) NOT NULL, " +                                             //имя учетной записи сеанса
-                        "passDate Date NOT NULL UNIQUE, " +                                             //*дата события (без времени) 
-                        "passId NVARCHAR(20) NOT NULL UNIQUE FOREIGN KEY REFERENCES Users(extId), " +   //*->ссылка на внешний id пользователя
+                        "passDate Date NOT NULL, " +                                                    //*дата события (без времени) 
+                        "passId NVARCHAR(20) NOT NULL FOREIGN KEY REFERENCES Users(extId), " +          //*->ссылка на внешний id пользователя
                         "passTimeStart time NOT NULL, " +                                               //время первого входа (без даты)
                         "passTimeStop time NOT NULL, " +                                                //время последнего выхода (без даты)
-                        "infoLunchId bit NOT NULL DEFAULT true, " +                                     //флаг признака обеда
+                        "infoLunchId bit DEFAULT 1, " +                                                 //флаг признака обеда
                         "infoWorkSchemeId int NULL FOREIGN KEY REFERENCES UserWorkScheme(id), " +       //->ссылка на схему работы
-                        "timeScheduleFact int NOT NULL DEFAULT 0, " +                                   //отработанное время (мин)
-                        "timeScheduleWithoutLunch int NOT NULL DEFAULT 0, " +                           //отработанное время без обеда (мин)
-                        "timeScheduleLess int NOT NULL DEFAULT 0, " +                                   //время недоработки (мин)
-                        "timeScheduleOver int NOT NULL DEFAULT 0, " +                                   //время переработки (мин)
+                        "timeScheduleFact int DEFAULT 0, " +                                            //отработанное время (мин)
+                        "timeScheduleWithoutLunch int DEFAULT 0, " +                                    //отработанное время без обеда (мин)
+                        "timeScheduleLess int DEFAULT 0, " +                                            //время недоработки (мин)
+                        "timeScheduleOver int DEFAULT 0, " +                                            //время переработки (мин)
                         "specmarkId int NOT NULL FOREIGN KEY REFERENCES SpecialMarks(id), " +           //->ссылка на специальные отметки
                         "specmarkTimeStart Datetime NULL, " +                                           //датавремя начала действия специальных отметок
                         "specmarkTimeStop Datetime NULL, " +                                            //датавремя окончания специальных отметок
                         "specmarkNote NVARCHAR(1024) NULL, " +                                          //комментарий к специальным отметкам
-                        "totalHoursInWork int NOT NULL DEFAULT 0, " +                                   //итог рабочего времени в графике (мин)
-                        "totalHoursOutsideWork int NOT NULL DEFAULT 0" +                                //итог рабочего времени вне графика (мин)
+                        "totalHoursInWork int DEFAULT 0, " +                                            //итог рабочего времени в графике (мин)
+                        "totalHoursOutsideWork int DEFAULT 0" +                                         //итог рабочего времени вне графика (мин)
+                        "UNIQUE(passDate, passId) " +                                                   //уникальность на уровне таблицы
                         ")";
                     sqlCommand.ExecuteNonQuery();
 
@@ -226,7 +227,7 @@ namespace TimeWorkTracking
                         "w.name work, " +                                                               //схема работы
                         "u.uses access " +                                                              //флаг доступа для использования
                         "FROM Users u, UserDepartment d, UserPost p, UserWorkScheme w " +
-                        "WHERE u.derartmentId = d.Id AND " +
+                        "WHERE u.departmentId = d.Id AND " +
                         "u.postId = p.id and " +
                         "u.workSchemeId = w.Id and " +
                         "u.extId like('%' + @extUserID + '%') " +
