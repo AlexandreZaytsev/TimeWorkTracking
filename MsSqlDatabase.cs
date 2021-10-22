@@ -238,13 +238,13 @@ namespace TimeWorkTracking
                     sqlCommand.CommandText = "Create function twt_GetPassFormData(@bDate datetime, @extUserID varchar(20) = '') " +
                         "Returns table as Return " +
                         "Select " +
-                        "e.passDate, "+
-                        "u.extId "+
+                            "e.passDate, "+
+                            "u.extId "+
                         "From " +
-                        "(Select * from Users where uses = 1 ) as u " +
-                        "left join " +
-                        "(Select * from EventsPass where passDate = cast('2021/01/02' as date)) as e " +
-                        "on u.ExtId = e.passId";
+                            "(Select * from Users where uses = 1 ) as u " +
+                            "left join " +
+                            "(Select * from EventsPass where passDate = cast('2021/01/02' as date)) as e " +
+                            "on u.ExtId = e.passId";
                     sqlCommand.ExecuteNonQuery(); 
 
                     /*
