@@ -191,7 +191,7 @@ namespace TimeWorkTracking
                         "Id bigint PRIMARY KEY IDENTITY, " +
                         "Author NVARCHAR(150) NOT NULL, " +                                         //имя учетной записи сеанса
                         "passDate Date NOT NULL UNIQUE, " +                                         //*дата события (без времени) 
-                        "passUserId int NOT NULL UNIQUE FOREIGN KEY REFERENCES Users(ExtId), " +    //*->ссылка на внешний id пользователя
+                        "passId NVARCHAR(20) NOT NULL UNIQUE FOREIGN KEY REFERENCES Users(ExtId), " +    //*->ссылка на внешний id пользователя
                         "passTimeStart time NOT NULL, " +                                           //время первого входа (без даты)
                         "passTimeStop time NOT NULL, " +                                            //время последнего выхода (без даты)
                         "infoLunchId bit NOT NULL DEFAULT 1, " +                                    //флаг признака обеда
