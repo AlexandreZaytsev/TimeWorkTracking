@@ -36,6 +36,8 @@ namespace TimeWorkTracking
         {
             con = new SqlConnection(@"Data Source=.\SQLEXPRESS; Initial Catalog=TimeWorkTracking; Integrated Security=True");
             da = new SqlDataAdapter("Select *From Student", con);
+//            da = new SqlDataAdapter("select * from twt_GetUserInfo('2')", con);
+
             ds = new DataSet();
             con.Open();
             da.Fill(ds, "Student");
@@ -45,9 +47,11 @@ namespace TimeWorkTracking
         private void Form1_Load(object sender, EventArgs e)
         {
             //  GetList();
-            dataGridView1.DataSource = MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "Select * From SpecialMarks");
-            CheckConnects();           //проверить соединение с базами
+//            dataGridView1.DataSource = MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "Select * From SpecialMarks");
+            dataGridView1.DataSource = MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "select * from twt_GetUserInfo('2')");
 
+            CheckConnects();           //проверить соединение с базами
+//            var rr = MsSqlDatabase.RequesScalar(Properties.Settings.Default.twtConnectionSrting, @"select count(*) from SpecialMarks where name like '%от%'", false);
         }
 
         private void button1_Click(object sender, EventArgs e) //insert

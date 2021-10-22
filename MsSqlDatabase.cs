@@ -176,8 +176,8 @@ namespace TimeWorkTracking
                         "Name NVARCHAR(150) NOT NULL UNIQUE, " +
                         "DerartmentId int NOT NULL FOREIGN KEY REFERENCES UserDepartment(Id), " +
                         "PostId int NOT NULL FOREIGN KEY REFERENCES UserPost(Id), " +
-                        "TimeStart time NOT NULL, " +
-                        "TimeStop time NOT NULL, " +
+                        "TimeStart time, " +
+                        "TimeStop time, " +
                         "Lunch bit NOT NULL, " +
                         "WorkSchemeId int NOT NULL FOREIGN KEY REFERENCES UserWorkScheme(Id), " +
                         "Uses bit NOT NULL " +
@@ -204,6 +204,22 @@ namespace TimeWorkTracking
                         "specmarkNote NVARCHAR(1024) NULL, " +
                         "totalHoursInWork int NOT NULL DEFAULT 0, " +
                         "totalHoursOutsideWork int NOT NULL DEFAULT 0" +
+                        ")";
+                    sqlCommand.ExecuteNonQuery();
+
+                    //UDF
+                    //возвращает информацию пользователя по внешнему идентификаторцу   
+                    sqlCommand.CommandText = "Create function twt_GetUserInfo(@extUserID varchar(20) = '') " +
+                        "Returns table " +
+                        "as " +
+                        "Return " +
+                        "(" +
+                        "SELECT u.id id, u.ExchangeKey extId, u.Name fio, d.Name department, p.Name post, u.TimeStart startT, u.TimeStop stopT, u.Lunch lunch, w.Name work, u.Uses access " +
+                        "FROM Users u, UserDepartment d, UserPost p, UserWorkScheme w " +
+                        "WHERE u.DerartmentId = d.Id AND " +
+                        "u.PostId = p.id and " +
+                        "u.WorkSchemeId = w.Id and " +
+                        "u.ExchangeKey like('%' + @extUserID + '%') " +
                         ")";
                     sqlCommand.ExecuteNonQuery();
                 }
@@ -309,12 +325,74 @@ namespace TimeWorkTracking
             return ret;
         }
 
+        //выполнить запрос на обновление создание и удаление
+        // connectionString - строка соединения
+        // sqlRequest - запрос
+        // errMode - false- не показывать ошибки true- показывать ошибки
+        //возврат - количество обработанных строк
+        private static int GetRequestNonQuery(string connectionString, string sqlRequest, Boolean errMode)
+        {
+            int ret = 0;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var sqlCommand = connection.CreateCommand())
+                {
+                    sqlCommand.CommandText = sqlRequest;
+                    try
+                    {
+                        ret = sqlCommand.ExecuteNonQuery();
+                    }
+                    catch (SqlException)
+                    {
+                        if (errMode)                        //показывать ошибки или нет
+                        {
+                        }
+                    }
+                }
+                connection.Close();                         //Close the connection
+            }
+            return ret;
+        }
+
+        //выполнить запрос возвращающий одно значение
+        // connectionString - строка соединения
+        // sqlRequest - запрос
+        // errMode - false- не показывать ошибки true- показывать ошибки
+        //возврат - количество обработанных строк
+        private static string GetRequesScalar(string connectionString, string sqlRequest, Boolean errMode)
+        {
+            string ret = "";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var sqlCommand = connection.CreateCommand())
+                {
+                    sqlCommand.CommandText = sqlRequest;
+                    try
+                    {
+                        object result = sqlCommand.ExecuteScalar();
+                        if (result != null)
+                        {
+                            ret = result.ToString();
+                        }
+                    }
+                    catch (SqlException)
+                    {
+                        if (errMode)                        //показывать ошибки или нет
+                        {
+                        }
+                    }
+                }
+                connection.Close();                         //Close the connection
+            }
+            return ret;
+        }
+
         //выполнить запрос и вернуть DataSet
         private static DataTable GetTableRequest(string connectionString, string sqlRequest)
         {
-            
             DataSet ds= new DataSet();  // Создаем объект Dataset
-
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -324,19 +402,8 @@ namespace TimeWorkTracking
                 //DataSet ds = new DataSet();
                 
                 adapter.Fill(ds);       // Заполняем Dataset
-                // Отображаем данные
-  //              dataGridView1.DataSource = ds.Tables[0];
             }
-/*
-            using (var sqlConnection = new SqlConnection(connectionString))
-            {
-                SqlDataAdapter da = new SqlDataAdapter("Select * From " + tableName, sqlConnection);
-                sqlConnection.Open();
-                da.Fill(ds, tableName);
-                sqlConnection.Close();
-            }
- */
-            return ds.Tables[0]; //ds.Tables[tableName];    // Возвращаем объект Dataset
+            return ds.Tables[0]; //ds.Tables[tableName];    // Возвращаем первую таблицу из набора Dataset
         }
 
         //удалить бд
@@ -347,23 +414,22 @@ namespace TimeWorkTracking
             sqlConnectionStringBuilder.InitialCatalog = "master";
             using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
             {
-               sqlConnection.Open();
-               using (var sqlCommand = sqlConnection.CreateCommand())
-               {
-                   sqlCommand.CommandText = $@"
+                sqlConnection.Open();
+                using (var sqlCommand = sqlConnection.CreateCommand())
+                {
+                    //$ - использхование вставки параметров в строку без конкатенации
+                    //@ - строка без экранирующих символов
+                    sqlCommand.CommandText = $@"
                     ALTER DATABASE {databaseName} SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
                     DROP DATABASE [{databaseName}]
-                ";
+                    ";
                     sqlCommand.ExecuteNonQuery();
                 }
             }
         }
 
 
-
-
         //PUBLIC------------------------------------------------------------------------
-
 
         //пересоздать БД 
         public static void CreateDataBase(string connectionstring)
@@ -401,6 +467,18 @@ namespace TimeWorkTracking
         public static DataTable TableRequest(string connectionString, string sqlRequest)
         {
             return GetTableRequest(connectionString, sqlRequest);
+        }
+
+        //выполнить запрос на создание удаление обновление 
+        //возврат true или false
+        public static bool RequestNonQuery(string connectionString, string sqlRequest, Boolean errMode)
+        {
+            return GetRequestNonQuery(connectionString, sqlRequest, errMode) > 0;
+        }
+        //выполнить скалярный запрос и вернуть строку
+        public static string RequesScalar(string connectionString, string sqlRequest, Boolean errMode)
+        {
+            return GetRequesScalar(connectionString, sqlRequest, errMode);
         }
 
     }

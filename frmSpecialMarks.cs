@@ -100,13 +100,9 @@ namespace TimeWorkTracking
             {
                 // Reverse the current sort direction for this column.
                 if (_lvwItemComparer.Order == SortOrder.Ascending)
-                {
                     _lvwItemComparer.Order = SortOrder.Descending;
-                }
                 else
-                {
                     _lvwItemComparer.Order = SortOrder.Ascending;
-                }
             }
             else
             {
