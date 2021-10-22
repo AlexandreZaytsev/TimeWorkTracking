@@ -48,7 +48,7 @@ namespace TimeWorkTracking
         {
             //  GetList();
 //            dataGridView1.DataSource = MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "Select * From SpecialMarks");
-            dataGridView1.DataSource = MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "select * from twt_GetUserInfo('2')");
+//            dataGridView1.DataSource = MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "select * from twt_GetUserInfo('2')");
 
             CheckConnects();           //проверить соединение с базами
 //            var rr = MsSqlDatabase.RequesScalar(Properties.Settings.Default.twtConnectionSrting, @"select count(*) from SpecialMarks where name like '%от%'", false);
