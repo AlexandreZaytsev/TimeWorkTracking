@@ -166,8 +166,8 @@ namespace TimeWorkTracking
                         "Id int PRIMARY KEY IDENTITY, " +
                         "OriginalDate Date NOT NULL UNIQUE, " +                                         //*оригинальная дата
                         "TransferDate Date NOT NULL, " +                                                //реальная дата (перенос)
-                        "DateTypeId int NOT NULL FOREIGN KEY REFERENCES CalendarDateType(Id), " +       //ссылка на тип даты
-                        "DateNameId int NOT NULL FOREIGN KEY REFERENCES CalendarDateName(Id) " +        //ссылка на наименование даты    
+                        "DateTypeId int NOT NULL FOREIGN KEY REFERENCES CalendarDateType(Id), " +       //->ссылка на тип даты
+                        "DateNameId int NOT NULL FOREIGN KEY REFERENCES CalendarDateName(Id) " +        //->ссылка на наименование даты    
                         ")";
                     sqlCommand.ExecuteNonQuery();
 
@@ -176,12 +176,12 @@ namespace TimeWorkTracking
                         "Id int PRIMARY KEY IDENTITY, " +
                         "ExchangeKey NVARCHAR(20) NOT NULL UNIQUE, " +                                  //*внешний id для интеграции
                         "Name NVARCHAR(150) NOT NULL UNIQUE, " +                                        //*наименование
-                        "DerartmentId int NOT NULL FOREIGN KEY REFERENCES UserDepartment(Id), " +       //ссылка на департамент
-                        "PostId int NOT NULL FOREIGN KEY REFERENCES UserPost(Id), " +                   //ссылка на должность
+                        "DerartmentId int NOT NULL FOREIGN KEY REFERENCES UserDepartment(Id), " +       //->ссылка на департамент
+                        "PostId int NOT NULL FOREIGN KEY REFERENCES UserPost(Id), " +                   //->ссылка на должность
                         "TimeStart time, " +                                                            //время начала работы по графику (без даты)    
                         "TimeStop time, " +                                                             //время окончания работы по графику (без даты)
                         "Lunch bit NOT NULL, " +                                                        //флаг признака обеда
-                        "WorkSchemeId int NOT NULL FOREIGN KEY REFERENCES UserWorkScheme(Id), " +       //ссылка на схему работы
+                        "WorkSchemeId int NOT NULL FOREIGN KEY REFERENCES UserWorkScheme(Id), " +       //->ссылка на схему работы
                         "Uses bit NOT NULL " +                                                          //флаг доступа для использования
                         ")"; 
                     sqlCommand.ExecuteNonQuery();
@@ -191,16 +191,16 @@ namespace TimeWorkTracking
                         "Id bigint PRIMARY KEY IDENTITY, " +
                         "Author NVARCHAR(150) NOT NULL, " +                                             //имя учетной записи сеанса
                         "passDate Date NOT NULL UNIQUE, " +                                             //*дата события (без времени) 
-                        "passUserId int NOT NULL UNIQUE FOREIGN KEY REFERENCES Users(ExchangeKey), " +  //*ссылка на внешний id пользователя
+                        "passUserId int NOT NULL UNIQUE FOREIGN KEY REFERENCES Users(ExchangeKey), " +  //*->ссылка на внешний id пользователя
                         "passTimeStart time NOT NULL, " +                                               //время первого входа (без даты)
                         "passTimeStop time NOT NULL, " +                                                //время последнего выхода (без даты)
                         "infoLunchId bit NOT NULL DEFAULT 1, " +                                        //флаг признака обеда
-                        "infoWorkSchemeId int NULL FOREIGN KEY REFERENCES UserWorkScheme(Id), " +       //ссылка на схему работы
+                        "infoWorkSchemeId int NULL FOREIGN KEY REFERENCES UserWorkScheme(Id), " +       //->ссылка на схему работы
                         "timeScheduleFact int NOT NULL  DEFAULT 0, " +                                  //отработанное время (мин)
                         "timeScheduleWithoutLunch int NOT NULL  DEFAULT 0, " +                          //отработанное время без обеда (мин)
                         "timeScheduleLess int NOT NULL DEFAULT 0, " +                                   //время недоработки (мин)
                         "timeScheduleOver int NOT NULL DEFAULT 0, " +                                   //время переработки (мин)
-                        "specmarkNameId int NULL FOREIGN KEY REFERENCES SpecialMarks(Id), " +           //ссылка на специальные отметки
+                        "specmarkNameId int NULL FOREIGN KEY REFERENCES SpecialMarks(Id), " +           //->ссылка на специальные отметки
                         "specmarkTimeStart Datetime NULL, " +                                           //датавремя начала действия специальных отметок
                         "specmarkTimeStop Datetime NULL, " +                                            //датавремя окончания специальных отметок
                         "specmarkNote NVARCHAR(1024) NULL, " +                                          //комментарий к специальным отметкам
@@ -209,7 +209,7 @@ namespace TimeWorkTracking
                         ")";
                     sqlCommand.ExecuteNonQuery();
 
-                    //UDF
+                    //UDF (пользовательски функции для ускорения процесса выборки)
                     //возвращает информацию пользователя по внешнему идентификатору   
                     sqlCommand.CommandText = "Create function twt_GetUserInfo(@extUserID varchar(20) = '') " +
                         "Returns table as Return " +
