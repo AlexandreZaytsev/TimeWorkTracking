@@ -178,11 +178,11 @@ namespace TimeWorkTracking
                         "name NVARCHAR(150) NOT NULL UNIQUE, " +                                        //*наименование
                         "derartmentId int NOT NULL FOREIGN KEY REFERENCES UserDepartment(id), " +       //->ссылка на департамент
                         "postId int NOT NULL FOREIGN KEY REFERENCES UserPost(id), " +                   //->ссылка на должность
-                        "timeStart time, " +                                                            //время начала работы по графику (без даты)    
-                        "timeStop time, " +                                                             //время окончания работы по графику (без даты)
-                        "lunch bit NOT NULL DEFAULT 1, " +                                              //флаг признака обеда
+                        "timeStart time NULL, " +                                                       //время начала работы по графику (без даты)    
+                        "timeStop time NULL, " +                                                        //время окончания работы по графику (без даты)
+                        "lunch bit NOT NULL DEFAULT true, " +                                           //флаг признака обеда
                         "workSchemeId int NOT NULL FOREIGN KEY REFERENCES UserWorkScheme(id), " +       //->ссылка на схему работы
-                        "uses bit NOT NULL DEFAULT 1 " +                                                //флаг доступа для использования
+                        "uses bit NOT NULL DEFAULT true " +                                             //флаг доступа для использования
                         ")"; 
                     sqlCommand.ExecuteNonQuery();
 
@@ -194,7 +194,7 @@ namespace TimeWorkTracking
                         "passId NVARCHAR(20) NOT NULL UNIQUE FOREIGN KEY REFERENCES Users(extId), " +   //*->ссылка на внешний id пользователя
                         "passTimeStart time NOT NULL, " +                                               //время первого входа (без даты)
                         "passTimeStop time NOT NULL, " +                                                //время последнего выхода (без даты)
-                        "infoLunchId bit NOT NULL DEFAULT 1, " +                                        //флаг признака обеда
+                        "infoLunchId bit NOT NULL DEFAULT true, " +                                     //флаг признака обеда
                         "infoWorkSchemeId int NULL FOREIGN KEY REFERENCES UserWorkScheme(id), " +       //->ссылка на схему работы
                         "timeScheduleFact int NOT NULL DEFAULT 0, " +                                   //отработанное время (мин)
                         "timeScheduleWithoutLunch int NOT NULL DEFAULT 0, " +                           //отработанное время без обеда (мин)
