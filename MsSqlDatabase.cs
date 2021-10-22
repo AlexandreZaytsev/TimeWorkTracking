@@ -216,28 +216,30 @@ namespace TimeWorkTracking
                         "Returns table as Return " +
                         "(" +
                         "SELECT " +
-                        "u.id id, " +
-                        "u.extId extId, " +                                                             //внешний id для интеграции                                                 
-                        "u.name fio, " +                                                                //ФИО           
-                        "d.name department, " +                                                         //департамент пользователя
-                        "p.name post, " +                                                               //должность пользователя
-                        "u.timeStart startT, " +                                                        //время начала работы по графику (без даты)
-                        "u.timeStop stopT, " +                                                          //время окончания работы по графику (без даты)
-                        "u.lunch lunch, " +                                                             //флаг признака обеда   
-                        "w.name work, " +                                                               //схема работы
-                        "u.uses access " +                                                              //флаг доступа для использования
+                            "u.id id, " +
+                            "u.extId extId, " +                                                         //внешний id для интеграции                                                 
+                            "u.name fio, " +                                                            //ФИО           
+                            "d.name department, " +                                                     //департамент пользователя
+                            "p.name post, " +                                                           //должность пользователя
+                            "u.timeStart startT, " +                                                    //время начала работы по графику (без даты)
+                            "u.timeStop stopT, " +                                                      //время окончания работы по графику (без даты)
+                            "u.lunch lunch, " +                                                         //флаг признака обеда   
+                            "w.name work, " +                                                           //схема работы
+                            "u.uses access " +                                                          //флаг доступа для использования
                         "FROM Users u, UserDepartment d, UserPost p, UserWorkScheme w " +
                         "WHERE u.departmentId = d.Id AND " +
-                        "u.postId = p.id and " +
-                        "u.workSchemeId = w.Id and " +
-                        "u.extId like('%' + @extUserID + '%') " +
+                            "u.postId = p.id and " +
+                            "u.workSchemeId = w.Id and " +
+                            "u.extId like('%' + @extUserID + '%') " +
                         ")";
                     sqlCommand.ExecuteNonQuery();
 
                     //возвращает информацию пользователя по внешнему идентификатору   
-                    sqlCommand.CommandText = "Create function twt_GetPassFormDate(@bDate datetime, @extUserID varchar(20) = '') " +
+                    sqlCommand.CommandText = "Create function twt_GetPassFormData(@bDate datetime, @extUserID varchar(20) = '') " +
                         "Returns table as Return " +
-                        "Select * " +
+                        "Select " +
+                        "e.passDate, "+
+                        "u.extId "+
                         "From " +
                         "(Select * from Users where uses = 1 ) as u " +
                         "left join " +
