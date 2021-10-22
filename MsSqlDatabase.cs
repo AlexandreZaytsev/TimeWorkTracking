@@ -233,6 +233,35 @@ namespace TimeWorkTracking
                         "u.extId like('%' + @extUserID + '%') " +
                         ")";
                     sqlCommand.ExecuteNonQuery();
+
+                    //возвращает информацию пользователя по внешнему идентификатору   
+                    sqlCommand.CommandText = "Create function twt_GetPassFormDate(@bDate datetime, @extUserID varchar(20) = '') " +
+                        "Returns table as Return " +
+                        "Select * " +
+                        "From " +
+                        "(Select * from Users where uses = 1 ) as u " +
+                        "left join " +
+                        "(Select * from EventsPass where passDate = cast('2021/01/02' as date)) as e " +
+                        "on u.ExtId = e.passId";
+                    sqlCommand.ExecuteNonQuery(); 
+
+                    /*
+                     --select * from twt_GetUserInfo('')
+select * from Users
+select * from EventsPass --where passDate=convert(date,'01/01/2021 00:00:00',104)
+
+select 
+*
+ -- e.passDate,
+ -- u.extId
+ from 
+ (Select * from Users where uses=1 ) as u 
+ left join 
+ (Select * from EventsPass where passDate=cast('2021/01/02' as date)) as e
+ on u.ExtId=e.passId* 
+                     */
+
+
                 }
             }
 
@@ -299,7 +328,7 @@ namespace TimeWorkTracking
                     return command.ExecuteScalar() != DBNull.Value;
                 }
                 */
-                using (SqlCommand cmd = new SqlCommand($"SELECT db_id('{databaseName}')", sqlConnection)) 
+                    using (SqlCommand cmd = new SqlCommand($"SELECT db_id('{databaseName}')", sqlConnection)) 
                 {
                     return cmd.ExecuteScalar() != DBNull.Value;
                 }
