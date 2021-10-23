@@ -156,6 +156,8 @@ namespace TimeWorkTracking
             this.imglStatus.Images.SetKeyName(4, "mdb_edit.png");
             this.imglStatus.Images.SetKeyName(5, "mdb_find.png");
             this.imglStatus.Images.SetKeyName(6, "db_min.png");
+            this.imglStatus.Images.SetKeyName(7, "mdb_lock.png");
+            this.imglStatus.Images.SetKeyName(8, "mdb_unlock.png");
             // 
             // lstwDataBaseUsers
             // 
