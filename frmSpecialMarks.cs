@@ -84,9 +84,7 @@ namespace TimeWorkTracking
                     lvi.SubItems.Add(drow["Note"].ToString());
                     lvi.SubItems.Add(drow["id"].ToString().PadLeft(8, '0'));
                     lvi.SubItems.Add(drow["id"].ToString());
-
                     //  lvi.Checked = true;
-
                     // Add the list items to the ListView
                     lstwDataBaseSpecialMarks.Items.Add(lvi);
                 }
@@ -114,6 +112,7 @@ namespace TimeWorkTracking
             // Perform the sort with these new sort options.
             this.lstwDataBaseSpecialMarks.Sort();
         }
+ 
         //выбор значения из списка
         private void lstwDataBaseSpecialMarks_SelectedIndexChanged(object sender, EventArgs e)
         {

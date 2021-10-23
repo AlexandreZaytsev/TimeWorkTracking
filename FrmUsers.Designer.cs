@@ -32,6 +32,7 @@ namespace TimeWorkTracking
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUsers));
             this.mainPanelUsers = new System.Windows.Forms.Panel();
+            this.btImport = new System.Windows.Forms.Button();
             this.tbUserID = new System.Windows.Forms.TextBox();
             this.btUpdate = new System.Windows.Forms.Button();
             this.btInsert = new System.Windows.Forms.Button();
@@ -53,12 +54,13 @@ namespace TimeWorkTracking
             this.cbDepartment = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.cbName = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.btImport = new System.Windows.Forms.Button();
+            this.access = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.fio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tbName = new System.Windows.Forms.TextBox();
             this.mainPanelUsers.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -78,22 +80,33 @@ namespace TimeWorkTracking
             this.mainPanelUsers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mainPanelUsers.Location = new System.Drawing.Point(0, 0);
             this.mainPanelUsers.Name = "mainPanelUsers";
-            this.mainPanelUsers.Size = new System.Drawing.Size(990, 320);
+            this.mainPanelUsers.Size = new System.Drawing.Size(892, 313);
             this.mainPanelUsers.TabIndex = 0;
+            // 
+            // btImport
+            // 
+            this.btImport.Location = new System.Drawing.Point(565, 275);
+            this.btImport.Name = "btImport";
+            this.btImport.Size = new System.Drawing.Size(120, 30);
+            this.btImport.TabIndex = 23;
+            this.btImport.Text = "Импорт";
+            this.btImport.UseVisualStyleBackColor = true;
+            this.btImport.Click += new System.EventHandler(this.btImport_Click);
             // 
             // tbUserID
             // 
-            this.tbUserID.BackColor = System.Drawing.Color.FloralWhite;
-            this.tbUserID.Location = new System.Drawing.Point(472, 13);
+            this.tbUserID.BackColor = System.Drawing.SystemColors.Control;
+            this.tbUserID.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tbUserID.Enabled = false;
+            this.tbUserID.Location = new System.Drawing.Point(397, 16);
             this.tbUserID.Name = "tbUserID";
-            this.tbUserID.Size = new System.Drawing.Size(156, 24);
+            this.tbUserID.Size = new System.Drawing.Size(207, 17);
             this.tbUserID.TabIndex = 22;
-            this.tbUserID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // btUpdate
             // 
             this.btUpdate.Enabled = false;
-            this.btUpdate.Location = new System.Drawing.Point(845, 276);
+            this.btUpdate.Location = new System.Drawing.Point(762, 275);
             this.btUpdate.Name = "btUpdate";
             this.btUpdate.Size = new System.Drawing.Size(120, 30);
             this.btUpdate.TabIndex = 21;
@@ -103,7 +116,7 @@ namespace TimeWorkTracking
             // btInsert
             // 
             this.btInsert.Enabled = false;
-            this.btInsert.Location = new System.Drawing.Point(472, 276);
+            this.btInsert.Location = new System.Drawing.Point(389, 275);
             this.btInsert.Name = "btInsert";
             this.btInsert.Size = new System.Drawing.Size(120, 30);
             this.btInsert.TabIndex = 20;
@@ -121,7 +134,7 @@ namespace TimeWorkTracking
             this.chUse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.chUse.ImageIndex = 2;
             this.chUse.ImageList = this.imglStatus;
-            this.chUse.Location = new System.Drawing.Point(700, 12);
+            this.chUse.Location = new System.Drawing.Point(600, 11);
             this.chUse.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.chUse.Name = "chUse";
             this.chUse.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -164,11 +177,16 @@ namespace TimeWorkTracking
             // 
             // lstwDataBaseUsers
             // 
-            this.lstwDataBaseUsers.Location = new System.Drawing.Point(12, 12);
+            this.lstwDataBaseUsers.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.access,
+            this.fio});
+            this.lstwDataBaseUsers.Location = new System.Drawing.Point(11, 12);
             this.lstwDataBaseUsers.Name = "lstwDataBaseUsers";
-            this.lstwDataBaseUsers.Size = new System.Drawing.Size(454, 294);
+            this.lstwDataBaseUsers.Size = new System.Drawing.Size(373, 294);
+            this.lstwDataBaseUsers.SmallImageList = this.imglStatus;
             this.lstwDataBaseUsers.TabIndex = 18;
             this.lstwDataBaseUsers.UseCompatibleStateImageBehavior = false;
+            this.lstwDataBaseUsers.View = System.Windows.Forms.View.SmallIcon;
             this.lstwDataBaseUsers.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstwDataBaseUsers_ColumnClick);
             this.lstwDataBaseUsers.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.lstwDataBaseUsers_ColumnWidthChanging);
             this.lstwDataBaseUsers.SelectedIndexChanged += new System.EventHandler(this.lstwDataBaseUsers_SelectedIndexChanged);
@@ -176,6 +194,7 @@ namespace TimeWorkTracking
             // panel3
             // 
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.tbName);
             this.panel3.Controls.Add(this.udAfterM);
             this.panel3.Controls.Add(this.udAfterH);
             this.panel3.Controls.Add(this.udBeforeM);
@@ -183,12 +202,11 @@ namespace TimeWorkTracking
             this.panel3.Controls.Add(this.label1);
             this.panel3.Controls.Add(this.panel2);
             this.panel3.Controls.Add(this.panel1);
-            this.panel3.Controls.Add(this.cbName);
             this.panel3.Controls.Add(this.label7);
             this.panel3.Controls.Add(this.label4);
             this.panel3.Controls.Add(this.label6);
             this.panel3.Controls.Add(this.label5);
-            this.panel3.Location = new System.Drawing.Point(472, 45);
+            this.panel3.Location = new System.Drawing.Point(389, 44);
             this.panel3.Margin = new System.Windows.Forms.Padding(2);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(493, 222);
@@ -311,19 +329,27 @@ namespace TimeWorkTracking
             // 
             // cbPost
             // 
+            this.cbPost.BackColor = System.Drawing.SystemColors.Control;
+            this.cbPost.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPost.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.cbPost.FormattingEnabled = true;
             this.cbPost.Location = new System.Drawing.Point(138, 41);
             this.cbPost.Name = "cbPost";
             this.cbPost.Size = new System.Drawing.Size(326, 26);
             this.cbPost.TabIndex = 6;
+            this.cbPost.TextChanged += new System.EventHandler(this.cbPost_TextChanged);
             // 
             // cbDepartment
             // 
+            this.cbDepartment.BackColor = System.Drawing.SystemColors.Control;
+            this.cbDepartment.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDepartment.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.cbDepartment.FormattingEnabled = true;
             this.cbDepartment.Location = new System.Drawing.Point(138, 9);
             this.cbDepartment.Name = "cbDepartment";
             this.cbDepartment.Size = new System.Drawing.Size(326, 26);
             this.cbDepartment.TabIndex = 5;
+            this.cbDepartment.TextChanged += new System.EventHandler(this.cbDepartment_TextChanged);
             // 
             // label3
             // 
@@ -344,14 +370,6 @@ namespace TimeWorkTracking
             this.label2.Size = new System.Drawing.Size(112, 18);
             this.label2.TabIndex = 2;
             this.label2.Text = "Департамент";
-            // 
-            // cbName
-            // 
-            this.cbName.FormattingEnabled = true;
-            this.cbName.Location = new System.Drawing.Point(146, 7);
-            this.cbName.Name = "cbName";
-            this.cbName.Size = new System.Drawing.Size(326, 26);
-            this.cbName.TabIndex = 3;
             // 
             // label7
             // 
@@ -395,21 +413,28 @@ namespace TimeWorkTracking
             this.label5.TabIndex = 6;
             this.label5.Text = ":";
             // 
-            // btImport
+            // access
             // 
-            this.btImport.Location = new System.Drawing.Point(648, 276);
-            this.btImport.Name = "btImport";
-            this.btImport.Size = new System.Drawing.Size(120, 30);
-            this.btImport.TabIndex = 23;
-            this.btImport.Text = "Импорт";
-            this.btImport.UseVisualStyleBackColor = true;
-            this.btImport.Click += new System.EventHandler(this.btImport_Click);
+            this.access.Text = "";
+            this.access.Width = 29;
+            // 
+            // fio
+            // 
+            this.fio.Text = "ФИО";
+            this.fio.Width = 300;
+            // 
+            // tbName
+            // 
+            this.tbName.Location = new System.Drawing.Point(146, 9);
+            this.tbName.Name = "tbName";
+            this.tbName.Size = new System.Drawing.Size(326, 24);
+            this.tbName.TabIndex = 20;
             // 
             // frmUsers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(990, 320);
+            this.ClientSize = new System.Drawing.Size(892, 313);
             this.Controls.Add(this.mainPanelUsers);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "frmUsers";
@@ -430,7 +455,6 @@ namespace TimeWorkTracking
         #endregion
 
         private System.Windows.Forms.Panel mainPanelUsers;
-        private System.Windows.Forms.ComboBox cbName;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ComboBox cbPost;
         private System.Windows.Forms.ComboBox cbDepartment;
@@ -457,5 +481,8 @@ namespace TimeWorkTracking
         private System.Windows.Forms.DateTimePicker udAfterH;
         private System.Windows.Forms.DateTimePicker udBeforeM;
         private System.Windows.Forms.Button btImport;
+        private System.Windows.Forms.ColumnHeader access;
+        private System.Windows.Forms.ColumnHeader fio;
+        private System.Windows.Forms.TextBox tbName;
     }
 }

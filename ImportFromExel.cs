@@ -33,7 +33,7 @@ namespace TimeWorkTracking
         public static void ImportDataFromExcel(string excelFilePath)
         {
             //http://www.codedigest.com/Articles/ASPNET/400_ImportUpload_Excel_Sheet_data_to_Sql_Server_in_C__and_AspNet.aspx#google_vignette
-            //            https://csharp-tutorials1.blogspot.com/2017/03/import-excel-data-into-sql-table-using.html
+            //https://csharp-tutorials1.blogspot.com/2017/03/import-excel-data-into-sql-table-using.html
             //https://question-it.com/questions/1788823/kak-zagruzit-fajl-excel-v-tablitsu-bazy-dannyh-sql-s-pomoschju-prilozhenija-s-windows-form
             //https://www.red-gate.com/simple-talk/databases/sql-server/t-sql-programming-sql-server/questions-about-using-tsql-to-import-excel-data-you-were-too-shy-to-ask/          
             //https://metanit.com/sharp/tutorial/6.5.php
@@ -81,7 +81,7 @@ namespace TimeWorkTracking
                                       "postId = " + postId + ", " +
                                       "timeStart = " + "'" + ((DateTime)meta[4]).ToShortTimeString() + "', " +
                                       "timeStop = " + "'" + ((DateTime)meta[5]).ToShortTimeString() + "', " +
-                                      "lunch = " + ((Boolean)meta[6] ? 1 : 0) + ", " +
+                                      "noLunch = " + ((Boolean)meta[6] ? 1 : 0) + ", " +
                                       "workSchemeId = " + workSchemeId + ", " +
                                       "uses = " + ((Boolean)meta[8] ? 1 : 0) + " "+
                                     "WHERE extId = '" + meta[0].ToString() + "' and name = '" + meta[3].ToString()+"'; " +
@@ -93,7 +93,7 @@ namespace TimeWorkTracking
                                       "postId, " +
                                       "timeStart, " +
                                       "timeStop, " +
-                                      "lunch, " +
+                                      "noLunch, " +
                                       "workSchemeId, " +
                                       "uses) " +
                                     "VALUES (" +

@@ -26,17 +26,25 @@ namespace TimeWorkTracking
                     sqlCommand.CommandText = $"CREATE DATABASE {databaseName}";
                     sqlCommand.ExecuteNonQuery();
                 }
+                sqlConnection.Close();
             }
-            sqlConnectionStringBuilder.InitialCatalog = databaseName;
-            using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
+            InitDataBase(connectionString);
+        }
+        //инициализировать БД по строке подключения
+        private static void InitDataBase(string connectionString)
+        { 
+            using (var sqlConnection = new SqlConnection(connectionString))
             {
                 sqlConnection.Open();
                 using (var sqlCommand = sqlConnection.CreateCommand())
                 {
+        //СТРУКТУРА ДАННЫХ
+        //выпадающие списки
                     //График работы (таблица для списка) Почасовой/Поминутный
                     sqlCommand.CommandText = "CREATE TABLE UserWorkScheme (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "name NVARCHAR(150) NOT NULL UNIQUE" +                                          //*наименование
+                        "name NVARCHAR(150) NOT NULL UNIQUE, " +                                                  //расшифровка
+                        "uses bit DEFAULT 1 " +                                              //*наименование
                         ")";
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText = "INSERT INTO UserWorkScheme(name) VALUES " +
@@ -47,7 +55,8 @@ namespace TimeWorkTracking
                     //Тип даты производственного календаря (таблица для списка) Выходной/Сокращенный
                     sqlCommand.CommandText = "CREATE TABLE CalendarDateType (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "name NVARCHAR(150) NOT NULL UNIQUE" +                                          //*наименование
+                        "name NVARCHAR(150) NOT NULL UNIQUE, " +                                                  //расшифровка
+                        "uses bit DEFAULT 1 " +                                              //*наименование
                         ")";
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText = "INSERT INTO CalendarDateType(name) VALUES " +
@@ -59,7 +68,9 @@ namespace TimeWorkTracking
                     sqlCommand.CommandText = "CREATE TABLE CalendarDateName (" +
                         "id int PRIMARY KEY IDENTITY, " +
                         "name NVARCHAR(150) NOT NULL UNIQUE, " +                                        //*наименование
-                        "note NVARCHAR(150))";                                                          //расшифровка
+                        "note NVARCHAR(150), " +                                                  //расшифровка
+                        "uses bit DEFAULT 1 " +                                              //*наименование
+                        ")";                                                         //расшифровка
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText = "INSERT INTO CalendarDateName(name, note) VALUES " +
                         "(N'Новый год', N'1 января'), " +
@@ -77,7 +88,8 @@ namespace TimeWorkTracking
                     //Подразделение (таблица для списка)
                     sqlCommand.CommandText = "CREATE TABLE UserDepartment (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "name NVARCHAR(150) NOT NULL UNIQUE " +                                         //*наименование
+                        "name NVARCHAR(150) NOT NULL UNIQUE, " +                                                  //расшифровка
+                        "uses bit DEFAULT 1 " +                                             //*наименование
                         ")";
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText = "INSERT INTO UserDepartment(name) VALUES " +
@@ -96,7 +108,8 @@ namespace TimeWorkTracking
                     //Должность (таблица для списка)
                     sqlCommand.CommandText = "CREATE TABLE UserPost (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "name NVARCHAR(150) NOT NULL UNIQUE " +                                         //*наименование
+                        "name NVARCHAR(150) NOT NULL UNIQUE, " +                                                  //расшифровка
+                        "uses bit DEFAULT 1 " +                                             //*наименование
                         ")";
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText = "INSERT INTO UserPost(name) VALUES " +
@@ -129,7 +142,7 @@ namespace TimeWorkTracking
                         "letterCode NVARCHAR(4) NOT NULL, " +                                           //строковый код
                         "name NVARCHAR(150) NOT NULL UNIQUE, " +                                        //*наименование
                         "note NVARCHAR(1024) NULL, " +                                                  //расшифровка
-                        "uses bit NOT NULL " +                                                          //флаг доступа для использования
+                        "uses bit DEFAULT 1 " +                                                          //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText = "INSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES " +
@@ -161,6 +174,7 @@ namespace TimeWorkTracking
                         "('00', 'УД', N'Удаленка', '', 1)";
                     sqlCommand.ExecuteNonQuery();
 
+                    //таблицы
                     //Производственный Календарь (таблица использующая внешние данные)
                     sqlCommand.CommandText = "CREATE TABLE Calendars (" +
                         "id int PRIMARY KEY IDENTITY, " +
@@ -180,10 +194,10 @@ namespace TimeWorkTracking
                         "postId int NOT NULL FOREIGN KEY REFERENCES UserPost(id), " +                   //->ссылка на должность
                         "timeStart time NULL, " +                                                       //время начала работы по графику (без даты)    
                         "timeStop time NULL, " +                                                        //время окончания работы по графику (без даты)
-                        "lunch bit DEFAULT 1, " +                                                       //флаг признака обеда
+                        "noLunch bit DEFAULT 1, " +                                                       //флаг признака обеда
                         "workSchemeId int NOT NULL FOREIGN KEY REFERENCES UserWorkScheme(id), " +       //->ссылка на схему работы
                         "uses bit DEFAULT 1 " +                                                         //флаг доступа для использования
-                        ")"; 
+                        ")";
                     sqlCommand.ExecuteNonQuery();
 
                     //Учет рабочего времени (таблица использующая внешние данные)
@@ -210,7 +224,17 @@ namespace TimeWorkTracking
                         ")";
                     sqlCommand.ExecuteNonQuery();
 
-                    //UDF (пользовательски функции для ускорения процесса выборки)
+        //ИНИЦИАЛИЗПЦИЯ ДАННЫХ
+
+
+
+
+
+
+
+
+
+        //UDF (пользовательски функции для ускорения процесса выборки)
                     //возвращает информацию пользователя по внешнему идентификатору   
                     sqlCommand.CommandText = "Create function twt_GetUserInfo(@extUserID varchar(20) = '') " +
                         "Returns table as Return " +
@@ -221,9 +245,9 @@ namespace TimeWorkTracking
                             "u.name fio, " +                                                            //ФИО           
                             "d.name department, " +                                                     //департамент пользователя
                             "p.name post, " +                                                           //должность пользователя
-                            "u.timeStart startT, " +                                                    //время начала работы по графику (без даты)
-                            "u.timeStop stopT, " +                                                      //время окончания работы по графику (без даты)
-                            "u.lunch lunch, " +                                                         //флаг признака обеда   
+                            "u.timeStart startTime, " +                                                 //время начала работы по графику (без даты)
+                            "u.timeStop stopTime, " +                                                   //время окончания работы по графику (без даты)
+                            "u.noLunch noLunch, " +                                                     //флаг признака обеда   
                             "w.name work, " +                                                           //схема работы
                             "u.uses access " +                                                          //флаг доступа для использования
                         "FROM Users u, UserDepartment d, UserPost p, UserWorkScheme w " +

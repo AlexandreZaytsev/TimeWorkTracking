@@ -35,7 +35,7 @@ namespace TimeWorkTracking
                 cbSheme.DataSource = MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "Select id, name From UserWorkScheme");
 
                 InitializeListView();
-                LoadList(MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "Select * From Users"));
+                LoadList(MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "select * from twt_GetUserInfo('')"));
 
                 udBeforeH.Value = new DateTime(2000, 1, 1, 9, 0, 0);
                 udBeforeM.Value = new DateTime(2000, 1, 1, 9, 0, 0);
@@ -59,7 +59,7 @@ namespace TimeWorkTracking
             // with the Sort method to perform custom sorting.
             _lvwItemComparer = new ListViewItemComparer
             {
-                SortColumn = 5,// 1;// e.Column; (3 name)
+                SortColumn = 2,// 1;// e.Column; (3 name)
                 Order = SortOrder.Ascending
             };
 
@@ -86,24 +86,25 @@ namespace TimeWorkTracking
                 {
                     //                    listView1.Items[0].ImageIndex = 3;
                     // Define the list items
-                    ListViewItem lvi = new ListViewItem(drow["Uses"].ToString(), 0)
+                    ListViewItem lvi = new ListViewItem(drow["access"].ToString(), 0)
                     {
-                        ImageIndex = (Boolean)drow["Uses"] ? 1 : 2
+                        ImageIndex = (Boolean)drow["access"] ? 1 : 2
                     };
                     //    lvi.Checked = (Boolean)drow["Uses"];
                     //       lvi.SubItems.Add(drow["Uses"].ToString());
-                 /*
-                    lvi.SubItems.Add(drow["DigitalCode"].ToString());
-                    lvi.SubItems.Add(drow["LetterCode"].ToString());
-                    lvi.SubItems.Add(drow["Name"].ToString());
-                    lvi.SubItems.Add(drow["Note"].ToString());
-                    lvi.SubItems.Add(drow["id"].ToString().PadLeft(8, '0'));
-                    lvi.SubItems.Add(drow["id"].ToString());
-                 */
-                    //  lvi.Checked = true;
+
+                    lvi.SubItems.Add(drow["fio"].ToString());
+
+                    lvi.SubItems.Add(drow["extId"].ToString());
+                    lvi.SubItems.Add(drow["department"].ToString());
+                    lvi.SubItems.Add(drow["post"].ToString());
+                    lvi.SubItems.Add(drow["startTime"].ToString());
+                    lvi.SubItems.Add(drow["stopTime"].ToString());
+                    lvi.SubItems.Add(drow["noLunch"].ToString());
+                    lvi.SubItems.Add(drow["work"].ToString());
 
                     // Add the list items to the ListView
-              //      lstwDataBaseUsers.Items.Add(lvi);
+                    lstwDataBaseUsers.Items.Add(lvi);
                 }
             }
         }
@@ -133,16 +134,23 @@ namespace TimeWorkTracking
         //выбор значения из списка
         private void lstwDataBaseUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
+            DateTime dt;
             int ind = lstwDataBaseUsers.SelectedIndex();
             if (ind >= 0)
             {
-                /*
-                tbCodeDigital.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[1].Text;
-                tbCodeLetter.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[2].Text;
-                tbName.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[3].Text;
-                tbNote.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[4].Text;
-                chUse.Checked = lstwDataBaseSpecialMarks.Items[ind].Text == "True";
-           */
+                tbUserID.Text = "id: "+lstwDataBaseUsers.Items[ind].SubItems[2].Text;
+                chUse.Checked = lstwDataBaseUsers.Items[ind].Text == "True";
+                tbName.Text = lstwDataBaseUsers.Items[ind].SubItems[1].Text;
+                cbDepartment.Text = lstwDataBaseUsers.Items[ind].SubItems[3].Text;
+                cbPost.Text = lstwDataBaseUsers.Items[ind].SubItems[4].Text;
+                dt= Convert.ToDateTime(lstwDataBaseUsers.Items[ind].SubItems[5].Text);
+                udBeforeH.Value = dt;
+                udBeforeM.Value = dt;
+                dt = Convert.ToDateTime(lstwDataBaseUsers.Items[ind].SubItems[6].Text);
+                udAfterH.Value = dt;
+                udAfterM.Value = dt;
+                chbLunch.Checked = lstwDataBaseUsers.Items[ind].SubItems[7].Text == "True";
+                cbSheme.Text = lstwDataBaseUsers.Items[ind].SubItems[8].Text;
             }
         }
         //запретить изменение размеров
@@ -164,6 +172,22 @@ namespace TimeWorkTracking
         private void btImport_Click(object sender, EventArgs e)
         {
             ImportFromExel.ImportFromExcel();
+        }
+
+        private void cbDepartment_TextChanged(object sender, EventArgs e)
+        {
+            if (cbDepartment.FindString(cbDepartment.Text) == -1)
+                cbDepartment.BackColor=System.Drawing.SystemColors.Window;
+            else
+                cbDepartment.BackColor = System.Drawing.SystemColors.Control;
+        }
+
+        private void cbPost_TextChanged(object sender, EventArgs e)
+        {
+            if (cbPost.FindString(cbPost.Text) == -1)
+                cbPost.BackColor = System.Drawing.SystemColors.Window;
+            else
+                cbPost.BackColor = System.Drawing.SystemColors.Control;
         }
     }
 }
