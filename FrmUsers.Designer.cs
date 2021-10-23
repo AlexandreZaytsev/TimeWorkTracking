@@ -152,34 +152,17 @@ namespace TimeWorkTracking
             this.imglStatus.Images.SetKeyName(0, "setting.ico");
             this.imglStatus.Images.SetKeyName(1, "on5m.png");
             this.imglStatus.Images.SetKeyName(2, "off5m.png");
-            this.imglStatus.Images.SetKeyName(3, "on5.png");
-            this.imglStatus.Images.SetKeyName(4, "off5.png");
-            this.imglStatus.Images.SetKeyName(5, "on5j.jpg");
-            this.imglStatus.Images.SetKeyName(6, "off5j.jpg");
-            this.imglStatus.Images.SetKeyName(7, "on5b.bmp");
-            this.imglStatus.Images.SetKeyName(8, "off5b.bmp");
-            this.imglStatus.Images.SetKeyName(9, "on4.png");
-            this.imglStatus.Images.SetKeyName(10, "off4.png");
-            this.imglStatus.Images.SetKeyName(11, "on1_.png");
-            this.imglStatus.Images.SetKeyName(12, "off1_.png");
-            this.imglStatus.Images.SetKeyName(13, "on2.png");
-            this.imglStatus.Images.SetKeyName(14, "off_.png");
-            this.imglStatus.Images.SetKeyName(15, "off2.png");
-            this.imglStatus.Images.SetKeyName(16, "on3.png");
-            this.imglStatus.Images.SetKeyName(17, "off3.png");
-            this.imglStatus.Images.SetKeyName(18, "on_.png");
-            this.imglStatus.Images.SetKeyName(19, "on.png");
-            this.imglStatus.Images.SetKeyName(20, "off.png");
-            this.imglStatus.Images.SetKeyName(21, "sel_.png");
-            this.imglStatus.Images.SetKeyName(22, "twt.ico");
-            this.imglStatus.Images.SetKeyName(23, "sel.png");
-            this.imglStatus.Images.SetKeyName(24, "ok.png");
+            this.imglStatus.Images.SetKeyName(3, "mdb_add.png");
+            this.imglStatus.Images.SetKeyName(4, "mdb_edit.png");
+            this.imglStatus.Images.SetKeyName(5, "mdb_find.png");
+            this.imglStatus.Images.SetKeyName(6, "db_min.png");
             // 
             // lstwDataBaseUsers
             // 
             this.lstwDataBaseUsers.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.access,
             this.fio});
+            this.lstwDataBaseUsers.HideSelection = false;
             this.lstwDataBaseUsers.Location = new System.Drawing.Point(11, 12);
             this.lstwDataBaseUsers.Name = "lstwDataBaseUsers";
             this.lstwDataBaseUsers.Size = new System.Drawing.Size(373, 294);
@@ -341,6 +324,7 @@ namespace TimeWorkTracking
             // 
             // cbDepartment
             // 
+            this.cbDepartment.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.cbDepartment.BackColor = System.Drawing.SystemColors.Control;
             this.cbDepartment.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDepartment.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
@@ -425,10 +409,14 @@ namespace TimeWorkTracking
             // 
             // tbName
             // 
+            this.tbName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.tbName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.tbName.BackColor = System.Drawing.SystemColors.Control;
             this.tbName.Location = new System.Drawing.Point(146, 9);
             this.tbName.Name = "tbName";
             this.tbName.Size = new System.Drawing.Size(326, 24);
             this.tbName.TabIndex = 20;
+            this.tbName.TextChanged += new System.EventHandler(this.tbName_TextChanged);
             // 
             // frmUsers
             // 

@@ -189,5 +189,24 @@ namespace TimeWorkTracking
             else
                 cbPost.BackColor = System.Drawing.SystemColors.Control;
         }
+
+        private void tbName_TextChanged(object sender, EventArgs e)
+        {
+            if (lstwDataBaseUsers.Items.Cast<ListViewItem>()
+                .Where(x => (x.SubItems[1].Text == tbName.Text))
+                .FirstOrDefault() != null)
+            {
+                tbName.BackColor = System.Drawing.SystemColors.Control;
+                btUpdate.Enabled = true;
+                btInsert.Enabled = false;
+            }
+            else
+            {
+                tbName.BackColor = System.Drawing.SystemColors.Window;
+                btUpdate.Enabled = false;
+                btInsert.Enabled = true;
+            }
+        }
+
     }
 }
