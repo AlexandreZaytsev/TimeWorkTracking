@@ -37,10 +37,10 @@ namespace TimeWorkTracking
                 InitializeListView();
                 LoadList(MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "Select * From Users"));
 
-                udBeforeH.Value = new DateTime(1965, 7, 28, 9, 0, 0);
-                udBeforeM.Value = new DateTime(1965, 7, 28, 9, 0, 0);
-                udAfterH.Value = new DateTime(1965, 7, 28, 18, 0, 0);
-                udAfterH.Value = new DateTime(1965, 7, 28, 18, 0, 0);
+                udBeforeH.Value = new DateTime(2000, 1, 1, 9, 0, 0);
+                udBeforeM.Value = new DateTime(2000, 1, 1, 9, 0, 0);
+                udAfterH.Value = new DateTime(2000, 1, 1, 18, 0, 0);
+                udAfterH.Value = new DateTime(2000, 1, 1, 18, 0, 0);
             }
         }
         // Initialize ListView
@@ -142,7 +142,7 @@ namespace TimeWorkTracking
                 tbNote.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[4].Text;
                 chUse.Checked = lstwDataBaseSpecialMarks.Items[ind].Text == "True";
            */
-             }
+            }
         }
         //запретить изменение размеров
         private void lstwDataBaseUsers_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
@@ -160,5 +160,9 @@ namespace TimeWorkTracking
                 chUse.ImageIndex = 2;
         }
 
+        private void btImport_Click(object sender, EventArgs e)
+        {
+            ImportFromExel.ImportFromExcel();
+        }
     }
 }

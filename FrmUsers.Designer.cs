@@ -32,12 +32,17 @@ namespace TimeWorkTracking
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUsers));
             this.mainPanelUsers = new System.Windows.Forms.Panel();
+            this.tbUserID = new System.Windows.Forms.TextBox();
             this.btUpdate = new System.Windows.Forms.Button();
             this.btInsert = new System.Windows.Forms.Button();
             this.chUse = new System.Windows.Forms.CheckBox();
             this.imglStatus = new System.Windows.Forms.ImageList(this.components);
             this.lstwDataBaseUsers = new System.Windows.Forms.ListView();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.udAfterM = new System.Windows.Forms.DateTimePicker();
+            this.udAfterH = new System.Windows.Forms.DateTimePicker();
+            this.udBeforeM = new System.Windows.Forms.DateTimePicker();
+            this.udBeforeH = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
@@ -53,11 +58,7 @@ namespace TimeWorkTracking
             this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.tbUserID = new System.Windows.Forms.TextBox();
-            this.udBeforeH = new System.Windows.Forms.DateTimePicker();
-            this.udBeforeM = new System.Windows.Forms.DateTimePicker();
-            this.udAfterH = new System.Windows.Forms.DateTimePicker();
-            this.udAfterM = new System.Windows.Forms.DateTimePicker();
+            this.btImport = new System.Windows.Forms.Button();
             this.mainPanelUsers.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -66,6 +67,7 @@ namespace TimeWorkTracking
             // 
             // mainPanelUsers
             // 
+            this.mainPanelUsers.Controls.Add(this.btImport);
             this.mainPanelUsers.Controls.Add(this.tbUserID);
             this.mainPanelUsers.Controls.Add(this.btUpdate);
             this.mainPanelUsers.Controls.Add(this.btInsert);
@@ -78,6 +80,15 @@ namespace TimeWorkTracking
             this.mainPanelUsers.Name = "mainPanelUsers";
             this.mainPanelUsers.Size = new System.Drawing.Size(990, 320);
             this.mainPanelUsers.TabIndex = 0;
+            // 
+            // tbUserID
+            // 
+            this.tbUserID.BackColor = System.Drawing.Color.FloralWhite;
+            this.tbUserID.Location = new System.Drawing.Point(472, 13);
+            this.tbUserID.Name = "tbUserID";
+            this.tbUserID.Size = new System.Drawing.Size(156, 24);
+            this.tbUserID.TabIndex = 22;
+            this.tbUserID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // btUpdate
             // 
@@ -182,6 +193,60 @@ namespace TimeWorkTracking
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(493, 222);
             this.panel3.TabIndex = 16;
+            // 
+            // udAfterM
+            // 
+            this.udAfterM.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udAfterM.CustomFormat = "mm";
+            this.udAfterM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udAfterM.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.udAfterM.Location = new System.Drawing.Point(406, 126);
+            this.udAfterM.Name = "udAfterM";
+            this.udAfterM.ShowUpDown = true;
+            this.udAfterM.Size = new System.Drawing.Size(56, 30);
+            this.udAfterM.TabIndex = 19;
+            this.udAfterM.Value = new System.DateTime(2021, 10, 21, 18, 0, 0, 0);
+            // 
+            // udAfterH
+            // 
+            this.udAfterH.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udAfterH.CustomFormat = "HH";
+            this.udAfterH.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udAfterH.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.udAfterH.Location = new System.Drawing.Point(323, 126);
+            this.udAfterH.Name = "udAfterH";
+            this.udAfterH.ShowUpDown = true;
+            this.udAfterH.Size = new System.Drawing.Size(56, 30);
+            this.udAfterH.TabIndex = 18;
+            this.udAfterH.Value = new System.DateTime(2021, 10, 21, 18, 0, 0, 0);
+            // 
+            // udBeforeM
+            // 
+            this.udBeforeM.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udBeforeM.CustomFormat = "mm";
+            this.udBeforeM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udBeforeM.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.udBeforeM.Location = new System.Drawing.Point(239, 126);
+            this.udBeforeM.Name = "udBeforeM";
+            this.udBeforeM.ShowUpDown = true;
+            this.udBeforeM.Size = new System.Drawing.Size(56, 30);
+            this.udBeforeM.TabIndex = 17;
+            this.udBeforeM.Value = new System.DateTime(2021, 10, 21, 9, 0, 0, 0);
+            // 
+            // udBeforeH
+            // 
+            this.udBeforeH.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udBeforeH.Checked = false;
+            this.udBeforeH.CustomFormat = "HH";
+            this.udBeforeH.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udBeforeH.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.udBeforeH.Location = new System.Drawing.Point(158, 126);
+            this.udBeforeH.Name = "udBeforeH";
+            this.udBeforeH.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.udBeforeH.ShowUpDown = true;
+            this.udBeforeH.Size = new System.Drawing.Size(56, 30);
+            this.udBeforeH.TabIndex = 16;
+            this.udBeforeH.Value = new System.DateTime(2021, 10, 21, 9, 0, 0, 0);
             // 
             // label1
             // 
@@ -330,68 +395,15 @@ namespace TimeWorkTracking
             this.label5.TabIndex = 6;
             this.label5.Text = ":";
             // 
-            // tbUserID
+            // btImport
             // 
-            this.tbUserID.BackColor = System.Drawing.Color.FloralWhite;
-            this.tbUserID.Location = new System.Drawing.Point(472, 13);
-            this.tbUserID.Name = "tbUserID";
-            this.tbUserID.Size = new System.Drawing.Size(156, 24);
-            this.tbUserID.TabIndex = 22;
-            this.tbUserID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // udBeforeH
-            // 
-            this.udBeforeH.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.udBeforeH.Checked = false;
-            this.udBeforeH.CustomFormat = "HH";
-            this.udBeforeH.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.udBeforeH.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.udBeforeH.Location = new System.Drawing.Point(158, 126);
-            this.udBeforeH.Name = "udBeforeH";
-            this.udBeforeH.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.udBeforeH.ShowUpDown = true;
-            this.udBeforeH.Size = new System.Drawing.Size(56, 30);
-            this.udBeforeH.TabIndex = 16;
-            this.udBeforeH.Value = new System.DateTime(2021, 10, 21, 9, 0, 0, 0);
-            // 
-            // udBeforeM
-            // 
-            this.udBeforeM.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.udBeforeM.CustomFormat = "mm";
-            this.udBeforeM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.udBeforeM.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.udBeforeM.Location = new System.Drawing.Point(239, 126);
-            this.udBeforeM.Name = "udBeforeM";
-            this.udBeforeM.ShowUpDown = true;
-            this.udBeforeM.Size = new System.Drawing.Size(56, 30);
-            this.udBeforeM.TabIndex = 17;
-            this.udBeforeM.Value = new System.DateTime(2021, 10, 21, 9, 0, 0, 0);
-            // 
-            // udAfterH
-            // 
-            this.udAfterH.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.udAfterH.CustomFormat = "HH";
-            this.udAfterH.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.udAfterH.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.udAfterH.Location = new System.Drawing.Point(323, 126);
-            this.udAfterH.Name = "udAfterH";
-            this.udAfterH.ShowUpDown = true;
-            this.udAfterH.Size = new System.Drawing.Size(56, 30);
-            this.udAfterH.TabIndex = 18;
-            this.udAfterH.Value = new System.DateTime(2021, 10, 21, 18, 0, 0, 0);
-            // 
-            // udAfterM
-            // 
-            this.udAfterM.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.udAfterM.CustomFormat = "mm";
-            this.udAfterM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.udAfterM.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.udAfterM.Location = new System.Drawing.Point(406, 126);
-            this.udAfterM.Name = "udAfterM";
-            this.udAfterM.ShowUpDown = true;
-            this.udAfterM.Size = new System.Drawing.Size(56, 30);
-            this.udAfterM.TabIndex = 19;
-            this.udAfterM.Value = new System.DateTime(2021, 10, 21, 18, 0, 0, 0);
+            this.btImport.Location = new System.Drawing.Point(648, 276);
+            this.btImport.Name = "btImport";
+            this.btImport.Size = new System.Drawing.Size(120, 30);
+            this.btImport.TabIndex = 23;
+            this.btImport.Text = "Импорт";
+            this.btImport.UseVisualStyleBackColor = true;
+            this.btImport.Click += new System.EventHandler(this.btImport_Click);
             // 
             // frmUsers
             // 
@@ -444,5 +456,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.DateTimePicker udAfterM;
         private System.Windows.Forms.DateTimePicker udAfterH;
         private System.Windows.Forms.DateTimePicker udBeforeM;
+        private System.Windows.Forms.Button btImport;
     }
 }

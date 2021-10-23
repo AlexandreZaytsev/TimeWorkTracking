@@ -410,6 +410,7 @@ select
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
+ 
                 using (var sqlCommand = connection.CreateCommand())
                 {
                     sqlCommand.CommandText = sqlRequest;
