@@ -92,17 +92,18 @@ namespace TimeWorkTracking
                     };
                     //    lvi.Checked = (Boolean)drow["Uses"];
                     //       lvi.SubItems.Add(drow["Uses"].ToString());
+                 /*
                     lvi.SubItems.Add(drow["DigitalCode"].ToString());
                     lvi.SubItems.Add(drow["LetterCode"].ToString());
                     lvi.SubItems.Add(drow["Name"].ToString());
                     lvi.SubItems.Add(drow["Note"].ToString());
                     lvi.SubItems.Add(drow["id"].ToString().PadLeft(8, '0'));
                     lvi.SubItems.Add(drow["id"].ToString());
-
+                 */
                     //  lvi.Checked = true;
 
                     // Add the list items to the ListView
-                    lstwDataBaseUsers.Items.Add(lvi);
+              //      lstwDataBaseUsers.Items.Add(lvi);
                 }
             }
         }

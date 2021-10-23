@@ -15,8 +15,10 @@ namespace TimeWorkTracking
 
         public static void ImportFromExcel()
         {
-            OpenFileDialog od = new OpenFileDialog();
-            od.Filter = "Excell|*.xls;*.xlsx;*.xlsm;";
+            OpenFileDialog od = new OpenFileDialog
+            {
+                Filter = "Excell|*.xls;*.xlsx;*.xlsm;"
+            };
             DialogResult dr = od.ShowDialog();
             if (dr == DialogResult.Abort)
                 return;
@@ -33,14 +35,11 @@ namespace TimeWorkTracking
             //http://www.codedigest.com/Articles/ASPNET/400_ImportUpload_Excel_Sheet_data_to_Sql_Server_in_C__and_AspNet.aspx#google_vignette
             //            https://csharp-tutorials1.blogspot.com/2017/03/import-excel-data-into-sql-table-using.html
             //https://question-it.com/questions/1788823/kak-zagruzit-fajl-excel-v-tablitsu-bazy-dannyh-sql-s-pomoschju-prilozhenija-s-windows-form
-
             //https://www.red-gate.com/simple-talk/databases/sql-server/t-sql-programming-sql-server/questions-about-using-tsql-to-import-excel-data-you-were-too-shy-to-ask/          
-
             //https://metanit.com/sharp/tutorial/6.5.php
 
             using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
             {
-                string ssqltable = "Users";
                 string myexceldataquery = "Select * from [Reference$B3:J68]";
  //               string myexceldataquery = "Select * from users";
                 try
@@ -56,97 +55,63 @@ namespace TimeWorkTracking
 
                     object[] meta = new object[10];
                     bool read;
-                    string sql="";
                     int departmentId;
                     int postId;
                     int workSchemeId;
-                    DateTime start;
-                    DateTime stop;
-                    //var ret=null;
-                    //           var sqlCommand = sqlConnection.CreateCommand();
-                    SqlCommand cmd;
                     using (var sqlCommand = sqlConnection.CreateCommand())
                     {
+                        sqlCommand.CommandText = "DELETE FROM Users";
+                        sqlCommand.ExecuteScalar();
                         if (dr.Read() == true)
                         {
                             do
                             {
                                 int NumberOfColums = dr.GetValues(meta);
-                                sqlCommand.CommandText = "SELECT count(*) FROM Users Where extId='" + meta[0].ToString() + "' and name='" + meta[3].ToString()+"'";
-//                                cmd = new SqlCommand("SELECT count(*) FROM Users Where extId=" + meta[0].ToString() + " and name=" + meta[1].ToString(), sqlConnection);
-                                switch (sqlCommand.ExecuteScalar())
-                                {
-                                    case 1:
-                                      //  using (var sqlCommand = sqlConnection.CreateCommand(())
-                                        break;
-                                    default:
-                                        sqlCommand.CommandText = "SELECT id FROM UserDepartment Where name='" + meta[1].ToString()+"'";
-                                        departmentId=(int)sqlCommand.ExecuteScalar();
-                                        sqlCommand.CommandText = "SELECT id FROM UserPost Where name='" + meta[2].ToString()+"'";
-                                        postId = (int)sqlCommand.ExecuteScalar();
-                                        sqlCommand.CommandText = "SELECT id FROM UserWorkScheme Where name='" + meta[7].ToString()+"'";
-                                        workSchemeId = (int)sqlCommand.ExecuteScalar();
-                                        start = (DateTime)meta[4];
-                                        stop = (DateTime)meta[5];
-                                        var sta = start.ToString("HH:mm");
-                                        var sto = stop.ToString("HH:mm");
-                                        sqlCommand.CommandText = "INSERT INTO Users(extId, name, departmentId, postId, timeStart, timeStop, lunch, workSchemeId, uses) VALUES " +
-                                            "(" +
-                                            "N'" + meta[0].ToString() + "', " +
-                                            "N'" + meta[3].ToString() + "', " +
-                                            departmentId + ", " +
-                                            postId + ", " +
-                                          //             TimeSpan.FromHours(meta[4]).ToString("hh':'mm") + ", " +
-                                          //    (DateTime)meta[4].ToString("HH:mm")+//  ((DateTime)meta[4]).ToShortTimeString().ToString() + ", " +
-                                          "'"+DateTime.Parse(meta[4].ToString()).ToString("HH:mm") + "', " +
-                                          "'"+DateTime.Parse(meta[5].ToString()).ToString("HH:mm") + "', " +
-                                            //  ((DateTime)meta[5]).ToShortTimeString().ToString() + ", " +
-                                            ((Boolean)meta[6] ? 1 : 0) + ", " +
-                                            workSchemeId + ", " +
-                                            ((Boolean)meta[8] ? 1 : 0) +
-                                            ")";
-                                        break;
-                                }
-                          //      sqlCommand.CommandText = sql;
-                                sqlCommand.ExecuteNonQuery(); 
-                       //         break;
+
+                                sqlCommand.CommandText = "SELECT id FROM UserDepartment Where name='" + meta[1].ToString() + "'";
+                                departmentId = (int)sqlCommand.ExecuteScalar();
+                                sqlCommand.CommandText = "SELECT id FROM UserPost Where name='" + meta[2].ToString() + "'";
+                                postId = (int)sqlCommand.ExecuteScalar();
+                                sqlCommand.CommandText = "SELECT id FROM UserWorkScheme Where name='" + meta[7].ToString() + "'";
+                                workSchemeId = (int)sqlCommand.ExecuteScalar();
+
+                                sqlCommand.CommandText = 
+                                    "UPDATE Users Set " +
+                                      "departmentId = " + departmentId + ", " +
+                                      "postId = " + postId + ", " +
+                                      "timeStart = " + "'" + ((DateTime)meta[4]).ToShortTimeString() + "', " +
+                                      "timeStop = " + "'" + ((DateTime)meta[5]).ToShortTimeString() + "', " +
+                                      "lunch = " + ((Boolean)meta[6] ? 1 : 0) + ", " +
+                                      "workSchemeId = " + workSchemeId + ", " +
+                                      "uses = " + ((Boolean)meta[8] ? 1 : 0) + " "+
+                                    "WHERE extId = '" + meta[0].ToString() + "' and name = '" + meta[3].ToString()+"'; " +
+                                    "IF @@ROWCOUNT = 0 " +
+                                    "INSERT INTO Users(" +
+                                      "extId, " +
+                                      "name, " +
+                                      "departmentId, " +
+                                      "postId, " +
+                                      "timeStart, " +
+                                      "timeStop, " +
+                                      "lunch, " +
+                                      "workSchemeId, " +
+                                      "uses) " +
+                                    "VALUES (" +
+                                      "N'" + meta[0].ToString() + "', " +
+                                      "N'" + meta[3].ToString() + "', " +
+                                      departmentId + ", " +
+                                      postId + ", " +  
+                                      "'" + ((DateTime)meta[4]).ToShortTimeString() + "', " +
+                                      "'" + ((DateTime)meta[5]).ToShortTimeString() + "', " +
+                                      ((Boolean)meta[6] ? 1 : 0) + ", " +
+                                      workSchemeId + ", " +
+                                      ((Boolean)meta[8] ? 1 : 0) +
+                                      ")";
+                                sqlCommand.ExecuteNonQuery();
                                 read = dr.Read();
                             } while (read == true);
                         }
-
                     }
-                    /*
-                                        List<Class> list = new List<Class>();
-                                        while (reader.Read())
-                                            list.Add(new MyClass
-                                            {
-                                                ID = reader.GetInt32(0),
-                                                MarketName = reader.GetString(1),
-                                                Price = reader.GetDecimal(2),
-                                                Date = reader.GetDateTime(3)
-                                            });
-                                        reader.Close();
-
-                                        return list.ToArray();
-                      */
-                    /*
-                                        List<MyData> list = new List<MyData>();
-                                        while (dr.Read())
-                                        {
-                                            MyData data = new MyData();
-                                            data.Name = (string)myReader["name"];
-                                            data.FinalConc = (int)myReader["finalconc"]; // or whatever the type should be
-                                            list.Add(data);
-                                        }
-                    */
-
-
-                    //        SqlBulkCopy bulkcopy = new SqlBulkCopy(sqlConnection);
-                    //        bulkcopy.DestinationTableName = ssqltable;
-                            //          while (dr.Read())
-                              //   {
-            //            bulkcopy.WriteToServer(dr);
-                                //   }
                     dr.Close();
                     oledbconn.Close();
                     MessageBox.Show("File imported into sql server.");
