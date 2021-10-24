@@ -72,10 +72,13 @@ namespace TimeWorkTracking
                 {
                     //                    listView1.Items[0].ImageIndex = 3;
                     // Define the list items
-                    ListViewItem lvi = new ListViewItem(drow["Uses"].ToString(), 0)
+                    lstwDataBaseSpecialMarks.LabelEdit = false;      //запрет редактирования item
+                    ListViewItem lvi = new ListViewItem(drow["Uses"].ToString(), 0) //имя для сортировки
                     {
-                        ImageIndex = (Boolean)drow["Uses"] ? 1 : 0,
-                        StateImageIndex = (Boolean)drow["Uses"] ? 1 : 0
+                        ImageIndex = (Boolean)drow["Uses"] ? 1 : 0
+                        , StateImageIndex = (Boolean)drow["Uses"] ? 1 : 0
+                        , Checked = (Boolean)drow["Uses"]
+                        //                        , UseItemStyleForSubItems = true
                     };
 
                     //    lvi.Checked = (Boolean)drow["Uses"];

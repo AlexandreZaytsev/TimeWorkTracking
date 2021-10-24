@@ -77,10 +77,13 @@ namespace TimeWorkTracking
                 if (drow.RowState != DataRowState.Deleted)  // Only row that have not been deleted
                 {
                     // Define the list items
-                    ListViewItem lvi = new ListViewItem(drow["access"].ToString(), 0)
+                    lstwDataBaseUsers.LabelEdit=false;      //запрет редактирования item
+                    ListViewItem lvi = new ListViewItem(drow["access"].ToString(), 0) //имя для сортировки
                     {
-                        ImageIndex = (Boolean)drow["access"] ? 1 : 0,
-                        StateImageIndex = (Boolean)drow["access"] ? 1 : 0
+                        ImageIndex = (Boolean)drow["access"] ? 1 : 0
+                        , StateImageIndex = (Boolean)drow["access"] ? 1 : 0
+                        , Checked = (Boolean)drow["access"]
+//                        , UseItemStyleForSubItems = true
                     };
                     lvi.SubItems.Add(drow["fio"].ToString());
                     lvi.SubItems.Add(drow["extId"].ToString());
@@ -142,8 +145,8 @@ namespace TimeWorkTracking
         //запретить изменение размеров
         private void lstwDataBaseUsers_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
-            e.Cancel = true;
-            e.NewWidth = lstwDataBaseUsers.Columns[e.ColumnIndex].Width;
+          //  e.Cancel = true;
+          //  e.NewWidth = lstwDataBaseUsers.Columns[e.ColumnIndex].Width;
         }
 
         //чекбокс

@@ -190,6 +190,7 @@ namespace TimeWorkTracking
             this.access,
             this.fio});
             this.lstwDataBaseUsers.HideSelection = false;
+            this.lstwDataBaseUsers.LabelWrap = false;
             this.lstwDataBaseUsers.Location = new System.Drawing.Point(11, 12);
             this.lstwDataBaseUsers.MultiSelect = false;
             this.lstwDataBaseUsers.Name = "lstwDataBaseUsers";
