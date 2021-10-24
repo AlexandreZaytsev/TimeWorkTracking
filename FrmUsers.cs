@@ -180,7 +180,7 @@ namespace TimeWorkTracking
             else
                 cbPost.BackColor = System.Drawing.SystemColors.Control;
         }
-        //редактирование ключевого поля Имя
+        //редактирование ключевого поля Имя 
         private void tbName_TextChanged(object sender, EventArgs e)
         {
             if (lstwDataBaseUsers.Items.Cast<ListViewItem>()
