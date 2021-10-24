@@ -31,9 +31,10 @@ namespace TimeWorkTracking
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSpecialMarks));
-            this.imglStatus = new System.Windows.Forms.ImageList(this.components);
+            this.imgListStatus = new System.Windows.Forms.ImageList(this.components);
             this.mainPanelSpecialMarks = new System.Windows.Forms.Panel();
             this.btUpdate = new System.Windows.Forms.Button();
+            this.imageButton = new System.Windows.Forms.ImageList(this.components);
             this.btInsert = new System.Windows.Forms.Button();
             this.chUse = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -54,35 +55,14 @@ namespace TimeWorkTracking
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // imglStatus
+            // imgListStatus
             // 
-            this.imglStatus.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imglStatus.ImageStream")));
-            this.imglStatus.TransparentColor = System.Drawing.Color.Transparent;
-            this.imglStatus.Images.SetKeyName(0, "setting.ico");
-            this.imglStatus.Images.SetKeyName(1, "on5m.png");
-            this.imglStatus.Images.SetKeyName(2, "off5m.png");
-            this.imglStatus.Images.SetKeyName(3, "on5.png");
-            this.imglStatus.Images.SetKeyName(4, "off5.png");
-            this.imglStatus.Images.SetKeyName(5, "on5j.jpg");
-            this.imglStatus.Images.SetKeyName(6, "off5j.jpg");
-            this.imglStatus.Images.SetKeyName(7, "on5b.bmp");
-            this.imglStatus.Images.SetKeyName(8, "off5b.bmp");
-            this.imglStatus.Images.SetKeyName(9, "on4.png");
-            this.imglStatus.Images.SetKeyName(10, "off4.png");
-            this.imglStatus.Images.SetKeyName(11, "on1_.png");
-            this.imglStatus.Images.SetKeyName(12, "off1_.png");
-            this.imglStatus.Images.SetKeyName(13, "on2.png");
-            this.imglStatus.Images.SetKeyName(14, "off_.png");
-            this.imglStatus.Images.SetKeyName(15, "off2.png");
-            this.imglStatus.Images.SetKeyName(16, "on3.png");
-            this.imglStatus.Images.SetKeyName(17, "off3.png");
-            this.imglStatus.Images.SetKeyName(18, "on_.png");
-            this.imglStatus.Images.SetKeyName(19, "on.png");
-            this.imglStatus.Images.SetKeyName(20, "off.png");
-            this.imglStatus.Images.SetKeyName(21, "sel_.png");
-            this.imglStatus.Images.SetKeyName(22, "twt.ico");
-            this.imglStatus.Images.SetKeyName(23, "sel.png");
-            this.imglStatus.Images.SetKeyName(24, "ok.png");
+            this.imgListStatus.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgListStatus.ImageStream")));
+            this.imgListStatus.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgListStatus.Images.SetKeyName(0, "off5m.png");
+            this.imgListStatus.Images.SetKeyName(1, "on5m.png");
+            this.imgListStatus.Images.SetKeyName(2, "db_add_48x72.png");
+            this.imgListStatus.Images.SetKeyName(3, "db_edit_48x72.png");
             // 
             // mainPanelSpecialMarks
             // 
@@ -101,23 +81,47 @@ namespace TimeWorkTracking
             // btUpdate
             // 
             this.btUpdate.Enabled = false;
-            this.btUpdate.Location = new System.Drawing.Point(769, 264);
+            this.btUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btUpdate.ImageIndex = 2;
+            this.btUpdate.ImageList = this.imageButton;
+            this.btUpdate.Location = new System.Drawing.Point(749, 264);
             this.btUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btUpdate.Name = "btUpdate";
-            this.btUpdate.Size = new System.Drawing.Size(120, 30);
+            this.btUpdate.Size = new System.Drawing.Size(140, 32);
             this.btUpdate.TabIndex = 19;
             this.btUpdate.Text = "Обновить";
+            this.btUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btUpdate.UseVisualStyleBackColor = true;
+            // 
+            // imageButton
+            // 
+            this.imageButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageButton.ImageStream")));
+            this.imageButton.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageButton.Images.SetKeyName(0, "db_48.png");
+            this.imageButton.Images.SetKeyName(1, "db_add_48.png");
+            this.imageButton.Images.SetKeyName(2, "db_edit_48.png");
+            this.imageButton.Images.SetKeyName(3, "db_find_48.png");
+            this.imageButton.Images.SetKeyName(4, "db_lock_48.png");
+            this.imageButton.Images.SetKeyName(5, "db_unlock_48.png");
+            this.imageButton.Images.SetKeyName(6, "db_upload_48.png");
+            this.imageButton.Images.SetKeyName(7, "db_import_48.png");
+            this.imageButton.Images.SetKeyName(8, "db_export_48.png");
             // 
             // btInsert
             // 
             this.btInsert.Enabled = false;
+            this.btInsert.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btInsert.ImageIndex = 1;
+            this.btInsert.ImageList = this.imageButton;
             this.btInsert.Location = new System.Drawing.Point(512, 264);
             this.btInsert.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btInsert.Name = "btInsert";
-            this.btInsert.Size = new System.Drawing.Size(120, 30);
+            this.btInsert.Size = new System.Drawing.Size(140, 32);
             this.btInsert.TabIndex = 18;
             this.btInsert.Text = "Добавить";
+            this.btInsert.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btInsert.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btInsert.UseVisualStyleBackColor = true;
             // 
             // chUse
@@ -129,8 +133,8 @@ namespace TimeWorkTracking
             this.chUse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.chUse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.chUse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.chUse.ImageIndex = 2;
-            this.chUse.ImageList = this.imglStatus;
+            this.chUse.ImageIndex = 0;
+            this.chUse.ImageList = this.imgListStatus;
             this.chUse.Location = new System.Drawing.Point(614, 21);
             this.chUse.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.chUse.Name = "chUse";
@@ -248,7 +252,7 @@ namespace TimeWorkTracking
             this.lstwDataBaseSpecialMarks.MultiSelect = false;
             this.lstwDataBaseSpecialMarks.Name = "lstwDataBaseSpecialMarks";
             this.lstwDataBaseSpecialMarks.Size = new System.Drawing.Size(492, 280);
-            this.lstwDataBaseSpecialMarks.SmallImageList = this.imglStatus;
+            this.lstwDataBaseSpecialMarks.SmallImageList = this.imgListStatus;
             this.lstwDataBaseSpecialMarks.TabIndex = 15;
             this.lstwDataBaseSpecialMarks.UseCompatibleStateImageBehavior = false;
             this.lstwDataBaseSpecialMarks.View = System.Windows.Forms.View.SmallIcon;
@@ -299,7 +303,7 @@ namespace TimeWorkTracking
         }
 
         #endregion
-        private System.Windows.Forms.ImageList imglStatus;
+        private System.Windows.Forms.ImageList imgListStatus;
         private System.Windows.Forms.Panel mainPanelSpecialMarks;
         private System.Windows.Forms.Button btUpdate;
         private System.Windows.Forms.Button btInsert;
@@ -318,5 +322,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ColumnHeader num;
         private System.Windows.Forms.ColumnHeader code;
         private System.Windows.Forms.ColumnHeader name;
+        private System.Windows.Forms.ImageList imageButton;
     }
 }

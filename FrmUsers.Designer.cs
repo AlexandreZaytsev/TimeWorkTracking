@@ -35,11 +35,15 @@ namespace TimeWorkTracking
             this.btImport = new System.Windows.Forms.Button();
             this.tbUserID = new System.Windows.Forms.TextBox();
             this.btUpdate = new System.Windows.Forms.Button();
+            this.imageButton = new System.Windows.Forms.ImageList(this.components);
             this.btInsert = new System.Windows.Forms.Button();
             this.chUse = new System.Windows.Forms.CheckBox();
             this.imglStatus = new System.Windows.Forms.ImageList(this.components);
             this.lstwDataBaseUsers = new System.Windows.Forms.ListView();
+            this.access = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.fio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel3 = new System.Windows.Forms.Panel();
+            this.tbName = new System.Windows.Forms.TextBox();
             this.udAfterM = new System.Windows.Forms.DateTimePicker();
             this.udAfterH = new System.Windows.Forms.DateTimePicker();
             this.udBeforeM = new System.Windows.Forms.DateTimePicker();
@@ -58,9 +62,6 @@ namespace TimeWorkTracking
             this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.access = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.fio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tbName = new System.Windows.Forms.TextBox();
             this.mainPanelUsers.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -80,16 +81,20 @@ namespace TimeWorkTracking
             this.mainPanelUsers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mainPanelUsers.Location = new System.Drawing.Point(0, 0);
             this.mainPanelUsers.Name = "mainPanelUsers";
-            this.mainPanelUsers.Size = new System.Drawing.Size(892, 313);
+            this.mainPanelUsers.Size = new System.Drawing.Size(892, 337);
             this.mainPanelUsers.TabIndex = 0;
             // 
             // btImport
             // 
-            this.btImport.Location = new System.Drawing.Point(565, 275);
+            this.btImport.ImageIndex = 7;
+            this.btImport.ImageList = this.imageButton;
+            this.btImport.Location = new System.Drawing.Point(565, 271);
             this.btImport.Name = "btImport";
-            this.btImport.Size = new System.Drawing.Size(120, 30);
+            this.btImport.Size = new System.Drawing.Size(145, 32);
             this.btImport.TabIndex = 23;
             this.btImport.Text = "Импорт";
+            this.btImport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btImport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btImport.UseVisualStyleBackColor = true;
             this.btImport.Click += new System.EventHandler(this.btImport_Click);
             // 
@@ -106,21 +111,46 @@ namespace TimeWorkTracking
             // btUpdate
             // 
             this.btUpdate.Enabled = false;
-            this.btUpdate.Location = new System.Drawing.Point(762, 275);
+            this.btUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btUpdate.ImageIndex = 2;
+            this.btUpdate.ImageList = this.imageButton;
+            this.btUpdate.Location = new System.Drawing.Point(742, 271);
             this.btUpdate.Name = "btUpdate";
-            this.btUpdate.Size = new System.Drawing.Size(120, 30);
+            this.btUpdate.Size = new System.Drawing.Size(140, 32);
             this.btUpdate.TabIndex = 21;
             this.btUpdate.Text = "Обновить";
+            this.btUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btUpdate.UseVisualStyleBackColor = true;
+            // 
+            // imageButton
+            // 
+            this.imageButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageButton.ImageStream")));
+            this.imageButton.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageButton.Images.SetKeyName(0, "db_48.png");
+            this.imageButton.Images.SetKeyName(1, "db_add_48.png");
+            this.imageButton.Images.SetKeyName(2, "db_edit_48.png");
+            this.imageButton.Images.SetKeyName(3, "db_find_48.png");
+            this.imageButton.Images.SetKeyName(4, "db_lock_48.png");
+            this.imageButton.Images.SetKeyName(5, "db_unlock_48.png");
+            this.imageButton.Images.SetKeyName(6, "db_upload_48.png");
+            this.imageButton.Images.SetKeyName(7, "db_import_48.png");
+            this.imageButton.Images.SetKeyName(8, "db_export_48.png");
             // 
             // btInsert
             // 
+            this.btInsert.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btInsert.Enabled = false;
-            this.btInsert.Location = new System.Drawing.Point(389, 275);
+            this.btInsert.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btInsert.ImageIndex = 1;
+            this.btInsert.ImageList = this.imageButton;
+            this.btInsert.Location = new System.Drawing.Point(389, 271);
             this.btInsert.Name = "btInsert";
-            this.btInsert.Size = new System.Drawing.Size(120, 30);
+            this.btInsert.Size = new System.Drawing.Size(140, 32);
             this.btInsert.TabIndex = 20;
             this.btInsert.Text = "Добавить";
+            this.btInsert.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btInsert.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btInsert.UseVisualStyleBackColor = true;
             // 
             // chUse
@@ -132,7 +162,7 @@ namespace TimeWorkTracking
             this.chUse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.chUse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.chUse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.chUse.ImageIndex = 2;
+            this.chUse.ImageIndex = 0;
             this.chUse.ImageList = this.imglStatus;
             this.chUse.Location = new System.Drawing.Point(600, 11);
             this.chUse.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -149,15 +179,10 @@ namespace TimeWorkTracking
             // 
             this.imglStatus.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imglStatus.ImageStream")));
             this.imglStatus.TransparentColor = System.Drawing.Color.Transparent;
-            this.imglStatus.Images.SetKeyName(0, "setting.ico");
+            this.imglStatus.Images.SetKeyName(0, "off5m.png");
             this.imglStatus.Images.SetKeyName(1, "on5m.png");
-            this.imglStatus.Images.SetKeyName(2, "off5m.png");
-            this.imglStatus.Images.SetKeyName(3, "mdb_add.png");
-            this.imglStatus.Images.SetKeyName(4, "mdb_edit.png");
-            this.imglStatus.Images.SetKeyName(5, "mdb_find.png");
-            this.imglStatus.Images.SetKeyName(6, "db_min.png");
-            this.imglStatus.Images.SetKeyName(7, "mdb_lock.png");
-            this.imglStatus.Images.SetKeyName(8, "mdb_unlock.png");
+            this.imglStatus.Images.SetKeyName(2, "db_add_48x72.png");
+            this.imglStatus.Images.SetKeyName(3, "db_edit_48x72.png");
             // 
             // lstwDataBaseUsers
             // 
@@ -166,15 +191,26 @@ namespace TimeWorkTracking
             this.fio});
             this.lstwDataBaseUsers.HideSelection = false;
             this.lstwDataBaseUsers.Location = new System.Drawing.Point(11, 12);
+            this.lstwDataBaseUsers.MultiSelect = false;
             this.lstwDataBaseUsers.Name = "lstwDataBaseUsers";
             this.lstwDataBaseUsers.Size = new System.Drawing.Size(373, 294);
-            this.lstwDataBaseUsers.SmallImageList = this.imglStatus;
+            this.lstwDataBaseUsers.StateImageList = this.imglStatus;
             this.lstwDataBaseUsers.TabIndex = 18;
             this.lstwDataBaseUsers.UseCompatibleStateImageBehavior = false;
             this.lstwDataBaseUsers.View = System.Windows.Forms.View.SmallIcon;
             this.lstwDataBaseUsers.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstwDataBaseUsers_ColumnClick);
             this.lstwDataBaseUsers.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.lstwDataBaseUsers_ColumnWidthChanging);
             this.lstwDataBaseUsers.SelectedIndexChanged += new System.EventHandler(this.lstwDataBaseUsers_SelectedIndexChanged);
+            // 
+            // access
+            // 
+            this.access.Text = "";
+            this.access.Width = 29;
+            // 
+            // fio
+            // 
+            this.fio.Text = "ФИО";
+            this.fio.Width = 300;
             // 
             // panel3
             // 
@@ -196,6 +232,17 @@ namespace TimeWorkTracking
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(493, 222);
             this.panel3.TabIndex = 16;
+            // 
+            // tbName
+            // 
+            this.tbName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.tbName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.tbName.BackColor = System.Drawing.SystemColors.Control;
+            this.tbName.Location = new System.Drawing.Point(146, 9);
+            this.tbName.Name = "tbName";
+            this.tbName.Size = new System.Drawing.Size(326, 24);
+            this.tbName.TabIndex = 20;
+            this.tbName.TextChanged += new System.EventHandler(this.tbName_TextChanged);
             // 
             // udAfterM
             // 
@@ -399,32 +446,11 @@ namespace TimeWorkTracking
             this.label5.TabIndex = 6;
             this.label5.Text = ":";
             // 
-            // access
-            // 
-            this.access.Text = "";
-            this.access.Width = 29;
-            // 
-            // fio
-            // 
-            this.fio.Text = "ФИО";
-            this.fio.Width = 300;
-            // 
-            // tbName
-            // 
-            this.tbName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.tbName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.tbName.BackColor = System.Drawing.SystemColors.Control;
-            this.tbName.Location = new System.Drawing.Point(146, 9);
-            this.tbName.Name = "tbName";
-            this.tbName.Size = new System.Drawing.Size(326, 24);
-            this.tbName.TabIndex = 20;
-            this.tbName.TextChanged += new System.EventHandler(this.tbName_TextChanged);
-            // 
             // frmUsers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(892, 313);
+            this.ClientSize = new System.Drawing.Size(892, 337);
             this.Controls.Add(this.mainPanelUsers);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "frmUsers";
@@ -461,7 +487,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.CheckBox chbLunch;
         private System.Windows.Forms.ComboBox cbSheme;
         private System.Windows.Forms.ListView lstwDataBaseUsers;
-        private System.Windows.Forms.ImageList imglStatus;
         private System.Windows.Forms.CheckBox chUse;
         private System.Windows.Forms.Button btUpdate;
         private System.Windows.Forms.Button btInsert;
@@ -474,5 +499,7 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ColumnHeader access;
         private System.Windows.Forms.ColumnHeader fio;
         private System.Windows.Forms.TextBox tbName;
+        public System.Windows.Forms.ImageList imglStatus;
+        private System.Windows.Forms.ImageList imageButton;
     }
 }

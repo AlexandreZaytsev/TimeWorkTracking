@@ -70,31 +70,19 @@ namespace TimeWorkTracking
         // Load Data from the DataSet into the ListView
         private void LoadList(DataTable dtable)
         {
-            // Get the table from the data set
-            //            DataTable dtable = _DataSet.Tables["Titles"];
-
-            // Clear the ListView control
-            lstwDataBaseUsers.Items.Clear();
-
-            // Display items in the ListView control
-            for (int i = 0; i < dtable.Rows.Count; i++)
+            lstwDataBaseUsers.Items.Clear();                // Clear the ListView control
+            for (int i = 0; i < dtable.Rows.Count; i++)     // Display items in the ListView control
             {
                 DataRow drow = dtable.Rows[i];
-
-                // Only row that have not been deleted
-                if (drow.RowState != DataRowState.Deleted)
+                if (drow.RowState != DataRowState.Deleted)  // Only row that have not been deleted
                 {
-                    //                    listView1.Items[0].ImageIndex = 3;
                     // Define the list items
                     ListViewItem lvi = new ListViewItem(drow["access"].ToString(), 0)
                     {
-                        ImageIndex = (Boolean)drow["access"] ? 1 : 2
+                        ImageIndex = (Boolean)drow["access"] ? 1 : 0,
+                        StateImageIndex = (Boolean)drow["access"] ? 1 : 0
                     };
-                    //    lvi.Checked = (Boolean)drow["Uses"];
-                    //       lvi.SubItems.Add(drow["Uses"].ToString());
-
                     lvi.SubItems.Add(drow["fio"].ToString());
-
                     lvi.SubItems.Add(drow["extId"].ToString());
                     lvi.SubItems.Add(drow["department"].ToString());
                     lvi.SubItems.Add(drow["post"].ToString());
@@ -102,9 +90,8 @@ namespace TimeWorkTracking
                     lvi.SubItems.Add(drow["stopTime"].ToString());
                     lvi.SubItems.Add(drow["noLunch"].ToString());
                     lvi.SubItems.Add(drow["work"].ToString());
-
-                    // Add the list items to the ListView
-                    lstwDataBaseUsers.Items.Add(lvi);
+                    
+                    lstwDataBaseUsers.Items.Add(lvi);       // Add the list items to the ListView
                 }
             }
         }
@@ -126,12 +113,11 @@ namespace TimeWorkTracking
                 _lvwItemComparer.SortColumn = e.Column;
                 _lvwItemComparer.Order = SortOrder.Ascending;
             }
-
             // Perform the sort with these new sort options.
             this.lstwDataBaseUsers.Sort();
         }
 
-        //выбор значения из списка
+        //выбор значения из списка инициализация переменных формы
         private void lstwDataBaseUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
             DateTime dt;
@@ -166,14 +152,14 @@ namespace TimeWorkTracking
             if (chUse.Checked)
                 chUse.ImageIndex = 1;
             else
-                chUse.ImageIndex = 2;
+                chUse.ImageIndex = 0;
         }
-
+        //импорт
         private void btImport_Click(object sender, EventArgs e)
         {
             ImportFromExel.ImportFromExcel();
         }
-
+        //редактирование списка Департамент
         private void cbDepartment_TextChanged(object sender, EventArgs e)
         {
             if (cbDepartment.FindString(cbDepartment.Text) == -1)
@@ -181,7 +167,7 @@ namespace TimeWorkTracking
             else
                 cbDepartment.BackColor = System.Drawing.SystemColors.Control;
         }
-
+        //редактирование списка Должность
         private void cbPost_TextChanged(object sender, EventArgs e)
         {
             if (cbPost.FindString(cbPost.Text) == -1)
@@ -189,22 +175,31 @@ namespace TimeWorkTracking
             else
                 cbPost.BackColor = System.Drawing.SystemColors.Control;
         }
-
+        //редактирование ключевого поля Имя
         private void tbName_TextChanged(object sender, EventArgs e)
         {
+            var s = lstwDataBaseUsers.Items.Cast<ListViewItem>()
+                   .Where(x => (x.SubItems[1].Text == tbName.Text.Trim()))
+                   .FirstOrDefault();
+            var n = s != null || tbName.Text.Trim().Length!=0;
+
             if (lstwDataBaseUsers.Items.Cast<ListViewItem>()
-                .Where(x => (x.SubItems[1].Text == tbName.Text))
+                .Where(x => (x.SubItems[1].Text == tbName.Text.Trim()))
                 .FirstOrDefault() != null)
             {
                 tbName.BackColor = System.Drawing.SystemColors.Control;
+                lstwDataBaseUsers.HideSelection = false;
+                tbUserID.Visible = true;
                 btUpdate.Enabled = true;
                 btInsert.Enabled = false;
             }
             else
             {
                 tbName.BackColor = System.Drawing.SystemColors.Window;
+                lstwDataBaseUsers.HideSelection = true;
+                tbUserID.Visible = false;
                 btUpdate.Enabled = false;
-                btInsert.Enabled = true;
+                btInsert.Enabled = tbName.Text.Trim().Length != 0;  //если поле пустое
             }
         }
 

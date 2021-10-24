@@ -74,8 +74,10 @@ namespace TimeWorkTracking
                     // Define the list items
                     ListViewItem lvi = new ListViewItem(drow["Uses"].ToString(), 0)
                     {
-                        ImageIndex = (Boolean)drow["Uses"] ? 1 : 2
+                        ImageIndex = (Boolean)drow["Uses"] ? 1 : 0,
+                        StateImageIndex = (Boolean)drow["Uses"] ? 1 : 0
                     };
+
                     //    lvi.Checked = (Boolean)drow["Uses"];
                     //       lvi.SubItems.Add(drow["Uses"].ToString());
                     lvi.SubItems.Add(drow["DigitalCode"].ToString());
@@ -140,7 +142,7 @@ namespace TimeWorkTracking
             if (chUse.Checked)
                 chUse.ImageIndex = 1;
             else
-                chUse.ImageIndex = 2;
+                chUse.ImageIndex = 0;
         }
     }
 }
