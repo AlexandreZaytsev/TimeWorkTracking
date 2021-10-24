@@ -43,7 +43,7 @@ namespace TimeWorkTracking
                     //График работы (таблица для списка) Почасовой/Поминутный
                     sqlCommand.CommandText = "CREATE TABLE UserWorkScheme (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "name NVARCHAR(150) NOT NULL UNIQUE, " +                                                  //расшифровка
+                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                                  //расшифровка
                         "uses bit DEFAULT 1 " +                                              //*наименование
                         ")";
                     sqlCommand.ExecuteNonQuery();
@@ -55,7 +55,7 @@ namespace TimeWorkTracking
                     //Тип даты производственного календаря (таблица для списка) Выходной/Сокращенный
                     sqlCommand.CommandText = "CREATE TABLE CalendarDateType (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "name NVARCHAR(150) NOT NULL UNIQUE, " +                                                  //расшифровка
+                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                                  //расшифровка
                         "uses bit DEFAULT 1 " +                                              //*наименование
                         ")";
                     sqlCommand.ExecuteNonQuery();
@@ -67,8 +67,8 @@ namespace TimeWorkTracking
                     //Наименование даты производственного календаря (таблица для списка) 
                     sqlCommand.CommandText = "CREATE TABLE CalendarDateName (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "name NVARCHAR(150) NOT NULL UNIQUE, " +                                        //*наименование
-                        "note NVARCHAR(150), " +                                                  //расшифровка
+                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                        //*наименование
+                        "note VARCHAR(150), " +                                                  //расшифровка
                         "uses bit DEFAULT 1 " +                                              //*наименование
                         ")";                                                         //расшифровка
                     sqlCommand.ExecuteNonQuery();
@@ -88,7 +88,7 @@ namespace TimeWorkTracking
                     //Подразделение (таблица для списка)
                     sqlCommand.CommandText = "CREATE TABLE UserDepartment (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "name NVARCHAR(150) NOT NULL UNIQUE, " +                                                  //расшифровка
+                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                                  //расшифровка
                         "uses bit DEFAULT 1 " +                                             //*наименование
                         ")";
                     sqlCommand.ExecuteNonQuery();
@@ -108,7 +108,7 @@ namespace TimeWorkTracking
                     //Должность (таблица для списка)
                     sqlCommand.CommandText = "CREATE TABLE UserPost (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "name NVARCHAR(150) NOT NULL UNIQUE, " +                                                  //расшифровка
+                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                                  //расшифровка
                         "uses bit DEFAULT 1 " +                                             //*наименование
                         ")";
                     sqlCommand.ExecuteNonQuery();
@@ -138,10 +138,10 @@ namespace TimeWorkTracking
                     //Специальные отметки (самостоятельная таблица)
                     sqlCommand.CommandText = "CREATE TABLE SpecialMarks (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "digitalCode NVARCHAR(4) NOT NULL, " +                                          //числовой код 
-                        "letterCode NVARCHAR(4) NOT NULL, " +                                           //строковый код
-                        "name NVARCHAR(150) NOT NULL UNIQUE, " +                                        //*наименование
-                        "note NVARCHAR(1024) NULL, " +                                                  //расшифровка
+                        "digitalCode VARCHAR(4) NOT NULL, " +                                          //числовой код 
+                        "letterCode VARCHAR(4) NOT NULL, " +                                           //строковый код
+                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                        //*наименование
+                        "note VARCHAR(1024) NULL, " +                                                  //расшифровка
                         "uses bit DEFAULT 1 " +                                                          //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
@@ -188,8 +188,8 @@ namespace TimeWorkTracking
                     //Пользователь (таблица использующая внешние данные)
                     sqlCommand.CommandText = "CREATE TABLE Users (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "extId NVARCHAR(20) NOT NULL UNIQUE, " +                                        //*внешний id для интеграции
-                        "name NVARCHAR(150) NOT NULL UNIQUE, " +                                        //*наименование
+                        "extId VARCHAR(20) NOT NULL UNIQUE, " +                                        //*внешний id для интеграции
+                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                        //*наименование
                         "departmentId int NOT NULL FOREIGN KEY REFERENCES UserDepartment(id), " +       //->ссылка на департамент
                         "postId int NOT NULL FOREIGN KEY REFERENCES UserPost(id), " +                   //->ссылка на должность
                         "timeStart time NULL, " +                                                       //время начала работы по графику (без даты)    
@@ -203,9 +203,9 @@ namespace TimeWorkTracking
                     //Учет рабочего времени (таблица использующая внешние данные)
                     sqlCommand.CommandText = "CREATE TABLE EventsPass (" +
                         "id bigint PRIMARY KEY IDENTITY, " +
-                        "author NVARCHAR(150) NOT NULL, " +                                             //имя учетной записи сеанса
+                        "author VARCHAR(150) NOT NULL, " +                                             //имя учетной записи сеанса
                         "passDate Date NOT NULL, " +                                                    //*дата события (без времени) 
-                        "passId NVARCHAR(20) NOT NULL FOREIGN KEY REFERENCES Users(extId), " +          //*->ссылка на внешний id пользователя
+                        "passId VARCHAR(20) NOT NULL FOREIGN KEY REFERENCES Users(extId), " +          //*->ссылка на внешний id пользователя
                         "passTimeStart time NOT NULL, " +                                               //время первого входа (без даты)
                         "passTimeStop time NOT NULL, " +                                                //время последнего выхода (без даты)
                         "infoLunchId bit DEFAULT 1, " +                                                 //флаг признака обеда
@@ -217,7 +217,7 @@ namespace TimeWorkTracking
                         "specmarkId int NOT NULL FOREIGN KEY REFERENCES SpecialMarks(id), " +           //->ссылка на специальные отметки
                         "specmarkTimeStart Datetime NULL, " +                                           //датавремя начала действия специальных отметок
                         "specmarkTimeStop Datetime NULL, " +                                            //датавремя окончания специальных отметок
-                        "specmarkNote NVARCHAR(1024) NULL, " +                                          //комментарий к специальным отметкам
+                        "specmarkNote VARCHAR(1024) NULL, " +                                          //комментарий к специальным отметкам
                         "totalHoursInWork int DEFAULT 0, " +                                            //итог рабочего времени в графике (мин)
                         "totalHoursOutsideWork int DEFAULT 0" +                                         //итог рабочего времени вне графика (мин)
                         "UNIQUE(passDate, passId) " +                                                   //уникальность на уровне таблицы

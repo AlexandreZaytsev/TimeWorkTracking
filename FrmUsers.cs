@@ -130,7 +130,7 @@ namespace TimeWorkTracking
             int ind = lstwDataBaseUsers.SelectedIndex();
             if (ind >= 0)
             {
-                tbUserID.Text = "id: "+lstwDataBaseUsers.Items[ind].SubItems[2].Text;
+                tbUserID.Text = lstwDataBaseUsers.Items[ind].SubItems[2].Text;
                 chUse.Checked = lstwDataBaseUsers.Items[ind].Text == "True";
                 tbName.Text = lstwDataBaseUsers.Items[ind].SubItems[1].Text;
                 cbDepartment.Text = lstwDataBaseUsers.Items[ind].SubItems[3].Text;
@@ -202,8 +202,9 @@ namespace TimeWorkTracking
         //кнопка добавить запись в БД
         private void btInsert_Click(object sender, EventArgs e)
         {
+            int index;
+            string id = DateTime.Now.ToString("yyyyMMddHHmmss");
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-/*
             string sql = 
               "INSERT INTO Users(" +
                 "extId, " +
@@ -216,36 +217,47 @@ namespace TimeWorkTracking
                 "workSchemeId, " +
                 "uses) " +
               "VALUES (" +
-                "N'" + meta[0].ToString() + "', " +
-                "N'" + meta[3].ToString() + "', " +
-                departmentId + ", " +
-                postId + ", " +
-                "'" + ((DateTime)meta[4]).ToShortTimeString() + "', " +
-                "'" + ((DateTime)meta[5]).ToShortTimeString() + "', " +
-                ((Boolean)meta[6] ? 1 : 0) + ", " +
-                workSchemeId + ", " +
-                ((Boolean)meta[8] ? 1 : 0) +
+                "N'" + id + "', " +
+                "N'" + tbName.Text.Trim() + "', " +
+                ((DataRowView)cbDepartment.SelectedItem).Row["id"] + ", " +
+                ((DataRowView)cbPost.SelectedItem).Row["id"] + ", " +
+                "'" + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm") + "', " +
+                "'" + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm") + "', " +
+                (chbLunch.Checked ? 1 : 0) + ", " +
+                ((DataRowView)cbSheme.SelectedItem).Row["id"] + ", " +
+                (chUse.Checked ? 1 : 0) +
               ")";
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
-*/
+            index = lstwDataBaseUsers.Items.Count;                      //сохранить индекс
+            LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('')"));// order by extId desc"));
+            lstwDataBaseUsers.HideSelection = false;                    //отображение выделения 
+            lstwDataBaseUsers.Items[index].Selected = true;             //выделить элемент по индексу
+            tbName_TextChanged(null, null);                             //обновить поля и кнопки
+            
+//            lstwDataBaseUsers.Focus();
+//            lstwDataBaseUsers_ColumnClick(null, new ColumnClickEventArgs(2)); //сортировка
+            lstwDataBaseUsers.EnsureVisible(index);                     //показать в области видимости окна
         }
         //кнопка обновить запись в БД
         private void btUpdate_Click(object sender, EventArgs e)
         {
+            int index;
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-/*
-            string sql = 
+            string sql =
               "UPDATE Users Set " +
-                "departmentId = " + departmentId + ", " +
-                "postId = " + postId + ", " +
-                "timeStart = " + "'" + ((DateTime)meta[4]).ToShortTimeString() + "', " +
-                "timeStop = " + "'" + ((DateTime)meta[5]).ToShortTimeString() + "', " +
-                "noLunch = " + ((Boolean)meta[6] ? 1 : 0) + ", " +
-                "workSchemeId = " + workSchemeId + ", " +
-                "uses = " + ((Boolean)meta[8] ? 1 : 0) + " " +
-              "WHERE extId = '" + meta[0].ToString() + "' and name = '" + meta[3].ToString() + "'; " +
+                "departmentId = " + ((DataRowView)cbDepartment.SelectedItem).Row["id"] + ", " +
+                "postId = " + ((DataRowView)cbPost.SelectedItem).Row["id"] + ", " +
+                "timeStart = " + "'" + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm") + "', " +
+                "timeStop = " + "'" + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm") + "', " +
+                "noLunch = " + (chbLunch.Checked ? 1 : 0) + ", " +
+                "workSchemeId = " + ((DataRowView)cbSheme.SelectedItem).Row["id"] + ", " +
+                "uses = " + (chUse.Checked ? 1 : 0) + " " +
+              "WHERE extId = '" + tbUserID.Text.Trim() + "'"; 
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
-*/
+            index = lstwDataBaseUsers.SelectedIndex();          //сохранить индекс
+            LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('')"));
+            lstwDataBaseUsers.Items[index].Selected = true;     //выделить элемент по индексу
+            lstwDataBaseUsers.EnsureVisible(index);             //показать в области видимости окна
         }
         //кнопка импорт
         private void btImport_Click(object sender, EventArgs e)

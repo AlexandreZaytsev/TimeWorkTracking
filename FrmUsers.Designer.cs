@@ -62,6 +62,7 @@ namespace TimeWorkTracking
             this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.mainPanelUsers.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -70,6 +71,7 @@ namespace TimeWorkTracking
             // 
             // mainPanelUsers
             // 
+            this.mainPanelUsers.Controls.Add(this.label9);
             this.mainPanelUsers.Controls.Add(this.btImport);
             this.mainPanelUsers.Controls.Add(this.tbUserID);
             this.mainPanelUsers.Controls.Add(this.btUpdate);
@@ -117,9 +119,9 @@ namespace TimeWorkTracking
             this.tbUserID.BackColor = System.Drawing.SystemColors.Control;
             this.tbUserID.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbUserID.Enabled = false;
-            this.tbUserID.Location = new System.Drawing.Point(397, 16);
+            this.tbUserID.Location = new System.Drawing.Point(415, 16);
             this.tbUserID.Name = "tbUserID";
-            this.tbUserID.Size = new System.Drawing.Size(207, 17);
+            this.tbUserID.Size = new System.Drawing.Size(178, 17);
             this.tbUserID.TabIndex = 22;
             // 
             // btUpdate
@@ -449,6 +451,15 @@ namespace TimeWorkTracking
             this.label5.TabIndex = 6;
             this.label5.Text = ":";
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(390, 16);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(23, 18);
+            this.label9.TabIndex = 24;
+            this.label9.Text = "id:";
+            // 
             // frmUsers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -504,5 +515,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.TextBox tbName;
         public System.Windows.Forms.ImageList imglStatus;
         private System.Windows.Forms.ImageList imageButton;
+        private System.Windows.Forms.Label label9;
     }
 }

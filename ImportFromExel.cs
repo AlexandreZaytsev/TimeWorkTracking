@@ -55,9 +55,7 @@ namespace TimeWorkTracking
 
                     object[] meta = new object[10];
                     bool read;
-                    int departmentId;
-                    int postId;
-                    int workSchemeId;
+
                     using (var sqlCommand = sqlConnection.CreateCommand())
                     {
                         sqlCommand.CommandText = "DELETE FROM Users";
@@ -69,11 +67,11 @@ namespace TimeWorkTracking
                                 int NumberOfColums = dr.GetValues(meta);
 
                                 sqlCommand.CommandText = "SELECT id FROM UserDepartment Where name='" + meta[1].ToString() + "'";
-                                departmentId = (int)sqlCommand.ExecuteScalar();
+                                int departmentId = (int)sqlCommand.ExecuteScalar();
                                 sqlCommand.CommandText = "SELECT id FROM UserPost Where name='" + meta[2].ToString() + "'";
-                                postId = (int)sqlCommand.ExecuteScalar();
+                                int postId = (int)sqlCommand.ExecuteScalar();
                                 sqlCommand.CommandText = "SELECT id FROM UserWorkScheme Where name='" + meta[7].ToString() + "'";
-                                workSchemeId = (int)sqlCommand.ExecuteScalar();
+                                int workSchemeId = (int)sqlCommand.ExecuteScalar();
 
                                 sqlCommand.CommandText = 
                                     "UPDATE Users Set " +

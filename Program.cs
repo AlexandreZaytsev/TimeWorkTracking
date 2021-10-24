@@ -34,22 +34,6 @@ namespace TimeWorkTracking
             else
                 return -1;
         }
-        //Создать ID из даты
-        //ГодМесяцДеньЧасыМинутыСекунды+3разряда на потоковые операции (создание до 999 элементов в цикле)
-        static string CreateIDFromDate(DateTime curDate)
-        {
-            return  curDate.ToString("yyyyMMddHHmmss    hh:mm:ss");
-                /*
-                 * 2019 10 28 10 09 59
-                 * 2021 10 24 13 01 18
-                CStr(Year(curDate)) +
-                          Right("00" & CStr(Month(curDate)), 2) +
-                          Right("00" & CStr(Day(curDate)), 2) +
-                          Right("00" & CStr(Hour(curDate)), 2) +
-                          Right("00" & CStr(Minute(curDate)), 2) +
-                          Right("00" & CStr(Second(curDate)), 2)
-                      '    "000"
-                */
-        }
+
     }
 }
