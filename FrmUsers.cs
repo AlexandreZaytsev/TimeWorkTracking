@@ -19,23 +19,24 @@ namespace TimeWorkTracking
 
         private void frmUsers_Load(object sender, EventArgs e)
         {
-            mainPanelUsers.Enabled = MsSqlDatabase.CheckConnectWithConnectionStr(Properties.Settings.Default.twtConnectionSrting);
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            mainPanelUsers.Enabled = MsSqlDatabase.CheckConnectWithConnectionStr(cs);
             if (mainPanelUsers.Enabled)
             {
                 cbDepartment.DisplayMember = "Name";
                 cbDepartment.ValueMember = "id";
-                cbDepartment.DataSource = MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "Select id, name From UserDepartment");
+                cbDepartment.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From UserDepartment");
 
                 cbPost.DisplayMember = "Name";
                 cbPost.ValueMember = "id";
-                cbPost.DataSource = MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "Select id, name From UserPost");
+                cbPost.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From UserPost");
 
                 cbSheme.DisplayMember = "Name";
                 cbSheme.ValueMember = "id";
-                cbSheme.DataSource = MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "Select id, name From UserWorkScheme");
+                cbSheme.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From UserWorkScheme");
 
                 InitializeListView();
-                LoadList(MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "select * from twt_GetUserInfo('')"));
+                LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('')"));
 
                 udBeforeH.Value = new DateTime(2000, 1, 1, 9, 0, 0);
                 udBeforeM.Value = new DateTime(2000, 1, 1, 9, 0, 0);
@@ -181,7 +182,7 @@ namespace TimeWorkTracking
         {
             if (lstwDataBaseUsers.Items.Cast<ListViewItem>()
                 .Where(x => (x.SubItems[1].Text == tbName.Text.Trim()))      //поиск по ключевому полю
-                .FirstOrDefault() != null)
+                .FirstOrDefault() != null)// || tbUserID.Visible)
             {
                 tbName.BackColor = System.Drawing.SystemColors.Control;
                 lstwDataBaseUsers.HideSelection = false;
@@ -201,12 +202,50 @@ namespace TimeWorkTracking
         //кнопка добавить запись в БД
         private void btInsert_Click(object sender, EventArgs e)
         {
-
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+/*
+            string sql = 
+              "INSERT INTO Users(" +
+                "extId, " +
+                "name, " +
+                "departmentId, " +
+                "postId, " +
+                "timeStart, " +
+                "timeStop, " +
+                "noLunch, " +
+                "workSchemeId, " +
+                "uses) " +
+              "VALUES (" +
+                "N'" + meta[0].ToString() + "', " +
+                "N'" + meta[3].ToString() + "', " +
+                departmentId + ", " +
+                postId + ", " +
+                "'" + ((DateTime)meta[4]).ToShortTimeString() + "', " +
+                "'" + ((DateTime)meta[5]).ToShortTimeString() + "', " +
+                ((Boolean)meta[6] ? 1 : 0) + ", " +
+                workSchemeId + ", " +
+                ((Boolean)meta[8] ? 1 : 0) +
+              ")";
+            MsSqlDatabase.RequestNonQuery(cs, sql, false);
+*/
         }
         //кнопка обновить запись в БД
         private void btUpdate_Click(object sender, EventArgs e)
         {
-
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+/*
+            string sql = 
+              "UPDATE Users Set " +
+                "departmentId = " + departmentId + ", " +
+                "postId = " + postId + ", " +
+                "timeStart = " + "'" + ((DateTime)meta[4]).ToShortTimeString() + "', " +
+                "timeStop = " + "'" + ((DateTime)meta[5]).ToShortTimeString() + "', " +
+                "noLunch = " + ((Boolean)meta[6] ? 1 : 0) + ", " +
+                "workSchemeId = " + workSchemeId + ", " +
+                "uses = " + ((Boolean)meta[8] ? 1 : 0) + " " +
+              "WHERE extId = '" + meta[0].ToString() + "' and name = '" + meta[3].ToString() + "'; " +
+            MsSqlDatabase.RequestNonQuery(cs, sql, false);
+*/
         }
         //кнопка импорт
         private void btImport_Click(object sender, EventArgs e)

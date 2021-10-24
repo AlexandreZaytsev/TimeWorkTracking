@@ -22,11 +22,12 @@ namespace TimeWorkTracking
 
         private void frmSpecialMarks_Load(object sender, EventArgs e)
         {
-            mainPanelSpecialMarks.Enabled = MsSqlDatabase.CheckConnectWithConnectionStr(Properties.Settings.Default.twtConnectionSrting);
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            mainPanelSpecialMarks.Enabled = MsSqlDatabase.CheckConnectWithConnectionStr(cs);
             if (mainPanelSpecialMarks.Enabled) 
             {
                 InitializeListView();
-                LoadList(MsSqlDatabase.TableRequest(Properties.Settings.Default.twtConnectionSrting, "Select * From SpecialMarks"));
+                LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks"));
             }
         }
         // Initialize ListView
@@ -162,12 +163,15 @@ namespace TimeWorkTracking
         //кнопка добавить запись в БД
         private void btInsert_Click(object sender, EventArgs e)
         {
+            string sql = "";
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
 
         }
         //кнопка обновить запись в БД
         private void btUpdate_Click(object sender, EventArgs e)
         {
-
+            string sql = "";
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
         }
     }
 }
