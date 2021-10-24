@@ -56,21 +56,12 @@ namespace TimeWorkTracking
         // Load Data from the DataSet into the ListView
         private void LoadList(DataTable dtable)
         {
-            // Get the table from the data set
-            //            DataTable dtable = _DataSet.Tables["Titles"];
-
-            // Clear the ListView control
-            lstwDataBaseSpecialMarks.Items.Clear();
-
-            // Display items in the ListView control
-            for (int i = 0; i < dtable.Rows.Count; i++)
+            lstwDataBaseSpecialMarks.Items.Clear();         // Clear the ListView control
+            for (int i = 0; i < dtable.Rows.Count; i++)     // Display items in the ListView control
             {
                 DataRow drow = dtable.Rows[i];
-
-                // Only row that have not been deleted
-                if (drow.RowState != DataRowState.Deleted)
+                if (drow.RowState != DataRowState.Deleted)  // Only row that have not been deleted
                 {
-                    //                    listView1.Items[0].ImageIndex = 3;
                     // Define the list items
                     lstwDataBaseSpecialMarks.LabelEdit = false;      //запрет редактирования item
                     ListViewItem lvi = new ListViewItem(drow["Uses"].ToString(), 0) //имя для сортировки
@@ -146,6 +137,27 @@ namespace TimeWorkTracking
                 chUse.ImageIndex = 1;
             else
                 chUse.ImageIndex = 0;
+        }
+
+        //редактирование ключевого поля Имя
+        private void tbName_TextChanged(object sender, EventArgs e)
+        {
+            if (lstwDataBaseSpecialMarks.Items.Cast<ListViewItem>()
+                .Where(x => (x.SubItems[3].Text == tbName.Text.Trim()))     //поиск по ключевому полю
+                .FirstOrDefault() != null)
+            {
+                tbName.BackColor = System.Drawing.SystemColors.Control;
+                lstwDataBaseSpecialMarks.HideSelection = false;
+                btUpdate.Enabled = true;
+                btInsert.Enabled = false;
+            }
+            else
+            {
+                tbName.BackColor = System.Drawing.SystemColors.Window;
+                lstwDataBaseSpecialMarks.HideSelection = true;
+                btUpdate.Enabled = false;
+                btInsert.Enabled = tbName.Text.Trim().Length != 0;  //если поле пустое
+            }
         }
     }
 }

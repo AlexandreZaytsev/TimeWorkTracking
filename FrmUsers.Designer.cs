@@ -33,9 +33,9 @@ namespace TimeWorkTracking
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUsers));
             this.mainPanelUsers = new System.Windows.Forms.Panel();
             this.btImport = new System.Windows.Forms.Button();
+            this.imageButton = new System.Windows.Forms.ImageList(this.components);
             this.tbUserID = new System.Windows.Forms.TextBox();
             this.btUpdate = new System.Windows.Forms.Button();
-            this.imageButton = new System.Windows.Forms.ImageList(this.components);
             this.btInsert = new System.Windows.Forms.Button();
             this.chUse = new System.Windows.Forms.CheckBox();
             this.imglStatus = new System.Windows.Forms.ImageList(this.components);
@@ -81,7 +81,7 @@ namespace TimeWorkTracking
             this.mainPanelUsers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mainPanelUsers.Location = new System.Drawing.Point(0, 0);
             this.mainPanelUsers.Name = "mainPanelUsers";
-            this.mainPanelUsers.Size = new System.Drawing.Size(892, 337);
+            this.mainPanelUsers.Size = new System.Drawing.Size(892, 309);
             this.mainPanelUsers.TabIndex = 0;
             // 
             // btImport
@@ -97,6 +97,20 @@ namespace TimeWorkTracking
             this.btImport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btImport.UseVisualStyleBackColor = true;
             this.btImport.Click += new System.EventHandler(this.btImport_Click);
+            // 
+            // imageButton
+            // 
+            this.imageButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageButton.ImageStream")));
+            this.imageButton.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageButton.Images.SetKeyName(0, "db_48.png");
+            this.imageButton.Images.SetKeyName(1, "db_add_48.png");
+            this.imageButton.Images.SetKeyName(2, "db_edit_48.png");
+            this.imageButton.Images.SetKeyName(3, "db_find_48.png");
+            this.imageButton.Images.SetKeyName(4, "db_lock_48.png");
+            this.imageButton.Images.SetKeyName(5, "db_unlock_48.png");
+            this.imageButton.Images.SetKeyName(6, "db_upload_48.png");
+            this.imageButton.Images.SetKeyName(7, "db_import_48.png");
+            this.imageButton.Images.SetKeyName(8, "db_export_48.png");
             // 
             // tbUserID
             // 
@@ -122,20 +136,6 @@ namespace TimeWorkTracking
             this.btUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btUpdate.UseVisualStyleBackColor = true;
-            // 
-            // imageButton
-            // 
-            this.imageButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageButton.ImageStream")));
-            this.imageButton.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageButton.Images.SetKeyName(0, "db_48.png");
-            this.imageButton.Images.SetKeyName(1, "db_add_48.png");
-            this.imageButton.Images.SetKeyName(2, "db_edit_48.png");
-            this.imageButton.Images.SetKeyName(3, "db_find_48.png");
-            this.imageButton.Images.SetKeyName(4, "db_lock_48.png");
-            this.imageButton.Images.SetKeyName(5, "db_unlock_48.png");
-            this.imageButton.Images.SetKeyName(6, "db_upload_48.png");
-            this.imageButton.Images.SetKeyName(7, "db_import_48.png");
-            this.imageButton.Images.SetKeyName(8, "db_export_48.png");
             // 
             // btInsert
             // 
@@ -194,7 +194,7 @@ namespace TimeWorkTracking
             this.lstwDataBaseUsers.Location = new System.Drawing.Point(11, 12);
             this.lstwDataBaseUsers.MultiSelect = false;
             this.lstwDataBaseUsers.Name = "lstwDataBaseUsers";
-            this.lstwDataBaseUsers.Size = new System.Drawing.Size(373, 294);
+            this.lstwDataBaseUsers.Size = new System.Drawing.Size(373, 290);
             this.lstwDataBaseUsers.StateImageList = this.imglStatus;
             this.lstwDataBaseUsers.TabIndex = 18;
             this.lstwDataBaseUsers.UseCompatibleStateImageBehavior = false;
@@ -451,7 +451,7 @@ namespace TimeWorkTracking
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(892, 337);
+            this.ClientSize = new System.Drawing.Size(892, 309);
             this.Controls.Add(this.mainPanelUsers);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "frmUsers";

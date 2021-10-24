@@ -41,6 +41,8 @@ namespace TimeWorkTracking
                 udBeforeM.Value = new DateTime(2000, 1, 1, 9, 0, 0);
                 udAfterH.Value = new DateTime(2000, 1, 1, 18, 0, 0);
                 udAfterH.Value = new DateTime(2000, 1, 1, 18, 0, 0);
+
+                btImport.Visible = lstwDataBaseUsers.Items.Count == 0;  //загасить импорт если список не пустой
             }
         }
         // Initialize ListView
@@ -52,7 +54,7 @@ namespace TimeWorkTracking
             lstwDataBaseUsers.FullRowSelect = true;              // Select the item and subitems when selection is made.
             lstwDataBaseUsers.GridLines = true;                  // Display grid lines.
             lstwDataBaseUsers.Sorting = SortOrder.Ascending;     // Sort the items in the list in ascending order.
-
+//            lstwDataBaseUsers.StateImageList=
             // The ListViewItemSorter property allows you to specify the
             // object that performs the sorting of items in the ListView.
             // You can use the ListViewItemSorter property in combination
@@ -145,8 +147,8 @@ namespace TimeWorkTracking
         //запретить изменение размеров
         private void lstwDataBaseUsers_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
-          //  e.Cancel = true;
-          //  e.NewWidth = lstwDataBaseUsers.Columns[e.ColumnIndex].Width;
+            e.Cancel = true;
+            e.NewWidth = lstwDataBaseUsers.Columns[e.ColumnIndex].Width;
         }
 
         //чекбокс
@@ -181,13 +183,8 @@ namespace TimeWorkTracking
         //редактирование ключевого поля Имя
         private void tbName_TextChanged(object sender, EventArgs e)
         {
-            var s = lstwDataBaseUsers.Items.Cast<ListViewItem>()
-                   .Where(x => (x.SubItems[1].Text == tbName.Text.Trim()))
-                   .FirstOrDefault();
-            var n = s != null || tbName.Text.Trim().Length!=0;
-
             if (lstwDataBaseUsers.Items.Cast<ListViewItem>()
-                .Where(x => (x.SubItems[1].Text == tbName.Text.Trim()))
+                .Where(x => (x.SubItems[1].Text == tbName.Text.Trim()))      //поиск по ключевому полю
                 .FirstOrDefault() != null)
             {
                 tbName.BackColor = System.Drawing.SystemColors.Control;

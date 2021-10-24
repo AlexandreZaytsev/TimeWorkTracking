@@ -29,6 +29,7 @@ namespace TimeWorkTracking
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -40,7 +41,7 @@ namespace TimeWorkTracking
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.statusStripMain = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsbtDataBaseSQL = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsbtDataBasePACS = new System.Windows.Forms.ToolStripDropDownButton();
@@ -55,8 +56,9 @@ namespace TimeWorkTracking
             this.tsbtReportTotal = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripStatusLabel5 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel6 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.imageListStrip = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.statusStrip1.SuspendLayout();
+            this.statusStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -156,10 +158,10 @@ namespace TimeWorkTracking
             this.dataGridView1.Size = new System.Drawing.Size(869, 242);
             this.dataGridView1.TabIndex = 9;
             // 
-            // statusStrip1
+            // statusStripMain
             // 
-            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusStripMain.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel2,
             this.tsbtDataBaseSQL,
             this.tsbtDataBasePACS,
@@ -174,14 +176,14 @@ namespace TimeWorkTracking
             this.tsbtReportTotal,
             this.toolStripStatusLabel5,
             this.toolStripStatusLabel6});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 436);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 13, 0);
-            this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStrip1.ShowItemToolTips = true;
-            this.statusStrip1.Size = new System.Drawing.Size(884, 26);
-            this.statusStrip1.TabIndex = 15;
-            this.statusStrip1.Text = "statusStrip1";
+            this.statusStripMain.Location = new System.Drawing.Point(0, 436);
+            this.statusStripMain.Name = "statusStripMain";
+            this.statusStripMain.Padding = new System.Windows.Forms.Padding(1, 0, 13, 0);
+            this.statusStripMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.statusStripMain.ShowItemToolTips = true;
+            this.statusStripMain.Size = new System.Drawing.Size(884, 26);
+            this.statusStripMain.TabIndex = 15;
+            this.statusStripMain.Text = "statusStrip1";
             // 
             // toolStripStatusLabel2
             // 
@@ -216,7 +218,7 @@ namespace TimeWorkTracking
             // 
             this.toolStripStatusLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(225, 20);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(264, 20);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "    Справочники:";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -308,12 +310,19 @@ namespace TimeWorkTracking
             this.toolStripStatusLabel6.Size = new System.Drawing.Size(13, 20);
             this.toolStripStatusLabel6.Text = " ";
             // 
+            // imageListStrip
+            // 
+            this.imageListStrip.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListStrip.ImageStream")));
+            this.imageListStrip.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageListStrip.Images.SetKeyName(0, "no.png");
+            this.imageListStrip.Images.SetKeyName(1, "ok.png");
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 462);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.statusStripMain);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -335,8 +344,8 @@ namespace TimeWorkTracking
             this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.frmMain_HelpButtonClicked);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
+            this.statusStripMain.ResumeLayout(false);
+            this.statusStripMain.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -354,7 +363,7 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.StatusStrip statusStripMain;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
@@ -369,6 +378,7 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel6;
         private System.Windows.Forms.ToolStripDropDownButton tsbtDataBaseSQL;
         private System.Windows.Forms.ToolStripDropDownButton tsbtDataBasePACS;
+        public System.Windows.Forms.ImageList imageListStrip;
     }
 }
 
