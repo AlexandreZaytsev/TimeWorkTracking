@@ -159,11 +159,7 @@ namespace TimeWorkTracking
             else
                 chUse.ImageIndex = 0;
         }
-        //импорт
-        private void btImport_Click(object sender, EventArgs e)
-        {
-            ImportFromExel.ImportFromExcel();
-        }
+
         //редактирование списка Департамент
         private void cbDepartment_TextChanged(object sender, EventArgs e)
         {
@@ -202,6 +198,20 @@ namespace TimeWorkTracking
                 btInsert.Enabled = tbName.Text.Trim().Length != 0;  //если поле пустое
             }
         }
+        //кнопка добавить запись в БД
+        private void btInsert_Click(object sender, EventArgs e)
+        {
 
+        }
+        //кнопка обновить запись в БД
+        private void btUpdate_Click(object sender, EventArgs e)
+        {
+
+        }
+        //кнопка импорт
+        private void btImport_Click(object sender, EventArgs e)
+        {
+            ImportFromExel.ImportFromExcel();
+        }
     }
 }

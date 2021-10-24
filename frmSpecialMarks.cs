@@ -159,5 +159,15 @@ namespace TimeWorkTracking
                 btInsert.Enabled = tbName.Text.Trim().Length != 0;  //если поле пустое
             }
         }
+        //кнопка добавить запись в БД
+        private void btInsert_Click(object sender, EventArgs e)
+        {
+
+        }
+        //кнопка обновить запись в БД
+        private void btUpdate_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

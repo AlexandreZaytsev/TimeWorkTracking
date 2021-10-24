@@ -93,6 +93,7 @@ namespace TimeWorkTracking
             this.btUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btUpdate.UseVisualStyleBackColor = true;
+            this.btUpdate.Click += new System.EventHandler(this.btUpdate_Click);
             // 
             // imageButton
             // 
@@ -123,6 +124,7 @@ namespace TimeWorkTracking
             this.btInsert.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btInsert.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btInsert.UseVisualStyleBackColor = true;
+            this.btInsert.Click += new System.EventHandler(this.btInsert_Click);
             // 
             // chUse
             // 
