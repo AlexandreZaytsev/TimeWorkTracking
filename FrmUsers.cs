@@ -128,7 +128,6 @@ namespace TimeWorkTracking
             // Perform the sort with these new sort options.
             this.lstwDataBaseUsers.Sort();
         }
-
         //выбор значения из списка инициализация переменных формы
         private void lstwDataBaseUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -183,40 +182,44 @@ namespace TimeWorkTracking
         //редактирование ключевого поля Имя 
         private void tbName_TextChanged(object sender, EventArgs e)
         {
-            if (lstwDataBaseUsers.Items.Cast<ListViewItem>()
-                .Where(x => (x.SubItems[1].Text == tbName.Text.Trim()))         //поиск по ключевому полю
-                .FirstOrDefault() != null)// || tbUserID.Visible)
-            {                                                                   //поле в списке найдено НАЙДЕНО
-                tbName.BackColor = System.Drawing.SystemColors.Control;         //серый фон
-                lstwDataBaseUsers.HideSelection = false;                        //установить выделение строки (без перевода фокуса на listwiew)
-                tbUserID.Visible = true;                                        //отобразить id записи
-                btUpdate.Enabled = true;                                        //разблокировать кнопку записи в БД    
-                prBts.Enabled = false;                                          //заблокировать панель радиокнопок Insert/Update
-                rbUpdate.Checked = true;                                        //выбрать режим по умолчанию Update
+            if (tbName.Text.Trim().Length == 0)                             //если поле пустое
+            {
+                tbName.BackColor = System.Drawing.SystemColors.Window;      //белый фон
+                lstwDataBaseUsers.HideSelection = true;                     //снять выделение со строки listview (без перевода фокуса на listwiew)
+                rbUpdate.Checked = true;                                    //выбрать режим по умолчанию Update
+                prBts.Enabled = false;                                      //заблокировать панель радиокнопок Insert/Update
+                btUpdate.Enabled = false;                                   //заблокировать кнопку записи в БД    
             }
-            else
-            {                                                                   //поле в списке найдено НЕ НАЙДЕНО
-                tbName.BackColor = System.Drawing.SystemColors.Window;          //белый фон
-                lstwDataBaseUsers.HideSelection = true;                         //снять выделение со строки listview (без перевода фокуса на listwiew)
-                if (tbName.Text.Trim().Length != 0)                             //если поле не пустое
+            else                                                            //если поле не пустое          
+            {
+                btUpdate.Enabled = true;                                    //разблокировать кнопку записи в БД    
+                if (lstwDataBaseUsers.Items.Cast<ListViewItem>()            //попробовать найти значение поля в списке ListView
+                    .Where(x => (x.SubItems[1].Text == tbName.Text.Trim()))         
+                    .FirstOrDefault() != null)
+                {                                                           //значение есть
+                    tbName.BackColor = System.Drawing.SystemColors.Control; //серый фон
+                    lstwDataBaseUsers.HideSelection = false;                //установить выделение строки (без перевода фокуса на listwiew)
+                    rbUpdate.Checked = true;                                //выбрать режим по умолчанию Update
+                    prBts.Enabled = false;                                  //заблокировать панель радиокнопок Insert/Update
+                }
+                else                                                        //значения нет 
                 {
-                    tbUserID.Visible = true;                                    //отобразить id записи    
-                    btUpdate.Enabled = true;                                    //разблокировать кнопку записи в БД    
-
-                    prBts.Enabled = false;                                     //заблокировать панель радиокнопок Insert/Update
-                    rbInsert.Checked = true;                                   //выбрать режим по умолчанию Insert
+                    tbName.BackColor = System.Drawing.SystemColors.Window;  //белый фон
+                    lstwDataBaseUsers.HideSelection = true;                 //снять выделение со строки listview (без перевода фокуса на listwiew)
+                    if (tbUserID.Text.Trim().Length == 0)                   //проверить есть id или нет (при первом старте на пустом списке)  
+                    {
+                        rbUpdate.Checked = false;                           //выбрать режим по умолчанию Insert
+                        prBts.Enabled = false;                              //заблокировать панель радиокнопок Insert/Update
+                    }
+                    else 
+                    {
+                        rbUpdate.Checked = true;                            //выбрать режим по умолчанию Update
+                        prBts.Enabled = true;                               //заблокировать панель радиокнопок Insert/Update
+                    }
                 }
-                else
-                {                                                               //если поле пустое
-                    tbUserID.Visible = true;                                    //отобразить id записи    
-                    btUpdate.Enabled = false;                                   //заблокировать кнопку записи в БД    
-                    prBts.Enabled = false;                                      //заблокировать панель радиокнопок Insert/Update
-                    rbUpdate.Checked = true;                                    //выбрать режим по умолчанию Update
-                }
 
-//                btUpdate.Enabled = false;
-//                prBts.Enabled = tbName.Text.Trim().Length != 0;  //если поле пустое
             }
+
         }
 
         //кнопка Добавить/Обновить запись в БД (в зависимости от флага)
@@ -291,6 +294,9 @@ namespace TimeWorkTracking
         private void rbInsertUpdate_CheckedChanged(object sender, EventArgs e)
         {
             btUpdate.ImageIndex = rbInsert.Checked ? 1 : 2;
+            tbUserID.Visible = !rbInsert.Checked;                                    //отобразить id записи    
         }
+
+
     }
 }
