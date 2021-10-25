@@ -88,7 +88,7 @@ namespace TimeWorkTracking
             this.mainPanelUsers.Location = new System.Drawing.Point(0, 0);
             this.mainPanelUsers.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.mainPanelUsers.Name = "mainPanelUsers";
-            this.mainPanelUsers.Size = new System.Drawing.Size(892, 450);
+            this.mainPanelUsers.Size = new System.Drawing.Size(892, 374);
             this.mainPanelUsers.TabIndex = 0;
             // 
             // btInsert
@@ -184,7 +184,7 @@ namespace TimeWorkTracking
             // fio
             // 
             this.fio.Text = "ФИО";
-            this.fio.Width = 300;
+            this.fio.Width = 231;
             // 
             // imglStatus
             // 
@@ -535,22 +535,22 @@ namespace TimeWorkTracking
             // 
             this.lMsg.AutoSize = true;
             this.lMsg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.lMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lMsg.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lMsg.ImageIndex = 6;
             this.lMsg.ImageList = this.imageButton;
-            this.lMsg.Location = new System.Drawing.Point(651, 339);
+            this.lMsg.Location = new System.Drawing.Point(665, 339);
             this.lMsg.Name = "lMsg";
-            this.lMsg.Size = new System.Drawing.Size(211, 20);
+            this.lMsg.Size = new System.Drawing.Size(200, 20);
             this.lMsg.TabIndex = 0;
-            this.lMsg.Text = "    Новая запись в БД";
+            this.lMsg.Text = "      Новая запись в БД";
             this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // frmUsers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(892, 450);
+            this.ClientSize = new System.Drawing.Size(892, 374);
             this.Controls.Add(this.mainPanelUsers);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
