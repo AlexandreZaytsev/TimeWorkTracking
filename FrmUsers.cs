@@ -36,7 +36,7 @@ namespace TimeWorkTracking
                 cbSheme.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From UserWorkScheme");
 
                 InitializeListView();
-                LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('')"));
+                LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));
 
                 udBeforeH.Value = new DateTime(2000, 1, 1, 9, 0, 0);
                 udBeforeM.Value = new DateTime(2000, 1, 1, 9, 0, 0);
@@ -62,7 +62,7 @@ namespace TimeWorkTracking
             // with the Sort method to perform custom sorting.
             _lvwItemComparer = new ListViewItemComparer
             {
-                SortColumn = 2,// 1;// e.Column; (3 name)
+                SortColumn = 1,// 1;// e.Column; (3 name)
                 Order = SortOrder.Ascending
             };
 
@@ -152,15 +152,16 @@ namespace TimeWorkTracking
             e.NewWidth = lstwDataBaseUsers.Columns[e.ColumnIndex].Width;
         }
 
-        //чекбокс
+        //чекбокс Сотрудник активен
         private void chUse_CheckedChanged(object sender, EventArgs e)
         {
-            if (chUse.Checked)
-                chUse.ImageIndex = 1;
-            else
-                chUse.ImageIndex = 0;
+            chUse.ImageIndex = chUse.Checked ? 1 : 0;
         }
 
+        private void chNew_CheckedChanged(object sender, EventArgs e)
+        {
+            chNew.ImageIndex = chNew.Checked ? 2 : 3;
+        }
         //редактирование списка Департамент
         private void cbDepartment_TextChanged(object sender, EventArgs e)
         {
@@ -228,9 +229,11 @@ namespace TimeWorkTracking
                 (chUse.Checked ? 1 : 0) +
               ")";
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
-            index = lstwDataBaseUsers.Items.Count;                      //сохранить индекс
-            LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('')"));// order by extId desc"));
-            lstwDataBaseUsers.HideSelection = false;                    //отображение выделения 
+            LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));// order by extId desc"));
+            index = lstwDataBaseUsers.Items.Cast<ListViewItem>()
+                .Where(x => (x.SubItems[2].Text == id))                 //найти индекс поиск по полю id
+                .FirstOrDefault().Index;
+//            lstwDataBaseUsers.HideSelection = false;                    //отображение выделения 
             lstwDataBaseUsers.Items[index].Selected = true;             //выделить элемент по индексу
             tbName_TextChanged(null, null);                             //обновить поля и кнопки
             
@@ -263,6 +266,11 @@ namespace TimeWorkTracking
         private void btImport_Click(object sender, EventArgs e)
         {
             ImportFromExel.ImportFromExcel();
+        }
+
+        private void rbInsertUpdate_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
