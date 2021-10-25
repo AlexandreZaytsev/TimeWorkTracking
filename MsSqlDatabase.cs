@@ -188,8 +188,10 @@ namespace TimeWorkTracking
                     //Пользователь (таблица использующая внешние данные)
                     sqlCommand.CommandText = "CREATE TABLE Users (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "extId VARCHAR(20) NOT NULL UNIQUE, " +                                        //*внешний id для интеграции
-                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                        //*наименование
+                        "extId VARCHAR(20) NOT NULL UNIQUE, " +                                         //*внешний id для интеграции
+                        "crmId NUMERIC DEFAULT 0, " +                                                   //внешний id для интеграции с crm
+                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                         //*наименование
+                        "note VARCHAR(1024) NULL, " +                                                   //расшифровка
                         "departmentId int NOT NULL FOREIGN KEY REFERENCES UserDepartment(id), " +       //->ссылка на департамент
                         "postId int NOT NULL FOREIGN KEY REFERENCES UserPost(id), " +                   //->ссылка на должность
                         "timeStart time NULL, " +                                                       //время начала работы по графику (без даты)    
@@ -241,8 +243,10 @@ namespace TimeWorkTracking
                         "(" +
                         "SELECT " +
                             "u.id id, " +
-                            "u.extId extId, " +                                                         //внешний id для интеграции                                                 
+                            "u.extId extId, " +                                                         //внешний id для интеграции с СКУД                                                 
+                            "u.crmId crmId, " +                                                         //внешний id для интеграции с CRM                                                 
                             "u.name fio, " +                                                            //ФИО           
+                            "u.note note, " +                                                           //комментарий           
                             "d.name department, " +                                                     //департамент пользователя
                             "p.name post, " +                                                           //должность пользователя
                             "u.timeStart startTime, " +                                                 //время начала работы по графику (без даты)

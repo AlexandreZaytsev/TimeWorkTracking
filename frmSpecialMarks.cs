@@ -173,5 +173,10 @@ namespace TimeWorkTracking
             string sql = "";
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
         }
+        //навели мышкой на Insert загасили id
+        private void btInsert_MouseHover(object sender, EventArgs e)
+        {
+
+        }
     }
 }

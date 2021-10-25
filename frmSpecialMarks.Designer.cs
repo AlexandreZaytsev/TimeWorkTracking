@@ -74,8 +74,9 @@ namespace TimeWorkTracking
             this.mainPanelSpecialMarks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanelSpecialMarks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mainPanelSpecialMarks.Location = new System.Drawing.Point(0, 0);
+            this.mainPanelSpecialMarks.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.mainPanelSpecialMarks.Name = "mainPanelSpecialMarks";
-            this.mainPanelSpecialMarks.Size = new System.Drawing.Size(899, 287);
+            this.mainPanelSpecialMarks.Size = new System.Drawing.Size(674, 233);
             this.mainPanelSpecialMarks.TabIndex = 2;
             // 
             // btUpdate
@@ -84,10 +85,10 @@ namespace TimeWorkTracking
             this.btUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btUpdate.ImageIndex = 2;
             this.btUpdate.ImageList = this.imageButton;
-            this.btUpdate.Location = new System.Drawing.Point(752, 248);
-            this.btUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btUpdate.Location = new System.Drawing.Point(564, 202);
+            this.btUpdate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btUpdate.Name = "btUpdate";
-            this.btUpdate.Size = new System.Drawing.Size(140, 32);
+            this.btUpdate.Size = new System.Drawing.Size(105, 26);
             this.btUpdate.TabIndex = 19;
             this.btUpdate.Text = "Обновить";
             this.btUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -115,16 +116,17 @@ namespace TimeWorkTracking
             this.btInsert.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btInsert.ImageIndex = 1;
             this.btInsert.ImageList = this.imageButton;
-            this.btInsert.Location = new System.Drawing.Point(512, 248);
-            this.btInsert.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btInsert.Location = new System.Drawing.Point(384, 202);
+            this.btInsert.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btInsert.Name = "btInsert";
-            this.btInsert.Size = new System.Drawing.Size(140, 32);
+            this.btInsert.Size = new System.Drawing.Size(105, 26);
             this.btInsert.TabIndex = 18;
             this.btInsert.Text = "Добавить";
             this.btInsert.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btInsert.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btInsert.UseVisualStyleBackColor = true;
             this.btInsert.Click += new System.EventHandler(this.btInsert_Click);
+            this.btInsert.MouseHover += new System.EventHandler(this.btInsert_MouseHover);
             // 
             // chUse
             // 
@@ -137,11 +139,11 @@ namespace TimeWorkTracking
             this.chUse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.chUse.ImageIndex = 0;
             this.chUse.ImageList = this.imgListStatus;
-            this.chUse.Location = new System.Drawing.Point(614, 11);
-            this.chUse.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.chUse.Location = new System.Drawing.Point(460, 9);
+            this.chUse.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.chUse.Name = "chUse";
             this.chUse.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.chUse.Size = new System.Drawing.Size(253, 28);
+            this.chUse.Size = new System.Drawing.Size(214, 25);
             this.chUse.TabIndex = 16;
             this.chUse.Text = "Доступно для использования";
             this.chUse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -159,29 +161,29 @@ namespace TimeWorkTracking
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.tbNote);
             this.panel1.Controls.Add(this.label4);
-            this.panel1.Location = new System.Drawing.Point(512, 43);
+            this.panel1.Location = new System.Drawing.Point(384, 35);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(380, 200);
+            this.panel1.Size = new System.Drawing.Size(286, 163);
             this.panel1.TabIndex = 17;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(4, 9);
+            this.label1.Location = new System.Drawing.Point(3, 7);
             this.label1.Margin = new System.Windows.Forms.Padding(2);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(123, 18);
+            this.label1.Size = new System.Drawing.Size(107, 15);
             this.label1.TabIndex = 2;
             this.label1.Text = "Наименование";
             // 
             // tbCodeLetter
             // 
-            this.tbCodeLetter.Location = new System.Drawing.Point(323, 166);
-            this.tbCodeLetter.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tbCodeLetter.Location = new System.Drawing.Point(242, 135);
+            this.tbCodeLetter.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tbCodeLetter.Name = "tbCodeLetter";
-            this.tbCodeLetter.Size = new System.Drawing.Size(47, 24);
+            this.tbCodeLetter.Size = new System.Drawing.Size(36, 21);
             this.tbCodeLetter.TabIndex = 10;
             this.tbCodeLetter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -189,56 +191,58 @@ namespace TimeWorkTracking
             // 
             this.tbName.BackColor = System.Drawing.SystemColors.Control;
             this.tbName.HideSelection = false;
-            this.tbName.Location = new System.Drawing.Point(10, 35);
-            this.tbName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tbName.Location = new System.Drawing.Point(8, 28);
+            this.tbName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tbName.Name = "tbName";
-            this.tbName.Size = new System.Drawing.Size(359, 24);
+            this.tbName.Size = new System.Drawing.Size(270, 21);
             this.tbName.TabIndex = 3;
             this.tbName.TextChanged += new System.EventHandler(this.tbName_TextChanged);
             // 
             // tbCodeDigital
             // 
-            this.tbCodeDigital.Location = new System.Drawing.Point(138, 166);
-            this.tbCodeDigital.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tbCodeDigital.Location = new System.Drawing.Point(104, 135);
+            this.tbCodeDigital.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tbCodeDigital.Name = "tbCodeDigital";
-            this.tbCodeDigital.Size = new System.Drawing.Size(47, 24);
+            this.tbCodeDigital.Size = new System.Drawing.Size(36, 21);
             this.tbCodeDigital.TabIndex = 9;
             this.tbCodeDigital.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(4, 65);
+            this.label2.Location = new System.Drawing.Point(3, 53);
             this.label2.Margin = new System.Windows.Forms.Padding(2);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(76, 18);
+            this.label2.Size = new System.Drawing.Size(64, 15);
             this.label2.TabIndex = 4;
             this.label2.Text = "Описание";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(191, 169);
+            this.label5.Location = new System.Drawing.Point(143, 137);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(114, 18);
+            this.label5.Size = new System.Drawing.Size(93, 15);
             this.label5.TabIndex = 8;
             this.label5.Text = "Буквенный код";
             // 
             // tbNote
             // 
-            this.tbNote.Location = new System.Drawing.Point(10, 87);
-            this.tbNote.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tbNote.Location = new System.Drawing.Point(8, 71);
+            this.tbNote.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tbNote.Multiline = true;
             this.tbNote.Name = "tbNote";
-            this.tbNote.Size = new System.Drawing.Size(359, 70);
+            this.tbNote.Size = new System.Drawing.Size(270, 58);
             this.tbNote.TabIndex = 5;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(4, 169);
+            this.label4.Location = new System.Drawing.Point(3, 137);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(112, 18);
+            this.label4.Size = new System.Drawing.Size(92, 15);
             this.label4.TabIndex = 7;
             this.label4.Text = "Цифровой код";
             // 
@@ -252,10 +256,11 @@ namespace TimeWorkTracking
             this.name});
             this.lstwDataBaseSpecialMarks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lstwDataBaseSpecialMarks.HideSelection = false;
-            this.lstwDataBaseSpecialMarks.Location = new System.Drawing.Point(11, 12);
+            this.lstwDataBaseSpecialMarks.Location = new System.Drawing.Point(8, 10);
+            this.lstwDataBaseSpecialMarks.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lstwDataBaseSpecialMarks.MultiSelect = false;
             this.lstwDataBaseSpecialMarks.Name = "lstwDataBaseSpecialMarks";
-            this.lstwDataBaseSpecialMarks.Size = new System.Drawing.Size(492, 268);
+            this.lstwDataBaseSpecialMarks.Size = new System.Drawing.Size(370, 218);
             this.lstwDataBaseSpecialMarks.SmallImageList = this.imgListStatus;
             this.lstwDataBaseSpecialMarks.TabIndex = 15;
             this.lstwDataBaseSpecialMarks.UseCompatibleStateImageBehavior = false;
@@ -288,13 +293,12 @@ namespace TimeWorkTracking
             // 
             // frmSpecialMarks
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(899, 287);
+            this.ClientSize = new System.Drawing.Size(674, 233);
             this.Controls.Add(this.mainPanelSpecialMarks);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmSpecialMarks";
             this.Text = "Специальные отметки";
             this.Load += new System.EventHandler(this.frmSpecialMarks_Load);
