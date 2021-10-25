@@ -35,13 +35,13 @@ namespace TimeWorkTracking
             this.prBts = new System.Windows.Forms.Panel();
             this.rbUpdate = new System.Windows.Forms.RadioButton();
             this.rbInsert = new System.Windows.Forms.RadioButton();
-            this.imglStatus = new System.Windows.Forms.ImageList(this.components);
             this.btImport = new System.Windows.Forms.Button();
             this.imageButton = new System.Windows.Forms.ImageList(this.components);
             this.btUpdate = new System.Windows.Forms.Button();
             this.lstwDataBaseUsers = new System.Windows.Forms.ListView();
             this.access = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.fio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.imglStatus = new System.Windows.Forms.ImageList(this.components);
             this.panel3 = new System.Windows.Forms.Panel();
             this.tbNote = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -103,13 +103,11 @@ namespace TimeWorkTracking
             // 
             this.rbUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbUpdate.AutoSize = true;
-            this.rbUpdate.Checked = true;
             this.rbUpdate.Location = new System.Drawing.Point(101, 2);
             this.rbUpdate.Margin = new System.Windows.Forms.Padding(0);
             this.rbUpdate.Name = "rbUpdate";
             this.rbUpdate.Size = new System.Drawing.Size(83, 19);
             this.rbUpdate.TabIndex = 1;
-            this.rbUpdate.TabStop = true;
             this.rbUpdate.Text = "Обновить";
             this.rbUpdate.UseVisualStyleBackColor = true;
             this.rbUpdate.CheckedChanged += new System.EventHandler(this.rbInsertUpdate_CheckedChanged);
@@ -117,23 +115,16 @@ namespace TimeWorkTracking
             // rbInsert
             // 
             this.rbInsert.AutoSize = true;
+            this.rbInsert.Checked = true;
             this.rbInsert.Location = new System.Drawing.Point(3, 2);
             this.rbInsert.Margin = new System.Windows.Forms.Padding(0);
             this.rbInsert.Name = "rbInsert";
             this.rbInsert.Size = new System.Drawing.Size(83, 19);
             this.rbInsert.TabIndex = 0;
+            this.rbInsert.TabStop = true;
             this.rbInsert.Text = "Добавить";
             this.rbInsert.UseVisualStyleBackColor = true;
             this.rbInsert.CheckedChanged += new System.EventHandler(this.rbInsertUpdate_CheckedChanged);
-            // 
-            // imglStatus
-            // 
-            this.imglStatus.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imglStatus.ImageStream")));
-            this.imglStatus.TransparentColor = System.Drawing.Color.Transparent;
-            this.imglStatus.Images.SetKeyName(0, "off5m.png");
-            this.imglStatus.Images.SetKeyName(1, "on5m.png");
-            this.imglStatus.Images.SetKeyName(2, "db_add_48x72.png");
-            this.imglStatus.Images.SetKeyName(3, "db_edit_48x72.png");
             // 
             // btImport
             // 
@@ -167,14 +158,14 @@ namespace TimeWorkTracking
             // 
             this.btUpdate.Enabled = false;
             this.btUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btUpdate.ImageIndex = 2;
+            this.btUpdate.ImageIndex = 1;
             this.btUpdate.ImageList = this.imageButton;
             this.btUpdate.Location = new System.Drawing.Point(556, 261);
             this.btUpdate.Margin = new System.Windows.Forms.Padding(2);
             this.btUpdate.Name = "btUpdate";
             this.btUpdate.Size = new System.Drawing.Size(105, 26);
             this.btUpdate.TabIndex = 21;
-            this.btUpdate.Text = "Обновить";
+            this.btUpdate.Text = "БД";
             this.btUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btUpdate.UseVisualStyleBackColor = true;
@@ -209,6 +200,15 @@ namespace TimeWorkTracking
             // 
             this.fio.Text = "ФИО";
             this.fio.Width = 300;
+            // 
+            // imglStatus
+            // 
+            this.imglStatus.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imglStatus.ImageStream")));
+            this.imglStatus.TransparentColor = System.Drawing.Color.Transparent;
+            this.imglStatus.Images.SetKeyName(0, "off5m.png");
+            this.imglStatus.Images.SetKeyName(1, "on5m.png");
+            this.imglStatus.Images.SetKeyName(2, "db_add_48x72.png");
+            this.imglStatus.Images.SetKeyName(3, "db_edit_48x72.png");
             // 
             // panel3
             // 
@@ -258,7 +258,7 @@ namespace TimeWorkTracking
             // 
             this.tbName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.tbName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.tbName.BackColor = System.Drawing.SystemColors.Control;
+            this.tbName.BackColor = System.Drawing.SystemColors.Window;
             this.tbName.Location = new System.Drawing.Point(112, 29);
             this.tbName.Margin = new System.Windows.Forms.Padding(2);
             this.tbName.Name = "tbName";

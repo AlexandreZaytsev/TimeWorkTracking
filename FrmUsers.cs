@@ -33,7 +33,7 @@ namespace TimeWorkTracking
 
                 cbSheme.DisplayMember = "Name";
                 cbSheme.ValueMember = "id";
-                cbSheme.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From UserWorkScheme");
+                cbSheme.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From UserWorkScheme order by name desc");
 
                 InitializeListView();
                 LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));
@@ -43,7 +43,13 @@ namespace TimeWorkTracking
                 udAfterH.Value = new DateTime(2000, 1, 1, 18, 0, 0);
                 udAfterH.Value = new DateTime(2000, 1, 1, 18, 0, 0);
 
-                btImport.Visible = lstwDataBaseUsers.Items.Count == 0;  //загасить импорт если список не пустой
+                if (lstwDataBaseUsers.Items.Count == 0)
+                    btImport.Visible = true;                        //загасить импорт если список не пустой
+                else
+                {
+                    btImport.Visible = false;                       //загасить импорт если список не пустой
+                    lstwDataBaseUsers.Items[0].Selected = true;     //выделить элемент по индексу
+                }
             }
         }
         // Initialize ListView
@@ -181,7 +187,7 @@ namespace TimeWorkTracking
                 .Where(x => (x.SubItems[1].Text == tbName.Text.Trim()))         //поиск по ключевому полю
                 .FirstOrDefault() != null)// || tbUserID.Visible)
             {                                                                   //поле в списке найдено НАЙДЕНО
-                tbName.BackColor = System.Drawing.SystemColors.Control;
+                tbName.BackColor = System.Drawing.SystemColors.Control;         //серый фон
                 lstwDataBaseUsers.HideSelection = false;                        //установить выделение строки (без перевода фокуса на listwiew)
                 tbUserID.Visible = true;                                        //отобразить id записи
                 btUpdate.Enabled = true;                                        //разблокировать кнопку записи в БД    
@@ -190,21 +196,22 @@ namespace TimeWorkTracking
             }
             else
             {                                                                   //поле в списке найдено НЕ НАЙДЕНО
-                tbName.BackColor = System.Drawing.SystemColors.Window;
+                tbName.BackColor = System.Drawing.SystemColors.Window;          //белый фон
                 lstwDataBaseUsers.HideSelection = true;                         //снять выделение со строки listview (без перевода фокуса на listwiew)
-                if (tbName.Text.Trim().Length != 0)     //если не поле пустое)
+                if (tbName.Text.Trim().Length != 0)                             //если поле не пустое
                 {
-                    tbUserID.Visible = true;
-                    prBts.Enabled = true;
-                    btUpdate.Enabled = true;
-                    rbUpdate.Checked = true;
+                    tbUserID.Visible = true;                                    //отобразить id записи    
+                    btUpdate.Enabled = true;                                    //разблокировать кнопку записи в БД    
+
+                    prBts.Enabled = false;                                     //заблокировать панель радиокнопок Insert/Update
+                    rbInsert.Checked = true;                                   //выбрать режим по умолчанию Insert
                 }
                 else
-                {                                       //если поле пустое
-                    tbUserID.Visible = false;
-                    prBts.Enabled = false;
-                    btUpdate.Enabled = false;
-                    rbUpdate.Checked = false;
+                {                                                               //если поле пустое
+                    tbUserID.Visible = true;                                    //отобразить id записи    
+                    btUpdate.Enabled = false;                                   //заблокировать кнопку записи в БД    
+                    prBts.Enabled = false;                                      //заблокировать панель радиокнопок Insert/Update
+                    rbUpdate.Checked = true;                                    //выбрать режим по умолчанию Update
                 }
 
 //                btUpdate.Enabled = false;
