@@ -32,14 +32,13 @@ namespace TimeWorkTracking
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUsers));
             this.mainPanelUsers = new System.Windows.Forms.Panel();
-            this.rbInsert = new System.Windows.Forms.RadioButton();
+            this.prBts = new System.Windows.Forms.Panel();
             this.rbUpdate = new System.Windows.Forms.RadioButton();
-            this.chNew = new System.Windows.Forms.CheckBox();
+            this.rbInsert = new System.Windows.Forms.RadioButton();
             this.imglStatus = new System.Windows.Forms.ImageList(this.components);
             this.btImport = new System.Windows.Forms.Button();
             this.imageButton = new System.Windows.Forms.ImageList(this.components);
             this.btUpdate = new System.Windows.Forms.Button();
-            this.btInsert = new System.Windows.Forms.Button();
             this.lstwDataBaseUsers = new System.Windows.Forms.ListView();
             this.access = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.fio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -68,21 +67,18 @@ namespace TimeWorkTracking
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.toolTipMsg = new System.Windows.Forms.ToolTip(this.components);
-            this.panel4 = new System.Windows.Forms.Panel();
             this.mainPanelUsers.SuspendLayout();
+            this.prBts.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainPanelUsers
             // 
-            this.mainPanelUsers.Controls.Add(this.panel4);
-            this.mainPanelUsers.Controls.Add(this.chNew);
+            this.mainPanelUsers.Controls.Add(this.prBts);
             this.mainPanelUsers.Controls.Add(this.btImport);
             this.mainPanelUsers.Controls.Add(this.btUpdate);
-            this.mainPanelUsers.Controls.Add(this.btInsert);
             this.mainPanelUsers.Controls.Add(this.lstwDataBaseUsers);
             this.mainPanelUsers.Controls.Add(this.panel3);
             this.mainPanelUsers.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -93,23 +89,21 @@ namespace TimeWorkTracking
             this.mainPanelUsers.Size = new System.Drawing.Size(669, 357);
             this.mainPanelUsers.TabIndex = 0;
             // 
-            // rbInsert
+            // prBts
             // 
-            this.rbInsert.AutoSize = true;
-            this.rbInsert.Location = new System.Drawing.Point(3, 2);
-            this.rbInsert.Margin = new System.Windows.Forms.Padding(0);
-            this.rbInsert.Name = "rbInsert";
-            this.rbInsert.Size = new System.Drawing.Size(83, 19);
-            this.rbInsert.TabIndex = 0;
-            this.rbInsert.TabStop = true;
-            this.rbInsert.Text = "Добавить";
-            this.rbInsert.UseVisualStyleBackColor = true;
-            this.rbInsert.CheckedChanged += new System.EventHandler(this.rbInsertUpdate_CheckedChanged);
+            this.prBts.Controls.Add(this.rbUpdate);
+            this.prBts.Controls.Add(this.rbInsert);
+            this.prBts.Enabled = false;
+            this.prBts.Location = new System.Drawing.Point(292, 264);
+            this.prBts.Name = "prBts";
+            this.prBts.Size = new System.Drawing.Size(184, 23);
+            this.prBts.TabIndex = 27;
             // 
             // rbUpdate
             // 
             this.rbUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbUpdate.AutoSize = true;
+            this.rbUpdate.Checked = true;
             this.rbUpdate.Location = new System.Drawing.Point(101, 2);
             this.rbUpdate.Margin = new System.Windows.Forms.Padding(0);
             this.rbUpdate.Name = "rbUpdate";
@@ -120,28 +114,17 @@ namespace TimeWorkTracking
             this.rbUpdate.UseVisualStyleBackColor = true;
             this.rbUpdate.CheckedChanged += new System.EventHandler(this.rbInsertUpdate_CheckedChanged);
             // 
-            // chNew
+            // rbInsert
             // 
-            this.chNew.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chNew.AutoSize = true;
-            this.chNew.FlatAppearance.BorderSize = 0;
-            this.chNew.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
-            this.chNew.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.chNew.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.chNew.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.chNew.ImageIndex = 3;
-            this.chNew.ImageList = this.imglStatus;
-            this.chNew.Location = new System.Drawing.Point(271, 291);
-            this.chNew.Margin = new System.Windows.Forms.Padding(2);
-            this.chNew.Name = "chNew";
-            this.chNew.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.chNew.Size = new System.Drawing.Size(170, 25);
-            this.chNew.TabIndex = 24;
-            this.chNew.Text = "Добавить сотрудника";
-            this.chNew.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.toolTipMsg.SetToolTip(this.chNew, "Сотрудник активен");
-            this.chNew.UseVisualStyleBackColor = true;
-            this.chNew.CheckedChanged += new System.EventHandler(this.chNew_CheckedChanged);
+            this.rbInsert.AutoSize = true;
+            this.rbInsert.Location = new System.Drawing.Point(3, 2);
+            this.rbInsert.Margin = new System.Windows.Forms.Padding(0);
+            this.rbInsert.Name = "rbInsert";
+            this.rbInsert.Size = new System.Drawing.Size(83, 19);
+            this.rbInsert.TabIndex = 0;
+            this.rbInsert.Text = "Добавить";
+            this.rbInsert.UseVisualStyleBackColor = true;
+            this.rbInsert.CheckedChanged += new System.EventHandler(this.rbInsertUpdate_CheckedChanged);
             // 
             // imglStatus
             // 
@@ -156,12 +139,11 @@ namespace TimeWorkTracking
             // 
             this.btImport.ImageIndex = 7;
             this.btImport.ImageList = this.imageButton;
-            this.btImport.Location = new System.Drawing.Point(426, 320);
+            this.btImport.Location = new System.Drawing.Point(507, 261);
             this.btImport.Margin = new System.Windows.Forms.Padding(2);
             this.btImport.Name = "btImport";
-            this.btImport.Size = new System.Drawing.Size(109, 26);
+            this.btImport.Size = new System.Drawing.Size(30, 26);
             this.btImport.TabIndex = 23;
-            this.btImport.Text = "Импорт";
             this.btImport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btImport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btImport.UseVisualStyleBackColor = true;
@@ -198,24 +180,6 @@ namespace TimeWorkTracking
             this.btUpdate.UseVisualStyleBackColor = true;
             this.btUpdate.Click += new System.EventHandler(this.btUpdate_Click);
             // 
-            // btInsert
-            // 
-            this.btInsert.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btInsert.Enabled = false;
-            this.btInsert.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btInsert.ImageIndex = 1;
-            this.btInsert.ImageList = this.imageButton;
-            this.btInsert.Location = new System.Drawing.Point(292, 320);
-            this.btInsert.Margin = new System.Windows.Forms.Padding(2);
-            this.btInsert.Name = "btInsert";
-            this.btInsert.Size = new System.Drawing.Size(105, 26);
-            this.btInsert.TabIndex = 20;
-            this.btInsert.Text = "Добавить";
-            this.btInsert.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btInsert.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btInsert.UseVisualStyleBackColor = true;
-            this.btInsert.Click += new System.EventHandler(this.btInsert_Click);
-            // 
             // lstwDataBaseUsers
             // 
             this.lstwDataBaseUsers.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -227,7 +191,7 @@ namespace TimeWorkTracking
             this.lstwDataBaseUsers.Margin = new System.Windows.Forms.Padding(2);
             this.lstwDataBaseUsers.MultiSelect = false;
             this.lstwDataBaseUsers.Name = "lstwDataBaseUsers";
-            this.lstwDataBaseUsers.Size = new System.Drawing.Size(281, 236);
+            this.lstwDataBaseUsers.Size = new System.Drawing.Size(281, 277);
             this.lstwDataBaseUsers.StateImageList = this.imglStatus;
             this.lstwDataBaseUsers.TabIndex = 18;
             this.lstwDataBaseUsers.UseCompatibleStateImageBehavior = false;
@@ -553,15 +517,6 @@ namespace TimeWorkTracking
             this.label5.TabIndex = 6;
             this.label5.Text = ":";
             // 
-            // panel4
-            // 
-            this.panel4.Controls.Add(this.rbUpdate);
-            this.panel4.Controls.Add(this.rbInsert);
-            this.panel4.Location = new System.Drawing.Point(292, 264);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(184, 23);
-            this.panel4.TabIndex = 27;
-            // 
             // frmUsers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -574,15 +529,14 @@ namespace TimeWorkTracking
             this.Text = "Сотрудники";
             this.Load += new System.EventHandler(this.frmUsers_Load);
             this.mainPanelUsers.ResumeLayout(false);
-            this.mainPanelUsers.PerformLayout();
+            this.prBts.ResumeLayout(false);
+            this.prBts.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -608,7 +562,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ListView lstwDataBaseUsers;
         private System.Windows.Forms.CheckBox chUse;
         private System.Windows.Forms.Button btUpdate;
-        private System.Windows.Forms.Button btInsert;
         private System.Windows.Forms.TextBox tbUserID;
         private System.Windows.Forms.DateTimePicker udBeforeH;
         private System.Windows.Forms.DateTimePicker udAfterM;
@@ -623,9 +576,8 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox tbNote;
         private System.Windows.Forms.ToolTip toolTipMsg;
-        private System.Windows.Forms.CheckBox chNew;
         private System.Windows.Forms.RadioButton rbUpdate;
         private System.Windows.Forms.RadioButton rbInsert;
-        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Panel prBts;
     }
 }
