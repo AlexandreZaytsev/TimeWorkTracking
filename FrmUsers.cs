@@ -309,7 +309,7 @@ namespace TimeWorkTracking
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             string sql =
               "UPDATE Users Set " +
-                "note = 'N" + tbNote.Text.Trim() + "', " +
+                "note = N'" + tbNote.Text.Trim() + "', " +
                 "departmentId = " + ((DataRowView)cbDepartment.SelectedItem).Row["id"] + ", " +
                 "postId = " + ((DataRowView)cbPost.SelectedItem).Row["id"] + ", " +
                 "timeStart = " + "'" + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm") + "', " +
