@@ -76,7 +76,7 @@ namespace TimeWorkTracking
 
         }
 
-        // Load Data from the DataSet into the ListView
+        //Загрузить Data из DataSet в ListView
         private void LoadList(DataTable dtable)
         {
             lstwDataBaseUsers.Items.Clear();                // Clear the ListView control
@@ -186,9 +186,13 @@ namespace TimeWorkTracking
             {
                 tbName.BackColor = System.Drawing.SystemColors.Window;      //белый фон
                 lstwDataBaseUsers.HideSelection = true;                     //снять выделение со строки listview (без перевода фокуса на listwiew)
-                rbUpdate.Checked = true;                                    //выбрать режим по умолчанию Update
-                prBts.Enabled = false;                                      //заблокировать панель радиокнопок Insert/Update
-                btUpdate.Enabled = false;                                   //заблокировать кнопку записи в БД    
+
+                btInsert.Enabled = false;                                   //заблокировать кнопку INSERT    
+                btUpdate.Enabled = false;                                   //заблокировать кнопку UPDATE    
+
+                //  rbUpdate.Checked = true;                                    //выбрать режим по умолчанию Update
+                //  prBts.Enabled = false;                                      //заблокировать панель радиокнопок Insert/Update
+                //  btUpdate.Enabled = false;                                   //заблокировать кнопку записи в БД    
             }
             else                                                            //если поле не пустое          
             {
@@ -199,8 +203,12 @@ namespace TimeWorkTracking
                 {                                                           //значение есть
                     tbName.BackColor = System.Drawing.SystemColors.Control; //серый фон
                     lstwDataBaseUsers.HideSelection = false;                //установить выделение строки (без перевода фокуса на listwiew)
-                    rbUpdate.Checked = true;                                //выбрать режим по умолчанию Update
-                    prBts.Enabled = false;                                  //заблокировать панель радиокнопок Insert/Update
+
+                    btInsert.Enabled = false;                               //заблокировать кнопку INSERT    
+                    btUpdate.Enabled = true;                                //разблокировать кнопку UPDATE    
+
+//                    rbUpdate.Checked = true;                                //выбрать режим по умолчанию Update
+//                    prBts.Enabled = false;                                  //заблокировать панель радиокнопок Insert/Update
                 }
                 else                                                        //значения нет 
                 {
@@ -208,21 +216,30 @@ namespace TimeWorkTracking
                     lstwDataBaseUsers.HideSelection = true;                 //снять выделение со строки listview (без перевода фокуса на listwiew)
                     if (tbUserID.Text.Trim().Length == 0)                   //проверить есть id или нет (при первом старте на пустом списке)  
                     {
-                        rbUpdate.Checked = false;                           //выбрать режим по умолчанию Insert
-                        prBts.Enabled = false;                              //заблокировать панель радиокнопок Insert/Update
+                        btInsert.Enabled = true;                            //разблокировать кнопку INSERT    
+                        btUpdate.Enabled = false;                           //заблокировать кнопку UPDATE    
+
+                        //                        rbUpdate.Checked = false;                           //выбрать режим по умолчанию Insert
+                        //                        prBts.Enabled = false;                              //заблокировать панель радиокнопок Insert/Update
                     }
                     else 
                     {
-                        rbUpdate.Checked = true;                            //выбрать режим по умолчанию Update
-                        prBts.Enabled = true;                               //заблокировать панель радиокнопок Insert/Update
+                        btInsert.Enabled = true;                            //разблокировать кнопку INSERT    
+                        btUpdate.Enabled = true;                            //разблокировать кнопку UPDATE    
+
+                        //                        rbUpdate.Checked = true;                            //выбрать режим по умолчанию Update
+                        //                        prBts.Enabled = true;                               //заблокировать панель радиокнопок Insert/Update
                     }
                 }
-
             }
-
         }
 
-        //кнопка Добавить/Обновить запись в БД (в зависимости от флага)
+        //кнопка Добавить запись в БД
+        private void btInsert_Click(object sender, EventArgs e)
+        {
+
+        }
+        //кнопка Обновить запись в БД
         private void btUpdate_Click(object sender, EventArgs e)
         {
             int index;
