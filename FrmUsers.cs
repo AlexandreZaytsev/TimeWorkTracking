@@ -14,7 +14,7 @@ namespace TimeWorkTracking
         ListViewItemComparer _lvwItemComparer;
         public frmUsers()
         {
-            InitializeComponent();
+            InitializeComponent(); 
         }
 
         private void frmUsers_Load(object sender, EventArgs e)
