@@ -190,13 +190,8 @@ namespace TimeWorkTracking
             {
                 tbName.BackColor = System.Drawing.SystemColors.Window;      //белый фон
                 lstwDataBaseUsers.HideSelection = true;                     //снять выделение со строки listview (без перевода фокуса на listwiew)
-
                 btInsert.Enabled = false;                                   //заблокировать кнопку INSERT    
                 btUpdate.Enabled = false;                                   //заблокировать кнопку UPDATE    
-
-                //  rbUpdate.Checked = true;                                    //выбрать режим по умолчанию Update
-                //  prBts.Enabled = false;                                      //заблокировать панель радиокнопок Insert/Update
-                //  btUpdate.Enabled = false;                                   //заблокировать кнопку записи в БД    
             }
             else                                                            //если поле не пустое          
             {
@@ -210,9 +205,6 @@ namespace TimeWorkTracking
 
                     btInsert.Enabled = false;                               //заблокировать кнопку INSERT    
                     btUpdate.Enabled = true;                                //разблокировать кнопку UPDATE    
-
-//                    rbUpdate.Checked = true;                                //выбрать режим по умолчанию Update
-//                    prBts.Enabled = false;                                  //заблокировать панель радиокнопок Insert/Update
                 }
                 else                                                        //значения нет 
                 {
@@ -222,17 +214,11 @@ namespace TimeWorkTracking
                     {
                         btInsert.Enabled = true;                            //разблокировать кнопку INSERT    
                         btUpdate.Enabled = false;                           //заблокировать кнопку UPDATE    
-
-                        //                        rbUpdate.Checked = false;                           //выбрать режим по умолчанию Insert
-                        //                        prBts.Enabled = false;                              //заблокировать панель радиокнопок Insert/Update
                     }
                     else 
                     {
                         btInsert.Enabled = true;                            //разблокировать кнопку INSERT    
                         btUpdate.Enabled = true;                            //разблокировать кнопку UPDATE    
-
-                        //                        rbUpdate.Checked = true;                            //выбрать режим по умолчанию Update
-                        //                        prBts.Enabled = true;                               //заблокировать панель радиокнопок Insert/Update
                     }
                 }
             }
@@ -283,24 +269,6 @@ namespace TimeWorkTracking
             //            lstwDataBaseUsers_ColumnClick(null, new ColumnClickEventArgs(2)); //сортировка
             lstwDataBaseUsers.EnsureVisible(index);                     //показать в области видимости окна
         }
-        /*
-                       "id int PRIMARY KEY IDENTITY, " +
-                        "extId VARCHAR(20) NOT NULL UNIQUE, " +                                         //*внешний id для интеграции
-                        "crmId NUMERIC DEFAULT 0, " +                                                   //внешний id для интеграции с crm
-                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                         //*наименование
-                        "note VARCHAR(1024) NULL, " +                                                   //расшифровка
-                        "departmentId int NOT NULL FOREIGN KEY REFERENCES UserDepartment(id), " +       //->ссылка на департамент
-                        "postId int NOT NULL FOREIGN KEY REFERENCES UserPost(id), " +                   //->ссылка на должность
-                        "timeStart time NULL, " +                                                       //время начала работы по графику (без даты)    
-                        "timeStop time NULL, " +                                                        //время окончания работы по графику (без даты)
-                        "noLunch bit DEFAULT 1, " +                                                       //флаг признака обеда
-                        "workSchemeId int NOT NULL FOREIGN KEY REFERENCES UserWorkScheme(id), " +       //->ссылка на схему работы
-                        "uses bit DEFAULT 1 " +                                                         //флаг доступа для использования
-           */
-
-
-
-
 
         //кнопка Обновить запись в БД
         private void btUpdate_Click(object sender, EventArgs e)
@@ -335,10 +303,15 @@ namespace TimeWorkTracking
             btUpdate.ImageIndex = rbInsert.Checked ? 1 : 2;
             tbUserID.Visible = !rbInsert.Checked;                                    //отобразить id записи    
         }
-        //навели мышкой на Insert загасили id
+        //наехали на кнопку Insert загасили id
         private void btInsert_MouseHover(object sender, EventArgs e)
         {
-
+            tbUserID.Visible = false;
+        }
+        //уехали с кнопки Insert показали id
+        private void btInsert_MouseLeave(object sender, EventArgs e)
+        {
+            tbUserID.Visible = true;
         }
     }
 }

@@ -536,6 +536,7 @@ namespace TimeWorkTracking
             this.btInsert.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btInsert.UseVisualStyleBackColor = true;
             this.btInsert.Click += new System.EventHandler(this.btInsert_Click);
+            this.btInsert.MouseLeave += new System.EventHandler(this.btInsert_MouseLeave);
             this.btInsert.MouseHover += new System.EventHandler(this.btInsert_MouseHover);
             // 
             // frmUsers
