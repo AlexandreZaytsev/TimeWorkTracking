@@ -14,7 +14,8 @@ namespace TimeWorkTracking
         ListViewItemComparer _lvwItemComparer;
         public frmUsers()
         {
-            InitializeComponent(); 
+            InitializeComponent();
+            lMsg.Visible = false;
         }
 
         private void frmUsers_Load(object sender, EventArgs e)
@@ -137,7 +138,7 @@ namespace TimeWorkTracking
             int ind = lstwDataBaseUsers.SelectedIndex();
             if (ind >= 0)
             {
-                tbUserID.Text = lstwDataBaseUsers.Items[ind].SubItems[2].Text;                  //extID
+                tbExtID.Text = lstwDataBaseUsers.Items[ind].SubItems[2].Text;                  //extID
                 //crmId
                 chUse.Checked = lstwDataBaseUsers.Items[ind].Text == "True";                    //access    
                 tbName.Text = lstwDataBaseUsers.Items[ind].SubItems[1].Text;                    //fio
@@ -152,6 +153,7 @@ namespace TimeWorkTracking
                 udAfterM.Value = dt;
                 chbLunch.Checked = lstwDataBaseUsers.Items[ind].SubItems[7].Text == "True";     //lunch
                 cbSheme.Text = lstwDataBaseUsers.Items[ind].SubItems[8].Text;                   //work    
+                tbCrmID.Text = lstwDataBaseUsers.Items[ind].SubItems[10].Text;                  //crmID
             }
         }
         //запретить изменение размеров
@@ -210,7 +212,7 @@ namespace TimeWorkTracking
                 {
                     tbName.BackColor = System.Drawing.SystemColors.Window;  //белый фон
                     lstwDataBaseUsers.HideSelection = true;                 //снять выделение со строки listview (без перевода фокуса на listwiew)
-                    if (tbUserID.Text.Trim().Length == 0)                   //проверить есть id или нет (при первом старте на пустом списке)  
+                    if (tbExtID.Text.Trim().Length == 0)                   //проверить есть id или нет (при первом старте на пустом списке)  
                     {
                         btInsert.Enabled = true;                            //разблокировать кнопку INSERT    
                         btUpdate.Enabled = false;                           //заблокировать кнопку UPDATE    
@@ -277,6 +279,8 @@ namespace TimeWorkTracking
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             string sql =
               "UPDATE Users Set " +
+                "crmId = " + Convert.ToUInt64(tbCrmID.Text.Trim().PadLeft(18,'0')) + ", " +
+                "name = N'" + tbName.Text.Trim() + "', " +
                 "note = N'" + tbNote.Text.Trim() + "', " +
                 "departmentId = " + ((DataRowView)cbDepartment.SelectedItem).Row["id"] + ", " +
                 "postId = " + ((DataRowView)cbPost.SelectedItem).Row["id"] + ", " +
@@ -285,7 +289,7 @@ namespace TimeWorkTracking
                 "noLunch = " + (chbLunch.Checked ? 1 : 0) + ", " +
                 "workSchemeId = " + ((DataRowView)cbSheme.SelectedItem).Row["id"] + ", " +
                 "uses = " + (chUse.Checked ? 1 : 0) + " " +
-              "WHERE extId = '" + tbUserID.Text.Trim() + "'";
+              "WHERE extId = '" + tbExtID.Text.Trim() + "'";
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
             index = lstwDataBaseUsers.SelectedIndex();          //сохранить индекс
             LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('')"));
@@ -298,20 +302,24 @@ namespace TimeWorkTracking
             ImportFromExel.ImportFromExcel();
         }
 
-        private void rbInsertUpdate_CheckedChanged(object sender, EventArgs e)
-        {
-            btUpdate.ImageIndex = rbInsert.Checked ? 1 : 2;
-            tbUserID.Visible = !rbInsert.Checked;                                    //отобразить id записи    
-        }
         //наехали на кнопку Insert загасили id
         private void btInsert_MouseHover(object sender, EventArgs e)
         {
-            tbUserID.Visible = false;
+            tbExtID.Visible = false;
+            lMsg.Visible = true;
+            btUpdate.Visible = false;
         }
         //уехали с кнопки Insert показали id
         private void btInsert_MouseLeave(object sender, EventArgs e)
         {
-            tbUserID.Visible = true;
+            tbExtID.Visible = true;
+            lMsg.Visible = false;
+            btUpdate.Visible = true;
+        }
+        //ввод только цифр
+        private void tbCrmID_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
         }
     }
 }
