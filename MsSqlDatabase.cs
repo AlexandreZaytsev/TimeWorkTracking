@@ -60,7 +60,7 @@ namespace TimeWorkTracking
                         ")";
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText = "INSERT INTO CalendarDateType(name) VALUES " +
-                        "(N'Выходной'), " +
+                        "(N'Полный'), " +
                         "(N'Сокращенный')";
                     sqlCommand.ExecuteNonQuery();
 
@@ -68,21 +68,22 @@ namespace TimeWorkTracking
                     sqlCommand.CommandText = "CREATE TABLE CalendarDateName (" +
                         "id int PRIMARY KEY IDENTITY, " +
                         "name VARCHAR(150) NOT NULL UNIQUE, " +                                         //*наименование
-                        "note VARCHAR(1024), " +                                                        //расшифровка
+                        "date Date NULL, " +                                                            //дата (год не учитываем)            
                         "uses bit DEFAULT 1 " +                                                         //флаг доступа для использования
                         ")";                                                        
                     sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText = "INSERT INTO CalendarDateName(name, note) VALUES " +
-                        "(N'Новый год', N'1 января'), " +
-                        "(N'Новогодние каникулы', ''), " +
-                        "(N'Рождество Христово', N'7 января'), " +
-                        "(N'День защитника Отечества', N'23 февраля'), " +
-                        "(N'Международный женский день', N'8 марта'), " +
-                        "(N'Праздник весны и труда', N'1 мая'), " +
-                        "(N'День Победы', N'9 мая'), " +
-                        "(N'День России', N'12 июня'), " +
-                        "(N'День народного единства', N'4 ноября'), " +
-                        "(N'Нерабочие дни', '')";
+                    sqlCommand.CommandText = "INSERT INTO CalendarDateName(name, date) VALUES " +
+                        "(N'Новый год', '2000.01.01'), " +
+                        "(N'Новогодние каникулы', NULL), " +
+                        "(N'Рождество Христово', '2000.01.07'), " +
+                        "(N'День защитника Отечества', '2000.02.23'), " +
+                        "(N'Международный женский день', '2000.03.08'), " +
+                        "(N'Праздник весны и труда', '2000.05.01'), " +
+                        "(N'День Победы', '2000.05.09'), " +
+                        "(N'День России', '2000.06.12'), " +
+                        "(N'День народного единства', '2000.11.04'), " +
+                        "(N'Нерабочие дни', NULL), " +
+                        "(N'Сокращенные дни', NULL)";
                     sqlCommand.ExecuteNonQuery();
 
                     //Подразделение (таблица для списка)
@@ -181,7 +182,8 @@ namespace TimeWorkTracking
                         "originalDate Date NOT NULL , " +                                               //оригинальная дата
                         "transferDate Date NOT NULL UNIQUE, " +                                         //*реальная дата (перенос)
                         "dateTypeId int NOT NULL FOREIGN KEY REFERENCES CalendarDateType(id), " +       //->ссылка на тип даты
-                        "dateNameId int NOT NULL FOREIGN KEY REFERENCES CalendarDateName(id) " +        //->ссылка на наименование даты    
+                        "dateNameId int NOT NULL FOREIGN KEY REFERENCES CalendarDateName(id) " +        //->ссылка на наименование даты
+                        "uses bit DEFAULT 1 " +                                                         //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
 
@@ -196,7 +198,7 @@ namespace TimeWorkTracking
                         "postId int NOT NULL FOREIGN KEY REFERENCES UserPost(id), " +                   //->ссылка на должность
                         "timeStart time NULL, " +                                                       //время начала работы по графику (без даты)    
                         "timeStop time NULL, " +                                                        //время окончания работы по графику (без даты)
-                        "noLunch bit DEFAULT 1, " +                                                       //флаг признака обеда
+                        "noLunch bit DEFAULT 1, " +                                                     //флаг признака обеда
                         "workSchemeId int NOT NULL FOREIGN KEY REFERENCES UserWorkScheme(id), " +       //->ссылка на схему работы
                         "uses bit DEFAULT 1 " +                                                         //флаг доступа для использования
                         ")";
@@ -226,7 +228,7 @@ namespace TimeWorkTracking
                         ")";
                     sqlCommand.ExecuteNonQuery();
 
-        //ИНИЦИАЛИЗПЦИЯ ДАННЫХ
+                    //ИНИЦИАЛИЗПЦИЯ ДАННЫХ
 
 
 
@@ -236,7 +238,32 @@ namespace TimeWorkTracking
 
 
 
-        //UDF (пользовательски функции для ускорения процесса выборки)
+                    //UDF (пользовательски функции для ускорения процесса выборки)
+                    //возвращает информацию о дате по наименованию   
+                    sqlCommand.CommandText = "Create function twt_GetDateInfo(@Name varchar(20) = '') @Date varchar(4) = ''" +
+                        "Returns table as Return " +
+                        "(" +
+                        "Select " +
+                            "c.id id, " +
+                            "c.transferDate dWork, " +
+                            "c.originalDate dSource, " +
+                            "n.name name, " +
+                            "t.name dType " +
+                        "From Calendars c, CalendarDateName n, CalendarDateType t " +
+                        "Where c.dateNameId = n.id " +
+                            "and c.dateTypeId = t.id " +
+                            "and (n.name like('%' + @Name + '%') " +
+                            " or (not c.originalDate IS NULL and DATE_FORMAT(c.originalDate,'%m%d') = @Date)) " +
+                            ")";
+
+                    /*
+select c.id id, c.transferDate dWork, c.originalDate dSource, n.name name, t.name dType 
+from Calendars c, CalendarDateName n, CalendarDateType t
+where c.dateNameId=n.id and c.dateTypeId=t.id 
+      and (n.name like('%' + '' + '%') 
+	  or (not c.originalDate IS NULL and RIGHT('00'+cast(DAY(c.originalDate) as varchar(2)),2) + RIGHT('00' +cast(MONTH(c.originalDate) as varchar(2)),2) = '0101'))                     
+                    */
+
                     //возвращает информацию пользователя по внешнему идентификатору   
                     sqlCommand.CommandText = "Create function twt_GetUserInfo(@extUserID varchar(20) = '') " +
                         "Returns table as Return " +
