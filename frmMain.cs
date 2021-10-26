@@ -104,32 +104,38 @@ namespace TimeWorkTracking
             frmAbout aboutBox = new frmAbout();
             aboutBox.ShowDialog(this);
         }
-
+        //кнопка настройки базы SQL
         private void tsbtDataBaseSQL_Click(object sender, EventArgs e)
         {
             frmDataBaseSQL frm = new frmDataBaseSQL {Owner = this};
             CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
             frm.ShowDialog();
         }
-
+        //кнопка настройки базы СКУД
         private void tsbtDataBasePACS_Click(object sender, EventArgs e)
         {
             frmDataBasePACS frm = new frmDataBasePACS {Owner = this};
             CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
             frm.ShowDialog();
         }
-
+        //кнопка настройки специальныз отметок
         private void tsbtGuideMarks_Click(object sender, EventArgs e)
         {
             frmSpecialMarks frm = new frmSpecialMarks { Owner = this };
             frm.ShowDialog();
         }
+        //кнопка настройки сотрудников
         private void TsbtGuideUsers_Click(object sender, EventArgs e)
         {
             frmUsers frm = new frmUsers { Owner = this };
             frm.ShowDialog();
         }
-
+        //кнопка настройки календаря
+        private void tsbtGuideCalendar_Click(object sender, EventArgs e)
+        {
+            frmCalendar frm = new frmCalendar { Owner = this };
+            frm.ShowDialog();
+        }
         //проверить соединение с базами
         private void CheckConnects()
         {
@@ -160,8 +166,6 @@ namespace TimeWorkTracking
             }
             */
         }
-
-
     }
 
 

@@ -33,13 +33,13 @@ namespace TimeWorkTracking
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUsers));
             this.mainPanelUsers = new System.Windows.Forms.Panel();
             this.btInsert = new System.Windows.Forms.Button();
-            this.imageButton = new System.Windows.Forms.ImageList(this.components);
+            this.imgListButtonUsers = new System.Windows.Forms.ImageList(this.components);
             this.btImport = new System.Windows.Forms.Button();
             this.btUpdate = new System.Windows.Forms.Button();
             this.lstwDataBaseUsers = new System.Windows.Forms.ListView();
             this.access = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.fio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.imglStatus = new System.Windows.Forms.ImageList(this.components);
+            this.imgListStatusUsers = new System.Windows.Forms.ImageList(this.components);
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.tbCrmID = new System.Windows.Forms.TextBox();
@@ -68,7 +68,7 @@ namespace TimeWorkTracking
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.lMsg = new System.Windows.Forms.Label();
-            this.toolTipMsgUser = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTipMsgUsers = new System.Windows.Forms.ToolTip(this.components);
             this.mainPanelUsers.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -86,7 +86,7 @@ namespace TimeWorkTracking
             this.mainPanelUsers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanelUsers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mainPanelUsers.Location = new System.Drawing.Point(0, 0);
-            this.mainPanelUsers.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.mainPanelUsers.Margin = new System.Windows.Forms.Padding(2);
             this.mainPanelUsers.Name = "mainPanelUsers";
             this.mainPanelUsers.Size = new System.Drawing.Size(669, 304);
             this.mainPanelUsers.TabIndex = 0;
@@ -95,9 +95,9 @@ namespace TimeWorkTracking
             // 
             this.btInsert.Enabled = false;
             this.btInsert.ImageIndex = 1;
-            this.btInsert.ImageList = this.imageButton;
+            this.btInsert.ImageList = this.imgListButtonUsers;
             this.btInsert.Location = new System.Drawing.Point(292, 271);
-            this.btInsert.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btInsert.Margin = new System.Windows.Forms.Padding(2);
             this.btInsert.Name = "btInsert";
             this.btInsert.Size = new System.Drawing.Size(105, 26);
             this.btInsert.TabIndex = 28;
@@ -109,28 +109,28 @@ namespace TimeWorkTracking
             this.btInsert.MouseLeave += new System.EventHandler(this.btInsert_MouseLeave);
             this.btInsert.MouseHover += new System.EventHandler(this.btInsert_MouseHover);
             // 
-            // imageButton
+            // imgListButtonUsers
             // 
-            this.imageButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageButton.ImageStream")));
-            this.imageButton.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageButton.Images.SetKeyName(0, "db_48.png");
-            this.imageButton.Images.SetKeyName(1, "db_add_48.png");
-            this.imageButton.Images.SetKeyName(2, "db_edit_48.png");
-            this.imageButton.Images.SetKeyName(3, "db_find_48.png");
-            this.imageButton.Images.SetKeyName(4, "db_lock_48.png");
-            this.imageButton.Images.SetKeyName(5, "db_unlock_48.png");
-            this.imageButton.Images.SetKeyName(6, "db_upload_48.png");
-            this.imageButton.Images.SetKeyName(7, "db_import_48.png");
-            this.imageButton.Images.SetKeyName(8, "db_export_48.png");
-            this.imageButton.Images.SetKeyName(9, "attention_48.png");
-            this.imageButton.Images.SetKeyName(10, "info_48.png");
+            this.imgListButtonUsers.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgListButtonUsers.ImageStream")));
+            this.imgListButtonUsers.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgListButtonUsers.Images.SetKeyName(0, "db_48.png");
+            this.imgListButtonUsers.Images.SetKeyName(1, "db_add_48.png");
+            this.imgListButtonUsers.Images.SetKeyName(2, "db_edit_48.png");
+            this.imgListButtonUsers.Images.SetKeyName(3, "db_find_48.png");
+            this.imgListButtonUsers.Images.SetKeyName(4, "db_lock_48.png");
+            this.imgListButtonUsers.Images.SetKeyName(5, "db_unlock_48.png");
+            this.imgListButtonUsers.Images.SetKeyName(6, "db_upload_48.png");
+            this.imgListButtonUsers.Images.SetKeyName(7, "db_import_48.png");
+            this.imgListButtonUsers.Images.SetKeyName(8, "db_export_48.png");
+            this.imgListButtonUsers.Images.SetKeyName(9, "attention_48.png");
+            this.imgListButtonUsers.Images.SetKeyName(10, "info_48.png");
             // 
             // btImport
             // 
             this.btImport.ImageIndex = 7;
-            this.btImport.ImageList = this.imageButton;
+            this.btImport.ImageList = this.imgListButtonUsers;
             this.btImport.Location = new System.Drawing.Point(426, 271);
-            this.btImport.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btImport.Margin = new System.Windows.Forms.Padding(2);
             this.btImport.Name = "btImport";
             this.btImport.Size = new System.Drawing.Size(109, 26);
             this.btImport.TabIndex = 23;
@@ -144,9 +144,9 @@ namespace TimeWorkTracking
             // 
             this.btUpdate.Enabled = false;
             this.btUpdate.ImageIndex = 2;
-            this.btUpdate.ImageList = this.imageButton;
+            this.btUpdate.ImageList = this.imgListButtonUsers;
             this.btUpdate.Location = new System.Drawing.Point(556, 271);
-            this.btUpdate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btUpdate.Margin = new System.Windows.Forms.Padding(2);
             this.btUpdate.Name = "btUpdate";
             this.btUpdate.Size = new System.Drawing.Size(105, 26);
             this.btUpdate.TabIndex = 21;
@@ -164,11 +164,11 @@ namespace TimeWorkTracking
             this.lstwDataBaseUsers.HideSelection = false;
             this.lstwDataBaseUsers.LabelWrap = false;
             this.lstwDataBaseUsers.Location = new System.Drawing.Point(8, 10);
-            this.lstwDataBaseUsers.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lstwDataBaseUsers.Margin = new System.Windows.Forms.Padding(2);
             this.lstwDataBaseUsers.MultiSelect = false;
             this.lstwDataBaseUsers.Name = "lstwDataBaseUsers";
             this.lstwDataBaseUsers.Size = new System.Drawing.Size(281, 288);
-            this.lstwDataBaseUsers.StateImageList = this.imglStatus;
+            this.lstwDataBaseUsers.StateImageList = this.imgListStatusUsers;
             this.lstwDataBaseUsers.TabIndex = 18;
             this.lstwDataBaseUsers.UseCompatibleStateImageBehavior = false;
             this.lstwDataBaseUsers.View = System.Windows.Forms.View.SmallIcon;
@@ -186,14 +186,14 @@ namespace TimeWorkTracking
             this.fio.Text = "ФИО";
             this.fio.Width = 231;
             // 
-            // imglStatus
+            // imgListStatusUsers
             // 
-            this.imglStatus.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imglStatus.ImageStream")));
-            this.imglStatus.TransparentColor = System.Drawing.Color.Transparent;
-            this.imglStatus.Images.SetKeyName(0, "off5m.png");
-            this.imglStatus.Images.SetKeyName(1, "on5m.png");
-            this.imglStatus.Images.SetKeyName(2, "db_add_48x72.png");
-            this.imglStatus.Images.SetKeyName(3, "db_edit_48x72.png");
+            this.imgListStatusUsers.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgListStatusUsers.ImageStream")));
+            this.imgListStatusUsers.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgListStatusUsers.Images.SetKeyName(0, "off5m.png");
+            this.imgListStatusUsers.Images.SetKeyName(1, "on5m.png");
+            this.imgListStatusUsers.Images.SetKeyName(2, "db_add_48x72.png");
+            this.imgListStatusUsers.Images.SetKeyName(3, "db_edit_48x72.png");
             // 
             // panel3
             // 
@@ -218,7 +218,7 @@ namespace TimeWorkTracking
             this.panel3.Controls.Add(this.label6);
             this.panel3.Controls.Add(this.label5);
             this.panel3.Location = new System.Drawing.Point(292, 10);
-            this.panel3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel3.Margin = new System.Windows.Forms.Padding(2);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(370, 256);
             this.panel3.TabIndex = 16;
@@ -227,7 +227,7 @@ namespace TimeWorkTracking
             // 
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel4.Location = new System.Drawing.Point(7, 31);
-            this.panel4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel4.Margin = new System.Windows.Forms.Padding(2);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(357, 1);
             this.panel4.TabIndex = 28;
@@ -238,7 +238,7 @@ namespace TimeWorkTracking
             this.tbCrmID.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbCrmID.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.tbCrmID.Location = new System.Drawing.Point(70, 9);
-            this.tbCrmID.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbCrmID.Margin = new System.Windows.Forms.Padding(2);
             this.tbCrmID.MaxLength = 18;
             this.tbCrmID.Name = "tbCrmID";
             this.tbCrmID.Size = new System.Drawing.Size(128, 14);
@@ -253,7 +253,7 @@ namespace TimeWorkTracking
             this.tbNote.Name = "tbNote";
             this.tbNote.Size = new System.Drawing.Size(357, 44);
             this.tbNote.TabIndex = 25;
-            this.toolTipMsgUser.SetToolTip(this.tbNote, "Комментарии");
+            this.toolTipMsgUsers.SetToolTip(this.tbNote, "Комментарии");
             // 
             // label9
             // 
@@ -281,7 +281,7 @@ namespace TimeWorkTracking
             this.tbName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.tbName.BackColor = System.Drawing.SystemColors.Window;
             this.tbName.Location = new System.Drawing.Point(50, 38);
-            this.tbName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbName.Margin = new System.Windows.Forms.Padding(2);
             this.tbName.Name = "tbName";
             this.tbName.Size = new System.Drawing.Size(236, 21);
             this.tbName.TabIndex = 20;
@@ -294,7 +294,7 @@ namespace TimeWorkTracking
             this.tbExtID.Enabled = false;
             this.tbExtID.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.tbExtID.Location = new System.Drawing.Point(260, 9);
-            this.tbExtID.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbExtID.Margin = new System.Windows.Forms.Padding(2);
             this.tbExtID.Name = "tbExtID";
             this.tbExtID.Size = new System.Drawing.Size(104, 14);
             this.tbExtID.TabIndex = 22;
@@ -306,7 +306,7 @@ namespace TimeWorkTracking
             this.udAfterM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.udAfterM.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.udAfterM.Location = new System.Drawing.Point(306, 182);
-            this.udAfterM.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.udAfterM.Margin = new System.Windows.Forms.Padding(2);
             this.udAfterM.Name = "udAfterM";
             this.udAfterM.ShowUpDown = true;
             this.udAfterM.Size = new System.Drawing.Size(43, 26);
@@ -320,7 +320,7 @@ namespace TimeWorkTracking
             this.udAfterH.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.udAfterH.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.udAfterH.Location = new System.Drawing.Point(244, 182);
-            this.udAfterH.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.udAfterH.Margin = new System.Windows.Forms.Padding(2);
             this.udAfterH.Name = "udAfterH";
             this.udAfterH.ShowUpDown = true;
             this.udAfterH.Size = new System.Drawing.Size(43, 26);
@@ -334,7 +334,7 @@ namespace TimeWorkTracking
             this.udBeforeM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.udBeforeM.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.udBeforeM.Location = new System.Drawing.Point(181, 182);
-            this.udBeforeM.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.udBeforeM.Margin = new System.Windows.Forms.Padding(2);
             this.udBeforeM.Name = "udBeforeM";
             this.udBeforeM.ShowUpDown = true;
             this.udBeforeM.Size = new System.Drawing.Size(43, 26);
@@ -351,16 +351,16 @@ namespace TimeWorkTracking
             this.chUse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.chUse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.chUse.ImageIndex = 0;
-            this.chUse.ImageList = this.imglStatus;
+            this.chUse.ImageList = this.imgListStatusUsers;
             this.chUse.Location = new System.Drawing.Point(285, 35);
-            this.chUse.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chUse.Margin = new System.Windows.Forms.Padding(2);
             this.chUse.Name = "chUse";
             this.chUse.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.chUse.Size = new System.Drawing.Size(84, 25);
             this.chUse.TabIndex = 19;
             this.chUse.Text = "Доступ";
             this.chUse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.toolTipMsgUser.SetToolTip(this.chUse, "Сотрудник активен");
+            this.toolTipMsgUsers.SetToolTip(this.chUse, "Сотрудник активен");
             this.chUse.UseVisualStyleBackColor = true;
             this.chUse.CheckedChanged += new System.EventHandler(this.chUse_CheckedChanged);
             // 
@@ -372,7 +372,7 @@ namespace TimeWorkTracking
             this.udBeforeH.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.udBeforeH.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.udBeforeH.Location = new System.Drawing.Point(120, 182);
-            this.udBeforeH.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.udBeforeH.Margin = new System.Windows.Forms.Padding(2);
             this.udBeforeH.Name = "udBeforeH";
             this.udBeforeH.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.udBeforeH.ShowUpDown = true;
@@ -398,7 +398,7 @@ namespace TimeWorkTracking
             this.panel2.Controls.Add(this.chbLunch);
             this.panel2.Controls.Add(this.cbSheme);
             this.panel2.Location = new System.Drawing.Point(7, 212);
-            this.panel2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(358, 36);
             this.panel2.TabIndex = 15;
@@ -417,7 +417,7 @@ namespace TimeWorkTracking
             // 
             this.chbLunch.AutoSize = true;
             this.chbLunch.Location = new System.Drawing.Point(206, 9);
-            this.chbLunch.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chbLunch.Margin = new System.Windows.Forms.Padding(2);
             this.chbLunch.Name = "chbLunch";
             this.chbLunch.Size = new System.Drawing.Size(144, 19);
             this.chbLunch.TabIndex = 14;
@@ -429,7 +429,7 @@ namespace TimeWorkTracking
             this.cbSheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbSheme.FormattingEnabled = true;
             this.cbSheme.Location = new System.Drawing.Point(104, 6);
-            this.cbSheme.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbSheme.Margin = new System.Windows.Forms.Padding(2);
             this.cbSheme.Name = "cbSheme";
             this.cbSheme.Size = new System.Drawing.Size(98, 23);
             this.cbSheme.TabIndex = 13;
@@ -442,7 +442,7 @@ namespace TimeWorkTracking
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Location = new System.Drawing.Point(7, 112);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(358, 65);
             this.panel1.TabIndex = 2;
@@ -454,7 +454,7 @@ namespace TimeWorkTracking
             this.cbPost.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.cbPost.FormattingEnabled = true;
             this.cbPost.Location = new System.Drawing.Point(104, 33);
-            this.cbPost.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbPost.Margin = new System.Windows.Forms.Padding(2);
             this.cbPost.Name = "cbPost";
             this.cbPost.Size = new System.Drawing.Size(246, 23);
             this.cbPost.TabIndex = 6;
@@ -468,7 +468,7 @@ namespace TimeWorkTracking
             this.cbDepartment.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.cbDepartment.FormattingEnabled = true;
             this.cbDepartment.Location = new System.Drawing.Point(104, 7);
-            this.cbDepartment.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbDepartment.Margin = new System.Windows.Forms.Padding(2);
             this.cbDepartment.Name = "cbDepartment";
             this.cbDepartment.Size = new System.Drawing.Size(246, 23);
             this.cbDepartment.TabIndex = 5;
@@ -546,7 +546,7 @@ namespace TimeWorkTracking
             this.lMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lMsg.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lMsg.ImageIndex = 6;
-            this.lMsg.ImageList = this.imageButton;
+            this.lMsg.ImageList = this.imgListButtonUsers;
             this.lMsg.Location = new System.Drawing.Point(499, 275);
             this.lMsg.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lMsg.Name = "lMsg";
@@ -562,7 +562,7 @@ namespace TimeWorkTracking
             this.ClientSize = new System.Drawing.Size(669, 304);
             this.Controls.Add(this.mainPanelUsers);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "frmUsers";
             this.Text = "Сотрудники";
             this.Load += new System.EventHandler(this.frmUsers_Load);
@@ -608,11 +608,11 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ColumnHeader access;
         private System.Windows.Forms.ColumnHeader fio;
         private System.Windows.Forms.TextBox tbName;
-        public System.Windows.Forms.ImageList imglStatus;
-        private System.Windows.Forms.ImageList imageButton;
+        public System.Windows.Forms.ImageList imgListStatusUsers;
+        private System.Windows.Forms.ImageList imgListButtonUsers;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox tbNote;
-        private System.Windows.Forms.ToolTip toolTipMsgUser;
+        private System.Windows.Forms.ToolTip toolTipMsgUsers;
         private System.Windows.Forms.Button btInsert;
         private System.Windows.Forms.TextBox tbCrmID;
         private System.Windows.Forms.Label label10;

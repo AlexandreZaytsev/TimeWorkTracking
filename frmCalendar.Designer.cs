@@ -1,7 +1,7 @@
 ﻿
 namespace TimeWorkTracking
 {
-    partial class frmSpecialMarks
+    partial class frmCalendar
     {
         /// <summary>
         /// Required designer variable.
@@ -30,11 +30,9 @@ namespace TimeWorkTracking
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSpecialMarks));
-            this.imgListStatusMarks = new System.Windows.Forms.ImageList(this.components);
-            this.mainPanelSpecialMarks = new System.Windows.Forms.Panel();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCalendar));
+            this.mainPanelCalendar = new System.Windows.Forms.Panel();
             this.btUpdate = new System.Windows.Forms.Button();
-            this.imgListButtonMarks = new System.Windows.Forms.ImageList(this.components);
             this.btInsert = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tbID = new System.Windows.Forms.TextBox();
@@ -52,41 +50,34 @@ namespace TimeWorkTracking
             this.code = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lMsg = new System.Windows.Forms.Label();
-            this.toolTipMsgMarks = new System.Windows.Forms.ToolTip(this.components);
-            this.mainPanelSpecialMarks.SuspendLayout();
+            this.imgListStatusCalendar = new System.Windows.Forms.ImageList(this.components);
+            this.imgListButtonCalendar = new System.Windows.Forms.ImageList(this.components);
+            this.toolTipMsgCalendar = new System.Windows.Forms.ToolTip(this.components);
+            this.mainPanelCalendar.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // imgListStatusMarks
+            // mainPanelCalendar
             // 
-            this.imgListStatusMarks.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgListStatusMarks.ImageStream")));
-            this.imgListStatusMarks.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgListStatusMarks.Images.SetKeyName(0, "off5m.png");
-            this.imgListStatusMarks.Images.SetKeyName(1, "on5m.png");
-            this.imgListStatusMarks.Images.SetKeyName(2, "db_add_48x72.png");
-            this.imgListStatusMarks.Images.SetKeyName(3, "db_edit_48x72.png");
-            // 
-            // mainPanelSpecialMarks
-            // 
-            this.mainPanelSpecialMarks.Controls.Add(this.btUpdate);
-            this.mainPanelSpecialMarks.Controls.Add(this.btInsert);
-            this.mainPanelSpecialMarks.Controls.Add(this.panel1);
-            this.mainPanelSpecialMarks.Controls.Add(this.lstwDataBaseSpecialMarks);
-            this.mainPanelSpecialMarks.Controls.Add(this.lMsg);
-            this.mainPanelSpecialMarks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainPanelSpecialMarks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.mainPanelSpecialMarks.Location = new System.Drawing.Point(0, 0);
-            this.mainPanelSpecialMarks.Margin = new System.Windows.Forms.Padding(2);
-            this.mainPanelSpecialMarks.Name = "mainPanelSpecialMarks";
-            this.mainPanelSpecialMarks.Size = new System.Drawing.Size(674, 233);
-            this.mainPanelSpecialMarks.TabIndex = 2;
+            this.mainPanelCalendar.Controls.Add(this.btUpdate);
+            this.mainPanelCalendar.Controls.Add(this.btInsert);
+            this.mainPanelCalendar.Controls.Add(this.panel1);
+            this.mainPanelCalendar.Controls.Add(this.lstwDataBaseSpecialMarks);
+            this.mainPanelCalendar.Controls.Add(this.lMsg);
+            this.mainPanelCalendar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainPanelCalendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.mainPanelCalendar.Location = new System.Drawing.Point(0, 0);
+            this.mainPanelCalendar.Margin = new System.Windows.Forms.Padding(2);
+            this.mainPanelCalendar.Name = "mainPanelCalendar";
+            this.mainPanelCalendar.Size = new System.Drawing.Size(693, 250);
+            this.mainPanelCalendar.TabIndex = 3;
             // 
             // btUpdate
             // 
             this.btUpdate.Enabled = false;
             this.btUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btUpdate.ImageIndex = 2;
-            this.btUpdate.ImageList = this.imgListButtonMarks;
+            this.btUpdate.ImageList = this.imgListButtonCalendar;
             this.btUpdate.Location = new System.Drawing.Point(564, 202);
             this.btUpdate.Margin = new System.Windows.Forms.Padding(2);
             this.btUpdate.Name = "btUpdate";
@@ -96,28 +87,13 @@ namespace TimeWorkTracking
             this.btUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btUpdate.UseVisualStyleBackColor = true;
-            this.btUpdate.Click += new System.EventHandler(this.btUpdate_Click);
-            // 
-            // imgListButtonMarks
-            // 
-            this.imgListButtonMarks.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgListButtonMarks.ImageStream")));
-            this.imgListButtonMarks.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgListButtonMarks.Images.SetKeyName(0, "db_48.png");
-            this.imgListButtonMarks.Images.SetKeyName(1, "db_add_48.png");
-            this.imgListButtonMarks.Images.SetKeyName(2, "db_edit_48.png");
-            this.imgListButtonMarks.Images.SetKeyName(3, "db_find_48.png");
-            this.imgListButtonMarks.Images.SetKeyName(4, "db_lock_48.png");
-            this.imgListButtonMarks.Images.SetKeyName(5, "db_unlock_48.png");
-            this.imgListButtonMarks.Images.SetKeyName(6, "db_upload_48.png");
-            this.imgListButtonMarks.Images.SetKeyName(7, "db_import_48.png");
-            this.imgListButtonMarks.Images.SetKeyName(8, "db_export_48.png");
             // 
             // btInsert
             // 
             this.btInsert.Enabled = false;
             this.btInsert.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btInsert.ImageIndex = 1;
-            this.btInsert.ImageList = this.imgListButtonMarks;
+            this.btInsert.ImageList = this.imgListButtonCalendar;
             this.btInsert.Location = new System.Drawing.Point(384, 202);
             this.btInsert.Margin = new System.Windows.Forms.Padding(2);
             this.btInsert.Name = "btInsert";
@@ -127,9 +103,6 @@ namespace TimeWorkTracking
             this.btInsert.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btInsert.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btInsert.UseVisualStyleBackColor = true;
-            this.btInsert.Click += new System.EventHandler(this.btInsert_Click);
-            this.btInsert.MouseLeave += new System.EventHandler(this.btInsert_MouseLeave);
-            this.btInsert.MouseHover += new System.EventHandler(this.btInsert_MouseHover);
             // 
             // panel1
             // 
@@ -186,7 +159,7 @@ namespace TimeWorkTracking
             this.chUse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.chUse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.chUse.ImageIndex = 0;
-            this.chUse.ImageList = this.imgListStatusMarks;
+            this.chUse.ImageList = this.imgListStatusCalendar;
             this.chUse.Location = new System.Drawing.Point(194, 2);
             this.chUse.Margin = new System.Windows.Forms.Padding(2);
             this.chUse.Name = "chUse";
@@ -196,7 +169,6 @@ namespace TimeWorkTracking
             this.chUse.Text = "Доступ";
             this.chUse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.chUse.UseVisualStyleBackColor = true;
-            this.chUse.CheckedChanged += new System.EventHandler(this.chUse_CheckedChanged);
             // 
             // tbName
             // 
@@ -207,7 +179,6 @@ namespace TimeWorkTracking
             this.tbName.Name = "tbName";
             this.tbName.Size = new System.Drawing.Size(270, 21);
             this.tbName.TabIndex = 3;
-            this.tbName.TextChanged += new System.EventHandler(this.tbName_TextChanged);
             // 
             // tbCodeDigital
             // 
@@ -262,13 +233,9 @@ namespace TimeWorkTracking
             this.lstwDataBaseSpecialMarks.MultiSelect = false;
             this.lstwDataBaseSpecialMarks.Name = "lstwDataBaseSpecialMarks";
             this.lstwDataBaseSpecialMarks.Size = new System.Drawing.Size(370, 218);
-            this.lstwDataBaseSpecialMarks.StateImageList = this.imgListStatusMarks;
             this.lstwDataBaseSpecialMarks.TabIndex = 15;
             this.lstwDataBaseSpecialMarks.UseCompatibleStateImageBehavior = false;
             this.lstwDataBaseSpecialMarks.View = System.Windows.Forms.View.SmallIcon;
-            this.lstwDataBaseSpecialMarks.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstwDataBaseSpecialMarks_ColumnClick);
-            this.lstwDataBaseSpecialMarks.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.lstwDataBaseSpecialMarks_ColumnWidthChanging);
-            this.lstwDataBaseSpecialMarks.SelectedIndexChanged += new System.EventHandler(this.lstwDataBaseSpecialMarks_SelectedIndexChanged);
             // 
             // used
             // 
@@ -299,7 +266,7 @@ namespace TimeWorkTracking
             this.lMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lMsg.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lMsg.ImageIndex = 6;
-            this.lMsg.ImageList = this.imgListButtonMarks;
+            this.lMsg.ImageList = this.imgListButtonCalendar;
             this.lMsg.Location = new System.Drawing.Point(507, 206);
             this.lMsg.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lMsg.Name = "lMsg";
@@ -308,19 +275,40 @@ namespace TimeWorkTracking
             this.lMsg.Text = "      Новая запись в БД";
             this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // frmSpecialMarks
+            // imgListStatusCalendar
+            // 
+            this.imgListStatusCalendar.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgListStatusCalendar.ImageStream")));
+            this.imgListStatusCalendar.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgListStatusCalendar.Images.SetKeyName(0, "off5m.png");
+            this.imgListStatusCalendar.Images.SetKeyName(1, "on5m.png");
+            this.imgListStatusCalendar.Images.SetKeyName(2, "db_add_48x72.png");
+            this.imgListStatusCalendar.Images.SetKeyName(3, "db_edit_48x72.png");
+            // 
+            // imgListButtonCalendar
+            // 
+            this.imgListButtonCalendar.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgListButtonCalendar.ImageStream")));
+            this.imgListButtonCalendar.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgListButtonCalendar.Images.SetKeyName(0, "db_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(1, "db_add_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(2, "db_edit_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(3, "db_find_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(4, "db_lock_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(5, "db_unlock_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(6, "db_upload_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(7, "db_import_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(8, "db_export_48.png");
+            // 
+            // frmCalendar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(674, 233);
-            this.Controls.Add(this.mainPanelSpecialMarks);
+            this.ClientSize = new System.Drawing.Size(693, 250);
+            this.Controls.Add(this.mainPanelCalendar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "frmSpecialMarks";
-            this.Text = "Специальные отметки";
-            this.Load += new System.EventHandler(this.frmSpecialMarks_Load);
-            this.mainPanelSpecialMarks.ResumeLayout(false);
-            this.mainPanelSpecialMarks.PerformLayout();
+            this.Name = "frmCalendar";
+            this.Text = "Производственный календарь";
+            this.mainPanelCalendar.ResumeLayout(false);
+            this.mainPanelCalendar.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
@@ -328,14 +316,15 @@ namespace TimeWorkTracking
         }
 
         #endregion
-        private System.Windows.Forms.ImageList imgListStatusMarks;
-        private System.Windows.Forms.Panel mainPanelSpecialMarks;
+
+        private System.Windows.Forms.Panel mainPanelCalendar;
         private System.Windows.Forms.Button btUpdate;
         private System.Windows.Forms.Button btInsert;
-        private System.Windows.Forms.CheckBox chUse;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TextBox tbID;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbCodeLetter;
+        private System.Windows.Forms.CheckBox chUse;
         private System.Windows.Forms.TextBox tbName;
         private System.Windows.Forms.TextBox tbCodeDigital;
         private System.Windows.Forms.Label label5;
@@ -346,9 +335,9 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ColumnHeader num;
         private System.Windows.Forms.ColumnHeader code;
         private System.Windows.Forms.ColumnHeader name;
-        private System.Windows.Forms.ImageList imgListButtonMarks;
-        private System.Windows.Forms.ToolTip toolTipMsgMarks;
         private System.Windows.Forms.Label lMsg;
-        private System.Windows.Forms.TextBox tbID;
+        private System.Windows.Forms.ImageList imgListStatusCalendar;
+        private System.Windows.Forms.ImageList imgListButtonCalendar;
+        private System.Windows.Forms.ToolTip toolTipMsgCalendar;
     }
 }

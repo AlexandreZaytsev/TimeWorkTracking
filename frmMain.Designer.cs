@@ -64,63 +64,56 @@ namespace TimeWorkTracking
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 34);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(13, 28);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(21, 17);
+            this.label1.Size = new System.Drawing.Size(18, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "ID";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(21, 78);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(16, 63);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(72, 17);
+            this.label2.Size = new System.Drawing.Size(54, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "FirstName";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(25, 124);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(19, 101);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(72, 17);
+            this.label3.Size = new System.Drawing.Size(55, 13);
             this.label3.TabIndex = 2;
             this.label3.Text = "LastName";
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(116, 34);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox1.Location = new System.Drawing.Point(87, 28);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(132, 22);
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 3;
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(116, 78);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox2.Location = new System.Drawing.Point(87, 63);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(132, 22);
+            this.textBox2.Size = new System.Drawing.Size(100, 20);
             this.textBox2.TabIndex = 4;
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(116, 124);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox3.Location = new System.Drawing.Point(87, 101);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(132, 22);
+            this.textBox3.Size = new System.Drawing.Size(100, 20);
             this.textBox3.TabIndex = 5;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(316, 21);
-            this.button1.Margin = new System.Windows.Forms.Padding(4);
+            this.button1.Location = new System.Drawing.Point(237, 17);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 28);
+            this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 6;
             this.button1.Text = "INSERT";
             this.button1.UseVisualStyleBackColor = true;
@@ -128,10 +121,9 @@ namespace TimeWorkTracking
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(316, 73);
-            this.button2.Margin = new System.Windows.Forms.Padding(4);
+            this.button2.Location = new System.Drawing.Point(237, 59);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 28);
+            this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 7;
             this.button2.Text = "UPDATE";
             this.button2.UseVisualStyleBackColor = true;
@@ -139,10 +131,9 @@ namespace TimeWorkTracking
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(316, 119);
-            this.button3.Margin = new System.Windows.Forms.Padding(4);
+            this.button3.Location = new System.Drawing.Point(237, 97);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(100, 28);
+            this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 8;
             this.button3.Text = "DELETE";
             this.button3.UseVisualStyleBackColor = true;
@@ -151,11 +142,10 @@ namespace TimeWorkTracking
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 181);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridView1.Location = new System.Drawing.Point(0, 147);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.Size = new System.Drawing.Size(869, 242);
+            this.dataGridView1.Size = new System.Drawing.Size(652, 197);
             this.dataGridView1.TabIndex = 9;
             // 
             // statusStripMain
@@ -176,19 +166,19 @@ namespace TimeWorkTracking
             this.tsbtReportTotal,
             this.toolStripStatusLabel5,
             this.toolStripStatusLabel6});
-            this.statusStripMain.Location = new System.Drawing.Point(0, 436);
+            this.statusStripMain.Location = new System.Drawing.Point(0, 349);
             this.statusStripMain.Name = "statusStripMain";
-            this.statusStripMain.Padding = new System.Windows.Forms.Padding(1, 0, 13, 0);
+            this.statusStripMain.Padding = new System.Windows.Forms.Padding(1, 0, 10, 0);
             this.statusStripMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStripMain.ShowItemToolTips = true;
-            this.statusStripMain.Size = new System.Drawing.Size(884, 26);
+            this.statusStripMain.Size = new System.Drawing.Size(663, 26);
             this.statusStripMain.TabIndex = 15;
             this.statusStripMain.Text = "statusStrip1";
             // 
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(55, 20);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(46, 21);
             this.toolStripStatusLabel2.Text = "Статус:";
             this.toolStripStatusLabel2.ToolTipText = "12431234";
             // 
@@ -198,7 +188,7 @@ namespace TimeWorkTracking
             this.tsbtDataBaseSQL.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbtDataBaseSQL.Name = "tsbtDataBaseSQL";
             this.tsbtDataBaseSQL.ShowDropDownArrow = false;
-            this.tsbtDataBaseSQL.Size = new System.Drawing.Size(82, 24);
+            this.tsbtDataBaseSQL.Size = new System.Drawing.Size(70, 24);
             this.tsbtDataBaseSQL.Text = "БД SQL";
             this.tsbtDataBaseSQL.ToolTipText = "Подключение к SQL базе учета рабочего времени";
             this.tsbtDataBaseSQL.Click += new System.EventHandler(this.tsbtDataBaseSQL_Click);
@@ -209,7 +199,7 @@ namespace TimeWorkTracking
             this.tsbtDataBasePACS.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbtDataBasePACS.Name = "tsbtDataBasePACS";
             this.tsbtDataBasePACS.ShowDropDownArrow = false;
-            this.tsbtDataBasePACS.Size = new System.Drawing.Size(93, 24);
+            this.tsbtDataBasePACS.Size = new System.Drawing.Size(79, 24);
             this.tsbtDataBasePACS.Text = "БД СКУД";
             this.tsbtDataBasePACS.ToolTipText = "Подключение к web сервису СКУД";
             this.tsbtDataBasePACS.Click += new System.EventHandler(this.tsbtDataBasePACS_Click);
@@ -218,7 +208,7 @@ namespace TimeWorkTracking
             // 
             this.toolStripStatusLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(264, 20);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(97, 21);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "    Справочники:";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -254,11 +244,12 @@ namespace TimeWorkTracking
             this.tsbtGuideCalendar.ShowDropDownArrow = false;
             this.tsbtGuideCalendar.Size = new System.Drawing.Size(24, 24);
             this.tsbtGuideCalendar.Text = "Производственный календарь";
+            this.tsbtGuideCalendar.Click += new System.EventHandler(this.tsbtGuideCalendar_Click);
             // 
             // toolStripStatusLabel3
             // 
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(152, 20);
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(121, 21);
             this.toolStripStatusLabel3.Text = "    Печатные Формы:";
             this.toolStripStatusLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -285,7 +276,7 @@ namespace TimeWorkTracking
             // toolStripStatusLabel4
             // 
             this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
-            this.toolStripStatusLabel4.Size = new System.Drawing.Size(67, 20);
+            this.toolStripStatusLabel4.Size = new System.Drawing.Size(54, 21);
             this.toolStripStatusLabel4.Text = "    Отчет:";
             this.toolStripStatusLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -302,12 +293,12 @@ namespace TimeWorkTracking
             // toolStripStatusLabel5
             // 
             this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
-            this.toolStripStatusLabel5.Size = new System.Drawing.Size(0, 20);
+            this.toolStripStatusLabel5.Size = new System.Drawing.Size(0, 21);
             // 
             // toolStripStatusLabel6
             // 
             this.toolStripStatusLabel6.Name = "toolStripStatusLabel6";
-            this.toolStripStatusLabel6.Size = new System.Drawing.Size(13, 20);
+            this.toolStripStatusLabel6.Size = new System.Drawing.Size(10, 21);
             this.toolStripStatusLabel6.Text = " ";
             // 
             // imageListStrip
@@ -319,9 +310,9 @@ namespace TimeWorkTracking
             // 
             // frmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(884, 462);
+            this.ClientSize = new System.Drawing.Size(663, 375);
             this.Controls.Add(this.statusStripMain);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.button3);
@@ -335,10 +326,9 @@ namespace TimeWorkTracking
             this.Controls.Add(this.label1);
             this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(899, 499);
+            this.MinimumSize = new System.Drawing.Size(678, 413);
             this.Name = "frmMain";
             this.Text = "Учет рабочего времени";
             this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.frmMain_HelpButtonClicked);
