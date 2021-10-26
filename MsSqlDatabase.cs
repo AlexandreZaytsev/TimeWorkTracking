@@ -182,7 +182,7 @@ namespace TimeWorkTracking
                         "originalDate Date NOT NULL , " +                                               //оригинальная дата
                         "transferDate Date NOT NULL UNIQUE, " +                                         //*реальная дата (перенос)
                         "dateTypeId int NOT NULL FOREIGN KEY REFERENCES CalendarDateType(id), " +       //->ссылка на тип даты
-                        "dateNameId int NOT NULL FOREIGN KEY REFERENCES CalendarDateName(id) " +        //->ссылка на наименование даты
+                        "dateNameId int NOT NULL FOREIGN KEY REFERENCES CalendarDateName(id), " +       //->ссылка на наименование даты
                         "uses bit DEFAULT 1 " +                                                         //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
@@ -228,80 +228,74 @@ namespace TimeWorkTracking
                         ")";
                     sqlCommand.ExecuteNonQuery();
 
-                    //ИНИЦИАЛИЗПЦИЯ ДАННЫХ
-
-
-
-
-
-
-
-
-
                     //UDF (пользовательски функции для ускорения процесса выборки)
-                    //возвращает информацию о дате по наименованию   
-                    sqlCommand.CommandText = "Create function twt_GetDateInfo(@Name varchar(20) = '') @Date varchar(4) = ''" +
-                        "Returns table as Return " +
-                        "(" +
-                        "Select " +
-                            "c.id id, " +
-                            "c.transferDate dWork, " +
-                            "c.originalDate dSource, " +
-                            "n.name name, " +
-                            "t.name dType " +
-                        "From Calendars c, CalendarDateName n, CalendarDateType t " +
-                        "Where c.dateNameId = n.id " +
-                            "and c.dateTypeId = t.id " +
-                            "and (n.name like('%' + @Name + '%') " +
-                            " or (not c.originalDate IS NULL and DATE_FORMAT(c.originalDate,'%m%d') = @Date)) " +
-                            ")";
 
-                    /*
-select c.id id, c.transferDate dWork, c.originalDate dSource, n.name name, t.name dType 
-from Calendars c, CalendarDateName n, CalendarDateType t
-where c.dateNameId=n.id and c.dateTypeId=t.id 
-      and (n.name like('%' + '' + '%') 
-	  or (not c.originalDate IS NULL and RIGHT('00'+cast(DAY(c.originalDate) as varchar(2)),2) + RIGHT('00' +cast(MONTH(c.originalDate) as varchar(2)),2) = '0101'))                     
-                    */
-
-                    //возвращает информацию пользователя по внешнему идентификатору   
-                    sqlCommand.CommandText = "Create function twt_GetUserInfo(@extUserID varchar(20) = '') " +
-                        "Returns table as Return " +
-                        "(" +
-                        "SELECT " +
-                            "u.id id, " +
-                            "u.extId extId, " +                                                         //внешний id для интеграции с СКУД                                                 
-                            "u.crmId crmId, " +                                                         //внешний id для интеграции с CRM                                                 
-                            "u.name fio, " +                                                            //ФИО           
-                            "u.note note, " +                                                           //комментарий           
-                            "d.name department, " +                                                     //департамент пользователя
-                            "p.name post, " +                                                           //должность пользователя
-                            "u.timeStart startTime, " +                                                 //время начала работы по графику (без даты)
-                            "u.timeStop stopTime, " +                                                   //время окончания работы по графику (без даты)
-                            "u.noLunch noLunch, " +                                                     //флаг признака обеда   
-                            "w.name work, " +                                                           //схема работы
-                            "u.uses access " +                                                          //флаг доступа для использования
-                        "FROM Users u, UserDepartment d, UserPost p, UserWorkScheme w " +
-                        "WHERE u.departmentId = d.Id AND " +
-                            "u.postId = p.id and " +
-                            "u.workSchemeId = w.Id and " +
-                            "u.extId like('%' + @extUserID + '%') " +
-                        ")";
+                    sqlCommand.CommandText = "Create function twt_GetDateInfo\r\n(\r\n@Name varchar(20) = '', \r\n@Date varchar(4) = ''\r\n)" +
+                        "\r\n/*" +
+                        "\r\n возвращает информацию о дате" + 
+                        "\r\n   по части (like) наименования" +
+                        "\r\n   или по дате без года (4 символа в формате MMDD) с ведущими нулями" +
+                        "\r\n*/" +
+                        "\r\nReturns table as Return " +
+                        "\r\n(" +
+                        "\r\nSelect " +
+                        "\r\n  c.id id, " +
+                        "\r\n  c.transferDate dWork, " +                                          //рабочая дата (перенос или исходная)
+                        "\r\n  c.originalDate dSource, " +                                        //исходная дата
+                        "\r\n  n.name name, " +                                                   //наименование дня
+                        "\r\n  t.name dType, " +                                                  //тип дня (полный/сокращенный)
+                        "\r\n  c.uses access " +                                                  //флаг доступа для использования
+                        "\r\nFrom Calendars c, CalendarDateName n, CalendarDateType t " +
+                        "\r\nWhere c.dateNameId = n.id " +
+                        "\r\n  and c.dateTypeId = t.id " +
+                        "\r\n  and (len(n.name)>0 and n.name like('%' + @Name + '%')) " +
+                        "\r\n  or (not c.originalDate IS NULL and right(CONVERT(varchar(8), c.originalDate, 112),4) = @Date) " +
+                        "\r\n)";
                     sqlCommand.ExecuteNonQuery();
 
-                    //возвращает данные для формы регистрации по запрашиваемой дате и активным пользователям
-                    // - если пользователь есть в истории проходов - время из истории (таблица EventsPass)
-                    // - если пользователя нет в истории проходов - время из рабочего графика (таблица Users)
-                    sqlCommand.CommandText = "Create function twt_GetPassFormData(@bDate datetime, @extUserID varchar(20) = '') " +
-                        "Returns table as Return " +
-                        "Select " +
-                            "e.passDate, "+
-                            "u.extId "+
-                        "From " +
-                            "(Select * from Users where uses = 1 ) as u " +
-                            "left join " +
-                            "(Select * from EventsPass where passDate = cast('2021/01/02' as date)) as e " +
-                            "on u.ExtId = e.passId";
+                    sqlCommand.CommandText = "Create function twt_GetUserInfo\r\n(\r\n@extUserID varchar(20) = ''\r\n)" +
+                        "\r\n/*" +
+                        "\r\n возвращает информацию о сотруднике по внешнему идентификатору" +
+                        "\r\n   по части (like) наименования" +
+                        "\r\n*/" +
+                        "\r\nReturns table as Return " +
+                        "\r\n(" +
+                        "\r\nSELECT " +
+                        "\r\n  u.id id, " +
+                        "\r\n  u.extId extId, " +                                                 //внешний id для интеграции с СКУД                                                 
+                        "\r\n  u.crmId crmId, " +                                                 //внешний id для интеграции с CRM                                                 
+                        "\r\n  u.name fio, " +                                                    //ФИО           
+                        "\r\n  u.note note, " +                                                   //комментарий           
+                        "\r\n  d.name department, " +                                             //департамент пользователя
+                        "\r\n  p.name post, " +                                                   //должность пользователя
+                        "\r\n  u.timeStart startTime, " +                                         //время начала работы по графику (без даты)
+                        "\r\n  u.timeStop stopTime, " +                                           //время окончания работы по графику (без даты)
+                        "\r\n  u.noLunch noLunch, " +                                             //флаг признака обеда   
+                        "\r\n  w.name work, " +                                                   //схема работы
+                        "\r\n  u.uses access " +                                                  //флаг доступа для использования
+                        "\r\nFROM Users u, UserDepartment d, UserPost p, UserWorkScheme w " +
+                        "\r\nWHERE u.departmentId = d.Id AND " +
+                        "\r\n  u.postId = p.id and " +
+                        "\r\n  u.workSchemeId = w.Id and " +
+                        "\r\n  u.extId like('%' + @extUserID + '%') " +
+                        "\r\n)";
+                    sqlCommand.ExecuteNonQuery();
+
+                    sqlCommand.CommandText = "Create function twt_GetPassFormData\r\n(\r\n@bDate datetime, \r\n@extUserID varchar(20) = ''\r\n)" +
+                        "\r\n/*" +
+                        "\r\n возвращает данные для формы регистрации по запрашиваемой дате и активным пользователям" +
+                        "\r\n   - если пользователь есть в истории проходов - время из истории (таблица EventsPass)" +
+                        "\r\n   - если пользователя нет в истории проходов - время из рабочего графика (таблица Users)" +
+                        "\r\n*/" +
+                        "\r\nReturns table as Return " +
+                        "\r\nSelect " +
+                        "\r\n  e.passDate, "+
+                        "\r\n  u.extId "+
+                        "\r\nFrom " +
+                        "\r\n  (Select * from Users where uses = 1 ) as u " +
+                        "\r\n  left join " +
+                        "\r\n  (Select * from EventsPass where passDate = cast('2021/01/02' as date)) as e " +
+                        "\r\n  on u.ExtId = e.passId";
                     sqlCommand.ExecuteNonQuery(); 
 
                     /*
