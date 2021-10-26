@@ -211,12 +211,12 @@ namespace TimeWorkTracking
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             string sql =
               "UPDATE SpecialMarks Set " +
-                "digitalCode = N'" + tbCodeDigital.Text.Trim() + ", " +
+                "digitalCode = N'" + tbCodeDigital.Text.Trim() + "', " +
                 "letterCode = N'" + tbCodeLetter.Text.Trim() + "', " +
                 "name = N'" + tbName.Text.Trim() + "', " +
-                "note = N'" + tbNote.Text.Trim() + ", " +
+                "note = N'" + tbNote.Text.Trim() + "', " +
                 "uses = " + (chUse.Checked ? 1 : 0) + " " +
-              "WHERE extId = '" + tbID.Text.Trim() + "'";
+              "WHERE extId = " + tbID.Text.Trim() + "";
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
             index = lstwDataBaseSpecialMarks.SelectedIndex();          //сохранить индекс
             LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));
