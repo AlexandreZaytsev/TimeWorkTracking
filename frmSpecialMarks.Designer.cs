@@ -242,7 +242,6 @@ namespace TimeWorkTracking
             // 
             // lstwDataBaseSpecialMarks
             // 
-            this.lstwDataBaseSpecialMarks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lstwDataBaseSpecialMarks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.used,
             this.num,
@@ -250,12 +249,13 @@ namespace TimeWorkTracking
             this.name});
             this.lstwDataBaseSpecialMarks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lstwDataBaseSpecialMarks.HideSelection = false;
+            this.lstwDataBaseSpecialMarks.LabelWrap = false;
             this.lstwDataBaseSpecialMarks.Location = new System.Drawing.Point(8, 10);
             this.lstwDataBaseSpecialMarks.Margin = new System.Windows.Forms.Padding(2);
             this.lstwDataBaseSpecialMarks.MultiSelect = false;
             this.lstwDataBaseSpecialMarks.Name = "lstwDataBaseSpecialMarks";
             this.lstwDataBaseSpecialMarks.Size = new System.Drawing.Size(370, 218);
-            this.lstwDataBaseSpecialMarks.SmallImageList = this.imgListStatus;
+            this.lstwDataBaseSpecialMarks.StateImageList = this.imgListStatus;
             this.lstwDataBaseSpecialMarks.TabIndex = 15;
             this.lstwDataBaseSpecialMarks.UseCompatibleStateImageBehavior = false;
             this.lstwDataBaseSpecialMarks.View = System.Windows.Forms.View.SmallIcon;

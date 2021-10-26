@@ -19,7 +19,7 @@ namespace TimeWorkTracking
         {
             InitializeComponent();
             lMsg.Visible = false;               //погасить сообщение о записи в БД
-//            tbID.Visible = false;
+            tbID.Visible = false;
         }
 
         private void frmSpecialMarks_Load(object sender, EventArgs e)
@@ -194,7 +194,7 @@ namespace TimeWorkTracking
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
             LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));// order by extId desc"));
             index = lstwDataBaseSpecialMarks.Items.Cast<ListViewItem>()
-                .Where(x => (x.SubItems[5].Text == tbName.Text.Trim()))     //найти индекс поиск по полю name
+                .Where(x => (x.SubItems[3].Text == tbName.Text.Trim()))     //найти индекс поиск по полю name
                 .FirstOrDefault().Index;
             //            lstwDataBaseUsers.HideSelection = false;                    //отображение выделения 
             lstwDataBaseSpecialMarks.Items[index].Selected = true;          //выделить элемент по индексу
@@ -216,7 +216,7 @@ namespace TimeWorkTracking
                 "name = N'" + tbName.Text.Trim() + "', " +
                 "note = N'" + tbNote.Text.Trim() + "', " +
                 "uses = " + (chUse.Checked ? 1 : 0) + " " +
-              "WHERE extId = " + tbID.Text.Trim() + "";
+              "WHERE id = " + tbID.Text.Trim() + "";
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
             index = lstwDataBaseSpecialMarks.SelectedIndex();          //сохранить индекс
             LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));
