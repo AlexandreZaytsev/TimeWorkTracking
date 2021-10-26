@@ -88,7 +88,7 @@ namespace TimeWorkTracking
             this.mainPanelUsers.Location = new System.Drawing.Point(0, 0);
             this.mainPanelUsers.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.mainPanelUsers.Name = "mainPanelUsers";
-            this.mainPanelUsers.Size = new System.Drawing.Size(669, 310);
+            this.mainPanelUsers.Size = new System.Drawing.Size(669, 304);
             this.mainPanelUsers.TabIndex = 0;
             // 
             // btInsert
@@ -559,7 +559,7 @@ namespace TimeWorkTracking
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(669, 310);
+            this.ClientSize = new System.Drawing.Size(669, 304);
             this.Controls.Add(this.mainPanelUsers);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
