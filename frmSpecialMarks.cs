@@ -68,20 +68,20 @@ namespace TimeWorkTracking
                 {
                     // Define the list items
                     lstwDataBaseSpecialMarks.LabelEdit = false;      //запрет редактирования item
-                    ListViewItem lvi = new ListViewItem(drow["Uses"].ToString(), 0) //имя для сортировки
+                    ListViewItem lvi = new ListViewItem(drow["uses"].ToString(), 0) //имя для сортировки
                     {
-                        ImageIndex = (Boolean)drow["Uses"] ? 1 : 0
-                        , StateImageIndex = (Boolean)drow["Uses"] ? 1 : 0
-                        , Checked = (Boolean)drow["Uses"]
+                        ImageIndex = (Boolean)drow["uses"] ? 1 : 0
+                        , StateImageIndex = (Boolean)drow["uses"] ? 1 : 0
+                        , Checked = (Boolean)drow["uses"]
                         //                        , UseItemStyleForSubItems = true
                     };
 
                     //    lvi.Checked = (Boolean)drow["Uses"];
                     //       lvi.SubItems.Add(drow["Uses"].ToString());
-                    lvi.SubItems.Add(drow["DigitalCode"].ToString());
-                    lvi.SubItems.Add(drow["LetterCode"].ToString());
-                    lvi.SubItems.Add(drow["Name"].ToString());
-                    lvi.SubItems.Add(drow["Note"].ToString());
+                    lvi.SubItems.Add(drow["digitalCode"].ToString());
+                    lvi.SubItems.Add(drow["letterCode"].ToString());
+                    lvi.SubItems.Add(drow["name"].ToString());
+                    lvi.SubItems.Add(drow["note"].ToString());
                     lvi.SubItems.Add(drow["id"].ToString().PadLeft(8, '0'));        //используется для строковой сортировки по колонке
                     lvi.SubItems.Add(drow["id"].ToString());
                     
@@ -219,7 +219,7 @@ namespace TimeWorkTracking
               "WHERE extId = '" + tbID.Text.Trim() + "'";
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
             index = lstwDataBaseSpecialMarks.SelectedIndex();          //сохранить индекс
-            LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('')"));
+            LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));
             lstwDataBaseSpecialMarks.Items[index].Selected = true;     //выделить элемент по индексу
             lstwDataBaseSpecialMarks.EnsureVisible(index);             //показать в области видимости окна
         }
