@@ -21,7 +21,7 @@ namespace TimeWorkTracking
             lMsg.Visible = false;               //погасить сообщение о записи в БД
             tbID.Visible = false;
         }
-
+        //загрузка формы
         private void frmSpecialMarks_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string

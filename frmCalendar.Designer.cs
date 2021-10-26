@@ -44,7 +44,7 @@ namespace TimeWorkTracking
             this.label5 = new System.Windows.Forms.Label();
             this.tbNote = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.lstwDataBaseSpecialMarks = new System.Windows.Forms.ListView();
+            this.lstwDataBaseCalendar = new System.Windows.Forms.ListView();
             this.used = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.num = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.code = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -62,7 +62,7 @@ namespace TimeWorkTracking
             this.mainPanelCalendar.Controls.Add(this.btUpdate);
             this.mainPanelCalendar.Controls.Add(this.btInsert);
             this.mainPanelCalendar.Controls.Add(this.panel1);
-            this.mainPanelCalendar.Controls.Add(this.lstwDataBaseSpecialMarks);
+            this.mainPanelCalendar.Controls.Add(this.lstwDataBaseCalendar);
             this.mainPanelCalendar.Controls.Add(this.lMsg);
             this.mainPanelCalendar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanelCalendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -218,24 +218,24 @@ namespace TimeWorkTracking
             this.label4.TabIndex = 7;
             this.label4.Text = "Цифровой код";
             // 
-            // lstwDataBaseSpecialMarks
+            // lstwDataBaseCalendar
             // 
-            this.lstwDataBaseSpecialMarks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.lstwDataBaseCalendar.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.used,
             this.num,
             this.code,
             this.name});
-            this.lstwDataBaseSpecialMarks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lstwDataBaseSpecialMarks.HideSelection = false;
-            this.lstwDataBaseSpecialMarks.LabelWrap = false;
-            this.lstwDataBaseSpecialMarks.Location = new System.Drawing.Point(8, 10);
-            this.lstwDataBaseSpecialMarks.Margin = new System.Windows.Forms.Padding(2);
-            this.lstwDataBaseSpecialMarks.MultiSelect = false;
-            this.lstwDataBaseSpecialMarks.Name = "lstwDataBaseSpecialMarks";
-            this.lstwDataBaseSpecialMarks.Size = new System.Drawing.Size(370, 218);
-            this.lstwDataBaseSpecialMarks.TabIndex = 15;
-            this.lstwDataBaseSpecialMarks.UseCompatibleStateImageBehavior = false;
-            this.lstwDataBaseSpecialMarks.View = System.Windows.Forms.View.SmallIcon;
+            this.lstwDataBaseCalendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lstwDataBaseCalendar.HideSelection = false;
+            this.lstwDataBaseCalendar.LabelWrap = false;
+            this.lstwDataBaseCalendar.Location = new System.Drawing.Point(8, 10);
+            this.lstwDataBaseCalendar.Margin = new System.Windows.Forms.Padding(2);
+            this.lstwDataBaseCalendar.MultiSelect = false;
+            this.lstwDataBaseCalendar.Name = "lstwDataBaseCalendar";
+            this.lstwDataBaseCalendar.Size = new System.Drawing.Size(370, 218);
+            this.lstwDataBaseCalendar.TabIndex = 15;
+            this.lstwDataBaseCalendar.UseCompatibleStateImageBehavior = false;
+            this.lstwDataBaseCalendar.View = System.Windows.Forms.View.SmallIcon;
             // 
             // used
             // 
@@ -307,6 +307,7 @@ namespace TimeWorkTracking
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "frmCalendar";
             this.Text = "Производственный календарь";
+            this.Load += new System.EventHandler(this.frmCalendar_Load);
             this.mainPanelCalendar.ResumeLayout(false);
             this.mainPanelCalendar.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -330,7 +331,7 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox tbNote;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ListView lstwDataBaseSpecialMarks;
+        private System.Windows.Forms.ListView lstwDataBaseCalendar;
         private System.Windows.Forms.ColumnHeader used;
         private System.Windows.Forms.ColumnHeader num;
         private System.Windows.Forms.ColumnHeader code;

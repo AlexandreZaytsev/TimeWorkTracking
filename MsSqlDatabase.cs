@@ -43,8 +43,8 @@ namespace TimeWorkTracking
                     //График работы (таблица для списка) Почасовой/Поминутный
                     sqlCommand.CommandText = "CREATE TABLE UserWorkScheme (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                                  //расшифровка
-                        "uses bit DEFAULT 1 " +                                              //*наименование
+                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                         //*наименование
+                        "uses bit DEFAULT 1 " +                                                         //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText = "INSERT INTO UserWorkScheme(name) VALUES " +
@@ -55,8 +55,8 @@ namespace TimeWorkTracking
                     //Тип даты производственного календаря (таблица для списка) Выходной/Сокращенный
                     sqlCommand.CommandText = "CREATE TABLE CalendarDateType (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                                  //расшифровка
-                        "uses bit DEFAULT 1 " +                                              //*наименование
+                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                         //*наименование
+                        "uses bit DEFAULT 1 " +                                                         //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText = "INSERT INTO CalendarDateType(name) VALUES " +
@@ -67,10 +67,10 @@ namespace TimeWorkTracking
                     //Наименование даты производственного календаря (таблица для списка) 
                     sqlCommand.CommandText = "CREATE TABLE CalendarDateName (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                        //*наименование
-                        "note VARCHAR(150), " +                                                  //расшифровка
-                        "uses bit DEFAULT 1 " +                                              //*наименование
-                        ")";                                                         //расшифровка
+                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                         //*наименование
+                        "note VARCHAR(1024), " +                                                        //расшифровка
+                        "uses bit DEFAULT 1 " +                                                         //флаг доступа для использования
+                        ")";                                                        
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText = "INSERT INTO CalendarDateName(name, note) VALUES " +
                         "(N'Новый год', N'1 января'), " +
@@ -88,8 +88,8 @@ namespace TimeWorkTracking
                     //Подразделение (таблица для списка)
                     sqlCommand.CommandText = "CREATE TABLE UserDepartment (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                                  //расшифровка
-                        "uses bit DEFAULT 1 " +                                             //*наименование
+                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                         //*наименование
+                        "uses bit DEFAULT 1 " +                                                         //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText = "INSERT INTO UserDepartment(name) VALUES " +
@@ -108,8 +108,8 @@ namespace TimeWorkTracking
                     //Должность (таблица для списка)
                     sqlCommand.CommandText = "CREATE TABLE UserPost (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                                  //расшифровка
-                        "uses bit DEFAULT 1 " +                                             //*наименование
+                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                         //*наименование
+                        "uses bit DEFAULT 1 " +                                                         //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText = "INSERT INTO UserPost(name) VALUES " +
@@ -142,7 +142,7 @@ namespace TimeWorkTracking
                         "letterCode VARCHAR(4) NOT NULL, " +                                           //строковый код
                         "name VARCHAR(150) NOT NULL UNIQUE, " +                                        //*наименование
                         "note VARCHAR(1024) NULL, " +                                                  //расшифровка
-                        "uses bit DEFAULT 1 " +                                                          //флаг доступа для использования
+                        "uses bit DEFAULT 1 " +                                                        //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText = "INSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES " +
