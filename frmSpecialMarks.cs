@@ -19,7 +19,7 @@ namespace TimeWorkTracking
         {
             InitializeComponent();
             lMsg.Visible = false;               //погасить сообщение о записи в БД
-            tbID.Visible = false;
+ //           tbID.Visible = false;
         }
         //загрузка формы
         private void frmSpecialMarks_Load(object sender, EventArgs e)

@@ -253,7 +253,7 @@ namespace TimeWorkTracking
             this.tbNote.Name = "tbNote";
             this.tbNote.Size = new System.Drawing.Size(357, 44);
             this.tbNote.TabIndex = 25;
-            this.toolTipMsgUsers.SetToolTip(this.tbNote, "Комментарии");
+            this.toolTipMsgUsers.SetToolTip(this.tbNote, "Комментарий");
             // 
             // label9
             // 

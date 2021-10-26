@@ -37,7 +37,6 @@ namespace TimeWorkTracking
             this.imgListButtonMarks = new System.Windows.Forms.ImageList(this.components);
             this.btInsert = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.tbID = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tbCodeLetter = new System.Windows.Forms.TextBox();
             this.chUse = new System.Windows.Forms.CheckBox();
@@ -53,6 +52,8 @@ namespace TimeWorkTracking
             this.name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lMsg = new System.Windows.Forms.Label();
             this.toolTipMsgMarks = new System.Windows.Forms.ToolTip(this.components);
+            this.label2 = new System.Windows.Forms.Label();
+            this.tbID = new System.Windows.Forms.TextBox();
             this.mainPanelSpecialMarks.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -134,6 +135,7 @@ namespace TimeWorkTracking
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.tbID);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.tbCodeLetter);
@@ -148,13 +150,6 @@ namespace TimeWorkTracking
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(286, 143);
             this.panel1.TabIndex = 17;
-            // 
-            // tbID
-            // 
-            this.tbID.Location = new System.Drawing.Point(115, 4);
-            this.tbID.Name = "tbID";
-            this.tbID.Size = new System.Drawing.Size(25, 21);
-            this.tbID.TabIndex = 21;
             // 
             // label1
             // 
@@ -195,6 +190,7 @@ namespace TimeWorkTracking
             this.chUse.TabIndex = 16;
             this.chUse.Text = "Доступ";
             this.chUse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.toolTipMsgMarks.SetToolTip(this.chUse, "Отметка активна");
             this.chUse.UseVisualStyleBackColor = true;
             this.chUse.CheckedChanged += new System.EventHandler(this.chUse_CheckedChanged);
             // 
@@ -236,6 +232,7 @@ namespace TimeWorkTracking
             this.tbNote.Name = "tbNote";
             this.tbNote.Size = new System.Drawing.Size(270, 58);
             this.tbNote.TabIndex = 5;
+            this.toolTipMsgMarks.SetToolTip(this.tbNote, "Комментарий");
             // 
             // label4
             // 
@@ -308,6 +305,25 @@ namespace TimeWorkTracking
             this.lMsg.Text = "      Новая запись в БД";
             this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(113, 7);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(20, 15);
+            this.label2.TabIndex = 24;
+            this.label2.Text = "id:";
+            // 
+            // tbID
+            // 
+            this.tbID.BackColor = System.Drawing.SystemColors.Control;
+            this.tbID.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tbID.Enabled = false;
+            this.tbID.Location = new System.Drawing.Point(132, 7);
+            this.tbID.Name = "tbID";
+            this.tbID.Size = new System.Drawing.Size(36, 14);
+            this.tbID.TabIndex = 23;
+            // 
             // frmSpecialMarks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -349,6 +365,7 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ImageList imgListButtonMarks;
         private System.Windows.Forms.ToolTip toolTipMsgMarks;
         private System.Windows.Forms.Label lMsg;
+        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbID;
     }
 }

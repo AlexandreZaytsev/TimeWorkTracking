@@ -178,8 +178,8 @@ namespace TimeWorkTracking
                     //Производственный Календарь (таблица использующая внешние данные)
                     sqlCommand.CommandText = "CREATE TABLE Calendars (" +
                         "id int PRIMARY KEY IDENTITY, " +
-                        "originalDate Date NOT NULL UNIQUE, " +                                         //*оригинальная дата
-                        "transferDate Date NOT NULL, " +                                                //реальная дата (перенос)
+                        "originalDate Date NOT NULL , " +                                               //оригинальная дата
+                        "transferDate Date NOT NULL UNIQUE, " +                                         //*реальная дата (перенос)
                         "dateTypeId int NOT NULL FOREIGN KEY REFERENCES CalendarDateType(id), " +       //->ссылка на тип даты
                         "dateNameId int NOT NULL FOREIGN KEY REFERENCES CalendarDateName(id) " +        //->ссылка на наименование даты    
                         ")";
