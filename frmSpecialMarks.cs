@@ -18,6 +18,8 @@ namespace TimeWorkTracking
         public frmSpecialMarks()
         {
             InitializeComponent();
+            lMsg.Visible = false;               //погасить сообщение о записи в БД
+//            tbID.Visible = false;
         }
 
         private void frmSpecialMarks_Load(object sender, EventArgs e)
@@ -27,7 +29,10 @@ namespace TimeWorkTracking
             if (mainPanelSpecialMarks.Enabled) 
             {
                 InitializeListView();
-                LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks"));
+                LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));
+
+                if (lstwDataBaseSpecialMarks.Items.Count != 0)
+                    lstwDataBaseSpecialMarks.Items[0].Selected = true;     //выделить элемент по индексу
             }
         }
         // Initialize ListView
@@ -46,15 +51,13 @@ namespace TimeWorkTracking
             // with the Sort method to perform custom sorting.
             _lvwItemComparer = new ListViewItemComparer
             {
-                SortColumn = 5,// 1;// e.Column; (3 name)
+                SortColumn = 5,                             //сортировка по id бд
                 Order = SortOrder.Ascending
             };
-
             lstwDataBaseSpecialMarks.ListViewItemSorter = _lvwItemComparer;
-
         }
 
-        // Load Data from the DataSet into the ListView
+        //Загрузить Data из DataSet в ListView
         private void LoadList(DataTable dtable)
         {
             lstwDataBaseSpecialMarks.Items.Clear();         // Clear the ListView control
@@ -79,11 +82,10 @@ namespace TimeWorkTracking
                     lvi.SubItems.Add(drow["LetterCode"].ToString());
                     lvi.SubItems.Add(drow["Name"].ToString());
                     lvi.SubItems.Add(drow["Note"].ToString());
-                    lvi.SubItems.Add(drow["id"].ToString().PadLeft(8, '0'));
+                    lvi.SubItems.Add(drow["id"].ToString().PadLeft(8, '0'));        //используется для строковой сортировки по колонке
                     lvi.SubItems.Add(drow["id"].ToString());
-                    //  lvi.Checked = true;
-                    // Add the list items to the ListView
-                    lstwDataBaseSpecialMarks.Items.Add(lvi);
+                    
+                    lstwDataBaseSpecialMarks.Items.Add(lvi);                        // Add the list items to the ListView
                 }
             }
         }
@@ -116,10 +118,11 @@ namespace TimeWorkTracking
             int ind = lstwDataBaseSpecialMarks.SelectedIndex();
             if (ind >= 0) 
             {
+                tbID.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[6].Text;
                 tbCodeDigital.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[1].Text;
                 tbCodeLetter.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[2].Text;
-                tbName.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[3].Text;
-                tbNote.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[4].Text;
+                tbName.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[3].Text;             //name
+                tbNote.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[4].Text;             //note
                 chUse.Checked = lstwDataBaseSpecialMarks.Items[ind].Text=="True";
             }
         }
@@ -131,52 +134,109 @@ namespace TimeWorkTracking
             e.NewWidth = lstwDataBaseSpecialMarks.Columns[e.ColumnIndex].Width;
         }
 
-        //чекбокс
+        //чекбокс запись активна
         private void chUse_CheckedChanged(object sender, EventArgs e)
         {
-            if (chUse.Checked)
-                chUse.ImageIndex = 1;
-            else
-                chUse.ImageIndex = 0;
+            chUse.ImageIndex = chUse.Checked ? 1 : 0;
         }
 
         //редактирование ключевого поля Имя
         private void tbName_TextChanged(object sender, EventArgs e)
         {
-            if (lstwDataBaseSpecialMarks.Items.Cast<ListViewItem>()
-                .Where(x => (x.SubItems[3].Text == tbName.Text.Trim()))     //поиск по ключевому полю
-                .FirstOrDefault() != null)
+            if (tbName.Text.Trim().Length == 0)                             //если поле пустое
             {
-                tbName.BackColor = System.Drawing.SystemColors.Control;
-                lstwDataBaseSpecialMarks.HideSelection = false;
-                btUpdate.Enabled = true;
-                btInsert.Enabled = false;
+                tbName.BackColor = System.Drawing.SystemColors.Window;      //белый фон
+                lstwDataBaseSpecialMarks.HideSelection = true;              //снять выделение со строки listview (без перевода фокуса на listwiew)
+                btInsert.Enabled = false;                                   //заблокировать кнопку INSERT    
+                btUpdate.Enabled = false;                                   //заблокировать кнопку UPDATE    
             }
-            else
+            else                                                            //если поле не пустое          
             {
-                tbName.BackColor = System.Drawing.SystemColors.Window;
-                lstwDataBaseSpecialMarks.HideSelection = true;
-                btUpdate.Enabled = false;
-                btInsert.Enabled = tbName.Text.Trim().Length != 0;  //если поле пустое
+                btUpdate.Enabled = true;                                    //разблокировать кнопку записи в БД    
+                if (lstwDataBaseSpecialMarks.Items.Cast<ListViewItem>()     //попробовать найти значение ключевого поля (name) в списке ListView
+                    .Where(x => (x.SubItems[3].Text == tbName.Text.Trim()))
+                    .FirstOrDefault() != null)
+                {                                                           //значение есть
+                    tbName.BackColor = System.Drawing.SystemColors.Control; //серый фон
+                    lstwDataBaseSpecialMarks.HideSelection = false;         //установить выделение строки (без перевода фокуса на listwiew)
+
+                    btInsert.Enabled = false;                               //заблокировать кнопку INSERT    
+                    btUpdate.Enabled = true;                                //разблокировать кнопку UPDATE    
+                }
+                else                                                        //значения нет 
+                {
+                    tbName.BackColor = System.Drawing.SystemColors.Window;  //белый фон
+                    lstwDataBaseSpecialMarks.HideSelection = true;          //снять выделение со строки listview (без перевода фокуса на listwiew)
+                    btInsert.Enabled = true;                                //разблокировать кнопку INSERT    
+                    btUpdate.Enabled = true;                                //разблокировать кнопку UPDATE    
+                }
             }
         }
         //кнопка добавить запись в БД
         private void btInsert_Click(object sender, EventArgs e)
         {
-            string sql = "";
+            int index;
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            string sql =
+              "INSERT INTO SpecialMarks(" +
+                "digitalCode, " +
+                "letterCode, " +
+                "name, " +
+                "note, " +
+                "uses) " +
+              "VALUES ( " +
+                "N'" + tbCodeDigital.Text.Trim() + "', " +
+                "N'" + tbCodeLetter.Text.Trim() + "', " +
+                "N'" + tbName.Text.Trim() + "', " +
+                "N'" + tbNote.Text.Trim() + "', " +
+                (chUse.Checked ? 1 : 0) +
+                ")";
+            MsSqlDatabase.RequestNonQuery(cs, sql, false);
+            LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));// order by extId desc"));
+            index = lstwDataBaseSpecialMarks.Items.Cast<ListViewItem>()
+                .Where(x => (x.SubItems[5].Text == tbName.Text.Trim()))     //найти индекс поиск по полю name
+                .FirstOrDefault().Index;
+            //            lstwDataBaseUsers.HideSelection = false;                    //отображение выделения 
+            lstwDataBaseSpecialMarks.Items[index].Selected = true;          //выделить элемент по индексу
+            tbName_TextChanged(null, null);                                 //обновить поля и кнопки
 
+            //            lstwDataBaseUsers.Focus();
+            //            lstwDataBaseUsers_ColumnClick(null, new ColumnClickEventArgs(2)); //сортировка
+            lstwDataBaseSpecialMarks.EnsureVisible(index);                  //показать в области видимости окна
         }
         //кнопка обновить запись в БД
         private void btUpdate_Click(object sender, EventArgs e)
         {
-            string sql = "";
+            int index;
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            string sql =
+              "UPDATE SpecialMarks Set " +
+                "digitalCode = N'" + tbCodeDigital.Text.Trim() + ", " +
+                "letterCode = N'" + tbCodeLetter.Text.Trim() + "', " +
+                "name = N'" + tbName.Text.Trim() + "', " +
+                "note = N'" + tbNote.Text.Trim() + ", " +
+                "uses = " + (chUse.Checked ? 1 : 0) + " " +
+              "WHERE extId = '" + tbID.Text.Trim() + "'";
+            MsSqlDatabase.RequestNonQuery(cs, sql, false);
+            index = lstwDataBaseSpecialMarks.SelectedIndex();          //сохранить индекс
+            LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('')"));
+            lstwDataBaseSpecialMarks.Items[index].Selected = true;     //выделить элемент по индексу
+            lstwDataBaseSpecialMarks.EnsureVisible(index);             //показать в области видимости окна
         }
-        //навели мышкой на Insert загасили id
+
+        //наехали на кнопку Insert загасили id
         private void btInsert_MouseHover(object sender, EventArgs e)
         {
-
+            tbID.Visible = false;
+            lMsg.Visible = true;
+            btUpdate.Visible = false;
+        }
+        //уехали с кнопки Insert показали id
+        private void btInsert_MouseLeave(object sender, EventArgs e)
+        {
+            tbID.Visible = true;
+            lMsg.Visible = false;
+            btUpdate.Visible = true;
         }
     }
 }

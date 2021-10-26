@@ -42,7 +42,6 @@ namespace TimeWorkTracking
             this.tbCodeLetter = new System.Windows.Forms.TextBox();
             this.tbName = new System.Windows.Forms.TextBox();
             this.tbCodeDigital = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.tbNote = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -51,6 +50,9 @@ namespace TimeWorkTracking
             this.num = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.code = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.toolTipMsgMark = new System.Windows.Forms.ToolTip(this.components);
+            this.lMsg = new System.Windows.Forms.Label();
+            this.tbID = new System.Windows.Forms.TextBox();
             this.mainPanelSpecialMarks.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -68,13 +70,13 @@ namespace TimeWorkTracking
             // 
             this.mainPanelSpecialMarks.Controls.Add(this.btUpdate);
             this.mainPanelSpecialMarks.Controls.Add(this.btInsert);
-            this.mainPanelSpecialMarks.Controls.Add(this.chUse);
             this.mainPanelSpecialMarks.Controls.Add(this.panel1);
             this.mainPanelSpecialMarks.Controls.Add(this.lstwDataBaseSpecialMarks);
+            this.mainPanelSpecialMarks.Controls.Add(this.lMsg);
             this.mainPanelSpecialMarks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanelSpecialMarks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mainPanelSpecialMarks.Location = new System.Drawing.Point(0, 0);
-            this.mainPanelSpecialMarks.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.mainPanelSpecialMarks.Margin = new System.Windows.Forms.Padding(2);
             this.mainPanelSpecialMarks.Name = "mainPanelSpecialMarks";
             this.mainPanelSpecialMarks.Size = new System.Drawing.Size(674, 233);
             this.mainPanelSpecialMarks.TabIndex = 2;
@@ -86,7 +88,7 @@ namespace TimeWorkTracking
             this.btUpdate.ImageIndex = 2;
             this.btUpdate.ImageList = this.imageButton;
             this.btUpdate.Location = new System.Drawing.Point(564, 202);
-            this.btUpdate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btUpdate.Margin = new System.Windows.Forms.Padding(2);
             this.btUpdate.Name = "btUpdate";
             this.btUpdate.Size = new System.Drawing.Size(105, 26);
             this.btUpdate.TabIndex = 19;
@@ -117,7 +119,7 @@ namespace TimeWorkTracking
             this.btInsert.ImageIndex = 1;
             this.btInsert.ImageList = this.imageButton;
             this.btInsert.Location = new System.Drawing.Point(384, 202);
-            this.btInsert.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btInsert.Margin = new System.Windows.Forms.Padding(2);
             this.btInsert.Name = "btInsert";
             this.btInsert.Size = new System.Drawing.Size(105, 26);
             this.btInsert.TabIndex = 18;
@@ -126,6 +128,7 @@ namespace TimeWorkTracking
             this.btInsert.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btInsert.UseVisualStyleBackColor = true;
             this.btInsert.Click += new System.EventHandler(this.btInsert_Click);
+            this.btInsert.MouseLeave += new System.EventHandler(this.btInsert_MouseLeave);
             this.btInsert.MouseHover += new System.EventHandler(this.btInsert_MouseHover);
             // 
             // chUse
@@ -139,13 +142,13 @@ namespace TimeWorkTracking
             this.chUse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.chUse.ImageIndex = 0;
             this.chUse.ImageList = this.imgListStatus;
-            this.chUse.Location = new System.Drawing.Point(460, 9);
-            this.chUse.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chUse.Location = new System.Drawing.Point(194, 2);
+            this.chUse.Margin = new System.Windows.Forms.Padding(2);
             this.chUse.Name = "chUse";
             this.chUse.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.chUse.Size = new System.Drawing.Size(214, 25);
+            this.chUse.Size = new System.Drawing.Size(84, 25);
             this.chUse.TabIndex = 16;
-            this.chUse.Text = "Доступно для использования";
+            this.chUse.Text = "Доступ";
             this.chUse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.chUse.UseVisualStyleBackColor = true;
             this.chUse.CheckedChanged += new System.EventHandler(this.chUse_CheckedChanged);
@@ -153,18 +156,19 @@ namespace TimeWorkTracking
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.tbID);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.tbCodeLetter);
+            this.panel1.Controls.Add(this.chUse);
             this.panel1.Controls.Add(this.tbName);
             this.panel1.Controls.Add(this.tbCodeDigital);
-            this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.tbNote);
             this.panel1.Controls.Add(this.label4);
-            this.panel1.Location = new System.Drawing.Point(384, 35);
+            this.panel1.Location = new System.Drawing.Point(383, 11);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(286, 163);
+            this.panel1.Size = new System.Drawing.Size(286, 143);
             this.panel1.TabIndex = 17;
             // 
             // label1
@@ -180,8 +184,8 @@ namespace TimeWorkTracking
             // 
             // tbCodeLetter
             // 
-            this.tbCodeLetter.Location = new System.Drawing.Point(242, 135);
-            this.tbCodeLetter.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbCodeLetter.Location = new System.Drawing.Point(242, 115);
+            this.tbCodeLetter.Margin = new System.Windows.Forms.Padding(2);
             this.tbCodeLetter.Name = "tbCodeLetter";
             this.tbCodeLetter.Size = new System.Drawing.Size(36, 21);
             this.tbCodeLetter.TabIndex = 10;
@@ -189,10 +193,10 @@ namespace TimeWorkTracking
             // 
             // tbName
             // 
-            this.tbName.BackColor = System.Drawing.SystemColors.Control;
+            this.tbName.BackColor = System.Drawing.SystemColors.Window;
             this.tbName.HideSelection = false;
             this.tbName.Location = new System.Drawing.Point(8, 28);
-            this.tbName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbName.Margin = new System.Windows.Forms.Padding(2);
             this.tbName.Name = "tbName";
             this.tbName.Size = new System.Drawing.Size(270, 21);
             this.tbName.TabIndex = 3;
@@ -200,27 +204,17 @@ namespace TimeWorkTracking
             // 
             // tbCodeDigital
             // 
-            this.tbCodeDigital.Location = new System.Drawing.Point(104, 135);
-            this.tbCodeDigital.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbCodeDigital.Location = new System.Drawing.Point(104, 115);
+            this.tbCodeDigital.Margin = new System.Windows.Forms.Padding(2);
             this.tbCodeDigital.Name = "tbCodeDigital";
             this.tbCodeDigital.Size = new System.Drawing.Size(36, 21);
             this.tbCodeDigital.TabIndex = 9;
             this.tbCodeDigital.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 53);
-            this.label2.Margin = new System.Windows.Forms.Padding(2);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(64, 15);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Описание";
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(143, 137);
+            this.label5.Location = new System.Drawing.Point(143, 117);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(93, 15);
@@ -229,8 +223,8 @@ namespace TimeWorkTracking
             // 
             // tbNote
             // 
-            this.tbNote.Location = new System.Drawing.Point(8, 71);
-            this.tbNote.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbNote.Location = new System.Drawing.Point(8, 53);
+            this.tbNote.Margin = new System.Windows.Forms.Padding(2);
             this.tbNote.Multiline = true;
             this.tbNote.Name = "tbNote";
             this.tbNote.Size = new System.Drawing.Size(270, 58);
@@ -239,7 +233,7 @@ namespace TimeWorkTracking
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 137);
+            this.label4.Location = new System.Drawing.Point(3, 117);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(92, 15);
@@ -257,7 +251,7 @@ namespace TimeWorkTracking
             this.lstwDataBaseSpecialMarks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lstwDataBaseSpecialMarks.HideSelection = false;
             this.lstwDataBaseSpecialMarks.Location = new System.Drawing.Point(8, 10);
-            this.lstwDataBaseSpecialMarks.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lstwDataBaseSpecialMarks.Margin = new System.Windows.Forms.Padding(2);
             this.lstwDataBaseSpecialMarks.MultiSelect = false;
             this.lstwDataBaseSpecialMarks.Name = "lstwDataBaseSpecialMarks";
             this.lstwDataBaseSpecialMarks.Size = new System.Drawing.Size(370, 218);
@@ -291,6 +285,29 @@ namespace TimeWorkTracking
             this.name.Text = "Наименование";
             this.name.Width = 250;
             // 
+            // lMsg
+            // 
+            this.lMsg.AutoSize = true;
+            this.lMsg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.lMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lMsg.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lMsg.ImageIndex = 6;
+            this.lMsg.ImageList = this.imageButton;
+            this.lMsg.Location = new System.Drawing.Point(507, 206);
+            this.lMsg.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lMsg.Name = "lMsg";
+            this.lMsg.Size = new System.Drawing.Size(157, 17);
+            this.lMsg.TabIndex = 20;
+            this.lMsg.Text = "      Новая запись в БД";
+            this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tbID
+            // 
+            this.tbID.Location = new System.Drawing.Point(115, 4);
+            this.tbID.Name = "tbID";
+            this.tbID.Size = new System.Drawing.Size(25, 21);
+            this.tbID.TabIndex = 21;
+            // 
             // frmSpecialMarks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -321,7 +338,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.TextBox tbCodeLetter;
         private System.Windows.Forms.TextBox tbName;
         private System.Windows.Forms.TextBox tbCodeDigital;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox tbNote;
         private System.Windows.Forms.Label label4;
@@ -331,5 +347,8 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ColumnHeader code;
         private System.Windows.Forms.ColumnHeader name;
         private System.Windows.Forms.ImageList imageButton;
+        private System.Windows.Forms.ToolTip toolTipMsgMark;
+        private System.Windows.Forms.Label lMsg;
+        private System.Windows.Forms.TextBox tbID;
     }
 }

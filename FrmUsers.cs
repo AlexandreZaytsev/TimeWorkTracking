@@ -15,7 +15,7 @@ namespace TimeWorkTracking
         public frmUsers()
         {
             InitializeComponent();
-            lMsg.Visible = false;
+            lMsg.Visible = false;               //погасить сообщение о записи в БД
         }
 
         private void frmUsers_Load(object sender, EventArgs e)
@@ -69,12 +69,10 @@ namespace TimeWorkTracking
             // with the Sort method to perform custom sorting.
             _lvwItemComparer = new ListViewItemComparer
             {
-                SortColumn = 1,// 1;// e.Column; (3 name)
+                SortColumn = 1,// 1;// e.Column; (3 name)       //сортировка по ФИО
                 Order = SortOrder.Ascending
             };
-
             lstwDataBaseUsers.ListViewItemSorter = _lvwItemComparer;
-
         }
 
         //Загрузить Data из DataSet в ListView
@@ -131,6 +129,7 @@ namespace TimeWorkTracking
             // Perform the sort with these new sort options.
             this.lstwDataBaseUsers.Sort();
         }
+
         //выбор значения из списка инициализация переменных формы
         private void lstwDataBaseUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -138,7 +137,7 @@ namespace TimeWorkTracking
             int ind = lstwDataBaseUsers.SelectedIndex();
             if (ind >= 0)
             {
-                tbExtID.Text = lstwDataBaseUsers.Items[ind].SubItems[2].Text;                  //extID
+                tbExtID.Text = lstwDataBaseUsers.Items[ind].SubItems[2].Text;                   //extID
                 //crmId
                 chUse.Checked = lstwDataBaseUsers.Items[ind].Text == "True";                    //access    
                 tbName.Text = lstwDataBaseUsers.Items[ind].SubItems[1].Text;                    //fio
@@ -198,7 +197,7 @@ namespace TimeWorkTracking
             else                                                            //если поле не пустое          
             {
                 btUpdate.Enabled = true;                                    //разблокировать кнопку записи в БД    
-                if (lstwDataBaseUsers.Items.Cast<ListViewItem>()            //попробовать найти значение поля в списке ListView
+                if (lstwDataBaseUsers.Items.Cast<ListViewItem>()            //попробовать найти значение ключевого поля (name) в списке ListView
                     .Where(x => (x.SubItems[1].Text == tbName.Text.Trim()))         
                     .FirstOrDefault() != null)
                 {                                                           //значение есть
