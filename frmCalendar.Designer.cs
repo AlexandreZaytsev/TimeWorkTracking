@@ -60,6 +60,7 @@ namespace TimeWorkTracking
             this.type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lMsg = new System.Windows.Forms.Label();
             this.toolTipMsgCalendar = new System.Windows.Forms.ToolTip(this.components);
+            this.label1 = new System.Windows.Forms.Label();
             this.mainPanelCalendar.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -85,14 +86,14 @@ namespace TimeWorkTracking
             // 
             this.btUpdate.Enabled = false;
             this.btUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btUpdate.ImageIndex = 2;
+            this.btUpdate.ImageIndex = 6;
             this.btUpdate.ImageList = this.imgListButtonCalendar;
             this.btUpdate.Location = new System.Drawing.Point(836, 330);
             this.btUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btUpdate.Name = "btUpdate";
             this.btUpdate.Size = new System.Drawing.Size(140, 32);
             this.btUpdate.TabIndex = 19;
-            this.btUpdate.Text = "Обновить";
+            this.btUpdate.Text = "Удалить";
             this.btUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btUpdate.UseVisualStyleBackColor = true;
@@ -226,6 +227,7 @@ namespace TimeWorkTracking
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.dtSource);
             this.groupBox1.Controls.Add(this.label6);
@@ -254,13 +256,13 @@ namespace TimeWorkTracking
             // dtSource
             // 
             this.dtSource.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dtSource.CustomFormat = "    dd MMMM yyyy";
+            this.dtSource.CustomFormat = "  dd MMMM yyyy";
             this.dtSource.DropDownAlign = System.Windows.Forms.LeftRightAlignment.Right;
             this.dtSource.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtSource.Location = new System.Drawing.Point(239, 49);
+            this.dtSource.Location = new System.Drawing.Point(245, 49);
             this.dtSource.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dtSource.Name = "dtSource";
-            this.dtSource.Size = new System.Drawing.Size(205, 24);
+            this.dtSource.Size = new System.Drawing.Size(200, 24);
             this.dtSource.TabIndex = 25;
             this.toolTipMsgCalendar.SetToolTip(this.dtSource, "Оригинальная дата из календаря");
             // 
@@ -276,12 +278,12 @@ namespace TimeWorkTracking
             // 
             // dtWork
             // 
-            this.dtWork.CustomFormat = "    dd MMMM yyyy";
+            this.dtWork.CustomFormat = "  dd MMMM yyyy";
             this.dtWork.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtWork.Location = new System.Drawing.Point(8, 49);
+            this.dtWork.Location = new System.Drawing.Point(2, 49);
             this.dtWork.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dtWork.Name = "dtWork";
-            this.dtWork.Size = new System.Drawing.Size(205, 24);
+            this.dtWork.Size = new System.Drawing.Size(200, 24);
             this.dtWork.TabIndex = 23;
             this.toolTipMsgCalendar.SetToolTip(this.dtWork, "Дата с учетом переносов");
             this.dtWork.ValueChanged += new System.EventHandler(this.dtWork_ValueChanged);
@@ -396,6 +398,18 @@ namespace TimeWorkTracking
             this.lMsg.Text = "      Новая запись в БД";
             this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Wingdings", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.label1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label1.Location = new System.Drawing.Point(204, 46);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(38, 41);
+            this.label1.TabIndex = 27;
+            this.label1.Text = "ï";
+            this.label1.UseCompatibleTextRendering = true;
+            // 
             // frmCalendar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -449,5 +463,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ComboBox cbDataType;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label label1;
     }
 }
