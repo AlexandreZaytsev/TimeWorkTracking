@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 
@@ -19,18 +13,18 @@ namespace TimeWorkTracking
         {
             InitializeComponent();
             lMsg.Visible = false;               //погасить сообщение о записи в БД
- //           tbID.Visible = false;
+                                                //           tbID.Visible = false;
         }
         //загрузка формы
         private void frmSpecialMarks_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             mainPanelSpecialMarks.Enabled = MsSqlDatabase.CheckConnectWithConnectionStr(cs);
-            if (mainPanelSpecialMarks.Enabled) 
+            if (mainPanelSpecialMarks.Enabled)
             {
                 InitializeListView();
                 LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));
-
+                lstwDataBaseSpecialMarks.AutoResizeColumn(3, ColumnHeaderAutoResizeStyle.HeaderSize);
                 if (lstwDataBaseSpecialMarks.Items.Count != 0)
                     lstwDataBaseSpecialMarks.Items[0].Selected = true;     //выделить элемент по индексу
             }
@@ -71,8 +65,10 @@ namespace TimeWorkTracking
                     ListViewItem lvi = new ListViewItem(drow["uses"].ToString(), 0) //имя для сортировки
                     {
                         ImageIndex = (Boolean)drow["uses"] ? 1 : 0
-                        , StateImageIndex = (Boolean)drow["uses"] ? 1 : 0
-                        , Checked = (Boolean)drow["uses"]
+                        ,
+                        StateImageIndex = (Boolean)drow["uses"] ? 1 : 0
+                        ,
+                        Checked = (Boolean)drow["uses"]
                         //                        , UseItemStyleForSubItems = true
                     };
 
@@ -84,7 +80,7 @@ namespace TimeWorkTracking
                     lvi.SubItems.Add(drow["note"].ToString());
                     lvi.SubItems.Add(drow["id"].ToString().PadLeft(8, '0'));        //используется для строковой сортировки по колонке
                     lvi.SubItems.Add(drow["id"].ToString());
-                    
+
                     lstwDataBaseSpecialMarks.Items.Add(lvi);                        // Add the list items to the ListView
                 }
             }
@@ -111,19 +107,19 @@ namespace TimeWorkTracking
             // Perform the sort with these new sort options.
             this.lstwDataBaseSpecialMarks.Sort();
         }
- 
+
         //выбор значения из списка
         private void lstwDataBaseSpecialMarks_SelectedIndexChanged(object sender, EventArgs e)
         {
             int ind = lstwDataBaseSpecialMarks.SelectedIndex();
-            if (ind >= 0) 
+            if (ind >= 0)
             {
                 tbID.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[6].Text;
                 tbCodeDigital.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[1].Text;
                 tbCodeLetter.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[2].Text;
                 tbName.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[3].Text;             //name
                 tbNote.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[4].Text;             //note
-                chUse.Checked = lstwDataBaseSpecialMarks.Items[ind].Text=="True";
+                chUse.Checked = lstwDataBaseSpecialMarks.Items[ind].Text == "True";
             }
         }
 

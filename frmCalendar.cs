@@ -33,6 +33,7 @@ namespace TimeWorkTracking
                 //таблица типа дня
                 InitializeListViewDaysCalendar();
                 LoadListDaysCalendar(MsSqlDatabase.TableRequest(cs, "Select * From CalendarDateName where uses=1"));     //сортировка по рабочей (перенос) дате
+                lstwDataBaseDaysCalendar.AutoResizeColumn(2, ColumnHeaderAutoResizeStyle.HeaderSize);
                 if (lstwDataBaseDaysCalendar.Items.Count != 0)
                     lstwDataBaseDaysCalendar.Items[0].Selected = true;     //выделить элемент по индексу
             }

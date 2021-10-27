@@ -38,6 +38,7 @@ namespace TimeWorkTracking
 
                 InitializeListView();
                 LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));
+                lstwDataBaseUsers.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.HeaderSize);
 
                 udBeforeH.Value = new DateTime(2000, 1, 1, 9, 0, 0);
                 udBeforeM.Value = new DateTime(2000, 1, 1, 9, 0, 0);

@@ -164,11 +164,12 @@ namespace TimeWorkTracking
             this.lstwDataBaseDaysCalendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lstwDataBaseDaysCalendar.HideSelection = false;
             this.lstwDataBaseDaysCalendar.LabelWrap = false;
-            this.lstwDataBaseDaysCalendar.Location = new System.Drawing.Point(3, 74);
+            this.lstwDataBaseDaysCalendar.Location = new System.Drawing.Point(6, 99);
             this.lstwDataBaseDaysCalendar.Margin = new System.Windows.Forms.Padding(2);
             this.lstwDataBaseDaysCalendar.MultiSelect = false;
             this.lstwDataBaseDaysCalendar.Name = "lstwDataBaseDaysCalendar";
-            this.lstwDataBaseDaysCalendar.Size = new System.Drawing.Size(491, 141);
+            this.lstwDataBaseDaysCalendar.ShowItemToolTips = true;
+            this.lstwDataBaseDaysCalendar.Size = new System.Drawing.Size(335, 103);
             this.lstwDataBaseDaysCalendar.StateImageList = this.imgListStatusCalendar;
             this.lstwDataBaseDaysCalendar.TabIndex = 31;
             this.lstwDataBaseDaysCalendar.UseCompatibleStateImageBehavior = false;
@@ -183,12 +184,12 @@ namespace TimeWorkTracking
             // 
             this.tDate.Text = "Дата";
             this.tDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tDate.Width = 120;
+            this.tDate.Width = 90;
             // 
             // tName
             // 
             this.tName.Text = "Наименование";
-            this.tName.Width = 200;
+            this.tName.Width = 150;
             // 
             // imgListStatusCalendar
             // 
@@ -227,7 +228,7 @@ namespace TimeWorkTracking
             this.groupBox1.Controls.Add(this.dtWork);
             this.groupBox1.Location = new System.Drawing.Point(3, 26);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(491, 43);
+            this.groupBox1.Size = new System.Drawing.Size(338, 68);
             this.groupBox1.TabIndex = 27;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Дата";
@@ -236,23 +237,24 @@ namespace TimeWorkTracking
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(6, 16);
+            this.label3.Location = new System.Drawing.Point(6, 18);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(95, 15);
             this.label3.TabIndex = 24;
             this.label3.Text = "Фактическая";
+            this.toolTipMsgCalendar.SetToolTip(this.label3, "Реальная дата (перенос даты)");
             // 
             // dt
             // 
-            this.dt.Location = new System.Drawing.Point(350, 13);
+            this.dt.Location = new System.Drawing.Point(168, 40);
             this.dt.Name = "dt";
-            this.dt.Size = new System.Drawing.Size(135, 21);
+            this.dt.Size = new System.Drawing.Size(155, 21);
             this.dt.TabIndex = 25;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(281, 16);
+            this.label6.Location = new System.Drawing.Point(165, 18);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(63, 15);
             this.label6.TabIndex = 26;
@@ -260,9 +262,9 @@ namespace TimeWorkTracking
             // 
             // dtWork
             // 
-            this.dtWork.Location = new System.Drawing.Point(117, 13);
+            this.dtWork.Location = new System.Drawing.Point(6, 40);
             this.dtWork.Name = "dtWork";
-            this.dtWork.Size = new System.Drawing.Size(129, 21);
+            this.dtWork.Size = new System.Drawing.Size(155, 21);
             this.dtWork.TabIndex = 23;
             // 
             // label2
@@ -315,7 +317,7 @@ namespace TimeWorkTracking
             this.chUse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.chUse.ImageIndex = 0;
             this.chUse.ImageList = this.imgListStatusCalendar;
-            this.chUse.Location = new System.Drawing.Point(406, 2);
+            this.chUse.Location = new System.Drawing.Point(253, 2);
             this.chUse.Margin = new System.Windows.Forms.Padding(2);
             this.chUse.Name = "chUse";
             this.chUse.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
