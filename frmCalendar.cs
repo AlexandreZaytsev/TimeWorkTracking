@@ -145,5 +145,64 @@ namespace TimeWorkTracking
             }
         }
 
+        //сортировка по заголовке столбца
+        private void lstwDataBaseDaysCalendar_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            // Determine if clicked column is already the column that is being sorted.
+            if (e.Column == _lvwItemComparer.SortColumn)
+            {
+                // Reverse the current sort direction for this column.
+                if (_lvwItemComparer.Order == SortOrder.Ascending)
+                    _lvwItemComparer.Order = SortOrder.Descending;
+                else
+                    _lvwItemComparer.Order = SortOrder.Ascending;
+            }
+            else
+            {
+                // Set the column number that is to be sorted; default to ascending.
+                _lvwItemComparer.SortColumn = e.Column;
+                _lvwItemComparer.Order = SortOrder.Ascending;
+            }
+
+            // Perform the sort with these new sort options.
+            this.lstwDataBaseDaysCalendar.Sort();
+        }
+        //выбор значения из списка
+        private void lstwDataBaseDaysCalendar_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int ind = lstwDataBaseDaysCalendar.SelectedIndex();
+            if (ind >= 0)
+            {
+                /*
+                tbID.Text = lstwDataBaseDaysCalendar.Items[ind].SubItems[6].Text;
+                tbCodeDigital.Text = lstwDataBaseDaysCalendar.Items[ind].SubItems[1].Text;
+                tbCodeLetter.Text = lstwDataBaseDaysCalendar.Items[ind].SubItems[2].Text;
+                tbName.Text = lstwDataBaseDaysCalendar.Items[ind].SubItems[3].Text;             //name
+                tbNote.Text = lstwDataBaseDaysCalendar.Items[ind].SubItems[4].Text;             //note
+*/
+                chUse.Checked = lstwDataBaseDaysCalendar.Items[ind].Text == "True";
+            }
+        }
+
+        //запретить изменение размеров
+        private void lstwDataBaseDaysCalendar_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            e.Cancel = true;
+            e.NewWidth = lstwDataBaseDaysCalendar.Columns[e.ColumnIndex].Width;
+        }
+
+        //чекбокс запись активна
+        private void chUse_CheckedChanged(object sender, EventArgs e)
+        {
+            chUse.ImageIndex = chUse.Checked ? 1 : 0;
+        }
+
+        //редактирование ключевого поля (Реальная дата)
+        private void dtWork_ValueChanged(object sender, EventArgs e)
+        {
+            dtSource.Value=dtWork.Value;    //сброс оригинальной даты
+        }
+
+
     }
 }

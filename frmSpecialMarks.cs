@@ -85,6 +85,7 @@ namespace TimeWorkTracking
                 }
             }
         }
+
         //сортировка по заголовке столбца
         private void lstwDataBaseSpecialMarks_ColumnClick(object sender, ColumnClickEventArgs e)
         {

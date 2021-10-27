@@ -45,7 +45,7 @@ namespace TimeWorkTracking
             this.cbDataType = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.dt = new System.Windows.Forms.DateTimePicker();
+            this.dtSource = new System.Windows.Forms.DateTimePicker();
             this.label6 = new System.Windows.Forms.Label();
             this.dtWork = new System.Windows.Forms.DateTimePicker();
             this.label2 = new System.Windows.Forms.Label();
@@ -163,6 +163,9 @@ namespace TimeWorkTracking
             this.lstwDataBaseDaysCalendar.TabIndex = 31;
             this.lstwDataBaseDaysCalendar.UseCompatibleStateImageBehavior = false;
             this.lstwDataBaseDaysCalendar.View = System.Windows.Forms.View.SmallIcon;
+            this.lstwDataBaseDaysCalendar.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstwDataBaseDaysCalendar_ColumnClick);
+            this.lstwDataBaseDaysCalendar.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.lstwDataBaseDaysCalendar_ColumnWidthChanging);
+            this.lstwDataBaseDaysCalendar.SelectedIndexChanged += new System.EventHandler(this.lstwDataBaseDaysCalendar_SelectedIndexChanged);
             // 
             // tUsed
             // 
@@ -212,7 +215,7 @@ namespace TimeWorkTracking
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.dt);
+            this.groupBox1.Controls.Add(this.dtSource);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.dtWork);
             this.groupBox1.Location = new System.Drawing.Point(3, 151);
@@ -233,12 +236,14 @@ namespace TimeWorkTracking
             this.label3.Text = "Фактическая";
             this.toolTipMsgCalendar.SetToolTip(this.label3, "Реальная дата (перенос даты)");
             // 
-            // dt
+            // dtSource
             // 
-            this.dt.Location = new System.Drawing.Point(179, 40);
-            this.dt.Name = "dt";
-            this.dt.Size = new System.Drawing.Size(155, 21);
-            this.dt.TabIndex = 25;
+            this.dtSource.DropDownAlign = System.Windows.Forms.LeftRightAlignment.Right;
+            this.dtSource.Location = new System.Drawing.Point(179, 40);
+            this.dtSource.Name = "dtSource";
+            this.dtSource.Size = new System.Drawing.Size(155, 21);
+            this.dtSource.TabIndex = 25;
+            this.toolTipMsgCalendar.SetToolTip(this.dtSource, "Оригинальная дата из календаря");
             // 
             // label6
             // 
@@ -255,6 +260,8 @@ namespace TimeWorkTracking
             this.dtWork.Name = "dtWork";
             this.dtWork.Size = new System.Drawing.Size(155, 21);
             this.dtWork.TabIndex = 23;
+            this.toolTipMsgCalendar.SetToolTip(this.dtWork, "Дата с учетом переносов");
+            this.dtWork.ValueChanged += new System.EventHandler(this.dtWork_ValueChanged);
             // 
             // label2
             // 
@@ -414,7 +421,7 @@ namespace TimeWorkTracking
         private System.Windows.Forms.DateTimePicker dtWork;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.DateTimePicker dt;
+        private System.Windows.Forms.DateTimePicker dtSource;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ListView lstwDataBaseDaysCalendar;
         private System.Windows.Forms.ColumnHeader tUsed;
