@@ -8,76 +8,63 @@ using System.Windows.Forms;
 namespace TimeWorkTracking
 {
     //https://www.akadia.com/services/dotnet_listview_sort_dataset.html
-    // This class is an implementation of the 'IComparer' interface.
+    // Этот класс является реализацией интерфейса IComparer
     public class ListViewItemComparer : IComparer
     {
-        // Specifies the column to be sorted
-        private int ColumnToSort;
-
-        // Specifies the order in which to sort (i.e. 'Ascending').
-        private SortOrder OrderOfSort;
-
-        // Case insensitive comparer object
-        private readonly CaseInsensitiveComparer ObjectCompare;
-
-        // Class constructor, initializes various elements
-        public ListViewItemComparer()
+        private int ColumnToSort;                               //Определяет столбец для сортировки
+        private SortOrder OrderOfSort;                          //Определяет порядок сортировки (т.е. «По возрастанию»).
+        private readonly CaseInsensitiveComparer ObjectCompare; //Объект сравнения без учета регистра
+        public ListViewItemComparer()                           //Конструктор класса, инициализирует различные элементы
         {
-            // Initialize the column to '0'
-            ColumnToSort = 0;
-
-            // Initialize the sort order to 'none'
-            OrderOfSort = SortOrder.None;
-
-            // Initialize the CaseInsensitiveComparer object
-            ObjectCompare = new CaseInsensitiveComparer();
+            ColumnToSort = 0;                                   //Инициализирует столбец равным 0
+            OrderOfSort = SortOrder.None;                       //Инициализируем порядок сортировки как «нет»
+            ObjectCompare = new CaseInsensitiveComparer();      //Инициализируем объект CaseInsensitiveComparer
         }
 
-        // This method is inherited from the IComparer interface.
-        // It compares the two objects passed using a case
-        // insensitive comparison.
+        // Этот метод унаследован от интерфейса IComparer.
+        // Он сравнивает два переданных объекта, используя
+        // сравнение без учета регистра.
         //
-        // x: First object to be compared
-        // y: Second object to be compared
+        // x: первый объект для сравнения
+        // y: второй объект для сравнения
         //
-        // The result of the comparison. "0" if equal,
-        // negative if 'x' is less than 'y' and
-        // positive if 'x' is greater than 'y'
+        // результат сравнения. «0», если равно,
+        // отрицательное, если 'x' меньше 'y' и
+        // положительно, если 'x' больше 'y'
         public int Compare(object x, object y)
         {
             int compareResult;
             ListViewItem listviewX, listviewY;
 
-            // Cast the objects to be compared to ListViewItem objects
+            //Приведение объектов для сравнения к объектам ListViewItem
             listviewX = (ListViewItem)x;
             listviewY = (ListViewItem)y;
 
-            // Case insensitive Compare
+            //Без учета регистра Compare
             compareResult = ObjectCompare.Compare(
                 listviewX.SubItems[ColumnToSort].Text,
                 listviewY.SubItems[ColumnToSort].Text
             );
 
-            // Calculate correct return value based on object comparison
+            // Вычислить правильное возвращаемое значение на основе сравнения объектов
             if (OrderOfSort == SortOrder.Ascending)
             {
-                // Ascending sort is selected, return normal result of compare operation
+                //Выбрана сортировка по возрастанию, вернуть нормальный результат операции
                 return compareResult;
             }
             else if (OrderOfSort == SortOrder.Descending)
             {
-                // Descending sort is selected, return negative result of compare operation
+                //Выбрана сортировка по убыванию, вернуть отрицательный результат операции сравнения
                 return (-compareResult);
             }
             else
             {
-                // Return '0' to indicate they are equal
-                return 0;
+                return 0;       // Верните '0', чтобы указать, что они равны
             }
         }
 
-        // Gets or sets the number of the column to which to
-        // apply the sorting operation (Defaults to '0').
+        // Получает или задает номер столбца, к которому
+        // применяется операция сортировки (по умолчанию «0»).
         public int SortColumn
         {
             set
@@ -90,8 +77,8 @@ namespace TimeWorkTracking
             }
         }
 
-        // Gets or sets the order of sorting to apply
-        // (for example, 'Ascending' or 'Descending').
+        // Получает или задает порядок сортировки для применения
+        // (например, «По возрастанию» или «По убыванию»).
         public SortOrder Order
         {
             set

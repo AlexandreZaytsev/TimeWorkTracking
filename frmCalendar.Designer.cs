@@ -33,8 +33,22 @@ namespace TimeWorkTracking
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCalendar));
             this.mainPanelCalendar = new System.Windows.Forms.Panel();
             this.btUpdate = new System.Windows.Forms.Button();
+            this.imgListButtonCalendar = new System.Windows.Forms.ImageList(this.components);
             this.btInsert = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lstwDataBaseDaysCalendar = new System.Windows.Forms.ListView();
+            this.tUsed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.imgListStatusCalendar = new System.Windows.Forms.ImageList(this.components);
+            this.label8 = new System.Windows.Forms.Label();
+            this.cbSheme = new System.Windows.Forms.ComboBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.dt = new System.Windows.Forms.DateTimePicker();
+            this.label6 = new System.Windows.Forms.Label();
+            this.dtWork = new System.Windows.Forms.DateTimePicker();
+            this.label2 = new System.Windows.Forms.Label();
             this.tbID = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tbCodeLetter = new System.Windows.Forms.TextBox();
@@ -46,16 +60,15 @@ namespace TimeWorkTracking
             this.label4 = new System.Windows.Forms.Label();
             this.lstwDataBaseCalendar = new System.Windows.Forms.ListView();
             this.used = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.num = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.code = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.dwork = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.dref = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lMsg = new System.Windows.Forms.Label();
-            this.imgListStatusCalendar = new System.Windows.Forms.ImageList(this.components);
-            this.imgListButtonCalendar = new System.Windows.Forms.ImageList(this.components);
             this.toolTipMsgCalendar = new System.Windows.Forms.ToolTip(this.components);
-            this.label2 = new System.Windows.Forms.Label();
             this.mainPanelCalendar.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainPanelCalendar
@@ -70,7 +83,7 @@ namespace TimeWorkTracking
             this.mainPanelCalendar.Location = new System.Drawing.Point(0, 0);
             this.mainPanelCalendar.Margin = new System.Windows.Forms.Padding(2);
             this.mainPanelCalendar.Name = "mainPanelCalendar";
-            this.mainPanelCalendar.Size = new System.Drawing.Size(693, 250);
+            this.mainPanelCalendar.Size = new System.Drawing.Size(1407, 390);
             this.mainPanelCalendar.TabIndex = 3;
             // 
             // btUpdate
@@ -79,7 +92,7 @@ namespace TimeWorkTracking
             this.btUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btUpdate.ImageIndex = 2;
             this.btUpdate.ImageList = this.imgListButtonCalendar;
-            this.btUpdate.Location = new System.Drawing.Point(564, 202);
+            this.btUpdate.Location = new System.Drawing.Point(564, 284);
             this.btUpdate.Margin = new System.Windows.Forms.Padding(2);
             this.btUpdate.Name = "btUpdate";
             this.btUpdate.Size = new System.Drawing.Size(105, 26);
@@ -89,13 +102,27 @@ namespace TimeWorkTracking
             this.btUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btUpdate.UseVisualStyleBackColor = true;
             // 
+            // imgListButtonCalendar
+            // 
+            this.imgListButtonCalendar.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgListButtonCalendar.ImageStream")));
+            this.imgListButtonCalendar.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgListButtonCalendar.Images.SetKeyName(0, "db_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(1, "db_add_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(2, "db_edit_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(3, "db_find_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(4, "db_lock_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(5, "db_unlock_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(6, "db_upload_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(7, "db_import_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(8, "db_export_48.png");
+            // 
             // btInsert
             // 
             this.btInsert.Enabled = false;
             this.btInsert.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btInsert.ImageIndex = 1;
             this.btInsert.ImageList = this.imgListButtonCalendar;
-            this.btInsert.Location = new System.Drawing.Point(384, 202);
+            this.btInsert.Location = new System.Drawing.Point(384, 284);
             this.btInsert.Margin = new System.Windows.Forms.Padding(2);
             this.btInsert.Name = "btInsert";
             this.btInsert.Size = new System.Drawing.Size(105, 26);
@@ -108,6 +135,10 @@ namespace TimeWorkTracking
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.lstwDataBaseDaysCalendar);
+            this.panel1.Controls.Add(this.label8);
+            this.panel1.Controls.Add(this.cbSheme);
+            this.panel1.Controls.Add(this.groupBox1);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.tbID);
             this.panel1.Controls.Add(this.label1);
@@ -121,15 +152,134 @@ namespace TimeWorkTracking
             this.panel1.Location = new System.Drawing.Point(383, 11);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(286, 143);
+            this.panel1.Size = new System.Drawing.Size(949, 257);
             this.panel1.TabIndex = 17;
+            // 
+            // lstwDataBaseDaysCalendar
+            // 
+            this.lstwDataBaseDaysCalendar.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.tUsed,
+            this.tDate,
+            this.tName});
+            this.lstwDataBaseDaysCalendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lstwDataBaseDaysCalendar.HideSelection = false;
+            this.lstwDataBaseDaysCalendar.LabelWrap = false;
+            this.lstwDataBaseDaysCalendar.Location = new System.Drawing.Point(3, 74);
+            this.lstwDataBaseDaysCalendar.Margin = new System.Windows.Forms.Padding(2);
+            this.lstwDataBaseDaysCalendar.MultiSelect = false;
+            this.lstwDataBaseDaysCalendar.Name = "lstwDataBaseDaysCalendar";
+            this.lstwDataBaseDaysCalendar.Size = new System.Drawing.Size(491, 141);
+            this.lstwDataBaseDaysCalendar.StateImageList = this.imgListStatusCalendar;
+            this.lstwDataBaseDaysCalendar.TabIndex = 31;
+            this.lstwDataBaseDaysCalendar.UseCompatibleStateImageBehavior = false;
+            this.lstwDataBaseDaysCalendar.View = System.Windows.Forms.View.SmallIcon;
+            // 
+            // tUsed
+            // 
+            this.tUsed.Text = "";
+            this.tUsed.Width = 29;
+            // 
+            // tDate
+            // 
+            this.tDate.Text = "Дата";
+            this.tDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tDate.Width = 120;
+            // 
+            // tName
+            // 
+            this.tName.Text = "Наименование";
+            this.tName.Width = 200;
+            // 
+            // imgListStatusCalendar
+            // 
+            this.imgListStatusCalendar.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgListStatusCalendar.ImageStream")));
+            this.imgListStatusCalendar.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgListStatusCalendar.Images.SetKeyName(0, "off5m.png");
+            this.imgListStatusCalendar.Images.SetKeyName(1, "on5m.png");
+            this.imgListStatusCalendar.Images.SetKeyName(2, "db_add_48x72.png");
+            this.imgListStatusCalendar.Images.SetKeyName(3, "db_edit_48x72.png");
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(297, 223);
+            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(37, 15);
+            this.label8.TabIndex = 29;
+            this.label8.Text = "День";
+            // 
+            // cbSheme
+            // 
+            this.cbSheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbSheme.FormattingEnabled = true;
+            this.cbSheme.Location = new System.Drawing.Point(353, 219);
+            this.cbSheme.Margin = new System.Windows.Forms.Padding(2);
+            this.cbSheme.Name = "cbSheme";
+            this.cbSheme.Size = new System.Drawing.Size(141, 23);
+            this.cbSheme.TabIndex = 30;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.dt);
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.dtWork);
+            this.groupBox1.Location = new System.Drawing.Point(3, 26);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(491, 43);
+            this.groupBox1.TabIndex = 27;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Дата";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label3.Location = new System.Drawing.Point(6, 16);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(95, 15);
+            this.label3.TabIndex = 24;
+            this.label3.Text = "Фактическая";
+            // 
+            // dt
+            // 
+            this.dt.Location = new System.Drawing.Point(350, 13);
+            this.dt.Name = "dt";
+            this.dt.Size = new System.Drawing.Size(135, 21);
+            this.dt.TabIndex = 25;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(281, 16);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(63, 15);
+            this.label6.TabIndex = 26;
+            this.label6.Text = "Исходная";
+            // 
+            // dtWork
+            // 
+            this.dtWork.Location = new System.Drawing.Point(117, 13);
+            this.dtWork.Name = "dtWork";
+            this.dtWork.Size = new System.Drawing.Size(129, 21);
+            this.dtWork.TabIndex = 23;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(9, 7);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(20, 15);
+            this.label2.TabIndex = 22;
+            this.label2.Text = "id:";
             // 
             // tbID
             // 
             this.tbID.BackColor = System.Drawing.SystemColors.Control;
             this.tbID.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbID.Enabled = false;
-            this.tbID.Location = new System.Drawing.Point(132, 7);
+            this.tbID.Location = new System.Drawing.Point(28, 7);
             this.tbID.Name = "tbID";
             this.tbID.Size = new System.Drawing.Size(36, 14);
             this.tbID.TabIndex = 21;
@@ -138,7 +288,7 @@ namespace TimeWorkTracking
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(3, 7);
+            this.label1.Location = new System.Drawing.Point(565, 40);
             this.label1.Margin = new System.Windows.Forms.Padding(2);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(107, 15);
@@ -147,7 +297,7 @@ namespace TimeWorkTracking
             // 
             // tbCodeLetter
             // 
-            this.tbCodeLetter.Location = new System.Drawing.Point(242, 115);
+            this.tbCodeLetter.Location = new System.Drawing.Point(804, 148);
             this.tbCodeLetter.Margin = new System.Windows.Forms.Padding(2);
             this.tbCodeLetter.Name = "tbCodeLetter";
             this.tbCodeLetter.Size = new System.Drawing.Size(36, 21);
@@ -165,7 +315,7 @@ namespace TimeWorkTracking
             this.chUse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.chUse.ImageIndex = 0;
             this.chUse.ImageList = this.imgListStatusCalendar;
-            this.chUse.Location = new System.Drawing.Point(194, 2);
+            this.chUse.Location = new System.Drawing.Point(406, 2);
             this.chUse.Margin = new System.Windows.Forms.Padding(2);
             this.chUse.Name = "chUse";
             this.chUse.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -180,7 +330,7 @@ namespace TimeWorkTracking
             // 
             this.tbName.BackColor = System.Drawing.SystemColors.Window;
             this.tbName.HideSelection = false;
-            this.tbName.Location = new System.Drawing.Point(8, 28);
+            this.tbName.Location = new System.Drawing.Point(570, 61);
             this.tbName.Margin = new System.Windows.Forms.Padding(2);
             this.tbName.Name = "tbName";
             this.tbName.Size = new System.Drawing.Size(270, 21);
@@ -188,7 +338,7 @@ namespace TimeWorkTracking
             // 
             // tbCodeDigital
             // 
-            this.tbCodeDigital.Location = new System.Drawing.Point(104, 115);
+            this.tbCodeDigital.Location = new System.Drawing.Point(666, 148);
             this.tbCodeDigital.Margin = new System.Windows.Forms.Padding(2);
             this.tbCodeDigital.Name = "tbCodeDigital";
             this.tbCodeDigital.Size = new System.Drawing.Size(36, 21);
@@ -198,7 +348,7 @@ namespace TimeWorkTracking
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(143, 117);
+            this.label5.Location = new System.Drawing.Point(705, 150);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(93, 15);
@@ -207,7 +357,7 @@ namespace TimeWorkTracking
             // 
             // tbNote
             // 
-            this.tbNote.Location = new System.Drawing.Point(8, 53);
+            this.tbNote.Location = new System.Drawing.Point(570, 86);
             this.tbNote.Margin = new System.Windows.Forms.Padding(2);
             this.tbNote.Multiline = true;
             this.tbNote.Name = "tbNote";
@@ -218,7 +368,7 @@ namespace TimeWorkTracking
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 117);
+            this.label4.Location = new System.Drawing.Point(565, 150);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(92, 15);
@@ -229,9 +379,10 @@ namespace TimeWorkTracking
             // 
             this.lstwDataBaseCalendar.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.used,
-            this.num,
-            this.code,
-            this.name});
+            this.dwork,
+            this.dref,
+            this.name,
+            this.type});
             this.lstwDataBaseCalendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lstwDataBaseCalendar.HideSelection = false;
             this.lstwDataBaseCalendar.LabelWrap = false;
@@ -240,6 +391,7 @@ namespace TimeWorkTracking
             this.lstwDataBaseCalendar.MultiSelect = false;
             this.lstwDataBaseCalendar.Name = "lstwDataBaseCalendar";
             this.lstwDataBaseCalendar.Size = new System.Drawing.Size(370, 218);
+            this.lstwDataBaseCalendar.StateImageList = this.imgListStatusCalendar;
             this.lstwDataBaseCalendar.TabIndex = 15;
             this.lstwDataBaseCalendar.UseCompatibleStateImageBehavior = false;
             this.lstwDataBaseCalendar.View = System.Windows.Forms.View.SmallIcon;
@@ -250,21 +402,26 @@ namespace TimeWorkTracking
             this.used.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.used.Width = 29;
             // 
-            // num
+            // dwork
             // 
-            this.num.Text = "№";
-            this.num.Width = 30;
+            this.dwork.Text = "Дата";
+            this.dwork.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.dwork.Width = 80;
             // 
-            // code
+            // dref
             // 
-            this.code.Text = "Код";
-            this.code.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.code.Width = 40;
+            this.dref.Text = "Сссылка";
+            this.dref.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.dref.Width = 80;
             // 
             // name
             // 
             this.name.Text = "Наименование";
-            this.name.Width = 250;
+            this.name.Width = 200;
+            // 
+            // type
+            // 
+            this.type.Text = "Тип дня";
             // 
             // lMsg
             // 
@@ -274,7 +431,7 @@ namespace TimeWorkTracking
             this.lMsg.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lMsg.ImageIndex = 6;
             this.lMsg.ImageList = this.imgListButtonCalendar;
-            this.lMsg.Location = new System.Drawing.Point(507, 206);
+            this.lMsg.Location = new System.Drawing.Point(507, 288);
             this.lMsg.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lMsg.Name = "lMsg";
             this.lMsg.Size = new System.Drawing.Size(157, 17);
@@ -282,43 +439,11 @@ namespace TimeWorkTracking
             this.lMsg.Text = "      Новая запись в БД";
             this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // imgListStatusCalendar
-            // 
-            this.imgListStatusCalendar.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgListStatusCalendar.ImageStream")));
-            this.imgListStatusCalendar.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgListStatusCalendar.Images.SetKeyName(0, "off5m.png");
-            this.imgListStatusCalendar.Images.SetKeyName(1, "on5m.png");
-            this.imgListStatusCalendar.Images.SetKeyName(2, "db_add_48x72.png");
-            this.imgListStatusCalendar.Images.SetKeyName(3, "db_edit_48x72.png");
-            // 
-            // imgListButtonCalendar
-            // 
-            this.imgListButtonCalendar.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgListButtonCalendar.ImageStream")));
-            this.imgListButtonCalendar.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgListButtonCalendar.Images.SetKeyName(0, "db_48.png");
-            this.imgListButtonCalendar.Images.SetKeyName(1, "db_add_48.png");
-            this.imgListButtonCalendar.Images.SetKeyName(2, "db_edit_48.png");
-            this.imgListButtonCalendar.Images.SetKeyName(3, "db_find_48.png");
-            this.imgListButtonCalendar.Images.SetKeyName(4, "db_lock_48.png");
-            this.imgListButtonCalendar.Images.SetKeyName(5, "db_unlock_48.png");
-            this.imgListButtonCalendar.Images.SetKeyName(6, "db_upload_48.png");
-            this.imgListButtonCalendar.Images.SetKeyName(7, "db_import_48.png");
-            this.imgListButtonCalendar.Images.SetKeyName(8, "db_export_48.png");
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(113, 7);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(20, 15);
-            this.label2.TabIndex = 22;
-            this.label2.Text = "id:";
-            // 
             // frmCalendar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(693, 250);
+            this.ClientSize = new System.Drawing.Size(1407, 390);
             this.Controls.Add(this.mainPanelCalendar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "frmCalendar";
@@ -328,6 +453,8 @@ namespace TimeWorkTracking
             this.mainPanelCalendar.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -349,13 +476,25 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ListView lstwDataBaseCalendar;
         private System.Windows.Forms.ColumnHeader used;
-        private System.Windows.Forms.ColumnHeader num;
-        private System.Windows.Forms.ColumnHeader code;
+        private System.Windows.Forms.ColumnHeader dwork;
+        private System.Windows.Forms.ColumnHeader dref;
         private System.Windows.Forms.ColumnHeader name;
         private System.Windows.Forms.Label lMsg;
         private System.Windows.Forms.ImageList imgListStatusCalendar;
         private System.Windows.Forms.ImageList imgListButtonCalendar;
         private System.Windows.Forms.ToolTip toolTipMsgCalendar;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ColumnHeader type;
+        private System.Windows.Forms.DateTimePicker dtWork;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.DateTimePicker dt;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.ListView lstwDataBaseDaysCalendar;
+        private System.Windows.Forms.ColumnHeader tUsed;
+        private System.Windows.Forms.ColumnHeader tDate;
+        private System.Windows.Forms.ColumnHeader tName;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ComboBox cbSheme;
     }
 }
