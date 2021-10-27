@@ -61,7 +61,10 @@ namespace TimeWorkTracking
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText = "INSERT INTO CalendarDateType(name) VALUES " +
                         "(N'Полный'), " +
-                        "(N'Сокращенный')";
+                        "(N'Сокращенный'), " +
+                        "(N'Удлиненный'), " +
+                        "(N'Праздничный'), " +
+                        "(N'Выходной')";
                     sqlCommand.ExecuteNonQuery();
 
                     //Наименование даты производственного календаря (таблица для списка) 
@@ -83,7 +86,7 @@ namespace TimeWorkTracking
                         "(N'День России', '2000.06.12'), " +
                         "(N'День народного единства', '2000.11.04'), " +
                         "(N'Нерабочие дни', NULL), " +
-                        "(N'Сокращенные дни', NULL)";
+                        "(N'-', NULL)";                                                             //другое
                     sqlCommand.ExecuteNonQuery();
 
                     //Подразделение (таблица для списка)
@@ -181,8 +184,8 @@ namespace TimeWorkTracking
                         "id int PRIMARY KEY IDENTITY, " +
                         "originalDate Date NOT NULL , " +                                           //оригинальная дата
                         "transferDate Date NOT NULL UNIQUE, " +                                     //*реальная дата (перенос)
-                        "dateTypeId int NOT NULL FOREIGN KEY REFERENCES CalendarDateType(id), " +   //->ссылка на тип даты
-                        "dateNameId int NOT NULL FOREIGN KEY REFERENCES CalendarDateName(id), " +   //->ссылка на наименование даты
+                        "dateNameId int NOT NULL FOREIGN KEY REFERENCES CalendarDateName(id), " +   //->ссылка на наименование даты (наименование даты и т.д.)
+                        "dateTypeId int NOT NULL FOREIGN KEY REFERENCES CalendarDateType(id), " +   //->ссылка на тип даты (тип дня сокращенный, полный и т.д.)
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
