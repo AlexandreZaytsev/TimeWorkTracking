@@ -244,7 +244,7 @@ namespace TimeWorkTracking
                         "\r\n  c.id id, " +
                         "\r\n  c.transferDate dWork, " +                                            //рабочая дата (перенос или исходная)
                         "\r\n  c.originalDate dSource, " +                                          //исходная дата
-                        "\r\n  n.name name, " +                                                     //наименование дня
+                        "\r\n  n.name dName, " +                                                    //наименование дня
                         "\r\n  t.name dType, " +                                                    //тип дня (полный/сокращенный)
                         "\r\n  c.uses access " +                                                    //флаг доступа для использования
                         "\r\nFrom Calendars c, CalendarDateName n, CalendarDateType t " +
