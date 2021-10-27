@@ -324,6 +324,9 @@ namespace TimeWorkTracking
             this.lstwDataBaseCalendar.TabIndex = 15;
             this.lstwDataBaseCalendar.UseCompatibleStateImageBehavior = false;
             this.lstwDataBaseCalendar.View = System.Windows.Forms.View.SmallIcon;
+            this.lstwDataBaseCalendar.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstwDataBaseCalendar_ColumnClick);
+            this.lstwDataBaseCalendar.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.lstwDataBaseCalendar_ColumnWidthChanging);
+            this.lstwDataBaseCalendar.SelectedIndexChanged += new System.EventHandler(this.lstwDataBaseCalendar_SelectedIndexChanged);
             // 
             // used
             // 

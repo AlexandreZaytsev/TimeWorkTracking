@@ -42,6 +42,8 @@ namespace TimeWorkTracking
                     lstwDataBaseDaysCalendar.Items[0].Selected = true;     //выделить элемент по индексу
             }
         }
+
+        //LIST CALENDAR ---------------------------------------------------------------------------------------------------
         // Initialize ListView календаря
         private void InitializeListViewCalendar()
         {
@@ -93,6 +95,29 @@ namespace TimeWorkTracking
                 }
             }
         }
+        private void lstwDataBaseCalendar_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            // Determine if clicked column is already the column that is being sorted.
+            if (e.Column == _lvwItemComparer.SortColumn)
+            {
+                // Reverse the current sort direction for this column.
+                if (_lvwItemComparer.Order == SortOrder.Ascending)
+                    _lvwItemComparer.Order = SortOrder.Descending;
+                else
+                    _lvwItemComparer.Order = SortOrder.Ascending;
+            }
+            else
+            {
+                // Set the column number that is to be sorted; default to ascending.
+                _lvwItemComparer.SortColumn = e.Column;
+                _lvwItemComparer.Order = SortOrder.Ascending;
+            }
+
+            // Perform the sort with these new sort options.
+            this.lstwDataBaseCalendar.Sort();
+        }
+
+        //LIST DAYS CALENDAR ---------------------------------------------------------------------------------------------------
         // Initialize ListView дней календаря
         private void InitializeListViewDaysCalendar()
         {
@@ -135,7 +160,7 @@ namespace TimeWorkTracking
 
                     //    lvi.Checked = (Boolean)drow["Uses"];
                     //       lvi.SubItems.Add(drow["Uses"].ToString());
-                    lvi.SubItems.Add(drow["date"].ToString() == "" ? "-":((DateTime)drow["date"]).ToString("d MMMMM"));
+                    lvi.SubItems.Add(drow["date"].ToString() == "" ? "-" : ((DateTime)drow["date"]).ToString("d MMMMM"));
                     lvi.SubItems.Add(drow["name"].ToString());
                     lvi.SubItems.Add(drow["id"].ToString().PadLeft(8, '0'));        //используется для строковой сортировки по колонке
                     lvi.SubItems.Add(drow["id"].ToString());
@@ -145,7 +170,7 @@ namespace TimeWorkTracking
             }
         }
 
-        //сортировка по заголовке столбца
+        //сортировка по заголовку столбца
         private void lstwDataBaseDaysCalendar_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             // Determine if clicked column is already the column that is being sorted.
@@ -191,10 +216,10 @@ namespace TimeWorkTracking
             e.NewWidth = lstwDataBaseDaysCalendar.Columns[e.ColumnIndex].Width;
         }
 
-        //чекбокс запись активна
-        private void chUse_CheckedChanged(object sender, EventArgs e)
+
+        private void lstwDataBaseCalendar_SelectedIndexChanged(object sender, EventArgs e)
         {
-            chUse.ImageIndex = chUse.Checked ? 1 : 0;
+
         }
 
         //редактирование ключевого поля (Реальная дата)
@@ -204,5 +229,16 @@ namespace TimeWorkTracking
         }
 
 
+
+        private void lstwDataBaseCalendar_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+
+        }
+
+        //чекбокс запись активна
+        private void chUse_CheckedChanged(object sender, EventArgs e)
+        {
+            chUse.ImageIndex = chUse.Checked ? 1 : 0;
+        }
     }
 }
