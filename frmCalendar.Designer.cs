@@ -86,7 +86,7 @@ namespace TimeWorkTracking
             // 
             this.btUpdate.Enabled = false;
             this.btUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btUpdate.ImageIndex = 6;
+            this.btUpdate.ImageIndex = 3;
             this.btUpdate.ImageList = this.imgListButtonCalendar;
             this.btUpdate.Location = new System.Drawing.Point(836, 330);
             this.btUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -105,12 +105,13 @@ namespace TimeWorkTracking
             this.imgListButtonCalendar.Images.SetKeyName(0, "db_48.png");
             this.imgListButtonCalendar.Images.SetKeyName(1, "db_add_48.png");
             this.imgListButtonCalendar.Images.SetKeyName(2, "db_edit_48.png");
-            this.imgListButtonCalendar.Images.SetKeyName(3, "db_find_48.png");
-            this.imgListButtonCalendar.Images.SetKeyName(4, "db_lock_48.png");
-            this.imgListButtonCalendar.Images.SetKeyName(5, "db_unlock_48.png");
-            this.imgListButtonCalendar.Images.SetKeyName(6, "db_upload_48.png");
-            this.imgListButtonCalendar.Images.SetKeyName(7, "db_import_48.png");
-            this.imgListButtonCalendar.Images.SetKeyName(8, "db_export_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(3, "db_del_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(4, "db_find_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(5, "db_lock_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(6, "db_unlock_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(7, "db_upload_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(8, "db_import_48.png");
+            this.imgListButtonCalendar.Images.SetKeyName(9, "db_export_48.png");
             // 
             // btInsert
             // 
@@ -245,7 +246,7 @@ namespace TimeWorkTracking
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(8, 22);
+            this.label3.Location = new System.Drawing.Point(39, 22);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(111, 18);
@@ -269,7 +270,7 @@ namespace TimeWorkTracking
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(235, 22);
+            this.label6.Location = new System.Drawing.Point(297, 22);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(76, 18);
@@ -402,7 +403,7 @@ namespace TimeWorkTracking
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Wingdings", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.label1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label1.ForeColor = System.Drawing.SystemColors.WindowFrame;
             this.label1.Location = new System.Drawing.Point(204, 46);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 41);
