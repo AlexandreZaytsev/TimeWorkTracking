@@ -34,6 +34,7 @@ namespace TimeWorkTracking
                 LoadListCalendar(MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') where access=1 order by dWork"));     //сортировка по рабочей (перенос) дате
                 if (lstwDataBaseCalendar.Items.Count != 0)
                     lstwDataBaseCalendar.Items[0].Selected = true;     //выделить элемент по индексу
+ 
                 //таблица типа дня
                 InitializeListViewDaysCalendar();
                 LoadListDaysCalendar(MsSqlDatabase.TableRequest(cs, "Select * From CalendarDateName where uses=1"));     //сортировка по рабочей (перенос) дате
@@ -95,6 +96,7 @@ namespace TimeWorkTracking
                 }
             }
         }
+        //сортировка по заголовку столбца
         private void lstwDataBaseCalendar_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             // Determine if clicked column is already the column that is being sorted.
@@ -126,18 +128,7 @@ namespace TimeWorkTracking
             lstwDataBaseDaysCalendar.AllowColumnReorder = true;         // Allow the user to rearrange columns.
             lstwDataBaseDaysCalendar.FullRowSelect = true;              // Select the item and subitems when selection is made.
             lstwDataBaseDaysCalendar.GridLines = true;                  // Display grid lines.
-            lstwDataBaseDaysCalendar.Sorting = SortOrder.Ascending;     // Sort the items in the list in ascending order.
-
-            // The ListViewItemSorter property allows you to specify the
-            // object that performs the sorting of items in the ListView.
-            // You can use the ListViewItemSorter property in combination
-            // with the Sort method to perform custom sorting.
-            _lvwItemComparer = new ListViewItemComparer
-            {
-                SortColumn = 3,                             //сортировка по рабочей дате
-                Order = SortOrder.Ascending
-            };
-            lstwDataBaseDaysCalendar.ListViewItemSorter = _lvwItemComparer;
+//            lstwDataBaseDaysCalendar.Sorting = SortOrder.Ascending;     // Sort the items in the list in ascending order.
         }
         //Загрузить Data из DataSet в ListView дней календаря
         private void LoadListDaysCalendar(DataTable dtable)
@@ -152,8 +143,8 @@ namespace TimeWorkTracking
                     lstwDataBaseDaysCalendar.LabelEdit = false;      //запрет редактирования item
                     ListViewItem lvi = new ListViewItem(drow["uses"].ToString(), 0) //имя для сортировки
                     {
-                        ImageIndex = (Boolean)drow["uses"] ? 1 : 0,
-                        StateImageIndex = (Boolean)drow["uses"] ? 1 : 0,
+//                        ImageIndex = (Boolean)drow["uses"] ? 4 : 0,
+                        StateImageIndex = (Boolean)drow["uses"] ? 2 : 0,
                         Checked = (Boolean)drow["uses"]
                         //                        , UseItemStyleForSubItems = true
                     };
@@ -164,40 +155,19 @@ namespace TimeWorkTracking
                     lvi.SubItems.Add(drow["name"].ToString());
                     lvi.SubItems.Add(drow["id"].ToString().PadLeft(8, '0'));        //используется для строковой сортировки по колонке
                     lvi.SubItems.Add(drow["id"].ToString());
-
+                    lvi.SubItems.Add(drow["date"].ToString() == "" ? DateTime.Today.ToString("d") : ((DateTime)drow["date"]).ToString("dd.MM.")+ DateTime.Now.Year.ToString());
                     lstwDataBaseDaysCalendar.Items.Add(lvi);                        // Add the list items to the ListView
                 }
             }
         }
 
-        //сортировка по заголовку столбца
-        private void lstwDataBaseDaysCalendar_ColumnClick(object sender, ColumnClickEventArgs e)
-        {
-            // Determine if clicked column is already the column that is being sorted.
-            if (e.Column == _lvwItemComparer.SortColumn)
-            {
-                // Reverse the current sort direction for this column.
-                if (_lvwItemComparer.Order == SortOrder.Ascending)
-                    _lvwItemComparer.Order = SortOrder.Descending;
-                else
-                    _lvwItemComparer.Order = SortOrder.Ascending;
-            }
-            else
-            {
-                // Set the column number that is to be sorted; default to ascending.
-                _lvwItemComparer.SortColumn = e.Column;
-                _lvwItemComparer.Order = SortOrder.Ascending;
-            }
-
-            // Perform the sort with these new sort options.
-            this.lstwDataBaseDaysCalendar.Sort();
-        }
         //выбор значения из списка
         private void lstwDataBaseDaysCalendar_SelectedIndexChanged(object sender, EventArgs e)
         {
             int ind = lstwDataBaseDaysCalendar.SelectedIndex();
             if (ind >= 0)
             {
+                dtWork.Value = DateTime.Parse(lstwDataBaseDaysCalendar.Items[ind].SubItems[5].Text);
                 /*
                 tbID.Text = lstwDataBaseDaysCalendar.Items[ind].SubItems[6].Text;
                 tbCodeDigital.Text = lstwDataBaseDaysCalendar.Items[ind].SubItems[1].Text;
@@ -205,7 +175,7 @@ namespace TimeWorkTracking
                 tbName.Text = lstwDataBaseDaysCalendar.Items[ind].SubItems[3].Text;             //name
                 tbNote.Text = lstwDataBaseDaysCalendar.Items[ind].SubItems[4].Text;             //note
 */
-                chUse.Checked = lstwDataBaseDaysCalendar.Items[ind].Text == "True";
+                //               chUse.Checked = lstwDataBaseDaysCalendar.Items[ind].Text == "True";
             }
         }
 
@@ -236,7 +206,8 @@ namespace TimeWorkTracking
         }
 
         //чекбокс запись активна
-        private void chUse_CheckedChanged(object sender, EventArgs e)
+
+        private void chUse_CheckedChanged_1(object sender, EventArgs e)
         {
             chUse.ImageIndex = chUse.Checked ? 1 : 0;
         }
