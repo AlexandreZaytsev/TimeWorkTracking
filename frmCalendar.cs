@@ -118,6 +118,28 @@ namespace TimeWorkTracking
             // Perform the sort with these new sort options.
             this.lstwDataBaseCalendar.Sort();
         }
+      
+        //выбор значения из списка
+        private void lstwDataBaseCalendar_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int ind = lstwDataBaseCalendar.SelectedIndex();
+            if (ind >= 0)
+            {
+/*
+                dtWork.Value = lstwDataBaseCalendar.Items[ind].SubItems[6].Text;
+                dtSource.Value = lstwDataBaseSpecialMarks.Items[ind].SubItems[1].Text;
+                cbDataType.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[2].Text;
+                lstwDataBaseDaysCalendar.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[3].Text;             //name
+*/
+                chUse.Checked = lstwDataBaseCalendar.Items[ind].Text == "True";
+            }
+        }
+        //запретить изменение размеров
+        private void lstwDataBaseCalendar_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            e.Cancel = true;
+            e.NewWidth = lstwDataBaseDaysCalendar.Columns[e.ColumnIndex].Width;
+        }
 
         //LIST DAYS CALENDAR ---------------------------------------------------------------------------------------------------
         // Initialize ListView дней календаря
@@ -168,14 +190,6 @@ namespace TimeWorkTracking
             if (ind >= 0)
             {
                 dtWork.Value = DateTime.Parse(lstwDataBaseDaysCalendar.Items[ind].SubItems[5].Text);
-                /*
-                tbID.Text = lstwDataBaseDaysCalendar.Items[ind].SubItems[6].Text;
-                tbCodeDigital.Text = lstwDataBaseDaysCalendar.Items[ind].SubItems[1].Text;
-                tbCodeLetter.Text = lstwDataBaseDaysCalendar.Items[ind].SubItems[2].Text;
-                tbName.Text = lstwDataBaseDaysCalendar.Items[ind].SubItems[3].Text;             //name
-                tbNote.Text = lstwDataBaseDaysCalendar.Items[ind].SubItems[4].Text;             //note
-*/
-                //               chUse.Checked = lstwDataBaseDaysCalendar.Items[ind].Text == "True";
             }
         }
 
@@ -186,23 +200,28 @@ namespace TimeWorkTracking
             e.NewWidth = lstwDataBaseDaysCalendar.Columns[e.ColumnIndex].Width;
         }
 
-
-        private void lstwDataBaseCalendar_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         //редактирование ключевого поля (Реальная дата)
         private void dtWork_ValueChanged(object sender, EventArgs e)
         {
             dtSource.Value=dtWork.Value;    //сброс оригинальной даты
-        }
+            if (lstwDataBaseCalendar.Items.Cast<ListViewItem>()     //попробовать найти значение ключевого поля (name) в списке ListView
+                .Where(x => (x.SubItems[5].Text == dtWork.Text.Trim()))
+                .FirstOrDefault() != null)
+            {                                                           //значение есть
+                dtWork.BackColor = System.Drawing.SystemColors.Control; //серый фон
+                lstwDataBaseCalendar.HideSelection = false;         //установить выделение строки (без перевода фокуса на listwiew)
 
-
-
-        private void lstwDataBaseCalendar_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
-        {
-
+                btInsert.Enabled = false;                               //заблокировать кнопку INSERT    
+                btDelete.Enabled = true;                                //разблокировать кнопку UPDATE    
+            }
+            else                                                        //значения нет 
+            {
+                dtWork.BackColor = System.Drawing.SystemColors.Window;  //белый фон
+                lstwDataBaseCalendar.HideSelection = true;          //снять выделение со строки listview (без перевода фокуса на listwiew)
+                btInsert.Enabled = true;                                //разблокировать кнопку INSERT    
+                btDelete.Enabled = true;                                //разблокировать кнопку UPDATE    
+            }
+            
         }
 
         //чекбокс запись активна

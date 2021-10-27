@@ -32,7 +32,7 @@ namespace TimeWorkTracking
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCalendar));
             this.mainPanelCalendar = new System.Windows.Forms.Panel();
-            this.btUpdate = new System.Windows.Forms.Button();
+            this.btDelete = new System.Windows.Forms.Button();
             this.imgListButtonCalendar = new System.Windows.Forms.ImageList(this.components);
             this.btInsert = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -69,7 +69,7 @@ namespace TimeWorkTracking
             // 
             // mainPanelCalendar
             // 
-            this.mainPanelCalendar.Controls.Add(this.btUpdate);
+            this.mainPanelCalendar.Controls.Add(this.btDelete);
             this.mainPanelCalendar.Controls.Add(this.btInsert);
             this.mainPanelCalendar.Controls.Add(this.panel1);
             this.mainPanelCalendar.Controls.Add(this.lstwDataBaseCalendar);
@@ -82,21 +82,21 @@ namespace TimeWorkTracking
             this.mainPanelCalendar.Size = new System.Drawing.Size(987, 370);
             this.mainPanelCalendar.TabIndex = 3;
             // 
-            // btUpdate
+            // btDelete
             // 
-            this.btUpdate.Enabled = false;
-            this.btUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btUpdate.ImageIndex = 3;
-            this.btUpdate.ImageList = this.imgListButtonCalendar;
-            this.btUpdate.Location = new System.Drawing.Point(836, 330);
-            this.btUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btUpdate.Name = "btUpdate";
-            this.btUpdate.Size = new System.Drawing.Size(140, 32);
-            this.btUpdate.TabIndex = 19;
-            this.btUpdate.Text = "Удалить";
-            this.btUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btUpdate.UseVisualStyleBackColor = true;
+            this.btDelete.Enabled = false;
+            this.btDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btDelete.ImageIndex = 3;
+            this.btDelete.ImageList = this.imgListButtonCalendar;
+            this.btDelete.Location = new System.Drawing.Point(836, 330);
+            this.btDelete.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btDelete.Name = "btDelete";
+            this.btDelete.Size = new System.Drawing.Size(140, 32);
+            this.btDelete.TabIndex = 19;
+            this.btDelete.Text = "Удалить";
+            this.btDelete.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btDelete.UseVisualStyleBackColor = true;
             // 
             // imgListButtonCalendar
             // 
@@ -436,7 +436,7 @@ namespace TimeWorkTracking
         #endregion
 
         private System.Windows.Forms.Panel mainPanelCalendar;
-        private System.Windows.Forms.Button btUpdate;
+        private System.Windows.Forms.Button btDelete;
         private System.Windows.Forms.Button btInsert;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox tbID;
