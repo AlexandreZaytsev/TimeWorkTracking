@@ -50,14 +50,7 @@ namespace TimeWorkTracking
             this.dtWork = new System.Windows.Forms.DateTimePicker();
             this.label2 = new System.Windows.Forms.Label();
             this.tbID = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tbCodeLetter = new System.Windows.Forms.TextBox();
             this.chUse = new System.Windows.Forms.CheckBox();
-            this.tbName = new System.Windows.Forms.TextBox();
-            this.tbCodeDigital = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.tbNote = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.lstwDataBaseCalendar = new System.Windows.Forms.ListView();
             this.used = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.dwork = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -85,7 +78,7 @@ namespace TimeWorkTracking
             this.mainPanelCalendar.Location = new System.Drawing.Point(0, 0);
             this.mainPanelCalendar.Margin = new System.Windows.Forms.Padding(2);
             this.mainPanelCalendar.Name = "mainPanelCalendar";
-            this.mainPanelCalendar.Size = new System.Drawing.Size(1407, 390);
+            this.mainPanelCalendar.Size = new System.Drawing.Size(740, 301);
             this.mainPanelCalendar.TabIndex = 3;
             // 
             // btUpdate
@@ -94,7 +87,7 @@ namespace TimeWorkTracking
             this.btUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btUpdate.ImageIndex = 2;
             this.btUpdate.ImageList = this.imgListButtonCalendar;
-            this.btUpdate.Location = new System.Drawing.Point(564, 284);
+            this.btUpdate.Location = new System.Drawing.Point(627, 268);
             this.btUpdate.Margin = new System.Windows.Forms.Padding(2);
             this.btUpdate.Name = "btUpdate";
             this.btUpdate.Size = new System.Drawing.Size(105, 26);
@@ -124,7 +117,7 @@ namespace TimeWorkTracking
             this.btInsert.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btInsert.ImageIndex = 1;
             this.btInsert.ImageList = this.imgListButtonCalendar;
-            this.btInsert.Location = new System.Drawing.Point(384, 284);
+            this.btInsert.Location = new System.Drawing.Point(383, 268);
             this.btInsert.Margin = new System.Windows.Forms.Padding(2);
             this.btInsert.Name = "btInsert";
             this.btInsert.Size = new System.Drawing.Size(105, 26);
@@ -143,18 +136,11 @@ namespace TimeWorkTracking
             this.panel1.Controls.Add(this.groupBox1);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.tbID);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.tbCodeLetter);
             this.panel1.Controls.Add(this.chUse);
-            this.panel1.Controls.Add(this.tbName);
-            this.panel1.Controls.Add(this.tbCodeDigital);
-            this.panel1.Controls.Add(this.label5);
-            this.panel1.Controls.Add(this.tbNote);
-            this.panel1.Controls.Add(this.label4);
             this.panel1.Location = new System.Drawing.Point(383, 11);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(949, 257);
+            this.panel1.Size = new System.Drawing.Size(349, 253);
             this.panel1.TabIndex = 17;
             // 
             // lstwDataBaseDaysCalendar
@@ -172,7 +158,7 @@ namespace TimeWorkTracking
             this.lstwDataBaseDaysCalendar.MultiSelect = false;
             this.lstwDataBaseDaysCalendar.Name = "lstwDataBaseDaysCalendar";
             this.lstwDataBaseDaysCalendar.ShowItemToolTips = true;
-            this.lstwDataBaseDaysCalendar.Size = new System.Drawing.Size(332, 100);
+            this.lstwDataBaseDaysCalendar.Size = new System.Drawing.Size(332, 105);
             this.lstwDataBaseDaysCalendar.StateImageList = this.imgListStatusCalendar;
             this.lstwDataBaseDaysCalendar.TabIndex = 31;
             this.lstwDataBaseDaysCalendar.UseCompatibleStateImageBehavior = false;
@@ -206,21 +192,21 @@ namespace TimeWorkTracking
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(144, 223);
+            this.label8.Location = new System.Drawing.Point(11, 225);
             this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(37, 15);
+            this.label8.Size = new System.Drawing.Size(153, 15);
             this.label8.TabIndex = 29;
-            this.label8.Text = "День";
+            this.label8.Text = "Продолжительность дня";
             // 
             // cbDataType
             // 
             this.cbDataType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDataType.FormattingEnabled = true;
-            this.cbDataType.Location = new System.Drawing.Point(200, 219);
+            this.cbDataType.Location = new System.Drawing.Point(182, 222);
             this.cbDataType.Margin = new System.Windows.Forms.Padding(2);
             this.cbDataType.Name = "cbDataType";
-            this.cbDataType.Size = new System.Drawing.Size(141, 23);
+            this.cbDataType.Size = new System.Drawing.Size(155, 23);
             this.cbDataType.TabIndex = 30;
             // 
             // groupBox1
@@ -229,7 +215,7 @@ namespace TimeWorkTracking
             this.groupBox1.Controls.Add(this.dt);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.dtWork);
-            this.groupBox1.Location = new System.Drawing.Point(3, 146);
+            this.groupBox1.Location = new System.Drawing.Point(3, 151);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(338, 69);
             this.groupBox1.TabIndex = 27;
@@ -289,26 +275,6 @@ namespace TimeWorkTracking
             this.tbID.Size = new System.Drawing.Size(36, 14);
             this.tbID.TabIndex = 21;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(565, 40);
-            this.label1.Margin = new System.Windows.Forms.Padding(2);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(107, 15);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Наименование";
-            // 
-            // tbCodeLetter
-            // 
-            this.tbCodeLetter.Location = new System.Drawing.Point(804, 148);
-            this.tbCodeLetter.Margin = new System.Windows.Forms.Padding(2);
-            this.tbCodeLetter.Name = "tbCodeLetter";
-            this.tbCodeLetter.Size = new System.Drawing.Size(36, 21);
-            this.tbCodeLetter.TabIndex = 10;
-            this.tbCodeLetter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
             // chUse
             // 
             this.chUse.Appearance = System.Windows.Forms.Appearance.Button;
@@ -331,55 +297,6 @@ namespace TimeWorkTracking
             this.toolTipMsgCalendar.SetToolTip(this.chUse, "Дата активна");
             this.chUse.UseVisualStyleBackColor = true;
             // 
-            // tbName
-            // 
-            this.tbName.BackColor = System.Drawing.SystemColors.Window;
-            this.tbName.HideSelection = false;
-            this.tbName.Location = new System.Drawing.Point(570, 61);
-            this.tbName.Margin = new System.Windows.Forms.Padding(2);
-            this.tbName.Name = "tbName";
-            this.tbName.Size = new System.Drawing.Size(270, 21);
-            this.tbName.TabIndex = 3;
-            // 
-            // tbCodeDigital
-            // 
-            this.tbCodeDigital.Location = new System.Drawing.Point(666, 148);
-            this.tbCodeDigital.Margin = new System.Windows.Forms.Padding(2);
-            this.tbCodeDigital.Name = "tbCodeDigital";
-            this.tbCodeDigital.Size = new System.Drawing.Size(36, 21);
-            this.tbCodeDigital.TabIndex = 9;
-            this.tbCodeDigital.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(705, 150);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(93, 15);
-            this.label5.TabIndex = 8;
-            this.label5.Text = "Буквенный код";
-            // 
-            // tbNote
-            // 
-            this.tbNote.Location = new System.Drawing.Point(570, 86);
-            this.tbNote.Margin = new System.Windows.Forms.Padding(2);
-            this.tbNote.Multiline = true;
-            this.tbNote.Name = "tbNote";
-            this.tbNote.Size = new System.Drawing.Size(270, 58);
-            this.tbNote.TabIndex = 5;
-            this.toolTipMsgCalendar.SetToolTip(this.tbNote, "Комментарий");
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(565, 150);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(92, 15);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "Цифровой код";
-            // 
             // lstwDataBaseCalendar
             // 
             this.lstwDataBaseCalendar.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -395,7 +312,7 @@ namespace TimeWorkTracking
             this.lstwDataBaseCalendar.Margin = new System.Windows.Forms.Padding(2);
             this.lstwDataBaseCalendar.MultiSelect = false;
             this.lstwDataBaseCalendar.Name = "lstwDataBaseCalendar";
-            this.lstwDataBaseCalendar.Size = new System.Drawing.Size(370, 218);
+            this.lstwDataBaseCalendar.Size = new System.Drawing.Size(370, 284);
             this.lstwDataBaseCalendar.StateImageList = this.imgListStatusCalendar;
             this.lstwDataBaseCalendar.TabIndex = 15;
             this.lstwDataBaseCalendar.UseCompatibleStateImageBehavior = false;
@@ -436,7 +353,7 @@ namespace TimeWorkTracking
             this.lMsg.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lMsg.ImageIndex = 6;
             this.lMsg.ImageList = this.imgListButtonCalendar;
-            this.lMsg.Location = new System.Drawing.Point(507, 288);
+            this.lMsg.Location = new System.Drawing.Point(570, 272);
             this.lMsg.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lMsg.Name = "lMsg";
             this.lMsg.Size = new System.Drawing.Size(157, 17);
@@ -447,9 +364,9 @@ namespace TimeWorkTracking
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.lstwDataBaseDaysCalendar);
-            this.groupBox2.Location = new System.Drawing.Point(3, 25);
+            this.groupBox2.Location = new System.Drawing.Point(3, 24);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(338, 120);
+            this.groupBox2.Size = new System.Drawing.Size(338, 125);
             this.groupBox2.TabIndex = 32;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Календарь дат";
@@ -458,7 +375,7 @@ namespace TimeWorkTracking
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1407, 390);
+            this.ClientSize = new System.Drawing.Size(740, 301);
             this.Controls.Add(this.mainPanelCalendar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "frmCalendar";
@@ -482,14 +399,7 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Button btInsert;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox tbID;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox tbCodeLetter;
         private System.Windows.Forms.CheckBox chUse;
-        private System.Windows.Forms.TextBox tbName;
-        private System.Windows.Forms.TextBox tbCodeDigital;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox tbNote;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ListView lstwDataBaseCalendar;
         private System.Windows.Forms.ColumnHeader used;
         private System.Windows.Forms.ColumnHeader dwork;
