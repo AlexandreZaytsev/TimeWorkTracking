@@ -25,6 +25,10 @@ namespace TimeWorkTracking
             mainPanelCalendar.Enabled = MsSqlDatabase.CheckConnectWithConnectionStr(cs);
             if (mainPanelCalendar.Enabled)
             {
+                cbDataType.DisplayMember = "Name";
+                cbDataType.ValueMember = "id";
+                cbDataType.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From CalendarDateType where uses=1");
+
                 //таблица календаря
                 InitializeListViewCalendar();
                 LoadListCalendar(MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') where access=1 order by dWork"));     //сортировка по рабочей (перенос) дате
@@ -33,7 +37,7 @@ namespace TimeWorkTracking
                 //таблица типа дня
                 InitializeListViewDaysCalendar();
                 LoadListDaysCalendar(MsSqlDatabase.TableRequest(cs, "Select * From CalendarDateName where uses=1"));     //сортировка по рабочей (перенос) дате
-                lstwDataBaseDaysCalendar.AutoResizeColumn(2, ColumnHeaderAutoResizeStyle.HeaderSize);
+                lstwDataBaseDaysCalendar.AutoResizeColumn(2, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
                 if (lstwDataBaseDaysCalendar.Items.Count != 0)
                     lstwDataBaseDaysCalendar.Items[0].Selected = true;     //выделить элемент по индексу
             }

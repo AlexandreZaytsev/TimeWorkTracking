@@ -26,19 +26,19 @@ namespace TimeWorkTracking
             {
                 cbDepartment.DisplayMember = "Name";
                 cbDepartment.ValueMember = "id";
-                cbDepartment.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From UserDepartment");
+                cbDepartment.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From UserDepartment where uses=1");
 
                 cbPost.DisplayMember = "Name";
                 cbPost.ValueMember = "id";
-                cbPost.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From UserPost");
+                cbPost.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From UserPost where uses=1");
 
                 cbSheme.DisplayMember = "Name";
                 cbSheme.ValueMember = "id";
-                cbSheme.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From UserWorkScheme order by name desc");
+                cbSheme.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From UserWorkScheme where uses=1 order by name desc");
 
                 InitializeListView();
                 LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));
-                lstwDataBaseUsers.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.HeaderSize);
+                lstwDataBaseUsers.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
 
                 udBeforeH.Value = new DateTime(2000, 1, 1, 9, 0, 0);
                 udBeforeM.Value = new DateTime(2000, 1, 1, 9, 0, 0);

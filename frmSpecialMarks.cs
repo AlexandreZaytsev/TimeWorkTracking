@@ -24,7 +24,7 @@ namespace TimeWorkTracking
             {
                 InitializeListView();
                 LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));
-                lstwDataBaseSpecialMarks.AutoResizeColumn(3, ColumnHeaderAutoResizeStyle.HeaderSize);
+                lstwDataBaseSpecialMarks.AutoResizeColumn(3, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
                 if (lstwDataBaseSpecialMarks.Items.Count != 0)
                     lstwDataBaseSpecialMarks.Items[0].Selected = true;     //выделить элемент по индексу
             }
