@@ -191,14 +191,18 @@ namespace TimeWorkTracking
             {
                 dtSource.Value = DateTime.Parse(lstwDataBaseDaysCalendar.Items[ind].SubItems[5].Text);
                 if (lstwDataBaseDaysCalendar.Items[ind].SubItems[1].Text != "-")
-                    pdtSource.BackColor = System.Drawing.SystemColors.ActiveCaption;//System.Drawing.Color.LimeGreen;
-
+                {
+//                    pdtSource.BackColor = System.Drawing.SystemColors.ActiveCaption;//System.Drawing.Color.LimeGreen;
+                    lbdtSource.Font = new System.Drawing.Font(lbdtSource.Font, System.Drawing.FontStyle.Bold);
+                }
                 if (lstwDataBaseDaysCalendar.Focused)
                     dtWork.Value = DateTime.Parse(lstwDataBaseDaysCalendar.Items[ind].SubItems[5].Text);
             }
             else 
             {
-                pdtSource.BackColor = System.Drawing.SystemColors.Control;
+ //               pdtSource.BackColor = System.Drawing.SystemColors.Control;
+                lbdtSource.Font = new System.Drawing.Font(lbdtSource.Font, System.Drawing.FontStyle.Regular);
+
             }
         }
 
@@ -252,7 +256,8 @@ namespace TimeWorkTracking
                     else
                         lstwDataBaseDaysCalendar.Items[index].Selected = false;
                 }
-                pdtSource.BackColor = selDate  ? System.Drawing.SystemColors.ActiveCaption : System.Drawing.SystemColors.Control;
+//                pdtSource.BackColor = selDate  ? System.Drawing.SystemColors.ActiveCaption : System.Drawing.SystemColors.Control;
+                lbdtSource.Font = selDate? new System.Drawing.Font(lbdtSource.Font, System.Drawing.FontStyle.Bold):new System.Drawing.Font(lbdtSource.Font, System.Drawing.FontStyle.Regular);
             }
         }
 

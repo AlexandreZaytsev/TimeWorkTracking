@@ -48,7 +48,6 @@ namespace TimeWorkTracking
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.dtSource = new System.Windows.Forms.DateTimePicker();
-            this.lbdtSource = new System.Windows.Forms.Label();
             this.dtWork = new System.Windows.Forms.DateTimePicker();
             this.label2 = new System.Windows.Forms.Label();
             this.tbID = new System.Windows.Forms.TextBox();
@@ -61,12 +60,11 @@ namespace TimeWorkTracking
             this.type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lMsg = new System.Windows.Forms.Label();
             this.toolTipMsgCalendar = new System.Windows.Forms.ToolTip(this.components);
-            this.pdtSource = new System.Windows.Forms.Panel();
+            this.lbdtSource = new System.Windows.Forms.Label();
             this.mainPanelCalendar.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.pdtSource.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainPanelCalendar
@@ -231,11 +229,11 @@ namespace TimeWorkTracking
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.lbdtSource);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.dtSource);
             this.groupBox1.Controls.Add(this.dtWork);
-            this.groupBox1.Controls.Add(this.pdtSource);
             this.groupBox1.Location = new System.Drawing.Point(4, 186);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
@@ -283,16 +281,6 @@ namespace TimeWorkTracking
             this.dtSource.TabIndex = 25;
             this.toolTipMsgCalendar.SetToolTip(this.dtSource, "Оригинальная дата из календаря");
             this.dtSource.ValueChanged += new System.EventHandler(this.dtSource_ValueChanged);
-            // 
-            // lbdtSource
-            // 
-            this.lbdtSource.AutoSize = true;
-            this.lbdtSource.Location = new System.Drawing.Point(61, 1);
-            this.lbdtSource.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lbdtSource.Name = "lbdtSource";
-            this.lbdtSource.Size = new System.Drawing.Size(76, 18);
-            this.lbdtSource.TabIndex = 26;
-            this.lbdtSource.Text = "Исходная";
             // 
             // dtWork
             // 
@@ -416,14 +404,15 @@ namespace TimeWorkTracking
             this.lMsg.Text = "      Новая запись в БД";
             this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // pdtSource
+            // lbdtSource
             // 
-            this.pdtSource.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.pdtSource.Controls.Add(this.lbdtSource);
-            this.pdtSource.Location = new System.Drawing.Point(245, 21);
-            this.pdtSource.Name = "pdtSource";
-            this.pdtSource.Size = new System.Drawing.Size(200, 24);
-            this.pdtSource.TabIndex = 28;
+            this.lbdtSource.AutoSize = true;
+            this.lbdtSource.Location = new System.Drawing.Point(301, 22);
+            this.lbdtSource.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lbdtSource.Name = "lbdtSource";
+            this.lbdtSource.Size = new System.Drawing.Size(76, 18);
+            this.lbdtSource.TabIndex = 26;
+            this.lbdtSource.Text = "Исходная";
             // 
             // frmCalendar
             // 
@@ -443,8 +432,6 @@ namespace TimeWorkTracking
             this.groupBox2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.pdtSource.ResumeLayout(false);
-            this.pdtSource.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -470,7 +457,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ColumnHeader type;
         private System.Windows.Forms.DateTimePicker dtWork;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label lbdtSource;
         private System.Windows.Forms.DateTimePicker dtSource;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ListView lstwDataBaseDaysCalendar;
@@ -481,6 +467,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ComboBox cbDataType;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel pdtSource;
+        private System.Windows.Forms.Label lbdtSource;
     }
 }
