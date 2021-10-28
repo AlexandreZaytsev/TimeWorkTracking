@@ -189,12 +189,17 @@ namespace TimeWorkTracking
             int ind = lstwDataBaseDaysCalendar.SelectedIndex();
             if (ind >= 0)
             {
-//                dtWork.Value = DateTime.Parse(lstwDataBaseDaysCalendar.Items[ind].SubItems[5].Text);
                 dtSource.Value = DateTime.Parse(lstwDataBaseDaysCalendar.Items[ind].SubItems[5].Text);
-                dtSource.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+                if (lstwDataBaseDaysCalendar.Items[ind].SubItems[1].Text != "-")
+                    pdtSource.BackColor = System.Drawing.SystemColors.ActiveCaption;//System.Drawing.Color.LimeGreen;
+
+                if (lstwDataBaseDaysCalendar.Focused)
+                    dtWork.Value = DateTime.Parse(lstwDataBaseDaysCalendar.Items[ind].SubItems[5].Text);
             }
-       //     else
-       //         dtSource.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            else 
+            {
+                pdtSource.BackColor = System.Drawing.SystemColors.Control;
+            }
         }
 
         //запретить изменение размеров
@@ -231,6 +236,8 @@ namespace TimeWorkTracking
         //редактирование поля Исходная дата
         private void dtSource_ValueChanged(object sender, EventArgs e)
         {
+            bool selDate = false;
+         //   bool selNoDate = false;
             string fd= ((DateTime)dtSource.Value).ToString("d MMMMM");
             if (!lstwDataBaseDaysCalendar.Focused)//lstwDataBaseDaysCalendar.Focused) 
             {
@@ -238,16 +245,14 @@ namespace TimeWorkTracking
                 {
                     if (lstwDataBaseDaysCalendar.Items[index].SubItems[1].Text == fd)
                     {
-                        dtSource.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+                        selDate = true;
                         lstwDataBaseDaysCalendar.Items[index].Selected = true;
                         lstwDataBaseDaysCalendar.EnsureVisible(index);             //показать в области видимости окна
                     }
                     else
-                    {
-                        dtSource.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
                         lstwDataBaseDaysCalendar.Items[index].Selected = false;
-                    }
                 }
+                pdtSource.BackColor = selDate  ? System.Drawing.SystemColors.ActiveCaption : System.Drawing.SystemColors.Control;
             }
         }
 
