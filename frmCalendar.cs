@@ -189,8 +189,12 @@ namespace TimeWorkTracking
             int ind = lstwDataBaseDaysCalendar.SelectedIndex();
             if (ind >= 0)
             {
-                dtWork.Value = DateTime.Parse(lstwDataBaseDaysCalendar.Items[ind].SubItems[5].Text);
+//                dtWork.Value = DateTime.Parse(lstwDataBaseDaysCalendar.Items[ind].SubItems[5].Text);
+                dtSource.Value = DateTime.Parse(lstwDataBaseDaysCalendar.Items[ind].SubItems[5].Text);
+                dtSource.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             }
+       //     else
+       //         dtSource.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
         }
 
         //запретить изменение размеров
@@ -203,6 +207,7 @@ namespace TimeWorkTracking
         //редактирование ключевого поля (Реальная дата)
         private void dtWork_ValueChanged(object sender, EventArgs e)
         {
+/*
             dtSource.Value=dtWork.Value;    //сброс оригинальной даты
             if (lstwDataBaseCalendar.Items.Cast<ListViewItem>()     //попробовать найти значение ключевого поля (name) в списке ListView
                 .Where(x => (x.SubItems[5].Text == dtWork.Text.Trim()))
@@ -221,7 +226,29 @@ namespace TimeWorkTracking
                 btInsert.Enabled = true;                                //разблокировать кнопку INSERT    
                 btDelete.Enabled = true;                                //разблокировать кнопку UPDATE    
             }
-            
+  */          
+        }
+        //редактирование поля Исходная дата
+        private void dtSource_ValueChanged(object sender, EventArgs e)
+        {
+            string fd= ((DateTime)dtSource.Value).ToString("d MMMMM");
+            if (!lstwDataBaseDaysCalendar.Focused)//lstwDataBaseDaysCalendar.Focused) 
+            {
+                for (int index = 0; index <= lstwDataBaseDaysCalendar.Items.Count - 1; index++)
+                {
+                    if (lstwDataBaseDaysCalendar.Items[index].SubItems[1].Text == fd)
+                    {
+                        dtSource.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+                        lstwDataBaseDaysCalendar.Items[index].Selected = true;
+                        lstwDataBaseDaysCalendar.EnsureVisible(index);             //показать в области видимости окна
+                    }
+                    else
+                    {
+                        dtSource.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+                        lstwDataBaseDaysCalendar.Items[index].Selected = false;
+                    }
+                }
+            }
         }
 
         //чекбокс запись активна
@@ -230,5 +257,7 @@ namespace TimeWorkTracking
         {
             chUse.ImageIndex = chUse.Checked ? 1 : 0;
         }
+
+
     }
 }

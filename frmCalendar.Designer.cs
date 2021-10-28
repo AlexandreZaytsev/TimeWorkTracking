@@ -45,6 +45,7 @@ namespace TimeWorkTracking
             this.label8 = new System.Windows.Forms.Label();
             this.cbDataType = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.dtSource = new System.Windows.Forms.DateTimePicker();
             this.label6 = new System.Windows.Forms.Label();
@@ -60,7 +61,6 @@ namespace TimeWorkTracking
             this.type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lMsg = new System.Windows.Forms.Label();
             this.toolTipMsgCalendar = new System.Windows.Forms.ToolTip(this.components);
-            this.label1 = new System.Windows.Forms.Label();
             this.mainPanelCalendar.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -149,9 +149,9 @@ namespace TimeWorkTracking
             // 
             this.groupBox2.Controls.Add(this.lstwDataBaseDaysCalendar);
             this.groupBox2.Location = new System.Drawing.Point(4, 30);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox2.Size = new System.Drawing.Size(451, 154);
             this.groupBox2.TabIndex = 32;
             this.groupBox2.TabStop = false;
@@ -165,6 +165,7 @@ namespace TimeWorkTracking
             this.tName});
             this.lstwDataBaseDaysCalendar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstwDataBaseDaysCalendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lstwDataBaseDaysCalendar.FullRowSelect = true;
             this.lstwDataBaseDaysCalendar.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lstwDataBaseDaysCalendar.HideSelection = false;
             this.lstwDataBaseDaysCalendar.LabelWrap = false;
@@ -234,13 +235,25 @@ namespace TimeWorkTracking
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.dtWork);
             this.groupBox1.Location = new System.Drawing.Point(4, 186);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox1.Size = new System.Drawing.Size(451, 85);
             this.groupBox1.TabIndex = 27;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Дата производственного календаря";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Wingdings", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.label1.ForeColor = System.Drawing.SystemColors.WindowFrame;
+            this.label1.Location = new System.Drawing.Point(204, 46);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(38, 41);
+            this.label1.TabIndex = 27;
+            this.label1.Text = "ï";
+            this.label1.UseCompatibleTextRendering = true;
             // 
             // label3
             // 
@@ -259,13 +272,15 @@ namespace TimeWorkTracking
             this.dtSource.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.dtSource.CustomFormat = "  dd MMMM yyyy";
             this.dtSource.DropDownAlign = System.Windows.Forms.LeftRightAlignment.Right;
+            this.dtSource.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.dtSource.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtSource.Location = new System.Drawing.Point(245, 49);
-            this.dtSource.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dtSource.Margin = new System.Windows.Forms.Padding(4);
             this.dtSource.Name = "dtSource";
             this.dtSource.Size = new System.Drawing.Size(200, 24);
             this.dtSource.TabIndex = 25;
             this.toolTipMsgCalendar.SetToolTip(this.dtSource, "Оригинальная дата из календаря");
+            this.dtSource.ValueChanged += new System.EventHandler(this.dtSource_ValueChanged);
             // 
             // label6
             // 
@@ -282,7 +297,7 @@ namespace TimeWorkTracking
             this.dtWork.CustomFormat = "  dd MMMM yyyy";
             this.dtWork.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtWork.Location = new System.Drawing.Point(2, 49);
-            this.dtWork.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dtWork.Margin = new System.Windows.Forms.Padding(4);
             this.dtWork.Name = "dtWork";
             this.dtWork.Size = new System.Drawing.Size(200, 24);
             this.dtWork.TabIndex = 23;
@@ -305,7 +320,7 @@ namespace TimeWorkTracking
             this.tbID.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbID.Enabled = false;
             this.tbID.Location = new System.Drawing.Point(37, 9);
-            this.tbID.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbID.Margin = new System.Windows.Forms.Padding(4);
             this.tbID.Name = "tbID";
             this.tbID.Size = new System.Drawing.Size(48, 17);
             this.tbID.TabIndex = 21;
@@ -399,18 +414,6 @@ namespace TimeWorkTracking
             this.lMsg.Text = "      Новая запись в БД";
             this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Wingdings", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.label1.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.label1.Location = new System.Drawing.Point(204, 46);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 41);
-            this.label1.TabIndex = 27;
-            this.label1.Text = "ï";
-            this.label1.UseCompatibleTextRendering = true;
-            // 
             // frmCalendar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -418,7 +421,7 @@ namespace TimeWorkTracking
             this.ClientSize = new System.Drawing.Size(987, 370);
             this.Controls.Add(this.mainPanelCalendar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmCalendar";
             this.Text = "Производственный календарь";
             this.Load += new System.EventHandler(this.frmCalendar_Load);
