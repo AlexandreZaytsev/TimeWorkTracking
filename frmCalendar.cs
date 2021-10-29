@@ -25,22 +25,25 @@ namespace TimeWorkTracking
             mainPanelCalendar.Enabled = MsSqlDatabase.CheckConnectWithConnectionStr(cs);
             if (mainPanelCalendar.Enabled)
             {
+                //сначала вспомогательные данные
                 cbDataType.DisplayMember = "Name";
                 cbDataType.ValueMember = "id";
                 cbDataType.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From CalendarDateType where uses=1");
 
-                //таблица календаря
-                InitializeListViewCalendar();
-                LoadListCalendar(MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') where access=1 order by dWork"));     //сортировка по рабочей (перенос) дате
-                if (lstwDataBaseCalendar.Items.Count != 0)
-                    lstwDataBaseCalendar.Items[0].Selected = true;     //выделить элемент по индексу
- 
                 //таблица типа дня
                 InitializeListViewDaysCalendar();
                 LoadListDaysCalendar(MsSqlDatabase.TableRequest(cs, "Select * From CalendarDateName where uses=1"));     //сортировка по рабочей (перенос) дате
                 lstwDataBaseDaysCalendar.AutoResizeColumn(2, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
                 if (lstwDataBaseDaysCalendar.Items.Count != 0)
                     lstwDataBaseDaysCalendar.Items[0].Selected = true;     //выделить элемент по индексу
+
+                //потом основную таблицу
+                //таблица календаря
+                InitializeListViewCalendar();
+                LoadListCalendar(MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') where access=1 order by dWork"));     //сортировка по рабочей (перенос) дате
+                if (lstwDataBaseCalendar.Items.Count != 0)
+                    lstwDataBaseCalendar.Items[0].Selected = true;     //выделить элемент по индексу
+ 
             }
         }
 
@@ -91,6 +94,7 @@ namespace TimeWorkTracking
                     lvi.SubItems.Add(((DateTime)drow["dSource"]).ToString("yyyy-MM-dd"));
                     lvi.SubItems.Add(drow["dName"].ToString());
                     lvi.SubItems.Add(drow["dType"].ToString());
+                    lvi.SubItems.Add(((DateTime)drow["dWork"]).ToString("yyyy"));
 
                     lstwDataBaseCalendar.Items.Add(lvi);                        // Add the list items to the ListView
                 }
@@ -213,29 +217,30 @@ namespace TimeWorkTracking
             e.NewWidth = lstwDataBaseDaysCalendar.Columns[e.ColumnIndex].Width;
         }
 
+        //---------------------------------------------------------------------------------------------------------------------
         //редактирование ключевого поля (Реальная дата)
         private void dtWork_ValueChanged(object sender, EventArgs e)
         {
-/*
-            dtSource.Value=dtWork.Value;    //сброс оригинальной даты
-            if (lstwDataBaseCalendar.Items.Cast<ListViewItem>()     //попробовать найти значение ключевого поля (name) в списке ListView
-                .Where(x => (x.SubItems[5].Text == dtWork.Text.Trim()))
+            if (lstwDataBaseCalendar.Items.Cast<ListViewItem>()         //попробовать найти значение ключевого поля (name) в списке ListView
+                .Where(x => (x.SubItems[1].Text == dtWork.Value.ToString("yyyy-MM-dd")))
                 .FirstOrDefault() != null)
             {                                                           //значение есть
-                dtWork.BackColor = System.Drawing.SystemColors.Control; //серый фон
-                lstwDataBaseCalendar.HideSelection = false;         //установить выделение строки (без перевода фокуса на listwiew)
+                lbdtWork.Font = new System.Drawing.Font(lbdtSource.Font, System.Drawing.FontStyle.Bold);
+                lstwDataBaseCalendar.HideSelection = false;             //установить выделение строки (без перевода фокуса на listwiew)
 
                 btInsert.Enabled = false;                               //заблокировать кнопку INSERT    
-                btDelete.Enabled = true;                                //разблокировать кнопку UPDATE    
+                btUpdate.Enabled = true;                                //разблокировать кнопку UPDATE    
+                btDelete.Enabled = true;                                //разблокировать кнопку DELETE    
             }
             else                                                        //значения нет 
             {
-                dtWork.BackColor = System.Drawing.SystemColors.Window;  //белый фон
-                lstwDataBaseCalendar.HideSelection = true;          //снять выделение со строки listview (без перевода фокуса на listwiew)
+                lbdtWork.Font = new System.Drawing.Font(lbdtSource.Font, System.Drawing.FontStyle.Regular);
+                lstwDataBaseCalendar.HideSelection = true;              //снять выделение со строки listview (без перевода фокуса на listwiew)
+
                 btInsert.Enabled = true;                                //разблокировать кнопку INSERT    
-                btDelete.Enabled = true;                                //разблокировать кнопку UPDATE    
+                btUpdate.Enabled = false;                               //разблокировать кнопку UPDATE    
+                btDelete.Enabled = false;                               //разблокировать кнопку UPDATE    
             }
-  */          
         }
         //редактирование поля Исходная дата
         private void dtSource_ValueChanged(object sender, EventArgs e)
@@ -243,6 +248,7 @@ namespace TimeWorkTracking
             bool selDate = false;
          //   bool selNoDate = false;
             string fd= ((DateTime)dtSource.Value).ToString("d MMMMM");
+
             if (!lstwDataBaseDaysCalendar.Focused)//lstwDataBaseDaysCalendar.Focused) 
             {
                 for (int index = 0; index <= lstwDataBaseDaysCalendar.Items.Count - 1; index++)
@@ -251,7 +257,7 @@ namespace TimeWorkTracking
                     {
                         selDate = true;
                         lstwDataBaseDaysCalendar.Items[index].Selected = true;
-                        lstwDataBaseDaysCalendar.EnsureVisible(index);             //показать в области видимости окна
+                        lstwDataBaseDaysCalendar.EnsureVisible(index);  //показать в области видимости окна
                     }
                     else
                         lstwDataBaseDaysCalendar.Items[index].Selected = false;
@@ -259,6 +265,8 @@ namespace TimeWorkTracking
 //                pdtSource.BackColor = selDate  ? System.Drawing.SystemColors.ActiveCaption : System.Drawing.SystemColors.Control;
                 lbdtSource.Font = selDate? new System.Drawing.Font(lbdtSource.Font, System.Drawing.FontStyle.Bold):new System.Drawing.Font(lbdtSource.Font, System.Drawing.FontStyle.Regular);
             }
+            else
+                dtWork.Value = dtSource.Value;                          //установить дату если значение выбирали из списка
         }
 
         //чекбокс запись активна
