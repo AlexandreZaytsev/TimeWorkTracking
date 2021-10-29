@@ -31,6 +31,7 @@ namespace TimeWorkTracking
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCalendar));
+            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Год", System.Windows.Forms.HorizontalAlignment.Right);
             this.mainPanelCalendar = new System.Windows.Forms.Panel();
             this.btDelete = new System.Windows.Forms.Button();
             this.imgListButtonCalendar = new System.Windows.Forms.ImageList(this.components);
@@ -99,6 +100,7 @@ namespace TimeWorkTracking
             this.btDelete.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btDelete.UseVisualStyleBackColor = true;
+            this.btDelete.Click += new System.EventHandler(this.btDelete_Click);
             // 
             // imgListButtonCalendar
             // 
@@ -129,7 +131,9 @@ namespace TimeWorkTracking
             this.btInsert.Text = "Добавить";
             this.btInsert.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btInsert.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.toolTipMsgCalendar.SetToolTip(this.btInsert, "Для создания записи в БД - необходимо указать тип даты из Календаря");
             this.btInsert.UseVisualStyleBackColor = true;
+            this.btInsert.Click += new System.EventHandler(this.btInsert_Click);
             // 
             // panel1
             // 
@@ -351,6 +355,11 @@ namespace TimeWorkTracking
             this.name,
             this.type});
             this.lstwDataBaseCalendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            listViewGroup1.Header = "Год";
+            listViewGroup1.HeaderAlignment = System.Windows.Forms.HorizontalAlignment.Right;
+            listViewGroup1.Name = "listViewGroup1";
+            this.lstwDataBaseCalendar.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
+            listViewGroup1});
             this.lstwDataBaseCalendar.HideSelection = false;
             this.lstwDataBaseCalendar.LabelWrap = false;
             this.lstwDataBaseCalendar.Location = new System.Drawing.Point(8, 10);
@@ -424,6 +433,7 @@ namespace TimeWorkTracking
             this.btUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btUpdate.UseVisualStyleBackColor = true;
+            this.btUpdate.Click += new System.EventHandler(this.btUpdate_Click);
             // 
             // frmCalendar
             // 
