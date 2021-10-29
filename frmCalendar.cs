@@ -107,11 +107,11 @@ namespace TimeWorkTracking
                     if (lstwDataBaseCalendar.Groups.Cast<ListViewGroup>().Count(x => (x.Name == lvg.Name))==0)
                         lstwDataBaseCalendar.Groups.Add(lvg);
 
-                    var ll = lstwDataBaseCalendar.Groups.Cast<ListViewGroup>()
-                .Where(x => (x.Name == lvg.Name))     //найти индекс поиск по полю name
-                .FirstOrDefault();
+                    //найдем группу среди групп
+                    lvi.Group = lstwDataBaseCalendar.Groups.Cast<ListViewGroup>()
+                            .Where(x => (x.Name == lvg.Name))                   
+                            .FirstOrDefault();
 
-                    lvi.Group = ll;
                     //создадим элемент
                     lstwDataBaseCalendar.Items.Add(lvi);                        // Add the list items to the ListView
                     //добавим его в группу
