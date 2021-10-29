@@ -58,6 +58,8 @@ namespace TimeWorkTracking
             lstwDataBaseCalendar.GridLines = true;                  // Display grid lines.
             lstwDataBaseCalendar.Sorting = SortOrder.Ascending;     // Sort the items in the list in ascending order.
             lstwDataBaseCalendar.LabelEdit = false;                 //запрет редактирования item
+            lstwDataBaseCalendar.AutoResizeColumn(4, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
+
 
             // The ListViewItemSorter property allows you to specify the
             // object that performs the sorting of items in the ListView.
@@ -83,8 +85,9 @@ namespace TimeWorkTracking
                 if (drow.RowState != DataRowState.Deleted)  // Only row that have not been deleted
                 {
                     //Определим группы
-                    ListViewGroup lvg = new ListViewGroup(((DateTime)drow["dWork"]).ToString("yyyy"), HorizontalAlignment.Left);
-                    lvg.Name = lvg.Header;
+                    string name = ((DateTime)drow["dWork"]).ToString("yyyy");
+                    ListViewGroup lvg = new ListViewGroup(name, "Календарь за " + name+"г.");//, HorizontalAlignment.Left);
+//                    lvg.Name = lvg.Header;
                     //Определим элементы
                     ListViewItem lvi = new ListViewItem(drow["access"].ToString(), 0) //имя для сортировки
                     {
