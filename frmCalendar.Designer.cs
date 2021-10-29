@@ -31,7 +31,7 @@ namespace TimeWorkTracking
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCalendar));
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Год", System.Windows.Forms.HorizontalAlignment.Right);
+            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Год", System.Windows.Forms.HorizontalAlignment.Left);
             this.mainPanelCalendar = new System.Windows.Forms.Panel();
             this.btDelete = new System.Windows.Forms.Button();
             this.imgListButtonCalendar = new System.Windows.Forms.ImageList(this.components);
@@ -356,8 +356,7 @@ namespace TimeWorkTracking
             this.type});
             this.lstwDataBaseCalendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             listViewGroup1.Header = "Год";
-            listViewGroup1.HeaderAlignment = System.Windows.Forms.HorizontalAlignment.Right;
-            listViewGroup1.Name = "listViewGroup1";
+            listViewGroup1.Name = "year";
             this.lstwDataBaseCalendar.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
             listViewGroup1});
             this.lstwDataBaseCalendar.HideSelection = false;

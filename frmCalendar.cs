@@ -52,11 +52,12 @@ namespace TimeWorkTracking
         private void InitializeListViewCalendar()
         {
             lstwDataBaseCalendar.View = View.Details;               // Set the view to show details.
-            lstwDataBaseCalendar.LabelEdit = true;                  // Allow the user to edit item text.
+//            lstwDataBaseCalendar.LabelEdit = true;                  // Allow the user to edit item text.
             lstwDataBaseCalendar.AllowColumnReorder = true;         // Allow the user to rearrange columns.
             lstwDataBaseCalendar.FullRowSelect = true;              // Select the item and subitems when selection is made.
             lstwDataBaseCalendar.GridLines = true;                  // Display grid lines.
             lstwDataBaseCalendar.Sorting = SortOrder.Ascending;     // Sort the items in the list in ascending order.
+            lstwDataBaseCalendar.LabelEdit = false;                 //запрет редактирования item
 
             // The ListViewItemSorter property allows you to specify the
             // object that performs the sorting of items in the ListView.
@@ -72,14 +73,19 @@ namespace TimeWorkTracking
         //Загрузить Data из DataSet в ListView календаря
         private void LoadListCalendar(DataTable dtable)
         {
-            lstwDataBaseCalendar.Items.Clear();         // Clear the ListView control
-            for (int i = 0; i < dtable.Rows.Count; i++)     // Display items in the ListView control
+            lstwDataBaseCalendar.Items.Clear();             //очистить коллекцию элементов
+            lstwDataBaseCalendar.Groups.Clear();            //очистить коллекцию группы
+//            lstwDataBaseCalendar.Groups.Add(new ListViewGroup("List item text",    HorizontalAlignment.Left));
+
+            for (int i = 0; i < dtable.Rows.Count; i++)     //цикл по DataTable и заполнение ListView 
             {
                 DataRow drow = dtable.Rows[i];
                 if (drow.RowState != DataRowState.Deleted)  // Only row that have not been deleted
                 {
-                    // Define the list items
-                    lstwDataBaseCalendar.LabelEdit = false;      //запрет редактирования item
+                    //Определим группы
+                    ListViewGroup lvg = new ListViewGroup(((DateTime)drow["dWork"]).ToString("yyyy"), HorizontalAlignment.Left);
+                    lvg.Name = lvg.Header;
+                    //Определим элементы
                     ListViewItem lvi = new ListViewItem(drow["access"].ToString(), 0) //имя для сортировки
                     {
                         ImageIndex = (Boolean)drow["access"] ? 1 : 0,
@@ -94,12 +100,17 @@ namespace TimeWorkTracking
                     lvi.SubItems.Add(((DateTime)drow["dSource"]).ToString("yyyy-MM-dd"));
                     lvi.SubItems.Add(drow["dName"].ToString());
                     lvi.SubItems.Add(drow["dType"].ToString());
-                    lvi.SubItems.Add(((DateTime)drow["dWork"]).ToString("yyyy"));
 
-//                https://stackoverflow.com/questions/39428698/adding-groups-and-items-to-listview-in-c-sharp-windows-form
+                    //                https://stackoverflow.com/questions/39428698/adding-groups-and-items-to-listview-in-c-sharp-windows-form
 
-                    lvi.Group.Items.Add(((DateTime)drow["dWork"]).ToString("yyyy"));
+                    //проверим есть ли потенциальная группа в коллекции групп если нет добавим
+                    if (lstwDataBaseCalendar.Groups.Cast<ListViewGroup>().Count(x => (x.Name == lvg.Name))==0)
+                        lstwDataBaseCalendar.Groups.Add(lvg);
+
+                    lvi.Group = lvg;
+                    //создадим элемент
                     lstwDataBaseCalendar.Items.Add(lvi);                        // Add the list items to the ListView
+                    //добавим его в группу
                 }
             }
         }
