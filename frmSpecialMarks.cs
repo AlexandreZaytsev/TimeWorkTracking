@@ -143,7 +143,7 @@ namespace TimeWorkTracking
             if (tbName.Text.Trim().Length == 0)                             //если поле пустое
             {
                 tbName.BackColor = System.Drawing.SystemColors.Window;      //белый фон
-                lstwDataBaseSpecialMarks.HideSelection = true;              //снять выделение со строки listview (без перевода фокуса на listwiew)
+                lstwDataBaseSpecialMarks.HideSelection = true;              //сбросить выделение строки при потере фокуса ListView
                 btInsert.Enabled = false;                                   //заблокировать кнопку INSERT    
                 btUpdate.Enabled = false;                                   //заблокировать кнопку UPDATE    
             }
@@ -155,7 +155,7 @@ namespace TimeWorkTracking
                     .FirstOrDefault() != null)
                 {                                                           //значение есть
                     tbName.BackColor = System.Drawing.SystemColors.Control; //серый фон
-                    lstwDataBaseSpecialMarks.HideSelection = false;         //установить выделение строки (без перевода фокуса на listwiew)
+                    lstwDataBaseSpecialMarks.HideSelection = false;         //оставить выделение строки при потере фокуса ListView
 
                     btInsert.Enabled = false;                               //заблокировать кнопку INSERT    
                     btUpdate.Enabled = true;                                //разблокировать кнопку UPDATE    
@@ -163,7 +163,7 @@ namespace TimeWorkTracking
                 else                                                        //значения нет 
                 {
                     tbName.BackColor = System.Drawing.SystemColors.Window;  //белый фон
-                    lstwDataBaseSpecialMarks.HideSelection = true;          //снять выделение со строки listview (без перевода фокуса на listwiew)
+                    lstwDataBaseSpecialMarks.HideSelection = true;          //сбросить выделение строки при потере фокуса ListView
                     btInsert.Enabled = true;                                //разблокировать кнопку INSERT    
                     btUpdate.Enabled = true;                                //разблокировать кнопку UPDATE    
                 }
