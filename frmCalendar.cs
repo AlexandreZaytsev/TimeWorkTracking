@@ -350,9 +350,6 @@ namespace TimeWorkTracking
         private void btInsert_Click(object sender, EventArgs e)
         {
             string key = dtWork.Value.ToString("yyyy-MM-dd");
-            int index= lstwDataBaseDaysCalendar.SelectedIndices[0];
-//            int index = lstwDataBaseDaysCalendar.SelectedIndex();
-
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             string sql =
               "INSERT INTO Calendars(" +
@@ -364,7 +361,7 @@ namespace TimeWorkTracking
               "VALUES ( " +
                 "'" + dtSource.Value.ToString("yyyy-MM-dd") + "', " +               //оригинальная дата
                 "'" + key + "', " +                                                 //*дата переноса
-                lstwDataBaseDaysCalendar.Items[index].SubItems[4].Text + ", " +
+                lstwDataBaseDaysCalendar.Items[lstwDataBaseDaysCalendar.SelectedIndex()].SubItems[4].Text + ", " +
                 ((DataRowView)cbDataType.SelectedItem).Row["id"] + ", " +
                 (chUse.Checked ? 1 : 0) +
                 ")";
@@ -378,36 +375,37 @@ namespace TimeWorkTracking
         //кнопка обновить запись в БД
         private void btUpdate_Click(object sender, EventArgs e)
         {
+            string key = dtWork.Value.ToString("yyyy-MM-dd");
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            string sql =
+              "UPDATE Calendars Set " +
+                "originalDate = '" + dtSource.Value.ToString("yyyy-MM-dd") + "', " +
+                "transferDate = '" + key + "', " +
+                "dateNameId = " + lstwDataBaseDaysCalendar.Items[lstwDataBaseDaysCalendar.SelectedIndex()].SubItems[4].Text + ", " +
+                "dateTypeId = " + ((DataRowView)cbDataType.SelectedItem).Row["id"] + ", " +
+                "uses = " + (chUse.Checked ? 1 : 0) + " " +
+              "WHERE transferDate = '" + key + "'";
+            MsSqlDatabase.RequestNonQuery(cs, sql, false);
 
+            LoadListCalendar(MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') order by dWork"));     //сортировка по рабочей (перенос) дате
+            lstwDataBaseCalendar.FindListByColValue(1, key);            //найти и выделить позицию
+            dtWork_ValueChanged(null, null);                            //обновить статус кнопок
         }
 
         //кнопка удалить запись в БД
         private void btDelete_Click(object sender, EventArgs e)
         {
-            int index = 0;
+            string key = dtWork.Value.ToString("yyyy-MM-dd");
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             string sql =
               "DELETE FROM Calendars " +
-              "WHERE transferDate = '" + dtWork.Value.ToString("yyyy-MM-dd") +"'";
+              "WHERE transferDate = '" + key + "'";
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
 
             LoadListCalendar(MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') order by dWork"));     //сортировка по рабочей (перенос) дате
             if (lstwDataBaseCalendar.Items.Count != 0)
-            {
-                lstwDataBaseCalendar.Items[0].Selected = true;          //выделить элемент по индексу
-                lstwDataBaseCalendar.HideSelection = false;             //оставить выделение строки при потере фокуса ListView
-                lstwDataBaseCalendar.EnsureVisible(index);              //показать в области видимости окна
-                lstwDataBaseCalendar_SelectedIndexChanged(null, null);  //обновить данные
-            }
-            else 
-            {
-                lbdtWork.Font = new System.Drawing.Font(lbdtSource.Font, System.Drawing.FontStyle.Regular);
-                lstwDataBaseCalendar.HideSelection = true;              //сбросить выделение строки при потере фокуса ListView
-
-                btInsert.Enabled = false;                               //кнопка INSERT (если есть выделенная строка в Календаре Дат)
-                btUpdate.Enabled = false;                               //разблокировать кнопку UPDATE    
-                btDelete.Enabled = false;                               //разблокировать кнопку UPDATE    
-            }
+                lstwDataBaseCalendar.FindListByColValue(1, lstwDataBaseCalendar.Items[0].SubItems[1].Text);            //найти и выделить позицию
+            dtWork_ValueChanged(null, null);                            //обновить статус кнопок
         }
 
     }
