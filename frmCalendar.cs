@@ -371,8 +371,8 @@ namespace TimeWorkTracking
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
 
             LoadListCalendar(MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') order by dWork"));     //сортировка по рабочей (перенос) дате
-            lstwDataBaseCalendar.FindListByColValue(1, key);
-            dtWork_ValueChanged(null,null);
+            lstwDataBaseCalendar.FindListByColValue(1, key);                        //найти и выделить позицию
+            dtWork_ValueChanged(null,null);                                         //обновить статус кнопок
         }
 
         //кнопка обновить запись в БД
