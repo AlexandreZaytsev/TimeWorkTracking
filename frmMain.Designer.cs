@@ -88,6 +88,8 @@ namespace TimeWorkTracking
             this.label5 = new System.Windows.Forms.Label();
             this.lMsg = new System.Windows.Forms.Label();
             this.toolTipMsgMain = new System.Windows.Forms.ToolTip(this.components);
+            this.gbNavigator = new System.Windows.Forms.GroupBox();
+            this.grRegistrator = new System.Windows.Forms.GroupBox();
             this.statusStripMain.SuspendLayout();
             this.mainPanelRegistration.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -261,6 +263,8 @@ namespace TimeWorkTracking
             // 
             // mainPanelRegistration
             // 
+            this.mainPanelRegistration.Controls.Add(this.grRegistrator);
+            this.mainPanelRegistration.Controls.Add(this.gbNavigator);
             this.mainPanelRegistration.Controls.Add(this.panel5);
             this.mainPanelRegistration.Controls.Add(this.btInsert);
             this.mainPanelRegistration.Controls.Add(this.btImport);
@@ -430,10 +434,10 @@ namespace TimeWorkTracking
             this.panel3.Controls.Add(this.label4);
             this.panel3.Controls.Add(this.label6);
             this.panel3.Controls.Add(this.label5);
-            this.panel3.Location = new System.Drawing.Point(474, 8);
+            this.panel3.Location = new System.Drawing.Point(474, 227);
             this.panel3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(493, 547);
+            this.panel3.Size = new System.Drawing.Size(493, 328);
             this.panel3.TabIndex = 30;
             // 
             // panel4
@@ -752,6 +756,24 @@ namespace TimeWorkTracking
             this.lMsg.Text = "      Новая запись в БД";
             this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // gbNavigator
+            // 
+            this.gbNavigator.Location = new System.Drawing.Point(474, 8);
+            this.gbNavigator.Name = "gbNavigator";
+            this.gbNavigator.Size = new System.Drawing.Size(492, 92);
+            this.gbNavigator.TabIndex = 36;
+            this.gbNavigator.TabStop = false;
+            this.gbNavigator.Text = "Навигатор";
+            // 
+            // grRegistrator
+            // 
+            this.grRegistrator.Location = new System.Drawing.Point(474, 106);
+            this.grRegistrator.Name = "grRegistrator";
+            this.grRegistrator.Size = new System.Drawing.Size(492, 92);
+            this.grRegistrator.TabIndex = 37;
+            this.grRegistrator.TabStop = false;
+            this.grRegistrator.Text = "Регистратор";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -845,6 +867,8 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.ComboBox cbDirect;
         private System.Windows.Forms.TextBox tbSatusList;
+        private System.Windows.Forms.GroupBox grRegistrator;
+        private System.Windows.Forms.GroupBox gbNavigator;
     }
 }
 
