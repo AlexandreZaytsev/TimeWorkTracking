@@ -48,16 +48,10 @@ namespace TimeWorkTracking
             this.toolStripStatusLabel6 = new System.Windows.Forms.ToolStripStatusLabel();
             this.imageListStrip = new System.Windows.Forms.ImageList(this.components);
             this.mainPanelRegistration = new System.Windows.Forms.Panel();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.tbSatusList = new System.Windows.Forms.TextBox();
-            this.cbDirect = new System.Windows.Forms.ComboBox();
             this.btInsert = new System.Windows.Forms.Button();
             this.imgListButtonMain = new System.Windows.Forms.ImageList(this.components);
             this.btImport = new System.Windows.Forms.Button();
             this.btUpdate = new System.Windows.Forms.Button();
-            this.lstwDataBaseMain = new System.Windows.Forms.ListView();
-            this.access = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.fio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.imgListStatusMain = new System.Windows.Forms.ImageList(this.components);
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -90,12 +84,20 @@ namespace TimeWorkTracking
             this.toolTipMsgMain = new System.Windows.Forms.ToolTip(this.components);
             this.gbNavigator = new System.Windows.Forms.GroupBox();
             this.grRegistrator = new System.Windows.Forms.GroupBox();
+            this.grUsers = new System.Windows.Forms.GroupBox();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.tbSatusList = new System.Windows.Forms.TextBox();
+            this.cbDirect = new System.Windows.Forms.ComboBox();
+            this.lstwDataBaseMain = new System.Windows.Forms.ListView();
+            this.access = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.fio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.statusStripMain.SuspendLayout();
             this.mainPanelRegistration.SuspendLayout();
-            this.panel5.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.grUsers.SuspendLayout();
+            this.panel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStripMain
@@ -161,7 +163,7 @@ namespace TimeWorkTracking
             // 
             this.toolStripStatusLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(356, 20);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(477, 20);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "    Справочники:";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -263,13 +265,12 @@ namespace TimeWorkTracking
             // 
             // mainPanelRegistration
             // 
+            this.mainPanelRegistration.Controls.Add(this.grUsers);
             this.mainPanelRegistration.Controls.Add(this.grRegistrator);
             this.mainPanelRegistration.Controls.Add(this.gbNavigator);
-            this.mainPanelRegistration.Controls.Add(this.panel5);
             this.mainPanelRegistration.Controls.Add(this.btInsert);
             this.mainPanelRegistration.Controls.Add(this.btImport);
             this.mainPanelRegistration.Controls.Add(this.btUpdate);
-            this.mainPanelRegistration.Controls.Add(this.lstwDataBaseMain);
             this.mainPanelRegistration.Controls.Add(this.panel3);
             this.mainPanelRegistration.Controls.Add(this.lMsg);
             this.mainPanelRegistration.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -279,49 +280,12 @@ namespace TimeWorkTracking
             this.mainPanelRegistration.Size = new System.Drawing.Size(976, 612);
             this.mainPanelRegistration.TabIndex = 16;
             // 
-            // panel5
-            // 
-            this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel5.Controls.Add(this.tbSatusList);
-            this.panel5.Controls.Add(this.cbDirect);
-            this.panel5.Location = new System.Drawing.Point(7, 561);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(461, 39);
-            this.panel5.TabIndex = 35;
-            // 
-            // tbSatusList
-            // 
-            this.tbSatusList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbSatusList.BackColor = System.Drawing.SystemColors.Control;
-            this.tbSatusList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tbSatusList.Enabled = false;
-            this.tbSatusList.Location = new System.Drawing.Point(207, 8);
-            this.tbSatusList.Name = "tbSatusList";
-            this.tbSatusList.Size = new System.Drawing.Size(244, 21);
-            this.tbSatusList.TabIndex = 1;
-            this.tbSatusList.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // cbDirect
-            // 
-            this.cbDirect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.cbDirect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbDirect.FormattingEnabled = true;
-            this.cbDirect.Items.AddRange(new object[] {
-            "сверху вниз",
-            "слева направо"});
-            this.cbDirect.Location = new System.Drawing.Point(5, 3);
-            this.cbDirect.Name = "cbDirect";
-            this.cbDirect.Size = new System.Drawing.Size(166, 30);
-            this.cbDirect.TabIndex = 0;
-            // 
             // btInsert
             // 
             this.btInsert.Enabled = false;
             this.btInsert.ImageIndex = 1;
             this.btInsert.ImageList = this.imgListButtonMain;
-            this.btInsert.Location = new System.Drawing.Point(474, 560);
+            this.btInsert.Location = new System.Drawing.Point(471, 553);
             this.btInsert.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btInsert.Name = "btInsert";
             this.btInsert.Size = new System.Drawing.Size(140, 40);
@@ -350,7 +314,7 @@ namespace TimeWorkTracking
             // btImport
             // 
             this.btImport.ImageIndex = 7;
-            this.btImport.Location = new System.Drawing.Point(649, 560);
+            this.btImport.Location = new System.Drawing.Point(646, 553);
             this.btImport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btImport.Name = "btImport";
             this.btImport.Size = new System.Drawing.Size(149, 40);
@@ -365,7 +329,7 @@ namespace TimeWorkTracking
             this.btUpdate.Enabled = false;
             this.btUpdate.ImageIndex = 2;
             this.btUpdate.ImageList = this.imgListButtonMain;
-            this.btUpdate.Location = new System.Drawing.Point(826, 560);
+            this.btUpdate.Location = new System.Drawing.Point(823, 553);
             this.btUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btUpdate.Name = "btUpdate";
             this.btUpdate.Size = new System.Drawing.Size(140, 40);
@@ -374,34 +338,6 @@ namespace TimeWorkTracking
             this.btUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btUpdate.UseVisualStyleBackColor = true;
-            // 
-            // lstwDataBaseMain
-            // 
-            this.lstwDataBaseMain.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.access,
-            this.fio});
-            this.lstwDataBaseMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lstwDataBaseMain.HideSelection = false;
-            this.lstwDataBaseMain.LabelWrap = false;
-            this.lstwDataBaseMain.Location = new System.Drawing.Point(7, 8);
-            this.lstwDataBaseMain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.lstwDataBaseMain.MultiSelect = false;
-            this.lstwDataBaseMain.Name = "lstwDataBaseMain";
-            this.lstwDataBaseMain.Size = new System.Drawing.Size(461, 547);
-            this.lstwDataBaseMain.StateImageList = this.imgListStatusMain;
-            this.lstwDataBaseMain.TabIndex = 31;
-            this.lstwDataBaseMain.UseCompatibleStateImageBehavior = false;
-            this.lstwDataBaseMain.View = System.Windows.Forms.View.SmallIcon;
-            // 
-            // access
-            // 
-            this.access.Text = "";
-            this.access.Width = 29;
-            // 
-            // fio
-            // 
-            this.fio.Text = "Фамилия Имя Отчество";
-            this.fio.Width = 231;
             // 
             // imgListStatusMain
             // 
@@ -434,10 +370,10 @@ namespace TimeWorkTracking
             this.panel3.Controls.Add(this.label4);
             this.panel3.Controls.Add(this.label6);
             this.panel3.Controls.Add(this.label5);
-            this.panel3.Location = new System.Drawing.Point(474, 227);
+            this.panel3.Location = new System.Drawing.Point(471, 225);
             this.panel3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(493, 328);
+            this.panel3.Size = new System.Drawing.Size(493, 292);
             this.panel3.TabIndex = 30;
             // 
             // panel4
@@ -749,7 +685,7 @@ namespace TimeWorkTracking
             this.lMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lMsg.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lMsg.ImageIndex = 6;
-            this.lMsg.Location = new System.Drawing.Point(750, 569);
+            this.lMsg.Location = new System.Drawing.Point(747, 562);
             this.lMsg.Name = "lMsg";
             this.lMsg.Size = new System.Drawing.Size(200, 20);
             this.lMsg.TabIndex = 29;
@@ -758,7 +694,8 @@ namespace TimeWorkTracking
             // 
             // gbNavigator
             // 
-            this.gbNavigator.Location = new System.Drawing.Point(474, 8);
+            this.gbNavigator.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.gbNavigator.Location = new System.Drawing.Point(471, 6);
             this.gbNavigator.Name = "gbNavigator";
             this.gbNavigator.Size = new System.Drawing.Size(492, 92);
             this.gbNavigator.TabIndex = 36;
@@ -767,12 +704,90 @@ namespace TimeWorkTracking
             // 
             // grRegistrator
             // 
-            this.grRegistrator.Location = new System.Drawing.Point(474, 106);
+            this.grRegistrator.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.grRegistrator.Location = new System.Drawing.Point(471, 104);
             this.grRegistrator.Name = "grRegistrator";
             this.grRegistrator.Size = new System.Drawing.Size(492, 92);
             this.grRegistrator.TabIndex = 37;
             this.grRegistrator.TabStop = false;
             this.grRegistrator.Text = "Регистратор";
+            // 
+            // grUsers
+            // 
+            this.grUsers.Controls.Add(this.panel5);
+            this.grUsers.Controls.Add(this.lstwDataBaseMain);
+            this.grUsers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.grUsers.Location = new System.Drawing.Point(3, 6);
+            this.grUsers.Name = "grUsers";
+            this.grUsers.Size = new System.Drawing.Size(460, 593);
+            this.grUsers.TabIndex = 38;
+            this.grUsers.TabStop = false;
+            this.grUsers.Text = "Сотрудники";
+            // 
+            // panel5
+            // 
+            this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel5.Controls.Add(this.tbSatusList);
+            this.panel5.Controls.Add(this.cbDirect);
+            this.panel5.Location = new System.Drawing.Point(6, 547);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(444, 39);
+            this.panel5.TabIndex = 37;
+            // 
+            // tbSatusList
+            // 
+            this.tbSatusList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSatusList.BackColor = System.Drawing.SystemColors.Control;
+            this.tbSatusList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tbSatusList.Enabled = false;
+            this.tbSatusList.Location = new System.Drawing.Point(190, 8);
+            this.tbSatusList.Name = "tbSatusList";
+            this.tbSatusList.Size = new System.Drawing.Size(244, 17);
+            this.tbSatusList.TabIndex = 1;
+            this.tbSatusList.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // cbDirect
+            // 
+            this.cbDirect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.cbDirect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDirect.FormattingEnabled = true;
+            this.cbDirect.Items.AddRange(new object[] {
+            "сверху вниз",
+            "слева направо"});
+            this.cbDirect.Location = new System.Drawing.Point(5, 3);
+            this.cbDirect.Name = "cbDirect";
+            this.cbDirect.Size = new System.Drawing.Size(166, 26);
+            this.cbDirect.TabIndex = 0;
+            // 
+            // lstwDataBaseMain
+            // 
+            this.lstwDataBaseMain.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.access,
+            this.fio});
+            this.lstwDataBaseMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lstwDataBaseMain.HideSelection = false;
+            this.lstwDataBaseMain.LabelWrap = false;
+            this.lstwDataBaseMain.Location = new System.Drawing.Point(6, 26);
+            this.lstwDataBaseMain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.lstwDataBaseMain.MultiSelect = false;
+            this.lstwDataBaseMain.Name = "lstwDataBaseMain";
+            this.lstwDataBaseMain.Size = new System.Drawing.Size(444, 515);
+            this.lstwDataBaseMain.StateImageList = this.imgListStatusMain;
+            this.lstwDataBaseMain.TabIndex = 36;
+            this.lstwDataBaseMain.UseCompatibleStateImageBehavior = false;
+            this.lstwDataBaseMain.View = System.Windows.Forms.View.SmallIcon;
+            // 
+            // access
+            // 
+            this.access.Text = "";
+            this.access.Width = 29;
+            // 
+            // fio
+            // 
+            this.fio.Text = "Фамилия Имя Отчество";
+            this.fio.Width = 231;
             // 
             // frmMain
             // 
@@ -796,14 +811,15 @@ namespace TimeWorkTracking
             this.statusStripMain.PerformLayout();
             this.mainPanelRegistration.ResumeLayout(false);
             this.mainPanelRegistration.PerformLayout();
-            this.panel5.ResumeLayout(false);
-            this.panel5.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.grUsers.ResumeLayout(false);
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -830,9 +846,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Button btInsert;
         private System.Windows.Forms.Button btImport;
         private System.Windows.Forms.Button btUpdate;
-        private System.Windows.Forms.ListView lstwDataBaseMain;
-        private System.Windows.Forms.ColumnHeader access;
-        private System.Windows.Forms.ColumnHeader fio;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.TextBox tbCrmID;
@@ -864,11 +877,15 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ImageList imgListButtonMain;
         public System.Windows.Forms.ImageList imgListStatusMain;
         private System.Windows.Forms.ToolTip toolTipMsgMain;
-        private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.ComboBox cbDirect;
-        private System.Windows.Forms.TextBox tbSatusList;
         private System.Windows.Forms.GroupBox grRegistrator;
         private System.Windows.Forms.GroupBox gbNavigator;
+        private System.Windows.Forms.GroupBox grUsers;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.TextBox tbSatusList;
+        private System.Windows.Forms.ComboBox cbDirect;
+        private System.Windows.Forms.ListView lstwDataBaseMain;
+        private System.Windows.Forms.ColumnHeader access;
+        private System.Windows.Forms.ColumnHeader fio;
     }
 }
 
