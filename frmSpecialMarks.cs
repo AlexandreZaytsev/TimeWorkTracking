@@ -24,7 +24,6 @@ namespace TimeWorkTracking
             {
                 InitializeListView();
                 LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));
-                lstwDataBaseSpecialMarks.AutoResizeColumn(3, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
                 if (lstwDataBaseSpecialMarks.Items.Count != 0)
                     lstwDataBaseSpecialMarks.Items[0].Selected = true;     //выделить элемент по индексу
             }
@@ -38,6 +37,7 @@ namespace TimeWorkTracking
             lstwDataBaseSpecialMarks.FullRowSelect = true;              // Select the item and subitems when selection is made.
             lstwDataBaseSpecialMarks.GridLines = true;                  // Display grid lines.
             lstwDataBaseSpecialMarks.Sorting = SortOrder.Ascending;     // Sort the items in the list in ascending order.
+            lstwDataBaseSpecialMarks.AutoResizeColumn(3, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
 
             // The ListViewItemSorter property allows you to specify the
             // object that performs the sorting of items in the ListView.
@@ -172,7 +172,7 @@ namespace TimeWorkTracking
         //кнопка добавить запись в БД
         private void btInsert_Click(object sender, EventArgs e)
         {
-            int index;
+            string key = tbName.Text.Trim();                                //ключевое поле
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             string sql =
               "INSERT INTO SpecialMarks(" +
@@ -184,41 +184,34 @@ namespace TimeWorkTracking
               "VALUES ( " +
                 "N'" + tbCodeDigital.Text.Trim() + "', " +
                 "N'" + tbCodeLetter.Text.Trim() + "', " +
-                "N'" + tbName.Text.Trim() + "', " +
+                "N'" + key + "', " +                                        //*наименование
                 "N'" + tbNote.Text.Trim() + "', " +
                 (chUse.Checked ? 1 : 0) +
                 ")";
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
+ 
             LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));// order by extId desc"));
-            index = lstwDataBaseSpecialMarks.Items.Cast<ListViewItem>()
-                .Where(x => (x.SubItems[3].Text == tbName.Text.Trim()))     //найти индекс поиск по полю name
-                .FirstOrDefault().Index;
-            //            lstwDataBaseUsers.HideSelection = false;                    //отображение выделения 
-            lstwDataBaseSpecialMarks.Items[index].Selected = true;          //выделить элемент по индексу
+            lstwDataBaseSpecialMarks.FindListByColValue(3, key);            //найти и выделить позицию
             tbName_TextChanged(null, null);                                 //обновить поля и кнопки
-
-            //            lstwDataBaseUsers.Focus();
-            //            lstwDataBaseUsers_ColumnClick(null, new ColumnClickEventArgs(2)); //сортировка
-            lstwDataBaseSpecialMarks.EnsureVisible(index);                  //показать в области видимости окна
         }
         //кнопка обновить запись в БД
         private void btUpdate_Click(object sender, EventArgs e)
         {
-            int index;
+            string key = tbName.Text.Trim();                                //ключевое поле
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             string sql =
               "UPDATE SpecialMarks Set " +
                 "digitalCode = N'" + tbCodeDigital.Text.Trim() + "', " +
                 "letterCode = N'" + tbCodeLetter.Text.Trim() + "', " +
-                "name = N'" + tbName.Text.Trim() + "', " +
+                "name = N'" + key + "', " +                                 //*наименование
                 "note = N'" + tbNote.Text.Trim() + "', " +
                 "uses = " + (chUse.Checked ? 1 : 0) + " " +
               "WHERE id = " + tbID.Text.Trim() + "";
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
-            index = lstwDataBaseSpecialMarks.SelectedIndex();          //сохранить индекс
-            LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));
-            lstwDataBaseSpecialMarks.Items[index].Selected = true;     //выделить элемент по индексу
-            lstwDataBaseSpecialMarks.EnsureVisible(index);             //показать в области видимости окна
+
+            LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));// order by extId desc"));
+            lstwDataBaseSpecialMarks.FindListByColValue(3, key);            //найти и выделить позицию
+            tbName_TextChanged(null, null);                                 //обновить поля и кнопки
         }
 
         //наехали на кнопку Insert загасили id

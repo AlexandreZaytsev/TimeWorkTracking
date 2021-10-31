@@ -31,7 +31,7 @@ namespace TimeWorkTracking
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCalendar));
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Год", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Год", System.Windows.Forms.HorizontalAlignment.Left);
             this.mainPanelCalendar = new System.Windows.Forms.Panel();
             this.btUpdate = new System.Windows.Forms.Button();
             this.imgListButtonCalendar = new System.Windows.Forms.ImageList(this.components);
@@ -82,7 +82,7 @@ namespace TimeWorkTracking
             this.mainPanelCalendar.Location = new System.Drawing.Point(0, 0);
             this.mainPanelCalendar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.mainPanelCalendar.Name = "mainPanelCalendar";
-            this.mainPanelCalendar.Size = new System.Drawing.Size(1038, 370);
+            this.mainPanelCalendar.Size = new System.Drawing.Size(1046, 370);
             this.mainPanelCalendar.TabIndex = 3;
             // 
             // btUpdate
@@ -91,7 +91,7 @@ namespace TimeWorkTracking
             this.btUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btUpdate.ImageIndex = 2;
             this.btUpdate.ImageList = this.imgListButtonCalendar;
-            this.btUpdate.Location = new System.Drawing.Point(728, 330);
+            this.btUpdate.Location = new System.Drawing.Point(738, 330);
             this.btUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btUpdate.Name = "btUpdate";
             this.btUpdate.Size = new System.Drawing.Size(140, 32);
@@ -123,7 +123,7 @@ namespace TimeWorkTracking
             this.btDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btDelete.ImageIndex = 3;
             this.btDelete.ImageList = this.imgListButtonCalendar;
-            this.btDelete.Location = new System.Drawing.Point(889, 330);
+            this.btDelete.Location = new System.Drawing.Point(899, 330);
             this.btDelete.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btDelete.Name = "btDelete";
             this.btDelete.Size = new System.Drawing.Size(140, 32);
@@ -140,7 +140,7 @@ namespace TimeWorkTracking
             this.btInsert.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btInsert.ImageIndex = 1;
             this.btInsert.ImageList = this.imgListButtonCalendar;
-            this.btInsert.Location = new System.Drawing.Point(564, 330);
+            this.btInsert.Location = new System.Drawing.Point(574, 330);
             this.btInsert.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btInsert.Name = "btInsert";
             this.btInsert.Size = new System.Drawing.Size(140, 32);
@@ -151,6 +151,8 @@ namespace TimeWorkTracking
             this.toolTipMsgCalendar.SetToolTip(this.btInsert, "Для создания записи в БД - необходимо указать тип даты из Календаря");
             this.btInsert.UseVisualStyleBackColor = true;
             this.btInsert.Click += new System.EventHandler(this.btInsert_Click);
+            this.btInsert.MouseLeave += new System.EventHandler(this.btInsert_MouseLeave);
+            this.btInsert.MouseHover += new System.EventHandler(this.btInsert_MouseHover);
             // 
             // panel1
             // 
@@ -162,7 +164,7 @@ namespace TimeWorkTracking
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.tbID);
             this.panel1.Controls.Add(this.chUse);
-            this.panel1.Location = new System.Drawing.Point(564, 14);
+            this.panel1.Location = new System.Drawing.Point(574, 14);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(465, 311);
@@ -380,17 +382,17 @@ namespace TimeWorkTracking
             this.name,
             this.type});
             this.lstwDataBaseCalendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            listViewGroup1.Header = "Год";
-            listViewGroup1.Name = "year";
+            listViewGroup2.Header = "Год";
+            listViewGroup2.Name = "year";
             this.lstwDataBaseCalendar.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1});
+            listViewGroup2});
             this.lstwDataBaseCalendar.HideSelection = false;
             this.lstwDataBaseCalendar.LabelWrap = false;
             this.lstwDataBaseCalendar.Location = new System.Drawing.Point(11, 12);
             this.lstwDataBaseCalendar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lstwDataBaseCalendar.MultiSelect = false;
             this.lstwDataBaseCalendar.Name = "lstwDataBaseCalendar";
-            this.lstwDataBaseCalendar.Size = new System.Drawing.Size(547, 349);
+            this.lstwDataBaseCalendar.Size = new System.Drawing.Size(556, 349);
             this.lstwDataBaseCalendar.StateImageList = this.imgListStatusCalendar;
             this.lstwDataBaseCalendar.TabIndex = 15;
             this.lstwDataBaseCalendar.UseCompatibleStateImageBehavior = false;
@@ -434,7 +436,7 @@ namespace TimeWorkTracking
             this.lMsg.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lMsg.ImageIndex = 6;
             this.lMsg.ImageList = this.imgListButtonCalendar;
-            this.lMsg.Location = new System.Drawing.Point(813, 335);
+            this.lMsg.Location = new System.Drawing.Point(823, 335);
             this.lMsg.Name = "lMsg";
             this.lMsg.Size = new System.Drawing.Size(200, 20);
             this.lMsg.TabIndex = 20;
@@ -445,7 +447,7 @@ namespace TimeWorkTracking
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1038, 370);
+            this.ClientSize = new System.Drawing.Size(1046, 370);
             this.Controls.Add(this.mainPanelCalendar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(4);

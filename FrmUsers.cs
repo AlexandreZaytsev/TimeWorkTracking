@@ -38,7 +38,6 @@ namespace TimeWorkTracking
 
                 InitializeListView();
                 LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));
-                lstwDataBaseUsers.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
 
                 udBeforeH.Value = new DateTime(2000, 1, 1, 9, 0, 0);
                 udBeforeM.Value = new DateTime(2000, 1, 1, 9, 0, 0);
@@ -63,7 +62,9 @@ namespace TimeWorkTracking
             lstwDataBaseUsers.FullRowSelect = true;              // Select the item and subitems when selection is made.
             lstwDataBaseUsers.GridLines = true;                  // Display grid lines.
             lstwDataBaseUsers.Sorting = SortOrder.Ascending;     // Sort the items in the list in ascending order.
-//            lstwDataBaseUsers.StateImageList=
+            lstwDataBaseUsers.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
+
+            //            lstwDataBaseUsers.StateImageList=
             // The ListViewItemSorter property allows you to specify the
             // object that performs the sorting of items in the ListView.
             // You can use the ListViewItemSorter property in combination
@@ -229,9 +230,8 @@ namespace TimeWorkTracking
         //кнопка Добавить запись в БД
         private void btInsert_Click(object sender, EventArgs e)
         {
-            int index;
+            string key = DateTime.Now.ToString("yyyyMMddHHmmss");           //ключевое поле
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            string id = DateTime.Now.ToString("yyyyMMddHHmmss");            //id из даты
             string sql =
               "INSERT INTO Users(" +
                 "extId, " +
@@ -246,7 +246,7 @@ namespace TimeWorkTracking
                 "workSchemeId, " +
                 "uses) " +
               "VALUES (" +
-                "N'" + id + "', " +
+                "N'" + key + "', " +                                         //*extid (из даты)
                 0 + ", " +
                 "N'" + tbName.Text.Trim() + "', " +
                 "N'" + tbNote.Text.Trim() + "', " +
@@ -259,23 +259,16 @@ namespace TimeWorkTracking
                 (chUse.Checked ? 1 : 0) +
               ")";
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
-            LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));// order by extId desc"));
-            index = lstwDataBaseUsers.Items.Cast<ListViewItem>()
-                .Where(x => (x.SubItems[2].Text == id))                 //найти индекс поиск по полю id
-                .FirstOrDefault().Index;
-            //            lstwDataBaseUsers.HideSelection = false;                    //отображение выделения 
-            lstwDataBaseUsers.Items[index].Selected = true;             //выделить элемент по индексу
-            tbName_TextChanged(null, null);                             //обновить поля и кнопки
 
-            //            lstwDataBaseUsers.Focus();
-            //            lstwDataBaseUsers_ColumnClick(null, new ColumnClickEventArgs(2)); //сортировка
-            lstwDataBaseUsers.EnsureVisible(index);                     //показать в области видимости окна
+            LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));// order by extId desc"));
+            lstwDataBaseUsers.FindListByColValue(2, key);                   //найти и выделить позицию
+            tbName_TextChanged(null, null);                                 //обновить поля и кнопки
         }
 
         //кнопка Обновить запись в БД
         private void btUpdate_Click(object sender, EventArgs e)
         {
-            int index;
+            string key = tbExtID.Text.Trim();                               //ключевое поле
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             string sql =
               "UPDATE Users Set " +
@@ -289,12 +282,12 @@ namespace TimeWorkTracking
                 "noLunch = " + (chbLunch.Checked ? 1 : 0) + ", " +
                 "workSchemeId = " + ((DataRowView)cbSheme.SelectedItem).Row["id"] + ", " +
                 "uses = " + (chUse.Checked ? 1 : 0) + " " +
-              "WHERE extId = '" + tbExtID.Text.Trim() + "'";
+              "WHERE extId = '" + key + "'";                                //*extid (из даты)
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
-            index = lstwDataBaseUsers.SelectedIndex();          //сохранить индекс
-            LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('')"));
-            lstwDataBaseUsers.Items[index].Selected = true;     //выделить элемент по индексу
-            lstwDataBaseUsers.EnsureVisible(index);             //показать в области видимости окна
+
+            LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));// order by extId desc"));
+            lstwDataBaseUsers.FindListByColValue(2, key);                   //найти и выделить позицию
+            tbName_TextChanged(null, null);                                 //обновить поля и кнопки
         }
         //кнопка импорт
         private void btImport_Click(object sender, EventArgs e)
