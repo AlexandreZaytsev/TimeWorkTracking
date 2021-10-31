@@ -80,7 +80,7 @@ namespace TimeWorkTracking
                     {
                         ImageIndex = (int)drow["used"]
                         , StateImageIndex = (int)drow["used"]
-                        , Checked = (int)drow["used"]==1? true: false
+                        , Checked = (int)drow["used"]==1
                         //                        , UseItemStyleForSubItems = true
                     };
                     lvi.SubItems.Add(drow["fio"].ToString());
@@ -98,6 +98,7 @@ namespace TimeWorkTracking
                     lstwDataBaseMain.Items.Add(lvi);       // Add the list items to the ListView
                 }
             }
+            tbSatusList.Text=getPassCount();
         }
         //сортировка по заголовке столбца
         private void lstwDataBaseUsers_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -134,6 +135,20 @@ namespace TimeWorkTracking
             return conSQL;
         }
 
+        //прочитать количество обраюотанных строк
+        private string getPassCount()
+        {
+            int count = 0;    
+            if (lstwDataBaseMain.Items.Count > 0)
+            {
+                for (int index = 0; index <= lstwDataBaseMain.Items.Count - 1; index++)
+                {
+                    if (lstwDataBaseMain.Items[index].Text == "1")
+                        count++;    
+                }
+            }
+            return "обработано "+ count.ToString()+" из " + lstwDataBaseMain.Items.Count.ToString();
+        }
 
         //STATUS STRIP------------------------------------------------------------------- 
         //кнока help

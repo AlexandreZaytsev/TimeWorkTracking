@@ -49,6 +49,7 @@ namespace TimeWorkTracking
             this.imageListStrip = new System.Windows.Forms.ImageList(this.components);
             this.mainPanelRegistration = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.tbSatusList = new System.Windows.Forms.TextBox();
             this.cbDirect = new System.Windows.Forms.ComboBox();
             this.btInsert = new System.Windows.Forms.Button();
             this.imgListButtonMain = new System.Windows.Forms.ImageList(this.components);
@@ -87,7 +88,6 @@ namespace TimeWorkTracking
             this.label5 = new System.Windows.Forms.Label();
             this.lMsg = new System.Windows.Forms.Label();
             this.toolTipMsgMain = new System.Windows.Forms.ToolTip(this.components);
-            this.lbStatus = new System.Windows.Forms.Label();
             this.statusStripMain.SuspendLayout();
             this.mainPanelRegistration.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -159,7 +159,7 @@ namespace TimeWorkTracking
             // 
             this.toolStripStatusLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(432, 20);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(356, 20);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "    Справочники:";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -278,12 +278,25 @@ namespace TimeWorkTracking
             // panel5
             // 
             this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel5.Controls.Add(this.lbStatus);
+            this.panel5.Controls.Add(this.tbSatusList);
             this.panel5.Controls.Add(this.cbDirect);
             this.panel5.Location = new System.Drawing.Point(7, 561);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(461, 39);
             this.panel5.TabIndex = 35;
+            // 
+            // tbSatusList
+            // 
+            this.tbSatusList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSatusList.BackColor = System.Drawing.SystemColors.Control;
+            this.tbSatusList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tbSatusList.Enabled = false;
+            this.tbSatusList.Location = new System.Drawing.Point(207, 8);
+            this.tbSatusList.Name = "tbSatusList";
+            this.tbSatusList.Size = new System.Drawing.Size(244, 21);
+            this.tbSatusList.TabIndex = 1;
+            this.tbSatusList.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // cbDirect
             // 
@@ -333,10 +346,10 @@ namespace TimeWorkTracking
             // btImport
             // 
             this.btImport.ImageIndex = 7;
-            this.btImport.Location = new System.Drawing.Point(653, 560);
+            this.btImport.Location = new System.Drawing.Point(649, 560);
             this.btImport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btImport.Name = "btImport";
-            this.btImport.Size = new System.Drawing.Size(145, 40);
+            this.btImport.Size = new System.Drawing.Size(149, 40);
             this.btImport.TabIndex = 33;
             this.btImport.Text = "Импорт";
             this.btImport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -739,18 +752,6 @@ namespace TimeWorkTracking
             this.lMsg.Text = "      Новая запись в БД";
             this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lbStatus
-            // 
-            this.lbStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbStatus.AutoSize = true;
-            this.lbStatus.Location = new System.Drawing.Point(278, 7);
-            this.lbStatus.Name = "lbStatus";
-            this.lbStatus.Size = new System.Drawing.Size(173, 24);
-            this.lbStatus.TabIndex = 1;
-            this.lbStatus.Text = "обработано 0 из 0";
-            this.lbStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -843,7 +844,7 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ToolTip toolTipMsgMain;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.ComboBox cbDirect;
-        private System.Windows.Forms.Label lbStatus;
+        private System.Windows.Forms.TextBox tbSatusList;
     }
 }
 
