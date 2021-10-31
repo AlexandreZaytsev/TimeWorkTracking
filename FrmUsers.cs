@@ -289,11 +289,6 @@ namespace TimeWorkTracking
             lstwDataBaseUsers.FindListByColValue(2, key);                   //найти и выделить позицию
             tbName_TextChanged(null, null);                                 //обновить поля и кнопки
         }
-        //кнопка импорт
-        private void btImport_Click(object sender, EventArgs e)
-        {
-            ImportFromExel.ImportFromExcel();
-        }
 
         //наехали на кнопку Insert загасили id
         private void btInsert_MouseHover(object sender, EventArgs e)
@@ -314,5 +309,13 @@ namespace TimeWorkTracking
         {
             e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
         }
+
+        //кнопка импорт
+        private void btImport_Click(object sender, EventArgs e)
+        {
+            ImportFromExel.ImportFromExcel();
+        }
+
+
     }
 }

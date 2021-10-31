@@ -256,6 +256,7 @@ namespace TimeWorkTracking
         //редактирование поля Исходная дата
         private void dtSource_ValueChanged(object sender, EventArgs e)
         {
+            lbDirect.Text = dtWork.Value != dtSource.Value ? "ï" : "ó";
             bool selDate = false;
             dtWork.Value = dtSource.Value;                              //установить реальную дату по исходной
             string fd = ((DateTime)dtSource.Value).ToString("d MMMMM");
@@ -283,7 +284,8 @@ namespace TimeWorkTracking
         //редактирование ключевого поля (Реальная дата)
         private void dtWork_ValueChanged(object sender, EventArgs e)
         {
-            if(lstwDataBaseCalendar.FindListByColValue(1, dtWork.Value.ToString("yyyy-MM-dd")) >= 0) 
+            lbDirect.Text = dtWork.Value != dtSource.Value ? "ï" : "ó";
+            if (lstwDataBaseCalendar.FindListByColValue(1, dtWork.Value.ToString("yyyy-MM-dd")) >= 0) 
             {
                 lbdtWork.Font = new System.Drawing.Font(lbdtSource.Font, System.Drawing.FontStyle.Bold);
                 btInsert.Enabled = false;                               //заблокировать кнопку INSERT    

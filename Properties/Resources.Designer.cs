@@ -71,6 +71,16 @@ namespace TimeWorkTracking.Properties {
         }
         
         /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
+        /// </summary>
+        internal static System.Drawing.Icon calendar_ico {
+            get {
+                object obj = ResourceManager.GetObject("calendar_ico", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap form {
@@ -81,12 +91,32 @@ namespace TimeWorkTracking.Properties {
         }
         
         /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
+        /// </summary>
+        internal static System.Drawing.Icon form_ico {
+            get {
+                object obj = ResourceManager.GetObject("form_ico", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap heat {
             get {
                 object obj = ResourceManager.GetObject("heat", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
+        /// </summary>
+        internal static System.Drawing.Icon heat_ico {
+            get {
+                object obj = ResourceManager.GetObject("heat_ico", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -131,12 +161,32 @@ namespace TimeWorkTracking.Properties {
         }
         
         /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
+        /// </summary>
+        internal static System.Drawing.Icon pass_ico {
+            get {
+                object obj = ResourceManager.GetObject("pass_ico", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap report {
             get {
                 object obj = ResourceManager.GetObject("report", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
+        /// </summary>
+        internal static System.Drawing.Icon report_ico {
+            get {
+                object obj = ResourceManager.GetObject("report_ico", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -197,6 +247,16 @@ namespace TimeWorkTracking.Properties {
             get {
                 object obj = ResourceManager.GetObject("users", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
+        /// </summary>
+        internal static System.Drawing.Icon users_ico {
+            get {
+                object obj = ResourceManager.GetObject("users_ico", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }

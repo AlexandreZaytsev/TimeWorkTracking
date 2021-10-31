@@ -182,6 +182,12 @@
     <None Include="Resources\off5m.png" />
     <None Include="Resources\on5m.png" />
     <None Include="Resources\db_add.png" />
+    <None Include="Resources\calendar.ico" />
+    <None Include="Resources\form.ico" />
+    <None Include="Resources\heat.ico" />
+    <None Include="Resources\pass.ico" />
+    <None Include="Resources\report.ico" />
+    <None Include="Resources\users.ico" />
     <Content Include="twt.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
