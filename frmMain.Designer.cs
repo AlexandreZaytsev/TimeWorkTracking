@@ -67,6 +67,7 @@ namespace TimeWorkTracking
             this.label1 = new System.Windows.Forms.Label();
             this.smDStart = new System.Windows.Forms.DateTimePicker();
             this.pPacs = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
             this.tbNote = new System.Windows.Forms.TextBox();
             this.tbName = new System.Windows.Forms.TextBox();
             this.udBeforeH = new System.Windows.Forms.DateTimePicker();
@@ -84,7 +85,6 @@ namespace TimeWorkTracking
             this.btUpdate = new System.Windows.Forms.Button();
             this.lMsg = new System.Windows.Forms.Label();
             this.toolTipMsgMain = new System.Windows.Forms.ToolTip(this.components);
-            this.label2 = new System.Windows.Forms.Label();
             this.statusStripMain.SuspendLayout();
             this.mainPanelRegistration.SuspendLayout();
             this.grUsers.SuspendLayout();
@@ -443,6 +443,7 @@ namespace TimeWorkTracking
             this.smTStop.ShowUpDown = true;
             this.smTStop.Size = new System.Drawing.Size(66, 26);
             this.smTStop.TabIndex = 17;
+            this.smTStop.ValueChanged += new System.EventHandler(this.checkDateSpecialMarks);
             // 
             // label4
             // 
@@ -466,6 +467,7 @@ namespace TimeWorkTracking
             this.smDStop.Name = "smDStop";
             this.smDStop.Size = new System.Drawing.Size(124, 26);
             this.smDStop.TabIndex = 15;
+            this.smDStop.ValueChanged += new System.EventHandler(this.checkDateSpecialMarks);
             // 
             // smTStart
             // 
@@ -479,6 +481,7 @@ namespace TimeWorkTracking
             this.smTStart.ShowUpDown = true;
             this.smTStart.Size = new System.Drawing.Size(66, 26);
             this.smTStart.TabIndex = 14;
+            this.smTStart.ValueChanged += new System.EventHandler(this.checkDateSpecialMarks);
             // 
             // label1
             // 
@@ -502,6 +505,7 @@ namespace TimeWorkTracking
             this.smDStart.Name = "smDStart";
             this.smDStart.Size = new System.Drawing.Size(124, 26);
             this.smDStart.TabIndex = 0;
+            this.smDStart.ValueChanged += new System.EventHandler(this.checkDateSpecialMarks);
             // 
             // pPacs
             // 
@@ -513,6 +517,15 @@ namespace TimeWorkTracking
             this.pPacs.Name = "pPacs";
             this.pPacs.Size = new System.Drawing.Size(356, 61);
             this.pPacs.TabIndex = 27;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(20, 20);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(51, 18);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "СКУД";
             // 
             // tbNote
             // 
@@ -725,15 +738,6 @@ namespace TimeWorkTracking
             this.lMsg.TabIndex = 29;
             this.lMsg.Text = "      Новая запись в БД";
             this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(20, 20);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(51, 18);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "СКУД";
             // 
             // frmMain
             // 

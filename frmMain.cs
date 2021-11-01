@@ -30,11 +30,11 @@ namespace TimeWorkTracking
             InitializeComponent();
             lMsg.Visible = false;                                           //погасить сообщение о записи в БД
             cbDirect.SelectedIndex = 0;
-            regDate.Value = DateTime.Now;
-            smDStart.Value = regDate.Value;
-            smTStart.Value = regDate.Value;
-            smDStop.Value = regDate.Value;
-            smTStop.Value = regDate.Value.AddHours(1);
+
+            smDStart.Value = DateTime.Now;
+            smTStart.Value = DateTime.Now;
+            smDStop.Value = DateTime.Now;
+            smTStop.Value = DateTime.Now.AddHours(1);
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -233,18 +233,31 @@ namespace TimeWorkTracking
             smDStop.Enabled = cbSMarks.Text != "-";
             smTStop.Enabled = cbSMarks.Text != "-";
         }
+
+        //проверка дат в специальных отметках
+        private void checkDateSpecialMarks(object sender, EventArgs e)//DateTime dStart, DateTime tStart, DateTime dStop, DateTime tStop)
+        {
+            //               if (DateTime.Parse(dStart.ToString("yyyy-MM-dd ") + tStart.ToString("HH:mm ")) <= DateTime.Parse(dStop.ToString("yyyy-MM-dd ") + tStop.ToString("HH:mm ")))
+            if ((cbSMarks.Text != "-" || cbSMarks.Text != "") && mainPanelRegistration.Enabled) 
+            { 
+                if (DateTime.Parse(smDStart.Value.ToString("yyyy-MM-dd ") + smTStart.Value.ToString("HH:mm ")) <= DateTime.Parse(smDStop.Value.ToString("yyyy-MM-dd ") + smTStop.Value.ToString("HH:mm ")))
+                {
+                    MessageBox.Show("Дата/Время окончания периода должно быть боольше Даты/Времени начала периода","Ошибка установки диапазона дат",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                    smDStop.Value = smDStart.Value;
+                    smTStop.Value = smDStart.Value.AddHours(1);
+                }
+            }
+        }
     }
-
-
 
     /*--------------------------------------------------------------------------------------------  
         CALLBACK OutPut (собственные сообщения)
     --------------------------------------------------------------------------------------------*/
-    //general notification
-    /// <summary>
-    /// CallBack_GetParam
-    /// исходящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров 
-    /// </summary>
+        //general notification
+        /// <summary>
+        /// CallBack_GetParam
+        /// исходящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров 
+        /// </summary>
     public static class CallBack_FrmMain_outEvent
     {
         /// <summary>
