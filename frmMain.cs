@@ -238,11 +238,12 @@ namespace TimeWorkTracking
         private void checkDateSpecialMarks(object sender, EventArgs e)//DateTime dStart, DateTime tStart, DateTime dStop, DateTime tStop)
         {
             //               if (DateTime.Parse(dStart.ToString("yyyy-MM-dd ") + tStart.ToString("HH:mm ")) <= DateTime.Parse(dStop.ToString("yyyy-MM-dd ") + tStop.ToString("HH:mm ")))
-            if ((cbSMarks.Text != "-" || cbSMarks.Text != "") && mainPanelRegistration.Enabled) 
+            if ((cbSMarks.Text != "-" && cbSMarks.Text != "") && mainPanelRegistration.Enabled) 
             { 
-                if (DateTime.Parse(smDStart.Value.ToString("yyyy-MM-dd ") + smTStart.Value.ToString("HH:mm ")) <= DateTime.Parse(smDStop.Value.ToString("yyyy-MM-dd ") + smTStop.Value.ToString("HH:mm ")))
+                if (DateTime.Compare(DateTime.Parse(smDStart.Value.ToString("yyyy-MM-dd ") + smTStart.Value.ToString("HH:mm ")),
+                                     DateTime.Parse(smDStop.Value.ToString("yyyy-MM-dd ") + smTStop.Value.ToString("HH:mm ")))>0)
                 {
-                    MessageBox.Show("Дата/Время окончания периода должно быть боольше Даты/Времени начала периода","Ошибка установки диапазона дат",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+//                    MessageBox.Show("Дата/Время окончания периода должно быть боольше Даты/Времени начала периода","Ошибка установки диапазона дат",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
                     smDStop.Value = smDStart.Value;
                     smTStop.Value = smDStart.Value.AddHours(1);
                 }
