@@ -61,10 +61,10 @@ namespace TimeWorkTracking
             this.cbSMarks = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
             this.smTStop = new System.Windows.Forms.DateTimePicker();
-            this.label4 = new System.Windows.Forms.Label();
+            this.lbSmarkStop = new System.Windows.Forms.Label();
             this.smDStop = new System.Windows.Forms.DateTimePicker();
             this.smTStart = new System.Windows.Forms.DateTimePicker();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lbSmarkStart = new System.Windows.Forms.Label();
             this.smDStart = new System.Windows.Forms.DateTimePicker();
             this.pPacs = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
@@ -398,10 +398,10 @@ namespace TimeWorkTracking
             this.panel7.Controls.Add(this.cbSMarks);
             this.panel7.Controls.Add(this.label11);
             this.panel7.Controls.Add(this.smTStop);
-            this.panel7.Controls.Add(this.label4);
+            this.panel7.Controls.Add(this.lbSmarkStop);
             this.panel7.Controls.Add(this.smDStop);
             this.panel7.Controls.Add(this.smTStart);
-            this.panel7.Controls.Add(this.label1);
+            this.panel7.Controls.Add(this.lbSmarkStart);
             this.panel7.Controls.Add(this.smDStart);
             this.panel7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.panel7.Location = new System.Drawing.Point(7, 190);
@@ -445,16 +445,16 @@ namespace TimeWorkTracking
             this.smTStop.TabIndex = 17;
             this.smTStop.ValueChanged += new System.EventHandler(this.checkDateSpecialMarks);
             // 
-            // label4
+            // lbSmarkStop
             // 
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(4, 69);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(145, 18);
-            this.label4.TabIndex = 16;
-            this.label4.Text = "Окончание периода";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lbSmarkStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lbSmarkStop.Location = new System.Drawing.Point(4, 69);
+            this.lbSmarkStop.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbSmarkStop.Name = "lbSmarkStop";
+            this.lbSmarkStop.Size = new System.Drawing.Size(145, 18);
+            this.lbSmarkStop.TabIndex = 16;
+            this.lbSmarkStop.Text = "Окончание периода";
+            this.lbSmarkStop.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // smDStop
             // 
@@ -483,16 +483,16 @@ namespace TimeWorkTracking
             this.smTStart.TabIndex = 14;
             this.smTStart.ValueChanged += new System.EventHandler(this.checkDateSpecialMarks);
             // 
-            // label1
+            // lbSmarkStart
             // 
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(4, 39);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(145, 18);
-            this.label1.TabIndex = 13;
-            this.label1.Text = "Начало периода";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lbSmarkStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lbSmarkStart.Location = new System.Drawing.Point(4, 39);
+            this.lbSmarkStart.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbSmarkStart.Name = "lbSmarkStart";
+            this.lbSmarkStart.Size = new System.Drawing.Size(145, 18);
+            this.lbSmarkStart.TabIndex = 13;
+            this.lbSmarkStart.Text = "Начало периода";
+            this.lbSmarkStart.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // smDStart
             // 
@@ -820,12 +820,12 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Panel pPacs;
         private System.Windows.Forms.DateTimePicker smDStart;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lbSmarkStart;
         private System.Windows.Forms.DateTimePicker smTStart;
         private System.Windows.Forms.ComboBox cbSMarks;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.DateTimePicker smTStop;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lbSmarkStop;
         private System.Windows.Forms.DateTimePicker smDStop;
         private System.Windows.Forms.DateTimePicker regDate;
         private System.Windows.Forms.Label label2;

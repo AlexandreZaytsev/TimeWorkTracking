@@ -243,10 +243,14 @@ namespace TimeWorkTracking
                 if (DateTime.Compare(DateTime.Parse(smDStart.Value.ToString("yyyy-MM-dd ") + smTStart.Value.ToString("HH:mm ")),
                                      DateTime.Parse(smDStop.Value.ToString("yyyy-MM-dd ") + smTStop.Value.ToString("HH:mm ")))>0)
                 {
-//                    MessageBox.Show("Дата/Время окончания периода должно быть боольше Даты/Времени начала периода","Ошибка установки диапазона дат",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                    //                    MessageBox.Show("Дата/Время окончания периода должно быть боольше Даты/Времени начала периода","Ошибка установки диапазона дат",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                    lbSmarkStop.BackColor = SystemColors.GrayText;
+
                     smDStop.Value = smDStart.Value;
                     smTStop.Value = smDStart.Value.AddHours(1);
                 }
+                else 
+                    lbSmarkStop.BackColor = SystemColors.Control;
             }
         }
     }
