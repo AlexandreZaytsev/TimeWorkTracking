@@ -17,7 +17,8 @@ namespace TimeWorkTracking
         {
             OpenFileDialog od = new OpenFileDialog
             {
-                Filter = "Excell|*.xls;*.xlsx;*.xlsm;"
+//                Filter = "Excell|*.xls;*.xlsx;*.xlsm;"
+                Filter = "Excel 2010(*.xlsm) | *.xlsm"              //"Excel Worksheets 2003(*.xls)|*.xls|Excel Worksheets 2007(*.xlsx)|*.xlsx|Word Documents(*.doc)|*.doc"
             };
             DialogResult dr = od.ShowDialog();
             if (dr == DialogResult.Abort)
@@ -64,7 +65,7 @@ namespace TimeWorkTracking
                         {
                             do
                             {
-                                int NumberOfColums = dr.GetValues(meta);
+                                int NumberOfColums = dr.GetValues(meta); 
 
                                 sqlCommand.CommandText = "SELECT id FROM UserDepartment Where name='" + meta[1].ToString() + "'";
                                 int departmentId = (int)sqlCommand.ExecuteScalar();
