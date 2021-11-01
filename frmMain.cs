@@ -18,8 +18,6 @@ namespace TimeWorkTracking
     public partial class frmMain : Form
     {
         ListViewItemComparer _lvwItemComparer;                              //объект сортировки по колонкам
-        DateTime smDtStart;                                                 //дата/время начала специальных отметок
-        DateTime smDtStop;                                                  //дата/время окончания специальных отметок
 
         public frmMain()
         {
