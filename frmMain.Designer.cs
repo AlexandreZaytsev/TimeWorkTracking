@@ -66,7 +66,7 @@ namespace TimeWorkTracking
             this.smTStart = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
             this.smDStart = new System.Windows.Forms.DateTimePicker();
-            this.panel6 = new System.Windows.Forms.Panel();
+            this.pPacs = new System.Windows.Forms.Panel();
             this.tbNote = new System.Windows.Forms.TextBox();
             this.tbName = new System.Windows.Forms.TextBox();
             this.udBeforeH = new System.Windows.Forms.DateTimePicker();
@@ -84,12 +84,14 @@ namespace TimeWorkTracking
             this.btUpdate = new System.Windows.Forms.Button();
             this.lMsg = new System.Windows.Forms.Label();
             this.toolTipMsgMain = new System.Windows.Forms.ToolTip(this.components);
+            this.label2 = new System.Windows.Forms.Label();
             this.statusStripMain.SuspendLayout();
             this.mainPanelRegistration.SuspendLayout();
             this.grUsers.SuspendLayout();
             this.panel5.SuspendLayout();
             this.grRegistrator.SuspendLayout();
             this.panel7.SuspendLayout();
+            this.pPacs.SuspendLayout();
             this.gbNavigator.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -156,7 +158,7 @@ namespace TimeWorkTracking
             // 
             this.toolStripStatusLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(471, 21);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(195, 21);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "    Справочники:";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -370,7 +372,7 @@ namespace TimeWorkTracking
             // grRegistrator
             // 
             this.grRegistrator.Controls.Add(this.panel7);
-            this.grRegistrator.Controls.Add(this.panel6);
+            this.grRegistrator.Controls.Add(this.pPacs);
             this.grRegistrator.Controls.Add(this.tbNote);
             this.grRegistrator.Controls.Add(this.tbName);
             this.grRegistrator.Controls.Add(this.udBeforeH);
@@ -501,15 +503,16 @@ namespace TimeWorkTracking
             this.smDStart.Size = new System.Drawing.Size(124, 26);
             this.smDStart.TabIndex = 0;
             // 
-            // panel6
+            // pPacs
             // 
-            this.panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel6.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.panel6.Location = new System.Drawing.Point(8, 98);
-            this.panel6.Margin = new System.Windows.Forms.Padding(2);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(356, 61);
-            this.panel6.TabIndex = 27;
+            this.pPacs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pPacs.Controls.Add(this.label2);
+            this.pPacs.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.pPacs.Location = new System.Drawing.Point(8, 98);
+            this.pPacs.Margin = new System.Windows.Forms.Padding(2);
+            this.pPacs.Name = "pPacs";
+            this.pPacs.Size = new System.Drawing.Size(356, 61);
+            this.pPacs.TabIndex = 27;
             // 
             // tbNote
             // 
@@ -723,6 +726,15 @@ namespace TimeWorkTracking
             this.lMsg.Text = "      Новая запись в БД";
             this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(20, 20);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(51, 18);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "СКУД";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -750,6 +762,8 @@ namespace TimeWorkTracking
             this.grRegistrator.ResumeLayout(false);
             this.grRegistrator.PerformLayout();
             this.panel7.ResumeLayout(false);
+            this.pPacs.ResumeLayout(false);
+            this.pPacs.PerformLayout();
             this.gbNavigator.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -800,7 +814,7 @@ namespace TimeWorkTracking
         private System.Windows.Forms.TextBox tbName;
         private System.Windows.Forms.TextBox tbNote;
         private System.Windows.Forms.Panel panel7;
-        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Panel pPacs;
         private System.Windows.Forms.DateTimePicker smDStart;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DateTimePicker smTStart;
@@ -810,6 +824,7 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.DateTimePicker smDStop;
         private System.Windows.Forms.DateTimePicker regDate;
+        private System.Windows.Forms.Label label2;
     }
 }
 
