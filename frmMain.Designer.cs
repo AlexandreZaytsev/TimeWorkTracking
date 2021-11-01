@@ -505,7 +505,7 @@ namespace TimeWorkTracking
             this.smDStart.Name = "smDStart";
             this.smDStart.Size = new System.Drawing.Size(124, 26);
             this.smDStart.TabIndex = 0;
-            this.smDStart.ValueChanged += new System.EventHandler(this.checkDateSpecialMarks);
+            this.smDStart.ValueChanged += new System.EventHandler(this.smDStart_ValueChanged);
             // 
             // pPacs
             // 

@@ -237,32 +237,32 @@ namespace TimeWorkTracking
         //проверка дат в специальных отметках
         private void checkDateSpecialMarks(object sender, EventArgs e)//DateTime dStart, DateTime tStart, DateTime dStop, DateTime tStop)
         {
-            //               if (DateTime.Parse(dStart.ToString("yyyy-MM-dd ") + tStart.ToString("HH:mm ")) <= DateTime.Parse(dStop.ToString("yyyy-MM-dd ") + tStop.ToString("HH:mm ")))
             if ((cbSMarks.Text != "-" && cbSMarks.Text != "") && mainPanelRegistration.Enabled) 
             { 
                 if (DateTime.Compare(DateTime.Parse(smDStart.Value.ToString("yyyy-MM-dd ") + smTStart.Value.ToString("HH:mm ")),
                                      DateTime.Parse(smDStop.Value.ToString("yyyy-MM-dd ") + smTStop.Value.ToString("HH:mm ")))>0)
                 {
                     //                    MessageBox.Show("Дата/Время окончания периода должно быть боольше Даты/Времени начала периода","Ошибка установки диапазона дат",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
-                    lbSmarkStop.BackColor = SystemColors.GrayText;
-
-                    smDStop.Value = smDStart.Value;
+                     smDStop.Value = smDStart.Value;
                     smTStop.Value = smDStart.Value.AddHours(1);
                 }
-                else 
-                    lbSmarkStop.BackColor = SystemColors.Control;
             }
+        }
+
+        private void smDStart_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 
     /*--------------------------------------------------------------------------------------------  
         CALLBACK OutPut (собственные сообщения)
     --------------------------------------------------------------------------------------------*/
-        //general notification
-        /// <summary>
-        /// CallBack_GetParam
-        /// исходящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров 
-        /// </summary>
+    //general notification
+    /// <summary>
+    /// CallBack_GetParam
+    /// исходящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров 
+    /// </summary>
     public static class CallBack_FrmMain_outEvent
     {
         /// <summary>
