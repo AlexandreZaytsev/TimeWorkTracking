@@ -225,7 +225,14 @@ namespace TimeWorkTracking
             */
         }
 
-
+        //изменение специальных отметок
+        private void cbSMarks_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            smDStart.Enabled = cbSMarks.Text != "-";
+            smTStart.Enabled = cbSMarks.Text != "-";
+            smDStop.Enabled = cbSMarks.Text != "-";
+            smTStop.Enabled = cbSMarks.Text != "-";
+        }
     }
 
 

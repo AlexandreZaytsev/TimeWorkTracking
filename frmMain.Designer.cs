@@ -82,21 +82,6 @@ namespace TimeWorkTracking
             this.imgListButtonMain = new System.Windows.Forms.ImageList(this.components);
             this.btImport = new System.Windows.Forms.Button();
             this.btUpdate = new System.Windows.Forms.Button();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.tbCrmID = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.tbExtID = new System.Windows.Forms.TextBox();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.label8 = new System.Windows.Forms.Label();
-            this.chbLunch = new System.Windows.Forms.CheckBox();
-            this.cbSheme = new System.Windows.Forms.ComboBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.cbPost = new System.Windows.Forms.ComboBox();
-            this.cbDepartment = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.lMsg = new System.Windows.Forms.Label();
             this.toolTipMsgMain = new System.Windows.Forms.ToolTip(this.components);
             this.statusStripMain.SuspendLayout();
@@ -106,9 +91,6 @@ namespace TimeWorkTracking
             this.grRegistrator.SuspendLayout();
             this.panel7.SuspendLayout();
             this.gbNavigator.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStripMain
@@ -136,7 +118,7 @@ namespace TimeWorkTracking
             this.statusStripMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStripMain.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.statusStripMain.ShowItemToolTips = true;
-            this.statusStripMain.Size = new System.Drawing.Size(1006, 26);
+            this.statusStripMain.Size = new System.Drawing.Size(730, 26);
             this.statusStripMain.SizingGrip = false;
             this.statusStripMain.TabIndex = 15;
             this.statusStripMain.Text = "statusStrip1";
@@ -282,14 +264,13 @@ namespace TimeWorkTracking
             this.mainPanelRegistration.Controls.Add(this.btInsert);
             this.mainPanelRegistration.Controls.Add(this.btImport);
             this.mainPanelRegistration.Controls.Add(this.btUpdate);
-            this.mainPanelRegistration.Controls.Add(this.panel3);
             this.mainPanelRegistration.Controls.Add(this.lMsg);
             this.mainPanelRegistration.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanelRegistration.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mainPanelRegistration.Location = new System.Drawing.Point(0, 26);
             this.mainPanelRegistration.Margin = new System.Windows.Forms.Padding(2);
             this.mainPanelRegistration.Name = "mainPanelRegistration";
-            this.mainPanelRegistration.Size = new System.Drawing.Size(1006, 492);
+            this.mainPanelRegistration.Size = new System.Drawing.Size(730, 492);
             this.mainPanelRegistration.TabIndex = 16;
             // 
             // grUsers
@@ -421,28 +402,29 @@ namespace TimeWorkTracking
             this.panel7.Controls.Add(this.label1);
             this.panel7.Controls.Add(this.smDStart);
             this.panel7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.panel7.Location = new System.Drawing.Point(7, 181);
+            this.panel7.Location = new System.Drawing.Point(7, 190);
             this.panel7.Margin = new System.Windows.Forms.Padding(2);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(356, 107);
+            this.panel7.Size = new System.Drawing.Size(356, 98);
             this.panel7.TabIndex = 28;
             // 
             // cbSMarks
             // 
             this.cbSMarks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbSMarks.FormattingEnabled = true;
-            this.cbSMarks.Location = new System.Drawing.Point(137, 9);
+            this.cbSMarks.Location = new System.Drawing.Point(154, 5);
             this.cbSMarks.Name = "cbSMarks";
-            this.cbSMarks.Size = new System.Drawing.Size(214, 26);
+            this.cbSMarks.Size = new System.Drawing.Size(197, 26);
             this.cbSMarks.TabIndex = 19;
+            this.cbSMarks.SelectedIndexChanged += new System.EventHandler(this.cbSMarks_SelectedIndexChanged);
             // 
             // label11
             // 
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label11.Location = new System.Drawing.Point(7, 12);
+            this.label11.Location = new System.Drawing.Point(4, 8);
             this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(125, 18);
+            this.label11.Size = new System.Drawing.Size(145, 18);
             this.label11.TabIndex = 18;
             this.label11.Text = "Специальные отметки";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -453,7 +435,7 @@ namespace TimeWorkTracking
             this.smTStop.CustomFormat = "HH:mm";
             this.smTStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.smTStop.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.smTStop.Location = new System.Drawing.Point(285, 69);
+            this.smTStop.Location = new System.Drawing.Point(285, 65);
             this.smTStop.Margin = new System.Windows.Forms.Padding(2);
             this.smTStop.Name = "smTStop";
             this.smTStop.ShowUpDown = true;
@@ -463,10 +445,10 @@ namespace TimeWorkTracking
             // label4
             // 
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(7, 73);
+            this.label4.Location = new System.Drawing.Point(4, 69);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(125, 18);
+            this.label4.Size = new System.Drawing.Size(145, 18);
             this.label4.TabIndex = 16;
             this.label4.Text = "Окончание периода";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -477,10 +459,10 @@ namespace TimeWorkTracking
             this.smDStop.CustomFormat = "dd.MM.yyyy";
             this.smDStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.smDStop.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.smDStop.Location = new System.Drawing.Point(137, 69);
+            this.smDStop.Location = new System.Drawing.Point(154, 65);
             this.smDStop.Margin = new System.Windows.Forms.Padding(2);
             this.smDStop.Name = "smDStop";
-            this.smDStop.Size = new System.Drawing.Size(112, 26);
+            this.smDStop.Size = new System.Drawing.Size(124, 26);
             this.smDStop.TabIndex = 15;
             // 
             // smTStart
@@ -489,7 +471,7 @@ namespace TimeWorkTracking
             this.smTStart.CustomFormat = "HH:mm";
             this.smTStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.smTStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.smTStart.Location = new System.Drawing.Point(285, 39);
+            this.smTStart.Location = new System.Drawing.Point(285, 35);
             this.smTStart.Margin = new System.Windows.Forms.Padding(2);
             this.smTStart.Name = "smTStart";
             this.smTStart.ShowUpDown = true;
@@ -499,10 +481,10 @@ namespace TimeWorkTracking
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(7, 43);
+            this.label1.Location = new System.Drawing.Point(4, 39);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(125, 18);
+            this.label1.Size = new System.Drawing.Size(145, 18);
             this.label1.TabIndex = 13;
             this.label1.Text = "Начало периода";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -513,10 +495,10 @@ namespace TimeWorkTracking
             this.smDStart.CustomFormat = "dd.MM.yyyy";
             this.smDStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.smDStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.smDStart.Location = new System.Drawing.Point(137, 39);
+            this.smDStart.Location = new System.Drawing.Point(154, 35);
             this.smDStart.Margin = new System.Windows.Forms.Padding(2);
             this.smDStart.Name = "smDStart";
-            this.smDStart.Size = new System.Drawing.Size(112, 26);
+            this.smDStart.Size = new System.Drawing.Size(124, 26);
             this.smDStart.TabIndex = 0;
             // 
             // panel6
@@ -532,10 +514,10 @@ namespace TimeWorkTracking
             // tbNote
             // 
             this.tbNote.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tbNote.Location = new System.Drawing.Point(8, 292);
+            this.tbNote.Location = new System.Drawing.Point(7, 292);
             this.tbNote.Multiline = true;
             this.tbNote.Name = "tbNote";
-            this.tbNote.Size = new System.Drawing.Size(357, 62);
+            this.tbNote.Size = new System.Drawing.Size(358, 62);
             this.tbNote.TabIndex = 26;
             // 
             // tbName
@@ -661,10 +643,10 @@ namespace TimeWorkTracking
             this.regDate.CustomFormat = "dd.MM.yyyy";
             this.regDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.regDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.regDate.Location = new System.Drawing.Point(21, 21);
+            this.regDate.Location = new System.Drawing.Point(9, 21);
             this.regDate.Margin = new System.Windows.Forms.Padding(2);
             this.regDate.Name = "regDate";
-            this.regDate.Size = new System.Drawing.Size(143, 31);
+            this.regDate.Size = new System.Drawing.Size(157, 31);
             this.regDate.TabIndex = 1;
             // 
             // btInsert
@@ -726,179 +708,6 @@ namespace TimeWorkTracking
             this.btUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btUpdate.UseVisualStyleBackColor = true;
             // 
-            // panel3
-            // 
-            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel3.Controls.Add(this.panel4);
-            this.panel3.Controls.Add(this.tbCrmID);
-            this.panel3.Controls.Add(this.label9);
-            this.panel3.Controls.Add(this.label10);
-            this.panel3.Controls.Add(this.tbExtID);
-            this.panel3.Controls.Add(this.panel2);
-            this.panel3.Controls.Add(this.panel1);
-            this.panel3.Location = new System.Drawing.Point(750, 131);
-            this.panel3.Margin = new System.Windows.Forms.Padding(2);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(370, 147);
-            this.panel3.TabIndex = 30;
-            // 
-            // panel4
-            // 
-            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel4.Location = new System.Drawing.Point(7, 31);
-            this.panel4.Margin = new System.Windows.Forms.Padding(2);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(357, 1);
-            this.panel4.TabIndex = 28;
-            // 
-            // tbCrmID
-            // 
-            this.tbCrmID.BackColor = System.Drawing.SystemColors.Control;
-            this.tbCrmID.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tbCrmID.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.tbCrmID.Location = new System.Drawing.Point(70, 9);
-            this.tbCrmID.Margin = new System.Windows.Forms.Padding(2);
-            this.tbCrmID.MaxLength = 18;
-            this.tbCrmID.Name = "tbCrmID";
-            this.tbCrmID.Size = new System.Drawing.Size(128, 17);
-            this.tbCrmID.TabIndex = 27;
-            this.tbCrmID.Text = "0";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(202, 9);
-            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(70, 18);
-            this.label9.TabIndex = 24;
-            this.label9.Text = "id СКУД:";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(18, 9);
-            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(62, 18);
-            this.label10.TabIndex = 26;
-            this.label10.Text = "id CRM:";
-            // 
-            // tbExtID
-            // 
-            this.tbExtID.BackColor = System.Drawing.SystemColors.Control;
-            this.tbExtID.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tbExtID.Enabled = false;
-            this.tbExtID.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.tbExtID.Location = new System.Drawing.Point(260, 9);
-            this.tbExtID.Margin = new System.Windows.Forms.Padding(2);
-            this.tbExtID.Name = "tbExtID";
-            this.tbExtID.Size = new System.Drawing.Size(104, 17);
-            this.tbExtID.TabIndex = 22;
-            // 
-            // panel2
-            // 
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.label8);
-            this.panel2.Controls.Add(this.chbLunch);
-            this.panel2.Controls.Add(this.cbSheme);
-            this.panel2.Location = new System.Drawing.Point(5, 103);
-            this.panel2.Margin = new System.Windows.Forms.Padding(2);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(358, 36);
-            this.panel2.TabIndex = 15;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(5, 10);
-            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(54, 18);
-            this.label8.TabIndex = 12;
-            this.label8.Text = "Тариф";
-            // 
-            // chbLunch
-            // 
-            this.chbLunch.AutoSize = true;
-            this.chbLunch.Location = new System.Drawing.Point(206, 9);
-            this.chbLunch.Margin = new System.Windows.Forms.Padding(2);
-            this.chbLunch.Name = "chbLunch";
-            this.chbLunch.Size = new System.Drawing.Size(169, 22);
-            this.chbLunch.TabIndex = 14;
-            this.chbLunch.Text = "Работает без обеда";
-            this.chbLunch.UseVisualStyleBackColor = true;
-            // 
-            // cbSheme
-            // 
-            this.cbSheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbSheme.FormattingEnabled = true;
-            this.cbSheme.Location = new System.Drawing.Point(104, 6);
-            this.cbSheme.Margin = new System.Windows.Forms.Padding(2);
-            this.cbSheme.Name = "cbSheme";
-            this.cbSheme.Size = new System.Drawing.Size(98, 25);
-            this.cbSheme.TabIndex = 13;
-            // 
-            // panel1
-            // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.cbPost);
-            this.panel1.Controls.Add(this.cbDepartment);
-            this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(5, 35);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(358, 65);
-            this.panel1.TabIndex = 2;
-            // 
-            // cbPost
-            // 
-            this.cbPost.BackColor = System.Drawing.SystemColors.Control;
-            this.cbPost.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbPost.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.cbPost.FormattingEnabled = true;
-            this.cbPost.Location = new System.Drawing.Point(104, 33);
-            this.cbPost.Margin = new System.Windows.Forms.Padding(2);
-            this.cbPost.Name = "cbPost";
-            this.cbPost.Size = new System.Drawing.Size(246, 25);
-            this.cbPost.TabIndex = 6;
-            // 
-            // cbDepartment
-            // 
-            this.cbDepartment.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.cbDepartment.BackColor = System.Drawing.SystemColors.Control;
-            this.cbDepartment.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbDepartment.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.cbDepartment.FormattingEnabled = true;
-            this.cbDepartment.Location = new System.Drawing.Point(104, 7);
-            this.cbDepartment.Margin = new System.Windows.Forms.Padding(2);
-            this.cbDepartment.Name = "cbDepartment";
-            this.cbDepartment.Size = new System.Drawing.Size(246, 25);
-            this.cbDepartment.TabIndex = 5;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(5, 36);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(82, 15);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Должность";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(5, 11);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(99, 15);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Департамент";
-            // 
             // lMsg
             // 
             this.lMsg.AutoSize = true;
@@ -918,7 +727,7 @@ namespace TimeWorkTracking
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1006, 518);
+            this.ClientSize = new System.Drawing.Size(730, 518);
             this.Controls.Add(this.mainPanelRegistration);
             this.Controls.Add(this.statusStripMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -942,12 +751,6 @@ namespace TimeWorkTracking
             this.grRegistrator.PerformLayout();
             this.panel7.ResumeLayout(false);
             this.gbNavigator.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -974,25 +777,10 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Button btInsert;
         private System.Windows.Forms.Button btImport;
         private System.Windows.Forms.Button btUpdate;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.TextBox tbCrmID;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox tbExtID;
         private System.Windows.Forms.DateTimePicker udAfterM;
         private System.Windows.Forms.DateTimePicker udAfterH;
         private System.Windows.Forms.DateTimePicker udBeforeM;
         private System.Windows.Forms.DateTimePicker udBeforeH;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.CheckBox chbLunch;
-        private System.Windows.Forms.ComboBox cbSheme;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.ComboBox cbPost;
-        private System.Windows.Forms.ComboBox cbDepartment;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
