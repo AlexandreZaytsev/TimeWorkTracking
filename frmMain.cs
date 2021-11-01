@@ -254,6 +254,14 @@ namespace TimeWorkTracking
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
             double bd = GetBusinessDays(firstDayOfMonth, lastDayOfMonth);
             lbBusinessDayCount.Text = "рабочих дней - " + bd.ToString();
+
+            if (e.Start.DayOfWeek == DayOfWeek.Monday)
+            {
+                MessageBox.Show("I hate mondays");
+                mcRegDate.SelectionStart = e.Start.AddDays(1);
+            }
+
+
         }
 
         //подсчитать количество рабочих дней

@@ -82,6 +82,7 @@ namespace TimeWorkTracking
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.gbNavigator = new System.Windows.Forms.GroupBox();
+            this.lbBusinessDayCount = new System.Windows.Forms.Label();
             this.mcRegDate = new System.Windows.Forms.MonthCalendar();
             this.btInsert = new System.Windows.Forms.Button();
             this.imgListButtonMain = new System.Windows.Forms.ImageList(this.components);
@@ -89,7 +90,6 @@ namespace TimeWorkTracking
             this.btUpdate = new System.Windows.Forms.Button();
             this.lMsg = new System.Windows.Forms.Label();
             this.toolTipMsgMain = new System.Windows.Forms.ToolTip(this.components);
-            this.lbBusinessDayCount = new System.Windows.Forms.Label();
             this.statusStripMain.SuspendLayout();
             this.mainPanelRegistration.SuspendLayout();
             this.grUsers.SuspendLayout();
@@ -704,8 +704,19 @@ namespace TimeWorkTracking
             this.gbNavigator.TabStop = false;
             this.gbNavigator.Text = "Навигатор";
             // 
+            // lbBusinessDayCount
+            // 
+            this.lbBusinessDayCount.Location = new System.Drawing.Point(206, 30);
+            this.lbBusinessDayCount.Name = "lbBusinessDayCount";
+            this.lbBusinessDayCount.Size = new System.Drawing.Size(145, 19);
+            this.lbBusinessDayCount.TabIndex = 3;
+            this.lbBusinessDayCount.Text = "рабочих дней - 0";
+            // 
             // mcRegDate
             // 
+            this.mcRegDate.BoldedDates = new System.DateTime[] {
+        new System.DateTime(2021, 11, 10, 0, 0, 0, 0),
+        new System.DateTime(2021, 11, 26, 0, 0, 0, 0)};
             this.mcRegDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mcRegDate.Location = new System.Drawing.Point(5, 21);
             this.mcRegDate.Name = "mcRegDate";
@@ -786,14 +797,6 @@ namespace TimeWorkTracking
             this.lMsg.TabIndex = 29;
             this.lMsg.Text = "      Новая запись в БД";
             this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lbBusinessDayCount
-            // 
-            this.lbBusinessDayCount.Location = new System.Drawing.Point(206, 30);
-            this.lbBusinessDayCount.Name = "lbBusinessDayCount";
-            this.lbBusinessDayCount.Size = new System.Drawing.Size(145, 19);
-            this.lbBusinessDayCount.TabIndex = 3;
-            this.lbBusinessDayCount.Text = "рабочих дней - 0";
             // 
             // frmMain
             // 
