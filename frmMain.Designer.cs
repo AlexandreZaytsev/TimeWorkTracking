@@ -48,21 +48,46 @@ namespace TimeWorkTracking
             this.toolStripStatusLabel6 = new System.Windows.Forms.ToolStripStatusLabel();
             this.imageListStrip = new System.Windows.Forms.ImageList(this.components);
             this.mainPanelRegistration = new System.Windows.Forms.Panel();
+            this.grUsers = new System.Windows.Forms.GroupBox();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.tbSatusList = new System.Windows.Forms.TextBox();
+            this.cbDirect = new System.Windows.Forms.ComboBox();
+            this.lstwDataBaseMain = new System.Windows.Forms.ListView();
+            this.access = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.fio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.imgListStatusMain = new System.Windows.Forms.ImageList(this.components);
+            this.grRegistrator = new System.Windows.Forms.GroupBox();
+            this.panel7 = new System.Windows.Forms.Panel();
+            this.cbSMarks = new System.Windows.Forms.ComboBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.smTStop = new System.Windows.Forms.DateTimePicker();
+            this.label4 = new System.Windows.Forms.Label();
+            this.smDStop = new System.Windows.Forms.DateTimePicker();
+            this.smTStart = new System.Windows.Forms.DateTimePicker();
+            this.label1 = new System.Windows.Forms.Label();
+            this.smDStart = new System.Windows.Forms.DateTimePicker();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.tbNote = new System.Windows.Forms.TextBox();
+            this.tbName = new System.Windows.Forms.TextBox();
+            this.udBeforeH = new System.Windows.Forms.DateTimePicker();
+            this.udBeforeM = new System.Windows.Forms.DateTimePicker();
+            this.udAfterM = new System.Windows.Forms.DateTimePicker();
+            this.udAfterH = new System.Windows.Forms.DateTimePicker();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.gbNavigator = new System.Windows.Forms.GroupBox();
+            this.regDate = new System.Windows.Forms.DateTimePicker();
             this.btInsert = new System.Windows.Forms.Button();
             this.imgListButtonMain = new System.Windows.Forms.ImageList(this.components);
             this.btImport = new System.Windows.Forms.Button();
             this.btUpdate = new System.Windows.Forms.Button();
-            this.imgListStatusMain = new System.Windows.Forms.ImageList(this.components);
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.tbCrmID = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.tbExtID = new System.Windows.Forms.TextBox();
-            this.udAfterM = new System.Windows.Forms.DateTimePicker();
-            this.udAfterH = new System.Windows.Forms.DateTimePicker();
-            this.udBeforeM = new System.Windows.Forms.DateTimePicker();
-            this.udBeforeH = new System.Windows.Forms.DateTimePicker();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
             this.chbLunch = new System.Windows.Forms.CheckBox();
@@ -72,34 +97,18 @@ namespace TimeWorkTracking
             this.cbDepartment = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.lMsg = new System.Windows.Forms.Label();
             this.toolTipMsgMain = new System.Windows.Forms.ToolTip(this.components);
-            this.gbNavigator = new System.Windows.Forms.GroupBox();
-            this.grRegistrator = new System.Windows.Forms.GroupBox();
-            this.grUsers = new System.Windows.Forms.GroupBox();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.tbSatusList = new System.Windows.Forms.TextBox();
-            this.cbDirect = new System.Windows.Forms.ComboBox();
-            this.lstwDataBaseMain = new System.Windows.Forms.ListView();
-            this.access = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.fio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tbName = new System.Windows.Forms.TextBox();
-            this.tbNote = new System.Windows.Forms.TextBox();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.panel7 = new System.Windows.Forms.Panel();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.statusStripMain.SuspendLayout();
             this.mainPanelRegistration.SuspendLayout();
+            this.grUsers.SuspendLayout();
+            this.panel5.SuspendLayout();
+            this.grRegistrator.SuspendLayout();
+            this.panel7.SuspendLayout();
+            this.gbNavigator.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.grRegistrator.SuspendLayout();
-            this.grUsers.SuspendLayout();
-            this.panel5.SuspendLayout();
-            this.panel7.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStripMain
@@ -123,11 +132,11 @@ namespace TimeWorkTracking
             this.toolStripStatusLabel6});
             this.statusStripMain.Location = new System.Drawing.Point(0, 0);
             this.statusStripMain.Name = "statusStripMain";
-            this.statusStripMain.Padding = new System.Windows.Forms.Padding(1, 0, 13, 0);
+            this.statusStripMain.Padding = new System.Windows.Forms.Padding(1, 0, 10, 0);
             this.statusStripMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStripMain.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.statusStripMain.ShowItemToolTips = true;
-            this.statusStripMain.Size = new System.Drawing.Size(1342, 26);
+            this.statusStripMain.Size = new System.Drawing.Size(1006, 26);
             this.statusStripMain.SizingGrip = false;
             this.statusStripMain.TabIndex = 15;
             this.statusStripMain.Text = "statusStrip1";
@@ -135,7 +144,7 @@ namespace TimeWorkTracking
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(55, 20);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(46, 21);
             this.toolStripStatusLabel2.Text = "Статус:";
             this.toolStripStatusLabel2.ToolTipText = "12431234";
             // 
@@ -145,7 +154,7 @@ namespace TimeWorkTracking
             this.tsbtDataBaseSQL.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbtDataBaseSQL.Name = "tsbtDataBaseSQL";
             this.tsbtDataBaseSQL.ShowDropDownArrow = false;
-            this.tsbtDataBaseSQL.Size = new System.Drawing.Size(82, 24);
+            this.tsbtDataBaseSQL.Size = new System.Drawing.Size(70, 24);
             this.tsbtDataBaseSQL.Text = "БД SQL";
             this.tsbtDataBaseSQL.ToolTipText = "Подключение к SQL базе учета рабочего времени";
             this.tsbtDataBaseSQL.Click += new System.EventHandler(this.tsbtDataBaseSQL_Click);
@@ -156,7 +165,7 @@ namespace TimeWorkTracking
             this.tsbtDataBasePACS.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbtDataBasePACS.Name = "tsbtDataBasePACS";
             this.tsbtDataBasePACS.ShowDropDownArrow = false;
-            this.tsbtDataBasePACS.Size = new System.Drawing.Size(93, 24);
+            this.tsbtDataBasePACS.Size = new System.Drawing.Size(79, 24);
             this.tsbtDataBasePACS.Text = "БД СКУД";
             this.tsbtDataBasePACS.ToolTipText = "Подключение к web сервису СКУД";
             this.tsbtDataBasePACS.Click += new System.EventHandler(this.tsbtDataBasePACS_Click);
@@ -165,7 +174,7 @@ namespace TimeWorkTracking
             // 
             this.toolStripStatusLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(356, 20);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(471, 21);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "    Справочники:";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -206,7 +215,7 @@ namespace TimeWorkTracking
             // toolStripStatusLabel3
             // 
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(152, 20);
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(121, 21);
             this.toolStripStatusLabel3.Text = "    Печатные Формы:";
             this.toolStripStatusLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -233,7 +242,7 @@ namespace TimeWorkTracking
             // toolStripStatusLabel4
             // 
             this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
-            this.toolStripStatusLabel4.Size = new System.Drawing.Size(67, 20);
+            this.toolStripStatusLabel4.Size = new System.Drawing.Size(54, 21);
             this.toolStripStatusLabel4.Text = "    Отчет:";
             this.toolStripStatusLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -250,12 +259,12 @@ namespace TimeWorkTracking
             // toolStripStatusLabel5
             // 
             this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
-            this.toolStripStatusLabel5.Size = new System.Drawing.Size(0, 20);
+            this.toolStripStatusLabel5.Size = new System.Drawing.Size(0, 21);
             // 
             // toolStripStatusLabel6
             // 
             this.toolStripStatusLabel6.Name = "toolStripStatusLabel6";
-            this.toolStripStatusLabel6.Size = new System.Drawing.Size(13, 20);
+            this.toolStripStatusLabel6.Size = new System.Drawing.Size(10, 21);
             this.toolStripStatusLabel6.Text = " ";
             // 
             // imageListStrip
@@ -278,19 +287,395 @@ namespace TimeWorkTracking
             this.mainPanelRegistration.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanelRegistration.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mainPanelRegistration.Location = new System.Drawing.Point(0, 26);
+            this.mainPanelRegistration.Margin = new System.Windows.Forms.Padding(2);
             this.mainPanelRegistration.Name = "mainPanelRegistration";
-            this.mainPanelRegistration.Size = new System.Drawing.Size(1342, 612);
+            this.mainPanelRegistration.Size = new System.Drawing.Size(1006, 492);
             this.mainPanelRegistration.TabIndex = 16;
+            // 
+            // grUsers
+            // 
+            this.grUsers.Controls.Add(this.panel5);
+            this.grUsers.Controls.Add(this.lstwDataBaseMain);
+            this.grUsers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.grUsers.Location = new System.Drawing.Point(2, 5);
+            this.grUsers.Margin = new System.Windows.Forms.Padding(2);
+            this.grUsers.Name = "grUsers";
+            this.grUsers.Padding = new System.Windows.Forms.Padding(2);
+            this.grUsers.Size = new System.Drawing.Size(345, 482);
+            this.grUsers.TabIndex = 38;
+            this.grUsers.TabStop = false;
+            this.grUsers.Text = "Сотрудники";
+            // 
+            // panel5
+            // 
+            this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel5.Controls.Add(this.tbSatusList);
+            this.panel5.Controls.Add(this.cbDirect);
+            this.panel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.panel5.Location = new System.Drawing.Point(4, 444);
+            this.panel5.Margin = new System.Windows.Forms.Padding(2);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(334, 32);
+            this.panel5.TabIndex = 37;
+            // 
+            // tbSatusList
+            // 
+            this.tbSatusList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSatusList.BackColor = System.Drawing.SystemColors.Control;
+            this.tbSatusList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tbSatusList.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbSatusList.Location = new System.Drawing.Point(142, 6);
+            this.tbSatusList.Margin = new System.Windows.Forms.Padding(2);
+            this.tbSatusList.Name = "tbSatusList";
+            this.tbSatusList.ReadOnly = true;
+            this.tbSatusList.Size = new System.Drawing.Size(183, 17);
+            this.tbSatusList.TabIndex = 1;
+            this.tbSatusList.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // cbDirect
+            // 
+            this.cbDirect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.cbDirect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDirect.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.cbDirect.FormattingEnabled = true;
+            this.cbDirect.Items.AddRange(new object[] {
+            "сверху вниз",
+            "слева направо"});
+            this.cbDirect.Location = new System.Drawing.Point(4, 2);
+            this.cbDirect.Margin = new System.Windows.Forms.Padding(2);
+            this.cbDirect.Name = "cbDirect";
+            this.cbDirect.Size = new System.Drawing.Size(126, 26);
+            this.cbDirect.TabIndex = 0;
+            // 
+            // lstwDataBaseMain
+            // 
+            this.lstwDataBaseMain.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.access,
+            this.fio});
+            this.lstwDataBaseMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lstwDataBaseMain.HideSelection = false;
+            this.lstwDataBaseMain.LabelWrap = false;
+            this.lstwDataBaseMain.Location = new System.Drawing.Point(4, 21);
+            this.lstwDataBaseMain.Margin = new System.Windows.Forms.Padding(2);
+            this.lstwDataBaseMain.MultiSelect = false;
+            this.lstwDataBaseMain.Name = "lstwDataBaseMain";
+            this.lstwDataBaseMain.Size = new System.Drawing.Size(334, 419);
+            this.lstwDataBaseMain.StateImageList = this.imgListStatusMain;
+            this.lstwDataBaseMain.TabIndex = 36;
+            this.lstwDataBaseMain.UseCompatibleStateImageBehavior = false;
+            this.lstwDataBaseMain.View = System.Windows.Forms.View.SmallIcon;
+            // 
+            // access
+            // 
+            this.access.Text = "";
+            this.access.Width = 29;
+            // 
+            // fio
+            // 
+            this.fio.Text = "Фамилия Имя Отчество";
+            this.fio.Width = 231;
+            // 
+            // imgListStatusMain
+            // 
+            this.imgListStatusMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgListStatusMain.ImageStream")));
+            this.imgListStatusMain.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgListStatusMain.Images.SetKeyName(0, "off5m.png");
+            this.imgListStatusMain.Images.SetKeyName(1, "on5m.png");
+            this.imgListStatusMain.Images.SetKeyName(2, "db_add_48x72.png");
+            this.imgListStatusMain.Images.SetKeyName(3, "db_edit_48x72.png");
+            // 
+            // grRegistrator
+            // 
+            this.grRegistrator.Controls.Add(this.panel7);
+            this.grRegistrator.Controls.Add(this.panel6);
+            this.grRegistrator.Controls.Add(this.tbNote);
+            this.grRegistrator.Controls.Add(this.tbName);
+            this.grRegistrator.Controls.Add(this.udBeforeH);
+            this.grRegistrator.Controls.Add(this.udBeforeM);
+            this.grRegistrator.Controls.Add(this.udAfterM);
+            this.grRegistrator.Controls.Add(this.udAfterH);
+            this.grRegistrator.Controls.Add(this.label5);
+            this.grRegistrator.Controls.Add(this.label6);
+            this.grRegistrator.Controls.Add(this.label7);
+            this.grRegistrator.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.grRegistrator.Location = new System.Drawing.Point(353, 84);
+            this.grRegistrator.Margin = new System.Windows.Forms.Padding(2);
+            this.grRegistrator.Name = "grRegistrator";
+            this.grRegistrator.Padding = new System.Windows.Forms.Padding(2);
+            this.grRegistrator.Size = new System.Drawing.Size(369, 360);
+            this.grRegistrator.TabIndex = 37;
+            this.grRegistrator.TabStop = false;
+            this.grRegistrator.Text = "Регистратор";
+            // 
+            // panel7
+            // 
+            this.panel7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel7.Controls.Add(this.cbSMarks);
+            this.panel7.Controls.Add(this.label11);
+            this.panel7.Controls.Add(this.smTStop);
+            this.panel7.Controls.Add(this.label4);
+            this.panel7.Controls.Add(this.smDStop);
+            this.panel7.Controls.Add(this.smTStart);
+            this.panel7.Controls.Add(this.label1);
+            this.panel7.Controls.Add(this.smDStart);
+            this.panel7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.panel7.Location = new System.Drawing.Point(7, 181);
+            this.panel7.Margin = new System.Windows.Forms.Padding(2);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(356, 107);
+            this.panel7.TabIndex = 28;
+            // 
+            // cbSMarks
+            // 
+            this.cbSMarks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbSMarks.FormattingEnabled = true;
+            this.cbSMarks.Location = new System.Drawing.Point(137, 9);
+            this.cbSMarks.Name = "cbSMarks";
+            this.cbSMarks.Size = new System.Drawing.Size(214, 26);
+            this.cbSMarks.TabIndex = 19;
+            // 
+            // label11
+            // 
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label11.Location = new System.Drawing.Point(7, 12);
+            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(125, 18);
+            this.label11.TabIndex = 18;
+            this.label11.Text = "Специальные отметки";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // smTStop
+            // 
+            this.smTStop.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.smTStop.CustomFormat = "HH:mm";
+            this.smTStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.smTStop.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.smTStop.Location = new System.Drawing.Point(285, 69);
+            this.smTStop.Margin = new System.Windows.Forms.Padding(2);
+            this.smTStop.Name = "smTStop";
+            this.smTStop.ShowUpDown = true;
+            this.smTStop.Size = new System.Drawing.Size(66, 26);
+            this.smTStop.TabIndex = 17;
+            // 
+            // label4
+            // 
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label4.Location = new System.Drawing.Point(7, 73);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(125, 18);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "Окончание периода";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // smDStop
+            // 
+            this.smDStop.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.smDStop.CustomFormat = "dd.MM.yyyy";
+            this.smDStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.smDStop.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.smDStop.Location = new System.Drawing.Point(137, 69);
+            this.smDStop.Margin = new System.Windows.Forms.Padding(2);
+            this.smDStop.Name = "smDStop";
+            this.smDStop.Size = new System.Drawing.Size(112, 26);
+            this.smDStop.TabIndex = 15;
+            // 
+            // smTStart
+            // 
+            this.smTStart.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.smTStart.CustomFormat = "HH:mm";
+            this.smTStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.smTStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.smTStart.Location = new System.Drawing.Point(285, 39);
+            this.smTStart.Margin = new System.Windows.Forms.Padding(2);
+            this.smTStart.Name = "smTStart";
+            this.smTStart.ShowUpDown = true;
+            this.smTStart.Size = new System.Drawing.Size(66, 26);
+            this.smTStart.TabIndex = 14;
+            // 
+            // label1
+            // 
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(7, 43);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(125, 18);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "Начало периода";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // smDStart
+            // 
+            this.smDStart.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.smDStart.CustomFormat = "dd.MM.yyyy";
+            this.smDStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.smDStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.smDStart.Location = new System.Drawing.Point(137, 39);
+            this.smDStart.Margin = new System.Windows.Forms.Padding(2);
+            this.smDStart.Name = "smDStart";
+            this.smDStart.Size = new System.Drawing.Size(112, 26);
+            this.smDStart.TabIndex = 0;
+            // 
+            // panel6
+            // 
+            this.panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel6.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.panel6.Location = new System.Drawing.Point(8, 98);
+            this.panel6.Margin = new System.Windows.Forms.Padding(2);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(356, 61);
+            this.panel6.TabIndex = 27;
+            // 
+            // tbNote
+            // 
+            this.tbNote.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbNote.Location = new System.Drawing.Point(8, 292);
+            this.tbNote.Multiline = true;
+            this.tbNote.Name = "tbNote";
+            this.tbNote.Size = new System.Drawing.Size(357, 62);
+            this.tbNote.TabIndex = 26;
+            // 
+            // tbName
+            // 
+            this.tbName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.tbName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.tbName.BackColor = System.Drawing.SystemColors.Control;
+            this.tbName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbName.Location = new System.Drawing.Point(8, 18);
+            this.tbName.Margin = new System.Windows.Forms.Padding(2);
+            this.tbName.Name = "tbName";
+            this.tbName.ReadOnly = true;
+            this.tbName.Size = new System.Drawing.Size(357, 24);
+            this.tbName.TabIndex = 21;
+            // 
+            // udBeforeH
+            // 
+            this.udBeforeH.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udBeforeH.Checked = false;
+            this.udBeforeH.CustomFormat = "HH";
+            this.udBeforeH.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udBeforeH.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.udBeforeH.Location = new System.Drawing.Point(21, 46);
+            this.udBeforeH.Margin = new System.Windows.Forms.Padding(2);
+            this.udBeforeH.Name = "udBeforeH";
+            this.udBeforeH.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.udBeforeH.ShowUpDown = true;
+            this.udBeforeH.Size = new System.Drawing.Size(60, 44);
+            this.udBeforeH.TabIndex = 16;
+            this.udBeforeH.Value = new System.DateTime(2021, 10, 21, 9, 0, 0, 0);
+            // 
+            // udBeforeM
+            // 
+            this.udBeforeM.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udBeforeM.CustomFormat = "mm";
+            this.udBeforeM.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udBeforeM.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.udBeforeM.Location = new System.Drawing.Point(104, 46);
+            this.udBeforeM.Margin = new System.Windows.Forms.Padding(2);
+            this.udBeforeM.Name = "udBeforeM";
+            this.udBeforeM.ShowUpDown = true;
+            this.udBeforeM.Size = new System.Drawing.Size(60, 44);
+            this.udBeforeM.TabIndex = 17;
+            this.udBeforeM.Value = new System.DateTime(2021, 10, 21, 9, 0, 0, 0);
+            // 
+            // udAfterM
+            // 
+            this.udAfterM.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udAfterM.CustomFormat = "mm";
+            this.udAfterM.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udAfterM.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.udAfterM.Location = new System.Drawing.Point(290, 46);
+            this.udAfterM.Margin = new System.Windows.Forms.Padding(2);
+            this.udAfterM.Name = "udAfterM";
+            this.udAfterM.ShowUpDown = true;
+            this.udAfterM.Size = new System.Drawing.Size(60, 44);
+            this.udAfterM.TabIndex = 19;
+            this.udAfterM.Value = new System.DateTime(2021, 10, 21, 18, 0, 0, 0);
+            // 
+            // udAfterH
+            // 
+            this.udAfterH.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udAfterH.CustomFormat = "HH";
+            this.udAfterH.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.udAfterH.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.udAfterH.Location = new System.Drawing.Point(206, 46);
+            this.udAfterH.Margin = new System.Windows.Forms.Padding(2);
+            this.udAfterH.Name = "udAfterH";
+            this.udAfterH.ShowUpDown = true;
+            this.udAfterH.Size = new System.Drawing.Size(60, 44);
+            this.udAfterH.TabIndex = 18;
+            this.udAfterH.Value = new System.DateTime(2021, 10, 21, 18, 0, 0, 0);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.Location = new System.Drawing.Point(80, 46);
+            this.label5.Margin = new System.Windows.Forms.Padding(0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(27, 37);
+            this.label5.TabIndex = 6;
+            this.label5.Text = ":";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label6.Location = new System.Drawing.Point(173, 46);
+            this.label6.Margin = new System.Windows.Forms.Padding(0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(28, 37);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "-";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label7.Location = new System.Drawing.Point(266, 46);
+            this.label7.Margin = new System.Windows.Forms.Padding(0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(27, 37);
+            this.label7.TabIndex = 10;
+            this.label7.Text = ":";
+            // 
+            // gbNavigator
+            // 
+            this.gbNavigator.Controls.Add(this.regDate);
+            this.gbNavigator.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.gbNavigator.Location = new System.Drawing.Point(353, 5);
+            this.gbNavigator.Margin = new System.Windows.Forms.Padding(2);
+            this.gbNavigator.Name = "gbNavigator";
+            this.gbNavigator.Padding = new System.Windows.Forms.Padding(2);
+            this.gbNavigator.Size = new System.Drawing.Size(369, 75);
+            this.gbNavigator.TabIndex = 36;
+            this.gbNavigator.TabStop = false;
+            this.gbNavigator.Text = "Навигатор";
+            // 
+            // regDate
+            // 
+            this.regDate.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.regDate.CustomFormat = "dd.MM.yyyy";
+            this.regDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.regDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.regDate.Location = new System.Drawing.Point(21, 21);
+            this.regDate.Margin = new System.Windows.Forms.Padding(2);
+            this.regDate.Name = "regDate";
+            this.regDate.Size = new System.Drawing.Size(143, 31);
+            this.regDate.TabIndex = 1;
             // 
             // btInsert
             // 
             this.btInsert.Enabled = false;
             this.btInsert.ImageIndex = 1;
             this.btInsert.ImageList = this.imgListButtonMain;
-            this.btInsert.Location = new System.Drawing.Point(471, 553);
-            this.btInsert.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btInsert.Location = new System.Drawing.Point(353, 449);
+            this.btInsert.Margin = new System.Windows.Forms.Padding(2);
             this.btInsert.Name = "btInsert";
-            this.btInsert.Size = new System.Drawing.Size(140, 40);
+            this.btInsert.Size = new System.Drawing.Size(105, 32);
             this.btInsert.TabIndex = 34;
             this.btInsert.Text = "Добавить";
             this.btInsert.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -316,10 +701,10 @@ namespace TimeWorkTracking
             // btImport
             // 
             this.btImport.ImageIndex = 7;
-            this.btImport.Location = new System.Drawing.Point(646, 553);
-            this.btImport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btImport.Location = new System.Drawing.Point(484, 449);
+            this.btImport.Margin = new System.Windows.Forms.Padding(2);
             this.btImport.Name = "btImport";
-            this.btImport.Size = new System.Drawing.Size(149, 40);
+            this.btImport.Size = new System.Drawing.Size(112, 32);
             this.btImport.TabIndex = 33;
             this.btImport.Text = "Импорт";
             this.btImport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -331,24 +716,15 @@ namespace TimeWorkTracking
             this.btUpdate.Enabled = false;
             this.btUpdate.ImageIndex = 2;
             this.btUpdate.ImageList = this.imgListButtonMain;
-            this.btUpdate.Location = new System.Drawing.Point(823, 553);
-            this.btUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btUpdate.Location = new System.Drawing.Point(617, 449);
+            this.btUpdate.Margin = new System.Windows.Forms.Padding(2);
             this.btUpdate.Name = "btUpdate";
-            this.btUpdate.Size = new System.Drawing.Size(140, 40);
+            this.btUpdate.Size = new System.Drawing.Size(105, 32);
             this.btUpdate.TabIndex = 32;
             this.btUpdate.Text = "Обновить";
             this.btUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btUpdate.UseVisualStyleBackColor = true;
-            // 
-            // imgListStatusMain
-            // 
-            this.imgListStatusMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgListStatusMain.ImageStream")));
-            this.imgListStatusMain.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgListStatusMain.Images.SetKeyName(0, "off5m.png");
-            this.imgListStatusMain.Images.SetKeyName(1, "on5m.png");
-            this.imgListStatusMain.Images.SetKeyName(2, "db_add_48x72.png");
-            this.imgListStatusMain.Images.SetKeyName(3, "db_edit_48x72.png");
             // 
             // panel3
             // 
@@ -360,19 +736,19 @@ namespace TimeWorkTracking
             this.panel3.Controls.Add(this.tbExtID);
             this.panel3.Controls.Add(this.panel2);
             this.panel3.Controls.Add(this.panel1);
-            this.panel3.Location = new System.Drawing.Point(1000, 161);
-            this.panel3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panel3.Location = new System.Drawing.Point(750, 131);
+            this.panel3.Margin = new System.Windows.Forms.Padding(2);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(493, 181);
+            this.panel3.Size = new System.Drawing.Size(370, 147);
             this.panel3.TabIndex = 30;
             // 
             // panel4
             // 
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel4.Location = new System.Drawing.Point(9, 38);
-            this.panel4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panel4.Location = new System.Drawing.Point(7, 31);
+            this.panel4.Margin = new System.Windows.Forms.Padding(2);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(475, 1);
+            this.panel4.Size = new System.Drawing.Size(357, 1);
             this.panel4.TabIndex = 28;
             // 
             // tbCrmID
@@ -380,29 +756,31 @@ namespace TimeWorkTracking
             this.tbCrmID.BackColor = System.Drawing.SystemColors.Control;
             this.tbCrmID.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbCrmID.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.tbCrmID.Location = new System.Drawing.Point(93, 11);
-            this.tbCrmID.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tbCrmID.Location = new System.Drawing.Point(70, 9);
+            this.tbCrmID.Margin = new System.Windows.Forms.Padding(2);
             this.tbCrmID.MaxLength = 18;
             this.tbCrmID.Name = "tbCrmID";
-            this.tbCrmID.Size = new System.Drawing.Size(171, 21);
+            this.tbCrmID.Size = new System.Drawing.Size(128, 17);
             this.tbCrmID.TabIndex = 27;
             this.tbCrmID.Text = "0";
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(269, 11);
+            this.label9.Location = new System.Drawing.Point(202, 9);
+            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(86, 24);
+            this.label9.Size = new System.Drawing.Size(70, 18);
             this.label9.TabIndex = 24;
             this.label9.Text = "id СКУД:";
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(24, 11);
+            this.label10.Location = new System.Drawing.Point(18, 9);
+            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(77, 24);
+            this.label10.Size = new System.Drawing.Size(62, 18);
             this.label10.TabIndex = 26;
             this.label10.Text = "id CRM:";
             // 
@@ -412,69 +790,11 @@ namespace TimeWorkTracking
             this.tbExtID.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbExtID.Enabled = false;
             this.tbExtID.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.tbExtID.Location = new System.Drawing.Point(347, 11);
-            this.tbExtID.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tbExtID.Location = new System.Drawing.Point(260, 9);
+            this.tbExtID.Margin = new System.Windows.Forms.Padding(2);
             this.tbExtID.Name = "tbExtID";
-            this.tbExtID.Size = new System.Drawing.Size(139, 21);
+            this.tbExtID.Size = new System.Drawing.Size(104, 17);
             this.tbExtID.TabIndex = 22;
-            // 
-            // udAfterM
-            // 
-            this.udAfterM.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.udAfterM.CustomFormat = "mm";
-            this.udAfterM.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.udAfterM.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.udAfterM.Location = new System.Drawing.Point(386, 57);
-            this.udAfterM.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.udAfterM.Name = "udAfterM";
-            this.udAfterM.ShowUpDown = true;
-            this.udAfterM.Size = new System.Drawing.Size(79, 53);
-            this.udAfterM.TabIndex = 19;
-            this.udAfterM.Value = new System.DateTime(2021, 10, 21, 18, 0, 0, 0);
-            // 
-            // udAfterH
-            // 
-            this.udAfterH.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.udAfterH.CustomFormat = "HH";
-            this.udAfterH.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.udAfterH.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.udAfterH.Location = new System.Drawing.Point(274, 57);
-            this.udAfterH.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.udAfterH.Name = "udAfterH";
-            this.udAfterH.ShowUpDown = true;
-            this.udAfterH.Size = new System.Drawing.Size(79, 53);
-            this.udAfterH.TabIndex = 18;
-            this.udAfterH.Value = new System.DateTime(2021, 10, 21, 18, 0, 0, 0);
-            // 
-            // udBeforeM
-            // 
-            this.udBeforeM.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.udBeforeM.CustomFormat = "mm";
-            this.udBeforeM.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.udBeforeM.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.udBeforeM.Location = new System.Drawing.Point(139, 57);
-            this.udBeforeM.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.udBeforeM.Name = "udBeforeM";
-            this.udBeforeM.ShowUpDown = true;
-            this.udBeforeM.Size = new System.Drawing.Size(79, 53);
-            this.udBeforeM.TabIndex = 17;
-            this.udBeforeM.Value = new System.DateTime(2021, 10, 21, 9, 0, 0, 0);
-            // 
-            // udBeforeH
-            // 
-            this.udBeforeH.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.udBeforeH.Checked = false;
-            this.udBeforeH.CustomFormat = "HH";
-            this.udBeforeH.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.udBeforeH.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.udBeforeH.Location = new System.Drawing.Point(28, 57);
-            this.udBeforeH.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.udBeforeH.Name = "udBeforeH";
-            this.udBeforeH.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.udBeforeH.ShowUpDown = true;
-            this.udBeforeH.Size = new System.Drawing.Size(79, 53);
-            this.udBeforeH.TabIndex = 16;
-            this.udBeforeH.Value = new System.DateTime(2021, 10, 21, 9, 0, 0, 0);
             // 
             // panel2
             // 
@@ -482,28 +802,29 @@ namespace TimeWorkTracking
             this.panel2.Controls.Add(this.label8);
             this.panel2.Controls.Add(this.chbLunch);
             this.panel2.Controls.Add(this.cbSheme);
-            this.panel2.Location = new System.Drawing.Point(7, 127);
-            this.panel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panel2.Location = new System.Drawing.Point(5, 103);
+            this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(477, 44);
+            this.panel2.Size = new System.Drawing.Size(358, 36);
             this.panel2.TabIndex = 15;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(7, 12);
+            this.label8.Location = new System.Drawing.Point(5, 10);
+            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(68, 24);
+            this.label8.Size = new System.Drawing.Size(54, 18);
             this.label8.TabIndex = 12;
             this.label8.Text = "Тариф";
             // 
             // chbLunch
             // 
             this.chbLunch.AutoSize = true;
-            this.chbLunch.Location = new System.Drawing.Point(275, 11);
-            this.chbLunch.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.chbLunch.Location = new System.Drawing.Point(206, 9);
+            this.chbLunch.Margin = new System.Windows.Forms.Padding(2);
             this.chbLunch.Name = "chbLunch";
-            this.chbLunch.Size = new System.Drawing.Size(214, 28);
+            this.chbLunch.Size = new System.Drawing.Size(169, 22);
             this.chbLunch.TabIndex = 14;
             this.chbLunch.Text = "Работает без обеда";
             this.chbLunch.UseVisualStyleBackColor = true;
@@ -512,10 +833,10 @@ namespace TimeWorkTracking
             // 
             this.cbSheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbSheme.FormattingEnabled = true;
-            this.cbSheme.Location = new System.Drawing.Point(139, 7);
-            this.cbSheme.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbSheme.Location = new System.Drawing.Point(104, 6);
+            this.cbSheme.Margin = new System.Windows.Forms.Padding(2);
             this.cbSheme.Name = "cbSheme";
-            this.cbSheme.Size = new System.Drawing.Size(129, 30);
+            this.cbSheme.Size = new System.Drawing.Size(98, 25);
             this.cbSheme.TabIndex = 13;
             // 
             // panel1
@@ -525,10 +846,10 @@ namespace TimeWorkTracking
             this.panel1.Controls.Add(this.cbDepartment);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(7, 43);
-            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panel1.Location = new System.Drawing.Point(5, 35);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(477, 80);
+            this.panel1.Size = new System.Drawing.Size(358, 65);
             this.panel1.TabIndex = 2;
             // 
             // cbPost
@@ -537,10 +858,10 @@ namespace TimeWorkTracking
             this.cbPost.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbPost.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.cbPost.FormattingEnabled = true;
-            this.cbPost.Location = new System.Drawing.Point(139, 41);
-            this.cbPost.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbPost.Location = new System.Drawing.Point(104, 33);
+            this.cbPost.Margin = new System.Windows.Forms.Padding(2);
             this.cbPost.Name = "cbPost";
-            this.cbPost.Size = new System.Drawing.Size(327, 30);
+            this.cbPost.Size = new System.Drawing.Size(246, 25);
             this.cbPost.TabIndex = 6;
             // 
             // cbDepartment
@@ -550,19 +871,20 @@ namespace TimeWorkTracking
             this.cbDepartment.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDepartment.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.cbDepartment.FormattingEnabled = true;
-            this.cbDepartment.Location = new System.Drawing.Point(139, 9);
-            this.cbDepartment.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbDepartment.Location = new System.Drawing.Point(104, 7);
+            this.cbDepartment.Margin = new System.Windows.Forms.Padding(2);
             this.cbDepartment.Name = "cbDepartment";
-            this.cbDepartment.Size = new System.Drawing.Size(327, 30);
+            this.cbDepartment.Size = new System.Drawing.Size(246, 25);
             this.cbDepartment.TabIndex = 5;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(7, 44);
+            this.label3.Location = new System.Drawing.Point(5, 36);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(98, 18);
+            this.label3.Size = new System.Drawing.Size(82, 15);
             this.label3.TabIndex = 4;
             this.label3.Text = "Должность";
             // 
@@ -570,44 +892,12 @@ namespace TimeWorkTracking
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(7, 14);
+            this.label2.Location = new System.Drawing.Point(5, 11);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(112, 18);
+            this.label2.Size = new System.Drawing.Size(99, 15);
             this.label2.TabIndex = 2;
             this.label2.Text = "Департамент";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label7.Location = new System.Drawing.Point(355, 57);
-            this.label7.Margin = new System.Windows.Forms.Padding(0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(32, 46);
-            this.label7.TabIndex = 10;
-            this.label7.Text = ":";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label6.Location = new System.Drawing.Point(231, 57);
-            this.label6.Margin = new System.Windows.Forms.Padding(0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(34, 46);
-            this.label6.TabIndex = 8;
-            this.label6.Text = "-";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(107, 57);
-            this.label5.Margin = new System.Windows.Forms.Padding(0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(32, 46);
-            this.label5.TabIndex = 6;
-            this.label5.Text = ":";
             // 
             // lMsg
             // 
@@ -616,188 +906,27 @@ namespace TimeWorkTracking
             this.lMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lMsg.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lMsg.ImageIndex = 6;
-            this.lMsg.Location = new System.Drawing.Point(747, 562);
+            this.lMsg.Location = new System.Drawing.Point(560, 457);
+            this.lMsg.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lMsg.Name = "lMsg";
-            this.lMsg.Size = new System.Drawing.Size(200, 20);
+            this.lMsg.Size = new System.Drawing.Size(157, 17);
             this.lMsg.TabIndex = 29;
             this.lMsg.Text = "      Новая запись в БД";
             this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // gbNavigator
-            // 
-            this.gbNavigator.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.gbNavigator.Location = new System.Drawing.Point(471, 6);
-            this.gbNavigator.Name = "gbNavigator";
-            this.gbNavigator.Size = new System.Drawing.Size(492, 92);
-            this.gbNavigator.TabIndex = 36;
-            this.gbNavigator.TabStop = false;
-            this.gbNavigator.Text = "Навигатор";
-            // 
-            // grRegistrator
-            // 
-            this.grRegistrator.Controls.Add(this.panel7);
-            this.grRegistrator.Controls.Add(this.panel6);
-            this.grRegistrator.Controls.Add(this.tbNote);
-            this.grRegistrator.Controls.Add(this.tbName);
-            this.grRegistrator.Controls.Add(this.udBeforeH);
-            this.grRegistrator.Controls.Add(this.udBeforeM);
-            this.grRegistrator.Controls.Add(this.udAfterM);
-            this.grRegistrator.Controls.Add(this.udAfterH);
-            this.grRegistrator.Controls.Add(this.label5);
-            this.grRegistrator.Controls.Add(this.label6);
-            this.grRegistrator.Controls.Add(this.label7);
-            this.grRegistrator.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.grRegistrator.Location = new System.Drawing.Point(471, 104);
-            this.grRegistrator.Name = "grRegistrator";
-            this.grRegistrator.Size = new System.Drawing.Size(492, 443);
-            this.grRegistrator.TabIndex = 37;
-            this.grRegistrator.TabStop = false;
-            this.grRegistrator.Text = "Регистратор";
-            // 
-            // grUsers
-            // 
-            this.grUsers.Controls.Add(this.panel5);
-            this.grUsers.Controls.Add(this.lstwDataBaseMain);
-            this.grUsers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.grUsers.Location = new System.Drawing.Point(3, 6);
-            this.grUsers.Name = "grUsers";
-            this.grUsers.Size = new System.Drawing.Size(460, 593);
-            this.grUsers.TabIndex = 38;
-            this.grUsers.TabStop = false;
-            this.grUsers.Text = "Сотрудники";
-            // 
-            // panel5
-            // 
-            this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel5.Controls.Add(this.tbSatusList);
-            this.panel5.Controls.Add(this.cbDirect);
-            this.panel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.panel5.Location = new System.Drawing.Point(6, 547);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(444, 39);
-            this.panel5.TabIndex = 37;
-            // 
-            // tbSatusList
-            // 
-            this.tbSatusList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbSatusList.BackColor = System.Drawing.SystemColors.Control;
-            this.tbSatusList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tbSatusList.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tbSatusList.Location = new System.Drawing.Point(190, 8);
-            this.tbSatusList.Name = "tbSatusList";
-            this.tbSatusList.ReadOnly = true;
-            this.tbSatusList.Size = new System.Drawing.Size(244, 21);
-            this.tbSatusList.TabIndex = 1;
-            this.tbSatusList.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // cbDirect
-            // 
-            this.cbDirect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.cbDirect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbDirect.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.cbDirect.FormattingEnabled = true;
-            this.cbDirect.Items.AddRange(new object[] {
-            "сверху вниз",
-            "слева направо"});
-            this.cbDirect.Location = new System.Drawing.Point(5, 3);
-            this.cbDirect.Name = "cbDirect";
-            this.cbDirect.Size = new System.Drawing.Size(166, 30);
-            this.cbDirect.TabIndex = 0;
-            // 
-            // lstwDataBaseMain
-            // 
-            this.lstwDataBaseMain.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.access,
-            this.fio});
-            this.lstwDataBaseMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lstwDataBaseMain.HideSelection = false;
-            this.lstwDataBaseMain.LabelWrap = false;
-            this.lstwDataBaseMain.Location = new System.Drawing.Point(6, 26);
-            this.lstwDataBaseMain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.lstwDataBaseMain.MultiSelect = false;
-            this.lstwDataBaseMain.Name = "lstwDataBaseMain";
-            this.lstwDataBaseMain.Size = new System.Drawing.Size(444, 515);
-            this.lstwDataBaseMain.StateImageList = this.imgListStatusMain;
-            this.lstwDataBaseMain.TabIndex = 36;
-            this.lstwDataBaseMain.UseCompatibleStateImageBehavior = false;
-            this.lstwDataBaseMain.View = System.Windows.Forms.View.SmallIcon;
-            // 
-            // access
-            // 
-            this.access.Text = "";
-            this.access.Width = 29;
-            // 
-            // fio
-            // 
-            this.fio.Text = "Фамилия Имя Отчество";
-            this.fio.Width = 231;
-            // 
-            // tbName
-            // 
-            this.tbName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.tbName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.tbName.BackColor = System.Drawing.SystemColors.Window;
-            this.tbName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tbName.Location = new System.Drawing.Point(10, 22);
-            this.tbName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tbName.Name = "tbName";
-            this.tbName.ReadOnly = true;
-            this.tbName.Size = new System.Drawing.Size(475, 28);
-            this.tbName.TabIndex = 21;
-            // 
-            // tbNote
-            // 
-            this.tbNote.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tbNote.Location = new System.Drawing.Point(10, 360);
-            this.tbNote.Margin = new System.Windows.Forms.Padding(4);
-            this.tbNote.Multiline = true;
-            this.tbNote.Name = "tbNote";
-            this.tbNote.Size = new System.Drawing.Size(475, 76);
-            this.tbNote.TabIndex = 26;
-            // 
-            // panel6
-            // 
-            this.panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel6.Location = new System.Drawing.Point(10, 120);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(474, 75);
-            this.panel6.TabIndex = 27;
-            // 
-            // panel7
-            // 
-            this.panel7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel7.Controls.Add(this.dateTimePicker1);
-            this.panel7.Location = new System.Drawing.Point(9, 201);
-            this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(474, 152);
-            this.panel7.TabIndex = 28;
-            // 
-            // dateTimePicker1
-            // 
-            this.dateTimePicker1.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dateTimePicker1.CustomFormat = "dd.MM.yyyy HH:mm:ss";
-            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(172, 48);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(200, 24);
-            this.dateTimePicker1.TabIndex = 0;
-            // 
             // frmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1342, 638);
+            this.ClientSize = new System.Drawing.Size(1006, 518);
             this.Controls.Add(this.mainPanelRegistration);
             this.Controls.Add(this.statusStripMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(898, 497);
+            this.MinimumSize = new System.Drawing.Size(678, 411);
             this.Name = "frmMain";
             this.Text = "Учет рабочего времени";
             this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.frmMain_HelpButtonClicked);
@@ -806,18 +935,19 @@ namespace TimeWorkTracking
             this.statusStripMain.PerformLayout();
             this.mainPanelRegistration.ResumeLayout(false);
             this.mainPanelRegistration.PerformLayout();
+            this.grUsers.ResumeLayout(false);
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
+            this.grRegistrator.ResumeLayout(false);
+            this.grRegistrator.PerformLayout();
+            this.panel7.ResumeLayout(false);
+            this.gbNavigator.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.grRegistrator.ResumeLayout(false);
-            this.grRegistrator.PerformLayout();
-            this.grUsers.ResumeLayout(false);
-            this.panel5.ResumeLayout(false);
-            this.panel5.PerformLayout();
-            this.panel7.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -883,7 +1013,15 @@ namespace TimeWorkTracking
         private System.Windows.Forms.TextBox tbNote;
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.DateTimePicker smDStart;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.DateTimePicker smTStart;
+        private System.Windows.Forms.ComboBox cbSMarks;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.DateTimePicker smTStop;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.DateTimePicker smDStop;
+        private System.Windows.Forms.DateTimePicker regDate;
     }
 }
 

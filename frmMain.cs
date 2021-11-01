@@ -17,7 +17,10 @@ namespace TimeWorkTracking
 {
     public partial class frmMain : Form
     {
-        ListViewItemComparer _lvwItemComparer;
+        ListViewItemComparer _lvwItemComparer;                              //объект сортировки по колонкам
+        DateTime smDtStart;                                                 //дата/время начала специальных отметок
+        DateTime smDtStop;                                                  //дата/время окончания специальных отметок
+
         public frmMain()
         {
             //подписка события внешних форм 
@@ -25,8 +28,13 @@ namespace TimeWorkTracking
             CallBack_FrmDataBasePACS_outEvent.callbackEventHandler = new CallBack_FrmDataBasePACS_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
 
             InitializeComponent();
-            lMsg.Visible = false;               //погасить сообщение о записи в БД
+            lMsg.Visible = false;                                           //погасить сообщение о записи в БД
             cbDirect.SelectedIndex = 0;
+            regDate.Value = DateTime.Now;
+            smDStart.Value = regDate.Value;
+            smTStart.Value = regDate.Value;
+            smDStop.Value = regDate.Value;
+            smTStop.Value = regDate.Value.AddHours(1);
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -35,6 +43,10 @@ namespace TimeWorkTracking
             CheckConnects();        //проверить соединение с базами
             if (mainPanelRegistration.Enabled)
             {
+                cbSMarks.DisplayMember = "Name";
+                cbSMarks.ValueMember = "id";
+                cbSMarks.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From SpecialMarks where uses=1");
+
                 InitializeListView();
                 LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('','') order by fio"));
                                                       //   select * from twt_GetPassFormData('2021.01.01', '') order by fio
