@@ -657,12 +657,12 @@ namespace TimeWorkTracking
             // 
             this.regDate.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.regDate.CustomFormat = "dd.MM.yyyy";
-            this.regDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.regDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.regDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.regDate.Location = new System.Drawing.Point(9, 21);
             this.regDate.Margin = new System.Windows.Forms.Padding(2);
             this.regDate.Name = "regDate";
-            this.regDate.Size = new System.Drawing.Size(157, 31);
+            this.regDate.Size = new System.Drawing.Size(155, 38);
             this.regDate.TabIndex = 1;
             // 
             // btInsert
