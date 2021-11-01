@@ -311,6 +311,8 @@ namespace TimeWorkTracking
         private void btInsert_Click(object sender, EventArgs e)
         {
             string key = dtWork.Value.ToString("yyyy-MM-dd");               //ключевое поле
+            string keySQL = dtWork.Value.ToString("yyyyMMdd");              //ключевое поле для БД
+
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             string sql =
               "INSERT INTO Calendars(" +
@@ -320,8 +322,8 @@ namespace TimeWorkTracking
                 "dateTypeId, " +
                 "uses) " +
               "VALUES ( " +
-                "'" + dtSource.Value.ToString("yyyy-MM-dd") + "', " +       //оригинальная дата
-                "'" + key + "', " +                                         //*рабочая дата (дата переноса)
+                "'" + dtSource.Value.ToString("yyyyMMdd") + "', " +       //оригинальная дата
+                "'" + keySQL + "', " +                                    //*рабочая дата (дата переноса)
                 lstwDataBaseDaysCalendar.Items[lstwDataBaseDaysCalendar.SelectedIndex()].SubItems[4].Text + ", " +
                 ((DataRowView)cbDataType.SelectedItem).Row["id"] + ", " +
                 (chUse.Checked ? 1 : 0) +
@@ -337,15 +339,17 @@ namespace TimeWorkTracking
         private void btUpdate_Click(object sender, EventArgs e)
         {
             string key = dtWork.Value.ToString("yyyy-MM-dd");               //ключевое поле
+            string keySQL = dtWork.Value.ToString("yyyyMMdd");              //ключевое поле для БД
+
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             string sql =
               "UPDATE Calendars Set " +
-                "originalDate = '" + dtSource.Value.ToString("yyyy-MM-dd") + "', " +
-                "transferDate = '" + key + "', " +
+                "originalDate = '" + dtSource.Value.ToString("yyyyMMdd") + "', " +
+                "transferDate = '" + keySQL + "', " +
                 "dateNameId = " + lstwDataBaseDaysCalendar.Items[lstwDataBaseDaysCalendar.SelectedIndex()].SubItems[4].Text + ", " +
                 "dateTypeId = " + ((DataRowView)cbDataType.SelectedItem).Row["id"] + ", " +
                 "uses = " + (chUse.Checked ? 1 : 0) + " " +
-              "WHERE transferDate = '" + key + "'";                         //*рабочая дата (дата переноса)
+              "WHERE transferDate = '" + keySQL + "'";                      //*рабочая дата (дата переноса)
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
 
             LoadListCalendar(MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') order by dWork"));     //сортировка по рабочей (перенос) дате
@@ -357,10 +361,12 @@ namespace TimeWorkTracking
         private void btDelete_Click(object sender, EventArgs e)
         {
             string key = dtWork.Value.ToString("yyyy-MM-dd");               //ключевое поле
+            string keySQL = dtWork.Value.ToString("yyyyMMdd");              //ключевое поле для БД
+
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             string sql =
               "DELETE FROM Calendars " +
-              "WHERE transferDate = '" + key + "'";                         //*рабочая дата (дата переноса)
+              "WHERE transferDate = '" + keySQL + "'";                      //*рабочая дата (дата переноса)
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
 
             LoadListCalendar(MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') order by dWork"));     //сортировка по рабочей (перенос) дате
