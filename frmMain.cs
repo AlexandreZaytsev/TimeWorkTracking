@@ -52,6 +52,7 @@ namespace TimeWorkTracking
 
                 dtWorkCalendar = MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('', '') order by dWork");
                 LoadBoldedDatesCalendar(dtWorkCalendar);        // Загрузить производственный календарь в массив непериодических выделенных дат
+                getDateInfo(DateTime.Now, dtWorkCalendar);      //прочитать харектеристики дня по производственному календарю 
             }
         }
 
@@ -243,6 +244,7 @@ namespace TimeWorkTracking
         //изменение даты в календаре
         private void mcRegDate_DateChanged(object sender, DateRangeEventArgs e)
         {
+            getDateInfo(e.Start, dtWorkCalendar);
             /*
             var firstDayOfMonth = new DateTime(e.Start.Year, e.Start.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
@@ -258,35 +260,62 @@ namespace TimeWorkTracking
         }
         private void mcRegDate_DateSelected(object sender, DateRangeEventArgs e)
         {
-            var inf = getDateInfo(e.Start, dtWorkCalendar);
-            lbDay.Text = inf[0].ToString();
+//            getDateInfo(e.Start, dtWorkCalendar);
+ //           lbDay.Text = inf[0].ToString();
         }
 
-        //прочитать харектеристики дня по производственному календарю и вернуть массив с описанием
-        private static Object[] getDateInfo(DateTime dayInfo, DataTable dtable)
+        //прочитать харектеристики дня по производственному календарю 
+        private void getDateInfo(DateTime dayInfo, DataTable dtable)
         {
-            Object[] x = new Object[3] { null,null,null};               
+            bool check = false;
+            lbDayValue.Text = dayInfo.ToString("dd-MM-yyyy");
             for (int i = 0; i < dtable.Rows.Count; i++)             //Display items in the ListView control
             {
                 DataRow drow = dtable.Rows[i];
-                if ((drow.RowState != DataRowState.Deleted) && (DateTime.Compare((DateTime)drow["dWork"], dayInfo) == 0))   //Only row that have not been deleted
+                if (                                                //если день совпадает с днем из производственного кадендаря
+                    (drow.RowState != DataRowState.Deleted) &&
+                    ((DateTime.Compare((DateTime)drow["dWork"], dayInfo) == 0) ||
+                     (DateTime.Compare((DateTime)drow["dSource"], dayInfo) == 0))
+                    )   //Only row that have not been deleted
                 {
-                    x[0] = drow["dName"].ToString();                //наименование дня из производственного календаоя
-                    x[1] = drow["dSource"];                         //оригинальная дата
-                    x[2] = drow["dType"].ToString();                //тип дня полный неполный и т.д.
-                    return x; 
+                    check = true;
+                    if (DateTime.Compare((DateTime)drow["dWork"], (DateTime)drow["dSource"]) == 0)
+                    {                                               //если дата без переносов
+                        lbDay.Text = drow["dName"].ToString() +      //наименование дня из производственного календаря
+                            "\r\n(" + drow["dType"].ToString().ToLower() + ")";
+                        pbDay.Visible = true;
+                    }
+                    else
+                    {                                               //дата с переносом
+                        if (DateTime.Compare((DateTime)drow["dWork"], dayInfo) == 0)
+                        {
+//                            lbDay.Text = dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday ? "Выходной день" : "Рабочий день";// drow["dName"].ToString();
+//                            lbDay.Text = drow["dName"].ToString();  //наименование дня из производственного календаря
+                            lbDay.Text = "Нерабочий день" +
+                                "\r\n(" + drow["dType"].ToString().ToLower() + ")" +
+                                "\r\n\r\n" + "Перенесено с даты\r\n  " + ((DateTime)drow["dSource"]).ToString("dd.MM.yyyy г.") + "\r\n" + drow["dName"].ToString();
+                            pbDay.Visible = true;
+                        }
+                        else
+                        {
+                            //                            lbDay.Text = dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday ? "Выходной день" : "Рабочий день";// drow["dName"].ToString();
+                            lbDay.Text = "Рабочий день" +
+                                "\r\n(" + drow["dType"].ToString().ToLower() + ")" +
+                                "\r\n\r\n" + "Перенесено на дату\r\n  " + ((DateTime)drow["dWork"]).ToString("dd.MM.yyyy г.") + "\r\n" + drow["dName"].ToString();
+                            pbDay.Visible = false;
+                        }
+                    }
                 }
             }
-
-            if (x[0]==null) 
+            if (!check) 
             {
-                x[0] = dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday? "Выходной день":"Рабочий день";// drow["dName"].ToString();
-                                      //         x[1] = drow["dSource"];
-                                      //         x[2] = drow["dType"].ToString();
+                lbDay.Text = dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday? "Выходной день":"Рабочий день";// drow["dName"].ToString();
+                pbDay.Visible = false;
             }
-            return x;
+
         }
-            //подсчитать количество рабочих дней
+
+        //подсчитать количество рабочих дней
         private static double getBusinessDays(DateTime startD, DateTime endD)
         {
             double calcBusinessDays =
