@@ -243,9 +243,10 @@ namespace TimeWorkTracking
         //изменение даты в календаре
         private void mcRegDate_DateChanged(object sender, DateRangeEventArgs e)
         {
+            /*
             var firstDayOfMonth = new DateTime(e.Start.Year, e.Start.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-            double bd = GetBusinessDays(firstDayOfMonth, lastDayOfMonth);
+            double bd = getBusinessDays(firstDayOfMonth, lastDayOfMonth);
             lbBusinessDayCount.Text = "рабочих дней - " + bd.ToString();
 
             if (e.Start.DayOfWeek == DayOfWeek.Monday)
@@ -253,10 +254,40 @@ namespace TimeWorkTracking
                 MessageBox.Show("I hate mondays");
                 mcRegDate.SelectionStart = e.Start.AddDays(1);
             }
+            */
+        }
+        private void mcRegDate_DateSelected(object sender, DateRangeEventArgs e)
+        {
+            var inf = getDateInfo(e.Start, dtWorkCalendar);
+            lbDay.Text = inf[0].ToString();
         }
 
-        //подсчитать количество рабочих дней
-        public static double GetBusinessDays(DateTime startD, DateTime endD)
+        //прочитать харектеристики дня по производственному календарю и вернуть массив с описанием
+        private static Object[] getDateInfo(DateTime dayInfo, DataTable dtable)
+        {
+            Object[] x = new Object[3] { null,null,null};               
+            for (int i = 0; i < dtable.Rows.Count; i++)             //Display items in the ListView control
+            {
+                DataRow drow = dtable.Rows[i];
+                if ((drow.RowState != DataRowState.Deleted) && (DateTime.Compare((DateTime)drow["dWork"], dayInfo) == 0))   //Only row that have not been deleted
+                {
+                    x[0] = drow["dName"].ToString();                //наименование дня из производственного календаоя
+                    x[1] = drow["dSource"];                         //оригинальная дата
+                    x[2] = drow["dType"].ToString();                //тип дня полный неполный и т.д.
+                    return x; 
+                }
+            }
+
+            if (x[0]==null) 
+            {
+                x[0] = dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday? "Выходной день":"Рабочий день";// drow["dName"].ToString();
+                                      //         x[1] = drow["dSource"];
+                                      //         x[2] = drow["dType"].ToString();
+            }
+            return x;
+        }
+            //подсчитать количество рабочих дней
+        private static double getBusinessDays(DateTime startD, DateTime endD)
         {
             double calcBusinessDays =
                 1 + ((endD - startD).TotalDays * 5 -

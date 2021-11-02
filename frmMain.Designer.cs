@@ -82,14 +82,17 @@ namespace TimeWorkTracking
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.gbNavigator = new System.Windows.Forms.GroupBox();
+            this.pbDay = new System.Windows.Forms.PictureBox();
+            this.lbDay = new System.Windows.Forms.Label();
+            this.imgListButtonMain = new System.Windows.Forms.ImageList(this.components);
             this.lbBusinessDayCount = new System.Windows.Forms.Label();
             this.mcRegDate = new System.Windows.Forms.MonthCalendar();
             this.btInsert = new System.Windows.Forms.Button();
-            this.imgListButtonMain = new System.Windows.Forms.ImageList(this.components);
             this.btImport = new System.Windows.Forms.Button();
             this.btUpdate = new System.Windows.Forms.Button();
             this.lMsg = new System.Windows.Forms.Label();
             this.toolTipMsgMain = new System.Windows.Forms.ToolTip(this.components);
+            this.lbFromDay = new System.Windows.Forms.Label();
             this.statusStripMain.SuspendLayout();
             this.mainPanelRegistration.SuspendLayout();
             this.grUsers.SuspendLayout();
@@ -98,6 +101,7 @@ namespace TimeWorkTracking
             this.panel7.SuspendLayout();
             this.pPacs.SuspendLayout();
             this.gbNavigator.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbDay)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStripMain
@@ -692,6 +696,9 @@ namespace TimeWorkTracking
             // 
             // gbNavigator
             // 
+            this.gbNavigator.Controls.Add(this.lbFromDay);
+            this.gbNavigator.Controls.Add(this.pbDay);
+            this.gbNavigator.Controls.Add(this.lbDay);
             this.gbNavigator.Controls.Add(this.lbBusinessDayCount);
             this.gbNavigator.Controls.Add(this.mcRegDate);
             this.gbNavigator.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -702,40 +709,28 @@ namespace TimeWorkTracking
             this.gbNavigator.Size = new System.Drawing.Size(369, 189);
             this.gbNavigator.TabIndex = 36;
             this.gbNavigator.TabStop = false;
-            this.gbNavigator.Text = "Навигатор";
+            this.gbNavigator.Text = "Производственный каледнарь";
             // 
-            // lbBusinessDayCount
+            // pbDay
             // 
-            this.lbBusinessDayCount.Location = new System.Drawing.Point(206, 30);
-            this.lbBusinessDayCount.Name = "lbBusinessDayCount";
-            this.lbBusinessDayCount.Size = new System.Drawing.Size(145, 19);
-            this.lbBusinessDayCount.TabIndex = 3;
-            this.lbBusinessDayCount.Text = "рабочих дней - 0";
+            this.pbDay.Image = global::TimeWorkTracking.Properties.Resources.holiday_48;
+            this.pbDay.Location = new System.Drawing.Point(341, 19);
+            this.pbDay.Name = "pbDay";
+            this.pbDay.Size = new System.Drawing.Size(22, 23);
+            this.pbDay.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbDay.TabIndex = 5;
+            this.pbDay.TabStop = false;
             // 
-            // mcRegDate
+            // lbDay
             // 
-            this.mcRegDate.BackColor = System.Drawing.SystemColors.Window;
-            this.mcRegDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.mcRegDate.Location = new System.Drawing.Point(5, 21);
-            this.mcRegDate.Name = "mcRegDate";
-            this.mcRegDate.ShowWeekNumbers = true;
-            this.mcRegDate.TabIndex = 2;
-            this.mcRegDate.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.mcRegDate_DateChanged);
-            // 
-            // btInsert
-            // 
-            this.btInsert.Enabled = false;
-            this.btInsert.ImageIndex = 1;
-            this.btInsert.ImageList = this.imgListButtonMain;
-            this.btInsert.Location = new System.Drawing.Point(353, 516);
-            this.btInsert.Margin = new System.Windows.Forms.Padding(2);
-            this.btInsert.Name = "btInsert";
-            this.btInsert.Size = new System.Drawing.Size(105, 32);
-            this.btInsert.TabIndex = 34;
-            this.btInsert.Text = "Добавить";
-            this.btInsert.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btInsert.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btInsert.UseVisualStyleBackColor = true;
+            this.lbDay.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lbDay.ImageAlign = System.Drawing.ContentAlignment.TopRight;
+            this.lbDay.ImageIndex = 11;
+            this.lbDay.Location = new System.Drawing.Point(197, 21);
+            this.lbDay.Name = "lbDay";
+            this.lbDay.Size = new System.Drawing.Size(163, 49);
+            this.lbDay.TabIndex = 4;
+            this.lbDay.Text = "рабочих дней - 0";
             // 
             // imgListButtonMain
             // 
@@ -752,6 +747,41 @@ namespace TimeWorkTracking
             this.imgListButtonMain.Images.SetKeyName(8, "db_export_48.png");
             this.imgListButtonMain.Images.SetKeyName(9, "attention_48.png");
             this.imgListButtonMain.Images.SetKeyName(10, "info_48.png");
+            this.imgListButtonMain.Images.SetKeyName(11, "holiday_48.png");
+            // 
+            // lbBusinessDayCount
+            // 
+            this.lbBusinessDayCount.Location = new System.Drawing.Point(203, 164);
+            this.lbBusinessDayCount.Name = "lbBusinessDayCount";
+            this.lbBusinessDayCount.Size = new System.Drawing.Size(145, 19);
+            this.lbBusinessDayCount.TabIndex = 3;
+            this.lbBusinessDayCount.Text = "рабочих дней - 0";
+            // 
+            // mcRegDate
+            // 
+            this.mcRegDate.BackColor = System.Drawing.SystemColors.Window;
+            this.mcRegDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.mcRegDate.Location = new System.Drawing.Point(5, 21);
+            this.mcRegDate.Name = "mcRegDate";
+            this.mcRegDate.ShowWeekNumbers = true;
+            this.mcRegDate.TabIndex = 2;
+            this.mcRegDate.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.mcRegDate_DateChanged);
+            this.mcRegDate.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.mcRegDate_DateSelected);
+            // 
+            // btInsert
+            // 
+            this.btInsert.Enabled = false;
+            this.btInsert.ImageIndex = 1;
+            this.btInsert.ImageList = this.imgListButtonMain;
+            this.btInsert.Location = new System.Drawing.Point(353, 516);
+            this.btInsert.Margin = new System.Windows.Forms.Padding(2);
+            this.btInsert.Name = "btInsert";
+            this.btInsert.Size = new System.Drawing.Size(105, 32);
+            this.btInsert.TabIndex = 34;
+            this.btInsert.Text = "Добавить";
+            this.btInsert.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btInsert.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btInsert.UseVisualStyleBackColor = true;
             // 
             // btImport
             // 
@@ -796,6 +826,14 @@ namespace TimeWorkTracking
             this.lMsg.Text = "      Новая запись в БД";
             this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // lbFromDay
+            // 
+            this.lbFromDay.Location = new System.Drawing.Point(197, 70);
+            this.lbFromDay.Name = "lbFromDay";
+            this.lbFromDay.Size = new System.Drawing.Size(167, 47);
+            this.lbFromDay.TabIndex = 6;
+            this.lbFromDay.Text = "рабочих дней - 0";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -826,6 +864,7 @@ namespace TimeWorkTracking
             this.pPacs.ResumeLayout(false);
             this.pPacs.PerformLayout();
             this.gbNavigator.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbDay)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -891,6 +930,9 @@ namespace TimeWorkTracking
         private System.Windows.Forms.CheckBox chPacsIn;
         private System.Windows.Forms.MonthCalendar mcRegDate;
         private System.Windows.Forms.Label lbBusinessDayCount;
+        private System.Windows.Forms.Label lbDay;
+        private System.Windows.Forms.PictureBox pbDay;
+        private System.Windows.Forms.Label lbFromDay;
     }
 }
 
