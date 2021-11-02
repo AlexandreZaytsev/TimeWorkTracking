@@ -18,12 +18,14 @@ namespace TimeWorkTracking
     public partial class frmMain : Form
     {
         ListViewItemComparer _lvwItemComparer;                              //объект сортировки по колонкам
+        DataTable dtWorkCalendar;                                           //производственный календаоь
 
         public frmMain()
         {
             //подписка события внешних форм 
             CallBack_FrmDataBaseSQL_outEvent.callbackEventHandler = new CallBack_FrmDataBaseSQL_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
             CallBack_FrmDataBasePACS_outEvent.callbackEventHandler = new CallBack_FrmDataBasePACS_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
+            CallBack_FrmUsers_outEvent.callbackEventHandler = new CallBack_FrmUsers_outEvent.callbackEvent(this.CallbackCheckListUsers);    //subscribe (listen) to the general notification
 
             InitializeComponent();
             lMsg.Visible = false;                                           //погасить сообщение о записи в БД
@@ -38,18 +40,19 @@ namespace TimeWorkTracking
         private void frmMain_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            CheckConnects();        //проверить соединение с базами
-            if (mainPanelRegistration.Enabled)
+            if (CheckConnects())                                //проверить соединение с базами
             {
                 cbSMarks.DisplayMember = "Name";
                 cbSMarks.ValueMember = "id";
                 cbSMarks.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From SpecialMarks where uses=1");
 
                 InitializeListView();
-                LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('','') order by fio"));
-                                                      //   select * from twt_GetPassFormData('2021.01.01', '') order by fio
-            }
+                LoadListUser(MsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('','') order by fio"));
+                mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
 
+                dtWorkCalendar = MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('', '') order by dWork");
+                LoadBoldedDatesCalendar(dtWorkCalendar);        // Загрузить производственный календарь в массив непериодических выделенных дат
+            }
         }
 
         // Initialize ListView
@@ -75,8 +78,8 @@ namespace TimeWorkTracking
             };
             lstwDataBaseMain.ListViewItemSorter = _lvwItemComparer;
         }
-        //Загрузить Data из DataSet в ListView
-        private void LoadList(DataTable dtable)
+        //Загрузить Data из DataSet в ListViewUser
+        private void LoadListUser(DataTable dtable)
         {
             lstwDataBaseMain.Items.Clear();                // Clear the ListView control
             for (int i = 0; i < dtable.Rows.Count; i++)     // Display items in the ListView control
@@ -132,7 +135,20 @@ namespace TimeWorkTracking
             this.lstwDataBaseMain.Sort();
         }
 
-
+        //Загрузить Производственный календарь Data из DataSet в Calendar
+        private void LoadBoldedDatesCalendar(DataTable dtable)
+        {
+            mcRegDate.RemoveAllBoldedDates();                           //Сбросить все непериодические даты
+            for (int i = 0; i < dtable.Rows.Count; i++)                 //Display items in the ListView control
+            {
+                DataRow drow = dtable.Rows[i];
+                if (drow.RowState != DataRowState.Deleted)              //Only row that have not been deleted
+                {
+                    mcRegDate.AddBoldedDate((DateTime)drow["dWork"]);
+                }
+            }
+            mcRegDate.UpdateBoldedDates();
+        }
 
         //проверить соединение с базами
         private bool CheckConnects()
@@ -141,7 +157,7 @@ namespace TimeWorkTracking
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             bool conSQL = MsSqlDatabase.CheckConnectWithConnectionStr(cs);
             this.tsbtDataBaseSQL.Image = conSQL ? Properties.Resources.ok : Properties.Resources.no;
-            mainPanelRegistration.Enabled = conSQL;
+            mainPanelRegistration.Enabled = conSQL && lstwDataBaseMain.Items.Count>0;
             return conSQL;
         }
 
@@ -224,6 +240,34 @@ namespace TimeWorkTracking
             }
         }
 
+        //изменение даты в календаре
+        private void mcRegDate_DateChanged(object sender, DateRangeEventArgs e)
+        {
+            var firstDayOfMonth = new DateTime(e.Start.Year, e.Start.Month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+            double bd = GetBusinessDays(firstDayOfMonth, lastDayOfMonth);
+            lbBusinessDayCount.Text = "рабочих дней - " + bd.ToString();
+
+            if (e.Start.DayOfWeek == DayOfWeek.Monday)
+            {
+                MessageBox.Show("I hate mondays");
+                mcRegDate.SelectionStart = e.Start.AddDays(1);
+            }
+        }
+
+        //подсчитать количество рабочих дней
+        public static double GetBusinessDays(DateTime startD, DateTime endD)
+        {
+            double calcBusinessDays =
+                1 + ((endD - startD).TotalDays * 5 -
+                (startD.DayOfWeek - endD.DayOfWeek) * 2) / 7;
+
+            if (endD.DayOfWeek == DayOfWeek.Saturday) calcBusinessDays--;
+            if (startD.DayOfWeek == DayOfWeek.Sunday) calcBusinessDays--;
+
+            return calcBusinessDays;
+        }
+
 
         /*--------------------------------------------------------------------------------------------  
         CALLBACK InPut (подписка на внешние сообщения)
@@ -246,38 +290,13 @@ namespace TimeWorkTracking
             }
             */
         }
-
-        //изменение даты в календаре
-        private void mcRegDate_DateChanged(object sender, DateRangeEventArgs e)
+        //обновить список юзеров в главном окне
+        private void CallbackCheckListUsers(string controlName, string controlParentName, Dictionary<String, String> param)
         {
-            var firstDayOfMonth = new DateTime(e.Start.Year, e.Start.Month, 1);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-            double bd = GetBusinessDays(firstDayOfMonth, lastDayOfMonth);
-            lbBusinessDayCount.Text = "рабочих дней - " + bd.ToString();
-
-            if (e.Start.DayOfWeek == DayOfWeek.Monday)
-            {
-                MessageBox.Show("I hate mondays");
-                mcRegDate.SelectionStart = e.Start.AddDays(1);
-            }
-
-
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            LoadListUser(MsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('','') order by fio"));
+            mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
         }
-
-        //подсчитать количество рабочих дней
-        public static double GetBusinessDays(DateTime startD, DateTime endD)
-        {
-            double calcBusinessDays =
-                1 + ((endD - startD).TotalDays * 5 -
-                (startD.DayOfWeek - endD.DayOfWeek) * 2) / 7;
-
-            if (endD.DayOfWeek == DayOfWeek.Saturday) calcBusinessDays--;
-            if (startD.DayOfWeek == DayOfWeek.Sunday) calcBusinessDays--;
-
-            return calcBusinessDays;
-        }
-
-
     }
 
     /*--------------------------------------------------------------------------------------------  

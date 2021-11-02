@@ -207,7 +207,23 @@ namespace TimeWorkTracking
                         "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20210501', '20210501', 6, 1, 1) " +
                         "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20210509', '20210509', 7, 1, 1) " +
                         "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20210612', '20210612', 8, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20211104', '20211104', 9, 1, 1) ";
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20211104', '20211104', 9, 1, 1) " +
+
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220101', '20220503', 1, 1, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220102', '20220510', 2, 1, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220103', '20220103', 2, 1, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220104', '20220104', 2, 1, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220105', '20220105', 2, 1, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220106', '20220106', 2, 1, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220107', '20220107', 3, 1, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220108', '20220108', 2, 1, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220223', '20220223', 4, 1, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220305', '20220310', 10, 1, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220308', '20220308', 5, 1, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220509', '20220509', 7, 1, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220612', '20220612', 8, 1, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20221104', '20221104', 9, 1, 1) ";
+
                     sqlCommand.ExecuteNonQuery();
 
                     //Пользователь (таблица использующая внешние данные)
@@ -901,7 +917,6 @@ namespace TimeWorkTracking
         {
             return GetTableRequest(connectionString, sqlRequest);
         }
-
         //выполнить запрос на создание удаление обновление 
         //возврат true или false
         public static bool RequestNonQuery(string connectionString, string sqlRequest, Boolean errMode)

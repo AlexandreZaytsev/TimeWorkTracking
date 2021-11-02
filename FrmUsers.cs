@@ -316,6 +316,35 @@ namespace TimeWorkTracking
             ImportFromExel.ImportFromExcel();
         }
 
-
+        //при закрытии формы запустить сообщение 
+        private void frmUsers_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            CallBack_FrmUsers_outEvent.callbackEventHandler("", "", null);  //send a general notification
+        }
     }
+
+    /*--------------------------------------------------------------------------------------------  
+   CALLBACK OutPut (собственные сообщения)
+   --------------------------------------------------------------------------------------------*/
+    //general notification
+    /// <summary>
+    /// CallBack_GetParam
+    /// исходящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров 
+    /// </summary>
+    public static class CallBack_FrmUsers_outEvent
+    {
+        /// <summary>
+        /// Delegate callbackEvent
+        /// </summary>
+        /// <param name="controlName">имя CTRL</param>
+        /// <param name="controlParentName">имя родителя CNTRL</param>
+        /// <param name="parameterPairs">параметры ключ-значение</param>
+        public delegate void callbackEvent(string controlName, string controlParentName, Dictionary<String, String> parameterPairs);
+        /// <summary>
+        /// The callback event handler
+        /// </summary>
+        public static callbackEvent callbackEventHandler;
+    }
+
+
 }
