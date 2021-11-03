@@ -42,17 +42,17 @@ namespace TimeWorkTracking
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             if (CheckConnects())                                //проверить соединение с базами
             {
+                dtWorkCalendar = MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('', '') order by dWork");
+                LoadBoldedDatesCalendar(dtWorkCalendar);        //Загрузить производственный календарь в массив непериодических выделенных дат
+                getDateInfo(DateTime.Now, dtWorkCalendar);      //прочитать харектеристики дня по производственному календарю 
+
                 cbSMarks.DisplayMember = "Name";
                 cbSMarks.ValueMember = "id";
                 cbSMarks.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From SpecialMarks where uses=1");
 
                 InitializeListView();
-                LoadListUser(MsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('','') order by fio"));
+                LoadListUser(MsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
                 mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
-
-                dtWorkCalendar = MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('', '') order by dWork");
-                LoadBoldedDatesCalendar(dtWorkCalendar);        // Загрузить производственный календарь в массив непериодических выделенных дат
-                getDateInfo(DateTime.Now, dtWorkCalendar);      //прочитать харектеристики дня по производственному календарю 
             }
         }
 
@@ -99,16 +99,15 @@ namespace TimeWorkTracking
                     };
                     lvi.SubItems.Add(drow["fio"].ToString());
                     lvi.SubItems.Add(drow["extId"].ToString());
-                    /*
-                    lvi.SubItems.Add(drow["department"].ToString());
-                    lvi.SubItems.Add(drow["post"].ToString());
-                    lvi.SubItems.Add(drow["startTime"].ToString());
-                    lvi.SubItems.Add(drow["stopTime"].ToString());
-                    lvi.SubItems.Add(drow["noLunch"].ToString());
-                    lvi.SubItems.Add(drow["work"].ToString());
-                    lvi.SubItems.Add(drow["note"].ToString());
-                    lvi.SubItems.Add(drow["crmId"].ToString());
-                    */
+                    lvi.SubItems.Add(drow["gtStart"].ToString());
+                    lvi.SubItems.Add(drow["gtStop"].ToString());
+                    lvi.SubItems.Add(drow["specmarkId"].ToString());
+                    lvi.SubItems.Add(drow["stSatrt"].ToString());
+                    lvi.SubItems.Add(drow["stStop"].ToString());
+                    lvi.SubItems.Add(drow["specmarkNote"].ToString());
+                    lvi.SubItems.Add(drow["ptSart"].ToString());
+                    lvi.SubItems.Add(drow["ptStop"].ToString());
+
                     lstwDataBaseMain.Items.Add(lvi);       // Add the list items to the ListView
                 }
             }
@@ -136,6 +135,68 @@ namespace TimeWorkTracking
             this.lstwDataBaseMain.Sort();
         }
 
+        //выбор значения из списка инициализация переменных формы
+        private void lstwDataBaseMain_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DateTime dt;
+            int ind = lstwDataBaseMain.SelectedIndex();
+            if (ind >= 0)
+            {
+ //               tbExtID.Text = lstwDataBaseUsers.Items[ind].SubItems[2].Text;                 //extID
+                //crmId
+ //               chUse.Checked = lstwDataBaseUsers.Items[ind].Text == "True";                  //access    
+                tbName.Text = lstwDataBaseMain.Items[ind].SubItems[1].Text;                     //fio
+                if (lstwDataBaseMain.Items[ind].Text == "0")                                        
+                {                                                                               //данных о проходе нет           
+                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[3].Text);
+                    udBeforeH.Value = dt;
+                    udBeforeM.Value = dt;
+                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[4].Text);
+                    udAfterH.Value = dt;
+                    udAfterM.Value = dt;
+
+                    btInsert.Enabled = true;                                                    //разблокировать кнопку INSERT    
+                    btUpdate.Enabled = false;                                                   //заблокировать кнопку UPDATE  
+                }
+                else
+                {                                                                               //данные о проходе есть
+                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[9].Text);
+                    udBeforeH.Value = dt;
+                    udBeforeM.Value = dt;
+                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[10].Text);
+                    udAfterH.Value = dt;
+                    udAfterM.Value = dt;
+
+                    cbSMarks.SelectedValue = lstwDataBaseMain.Items[ind].SubItems[4].Text;      //выбор по id
+
+                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[6].Text);
+                    smDStart.Value = dt;
+                    smTStart.Value = dt;
+                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[7].Text);
+                    smDStop.Value = dt;
+                    smTStop.Value = dt;
+
+                    tbNote.Text = lstwDataBaseMain.Items[ind].SubItems[8].Text;                 //комментарий
+
+                    btInsert.Enabled = false;                                                   //заблокировать кнопку INSERT    
+                    btUpdate.Enabled = true;                                                    //разблокировать кнопку UPDATE  
+                }
+
+
+                /*
+                                tbNote.Text = lstwDataBaseUsers.Items[ind].SubItems[9].Text;                    //note
+                                cbDepartment.Text = lstwDataBaseUsers.Items[ind].SubItems[3].Text;              //department    
+                                cbPost.Text = lstwDataBaseUsers.Items[ind].SubItems[4].Text;                    //post
+
+                                chbLunch.Checked = lstwDataBaseUsers.Items[ind].SubItems[7].Text == "True";     //lunch
+                                cbSheme.Text = lstwDataBaseUsers.Items[ind].SubItems[8].Text;                   //work    
+                                tbCrmID.Text = lstwDataBaseUsers.Items[ind].SubItems[10].Text;                  //crmID
+                */
+            }
+        }
+
+
+
         //Загрузить Производственный календарь Data из DataSet в Calendar
         private void LoadBoldedDatesCalendar(DataTable dtable)
         {
@@ -162,7 +223,7 @@ namespace TimeWorkTracking
             return conSQL;
         }
 
-        //прочитать количество обраюотанных строк
+        //прочитать количество обработанных строк
         private string getPassCount()
         {
             int count = 0;    
@@ -245,6 +306,9 @@ namespace TimeWorkTracking
         private void mcRegDate_DateChanged(object sender, DateRangeEventArgs e)
         {
             getDateInfo(e.Start, dtWorkCalendar);
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            LoadListUser(MsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
+
             /*
             var firstDayOfMonth = new DateTime(e.Start.Year, e.Start.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
@@ -354,8 +418,243 @@ namespace TimeWorkTracking
         private void CallbackCheckListUsers(string controlName, string controlParentName, Dictionary<String, String> param)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            LoadListUser(MsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('','') order by fio"));
+            LoadListUser(MsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
             mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
+        }
+
+        //кнопка Добавить/Обновить запись в БД
+        private void btInsert_Click(object sender, EventArgs e)
+        {
+            DateTime vDate = DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyyMMdd")); //Чистая дата без времени
+            DateTime vDateIn; 
+            DateTime vDateOut;
+            string vSpDateIn="";
+            string vSpDateOut="";
+            int spCount=0;
+            string msg = "";
+            DialogResult result= DialogResult.Yes;
+
+
+            if (cbSMarks.Text == "-")
+            {
+                vDateIn = DateTime.Parse(vDate.ToString("yyyyMMdd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //+ Время прихода
+                vDateOut = DateTime.Parse(vDate.ToString("yyyyMMdd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //+ Время ухода
+                WriteRecord(vDateIn, vDateOut, "-", "-");                   //Просто рабочий день
+            }
+            else 
+            {
+                vSpDateIn = smDStart.Value.ToString("yyyyMMdd") + " " + smTStart.Value.ToString("HH:mm");   //Дата начала спец. отметок
+                vSpDateOut = smDStop.Value.ToString("yyyyMMdd") + " " + smTStop.Value.ToString("HH:mm");    //Дата окончания спец. отметок
+                spCount = (DateTime.Parse(vSpDateOut) - DateTime.Parse(vSpDateIn)).Days; 
+            }
+
+            if (spCount == 0)
+            {
+                vDate = DateTime.Parse(vSpDateIn);       //Чистая дата без времени
+                vDateIn = DateTime.Parse(vDate.ToString("yyyyMMdd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //+ Время прихода
+                vDateOut = DateTime.Parse(vDate.ToString("yyyyMMdd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //+ Время ухода
+
+                result = DialogResult.Yes;
+                msg = "";
+                if (mcRegDate.SelectionStart.ToString("yyyyMMdd") != DateTime.Parse(vSpDateIn).ToString("yyyyMMdd"))
+                {
+                    msg = "Обратите внимание" + "\r\n" + "\r\n" +
+                        mcRegDate.SelectionStart.ToString("dd.MM.yyyy") + " - текущая Дата Регистрации" + "\r\n" +
+                        DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - Дата начала Специальных отметок" + "\r\n" +
+                        "не совпадают" + "\r\n" +
+                        "*данные будут записаны на Дату начала Специальных отметок" + "\r\n" + "\r\n" +
+                        "Продолжить?" + "\r\n";
+
+                    result = MessageBox.Show(
+                        "Добавить запись",
+                        msg,
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Information,
+                        MessageBoxDefaultButton.Button1,
+                        MessageBoxOptions.DefaultDesktopOnly
+                        );
+                }
+
+                if (result == DialogResult.Yes)
+                    WriteRecord(vDateIn, vDateOut, vSpDateIn, vSpDateOut);              //Просто рабочий день
+            }
+            else 
+            {
+                string timeIn = lstwDataBaseMain.Items[lstwDataBaseMain.SelectedIndex()].SubItems[3].Text;  //Время начала работы
+                string timeOut = lstwDataBaseMain.Items[lstwDataBaseMain.SelectedIndex()].SubItems[4].Text; //Время окончания работы
+
+                result = DialogResult.Yes;
+                msg = "";
+                //-- обработка ошибок
+                if (mcRegDate.SelectionStart.ToString("yyyyMMdd") != DateTime.Parse(vSpDateIn).ToString("yyyyMMdd"))
+                {
+                    msg = "Обратите внимание" + "\r\n" + "\r\n" +
+                        mcRegDate.SelectionStart.ToString("dd.MM.yyyy") + " - текущая Дата Регистрации" + "\r\n" +
+                        DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - Дата начала Специальных отметок" + "\r\n" +
+                        "не совпадают" + "\r\n" +
+                        "*данные будут записаны на Дату начала Специальных отметок" + "\r\n" + "\r\n" +
+                        "Продолжить?" + "\r\n";
+                }
+                msg = msg + DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + "-" + DateTime.Parse(vSpDateOut).ToString("dd.MM.yyyy") +
+                        " - период действия Специальных отметок превышает одни сутки" + "\r\n" +
+                        "*данные будут записаны на данный период с использованием времени из графика сотрудника " +
+                        timeIn + "-" + timeOut + "\r\n" + "\r\n" +
+                        "Продолжить?" + "\r\n";
+
+                result = MessageBox.Show(
+                        "Добавить запись",
+                        msg,
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Information,
+                        MessageBoxDefaultButton.Button1,
+                        MessageBoxOptions.DefaultDesktopOnly
+                        );
+                //-- обработка ошибок
+                if (result == DialogResult.Yes) 
+                {
+                    for (int i = 0; i < spCount; i++)                           //цикл по всем датам диапазона спец отметок начиная со следующего дня 
+                    {
+                        vDate = DateTime.Parse(vSpDateIn).AddDays(i);           //смещение на день
+
+                    }
+                }
+
+
+
+
+            }
+            /*
+                  Else
+
+                    If response = vbYes Then 'vbOK Then   ' User chose Yes.
+                      For i = 0 To spCount                                                      ' цикл по всем датам диапазона начиная со следующего дня
+                        vDate = ClearDataString(DateAdd("d", i, vSpDateIn))                     ' смещение на день
+                        vDateIn = CDate(vDate & " " & FormatDateTime(CDate(timeIn), vbShortTime))     '  + Время начала из графика
+                        vDateOut = CDate(vDate & " " & FormatDateTime(CDate(timeOut), vbShortTime))    '  + Время окончания из графика
+            '            If Not GetHolyday(ActiveWorkbook, CDate(vDate)) Then
+                        If Not GetHolyday(ThisWorkbook, CDate(vDate)) Then
+
+                          Call WriteRecord(vDateIn, vDateOut, vSpDateIn, vSpDateOut)            ' Просто рабочий (не праздничный не выходной) день
+                        End If
+                      Next
+                    End If
+                  End If
+                End If
+
+
+                  'сортировка по 3,5 колоке
+                With Worksheets("DataBase").ListObjects("Data")
+                  .Sort.SortFields.Clear
+            '      .Sort.SortFields.Add Key:=.ListColumns(4).Range, SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
+                  .Sort.SortFields.Add.ListColumns(3).Range, , xlDescending, , xlSortNormal
+            '      .Sort.SortFields.Add .ListColumns(5).Range, , xlAscending, , xlSortNormal
+                  .Sort.Apply
+                End With
+
+
+                'перемещение по списку
+                If btRegAdd.Caption <> "Обновить" Then
+                  If cdDirect.Value = "слева направо" Then                                      ' слева направо
+                    sbDate.Value = sbDate.Value + 1
+                    tbDate.Value = ClearDataString(DateValue(tbDate.Value) + 1)
+                    Call ChangeTime
+                    vDate = ClearDataString(tbDate.Value)                                       ' Чистая дата без времени
+                  Else                                                                          ' Сверху вниз
+                    If lbUsers.ListIndex = lbUsers.ListCount - 1 Then
+                      lbUsers.ListIndex = 0
+                    Else
+                      lbUsers.ListIndex = lbUsers.ListIndex + 1
+                    End If
+                  End If
+                End If
+            */
+        }
+
+        //Добавить/Обновить запись в БД
+        private void WriteRecord(DateTime vDateIn, DateTime vDateOut, string vSpDateIn, string vSpDateOut)
+        {
+            string key = DateTime.Now.ToString("yyyyMMddHHmmss");           //ключевое поле
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            /*
+                                    "id bigint PRIMARY KEY IDENTITY, " +
+                                    "author VARCHAR(150) NOT NULL, " +                                          //имя учетной записи сеанса
+                                    "passDate Datetime NOT NULL, " +                                                //*дата события (без времени) 
+                                    "passId VARCHAR(20) NOT NULL FOREIGN KEY REFERENCES Users(extId), " +       //*->ссылка на внешний id пользователя
+                                    "passTimeStart Datetime NOT NULL, " +                                           //время первого входа (без даты)
+                                    "passTimeStop Datetime NOT NULL, " +                                            //время последнего выхода (без даты)
+                                    "infoLunchId bit DEFAULT 1, " +                                             //флаг признака обеда
+                                    "infoWorkSchemeId int NULL FOREIGN KEY REFERENCES UserWorkScheme(id), " +   //->ссылка на схему работы
+                                    "timeScheduleFact int DEFAULT 0, " +                                        //отработанное время (мин)
+                                    "timeScheduleWithoutLunch int DEFAULT 0, " +                                //отработанное время без обеда (мин)
+                                    "timeScheduleLess int DEFAULT 0, " +                                        //время недоработки (мин)
+                                    "timeScheduleOver int DEFAULT 0, " +                                        //время переработки (мин)
+                                    "specmarkId int NOT NULL FOREIGN KEY REFERENCES SpecialMarks(id), " +       //->ссылка на специальные отметки
+                                    "specmarkTimeStart Datetime NULL, " +                                       //датавремя начала действия специальных отметок
+                                    "specmarkTimeStop Datetime NULL, " +                                        //датавремя окончания специальных отметок
+                                    "specmarkNote VARCHAR(1024) NULL, " +                                       //комментарий к специальным отметкам
+                                    "totalHoursInWork int DEFAULT 0, " +                                        //итог рабочего времени в графике (мин)
+                                    "totalHoursOutsideWork int DEFAULT 0" +                                     //итог рабочего времени вне графика (мин)
+                                    "UNIQUE(passDate, passId) " +                                               //уникальность на уровне таблицы
+
+             */
+            /*
+            string sql =
+              "UPDATE EventsPass Set " +
+                "departmentId = " + departmentId + ", " +
+                "postId = " + postId + ", " +
+                "timeStart = " + "'" + ((DateTime)meta[4]).ToShortTimeString() + "', " +
+                "timeStop = " + "'" + ((DateTime)meta[5]).ToShortTimeString() + "', " +
+                "noLunch = " + ((Boolean)meta[6] ? 1 : 0) + ", " +
+                "workSchemeId = " + workSchemeId + ", " +
+                "uses = " + ((Boolean)meta[8] ? 1 : 0) + " " +
+                "WHERE extId = '" + meta[0].ToString() + "' and name = '" + meta[3].ToString() + "'; " +
+              "IF @@ROWCOUNT = 0 " +
+              "INSERT INTO EventsPass(" +
+                "author, " +
+                "passDate, " +
+                "passId, " +
+                "passTimeStart, " +
+                "passTimeStop, " +
+                "infoLunchId, " +
+                "infoWorkSchemeId, " +
+                "timeScheduleFact, " +
+                "timeScheduleWithoutLunch, " +
+                "timeScheduleLess, " +
+                "timeScheduleOver, " +
+                "specmarkId, " +
+                "specmarkTimeStart, " +
+                "specmarkTimeStop, " +
+                "specmarkNote, " +
+                "totalHoursInWork, " +
+                "totalHoursOutsideWork) " +
+              "VALUES (" +
+                "N'" + Environment.UserName.ToString() + "', " +                                         //
+                "'" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "', " +
+                "'" + lstwDataBaseMain.Items[lstwDataBaseMain.SelectedIndex()].SubItems[2].Text + "', " +
+                "'" + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm") + "', " +
+                "'" + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm") + "', " +
+
+                0 + ", " +
+                "N'" + tbName.Text.Trim() + "', " +
+                "N'" + tbNote.Text.Trim() + "', " +
+                ((DataRowView)cbDepartment.SelectedItem).Row["id"] + ", " +
+                ((DataRowView)cbPost.SelectedItem).Row["id"] + ", " +
+                (chbLunch.Checked ? 1 : 0) + ", " +
+                ((DataRowView)cbSheme.SelectedItem).Row["id"] + ", " +
+                (chUse.Checked ? 1 : 0) +
+              ")";
+            MsSqlDatabase.RequestNonQuery(cs, sql, false);
+
+            LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));// order by extId desc"));
+            lstwDataBaseUsers.FindListByColValue(2, key);                   //найти и выделить позицию
+            tbName_TextChanged(null, null);                                 //обновить поля и кнопки
+*/
+        }
+
+
+        private void btUpdate_Click(object sender, EventArgs e)
+        {
+
         }
     }
 
