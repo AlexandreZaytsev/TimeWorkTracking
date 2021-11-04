@@ -83,6 +83,16 @@ namespace TimeWorkTracking.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap cDay_48 {
+            get {
+                object obj = ResourceManager.GetObject("cDay_48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap form {
             get {
                 object obj = ResourceManager.GetObject("form", resourceCulture);
@@ -267,6 +277,16 @@ namespace TimeWorkTracking.Properties {
             get {
                 object obj = ResourceManager.GetObject("users_ico", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap wDay_48 {
+            get {
+                object obj = ResourceManager.GetObject("wDay_48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

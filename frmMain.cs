@@ -65,7 +65,6 @@ namespace TimeWorkTracking
             lstwDataBaseMain.FullRowSelect = true;              // Select the item and subitems when selection is made.
             lstwDataBaseMain.GridLines = true;                  // Display grid lines.
             lstwDataBaseMain.Sorting = SortOrder.Ascending;     // Sort the items in the list in ascending order.
-            lstwDataBaseMain.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
 
             //            lstwDataBaseUsers.StateImageList=
             // The ListViewItemSorter property allows you to specify the
@@ -111,6 +110,9 @@ namespace TimeWorkTracking
                     lstwDataBaseMain.Items.Add(lvi);       // Add the list items to the ListView
                 }
             }
+            //после загрузки списка установить авторазмер последней колонки
+            lstwDataBaseMain.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
+
             tbSatusList.Text=getPassCount();
         }
         //сортировка по заголовке столбца
@@ -352,7 +354,7 @@ namespace TimeWorkTracking
                     else
                     {                                               //дата с переносом
                         if (DateTime.Compare((DateTime)drow["dWork"], dayInfo) == 0)
-                        {
+                        {                                           //это перенесенная дата
 //                            lbDay.Text = dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday ? "Выходной день" : "Рабочий день";// drow["dName"].ToString();
 //                            lbDay.Text = drow["dName"].ToString();  //наименование дня из производственного календаря
                             lbDay.Text = "Нерабочий день" +
@@ -361,19 +363,31 @@ namespace TimeWorkTracking
                             pbDay.Visible = true;
                         }
                         else
-                        {
-                            //                            lbDay.Text = dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday ? "Выходной день" : "Рабочий день";// drow["dName"].ToString();
-                            lbDay.Text = "Рабочий день" +
+                        {                                           //это реальный праздник
+                            //дополнительная прверка на дату реального праздника
+                            
+                            if (dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday)
+                            {                                       //праздник попадает на выходной
+                                lbDay.Text = "Выходной день" +
                                 "\r\n(" + drow["dType"].ToString().ToLower() + ")" +
                                 "\r\n\r\n" + "Перенесено на дату\r\n  " + ((DateTime)drow["dWork"]).ToString("dd.MM.yyyy г.") + "\r\n" + drow["dName"].ToString();
-                            pbDay.Visible = false;
+                                pbDay.Visible = false;
+                            }
+                            else
+                            {                                       //праздник не попадает на выходной
+                                lbDay.Text = "Рабочий день" +
+                                "\r\n(" + drow["dType"].ToString().ToLower() + ")" +
+                                "\r\n\r\n" + "Перенесено на дату\r\n  " + ((DateTime)drow["dWork"]).ToString("dd.MM.yyyy г.") + "\r\n" + drow["dName"].ToString();
+                                pbDay.Visible = false;
+                            }
+
                         }
                     }
                 }
             }
             if (!check) 
             {
-                lbDay.Text = dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday? "Выходной день":"Рабочий день";// drow["dName"].ToString();
+                lbDay.Text = dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday? "Выходной день":"Рабочий день";
                 pbDay.Visible = false;
             }
 

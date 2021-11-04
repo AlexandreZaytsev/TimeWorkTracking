@@ -189,6 +189,8 @@
     <None Include="Resources\report.ico" />
     <None Include="Resources\users.ico" />
     <None Include="Resources\holiday_48.png" />
+    <None Include="Resources\wDay_48.png" />
+    <None Include="Resources\cDay_48.png" />
     <Content Include="twt.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

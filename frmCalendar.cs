@@ -28,12 +28,13 @@ namespace TimeWorkTracking
                 //сначала вспомогательные данные
                 cbDataType.DisplayMember = "Name";
                 cbDataType.ValueMember = "id";
-                cbDataType.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From CalendarDateType where uses=1");
+                cbDataType.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From CalendarLengthDay where uses=1");
+                cbDataType.SelectedValue = "2";
 
                 //таблица типа дня
                 InitializeListViewDaysCalendar();
                 LoadListDaysCalendar(MsSqlDatabase.TableRequest(cs, "Select * From CalendarDateName where uses=1"));     //сортировка по рабочей (перенос) дате
-                lstwDataBaseDaysCalendar.AutoResizeColumn(2, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
+//                lstwDataBaseDaysCalendar.AutoResizeColumn(2, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
                 if (lstwDataBaseDaysCalendar.Items.Count != 0)
                     lstwDataBaseDaysCalendar.Items[0].Selected = true;     //выделить элемент по индексу
 
@@ -60,7 +61,7 @@ namespace TimeWorkTracking
             lstwDataBaseCalendar.GridLines = true;                  // Display grid lines.
             lstwDataBaseCalendar.Sorting = SortOrder.Ascending;     // Sort the items in the list in ascending order.
             lstwDataBaseCalendar.LabelEdit = false;                 //запрет редактирования item
-            lstwDataBaseCalendar.AutoResizeColumn(4, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
+//            lstwDataBaseCalendar.AutoResizeColumn(4, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
 //            lstwDataBaseCalendar.HideSelection = false;             //оставить выделение строки при потере фокуса ListView
 
 
@@ -102,7 +103,7 @@ namespace TimeWorkTracking
                     lvi.SubItems.Add(((DateTime)drow["dWork"]).ToString("yyyy-MM-dd"));
                     lvi.SubItems.Add(((DateTime)drow["dSource"]).ToString("yyyy-MM-dd"));
                     lvi.SubItems.Add(drow["dName"].ToString());
-                    lvi.SubItems.Add(drow["dType"].ToString());
+                    lvi.SubItems.Add(drow["dLength"].ToString());
                     lvi.SubItems.Add(drow["id"].ToString());
 
                     //                https://stackoverflow.com/questions/39428698/adding-groups-and-items-to-listview-in-c-sharp-windows-form
@@ -121,6 +122,8 @@ namespace TimeWorkTracking
                     //добавим его в группу
                 }
             }
+            //после загрузки списка установить авторазмер последней колонки
+            lstwDataBaseCalendar.AutoResizeColumn(4, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
         }
         //сортировка по заголовку столбца
         private void lstwDataBaseCalendar_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -167,7 +170,8 @@ namespace TimeWorkTracking
                     }
                     dtWork.Value = DateTime.Parse(lstwDataBaseCalendar.Items[ind].SubItems[1].Text);
                     
-                    tbID.Text = lstwDataBaseCalendar.Items[ind].SubItems[5].Text;
+                    tbID.Text = lstwDataBaseCalendar.Items[ind].SubItems[5].Text;               //id базы данных    
+                    cbDataType.Text = lstwDataBaseCalendar.Items[ind].SubItems[4].Text;         //тип дня
                     chUse.Checked = lstwDataBaseCalendar.Items[ind].Text == "True";
 
                 }
@@ -189,7 +193,8 @@ namespace TimeWorkTracking
             lstwDataBaseDaysCalendar.AllowColumnReorder = true;         // Allow the user to rearrange columns.
             lstwDataBaseDaysCalendar.FullRowSelect = true;              // Select the item and subitems when selection is made.
             lstwDataBaseDaysCalendar.GridLines = true;                  // Display grid lines.
-//            lstwDataBaseDaysCalendar.Sorting = SortOrder.Ascending;     // Sort the items in the list in ascending order.
+
+            //            lstwDataBaseDaysCalendar.Sorting = SortOrder.Ascending;     // Sort the items in the list in ascending order.
         }
         //Загрузить Data из DataSet в ListView дней календаря
         private void LoadListDaysCalendar(DataTable dtable)
@@ -204,9 +209,9 @@ namespace TimeWorkTracking
                     lstwDataBaseDaysCalendar.LabelEdit = false;      //запрет редактирования item
                     ListViewItem lvi = new ListViewItem(drow["uses"].ToString(), 0) //имя для сортировки
                     {
-//                        ImageIndex = (Boolean)drow["uses"] ? 4 : 0,
-                        StateImageIndex = (Boolean)drow["uses"] ? 2 : 0,
-                        Checked = (Boolean)drow["uses"]
+//                        ImageIndex = (int)drow["dateTypeId"] == 1 ? 2 : 3,
+                        StateImageIndex = (int)drow["dateTypeId"]== 1 ? 2 : 3,
+//                        Checked = (Boolean)drow["uses"]
                         //                        , UseItemStyleForSubItems = true
                     };
 
@@ -220,6 +225,8 @@ namespace TimeWorkTracking
                     lstwDataBaseDaysCalendar.Items.Add(lvi);                        // Add the list items to the ListView
                 }
             }
+            //после загрузки списка установить авторазмер последней колонки
+            lstwDataBaseDaysCalendar.AutoResizeColumn(2, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
         }
 
         //выбор дня из списка ListView дней
@@ -319,7 +326,7 @@ namespace TimeWorkTracking
                 "originalDate, " +
                 "transferDate, " +
                 "dateNameId, " +
-                "dateTypeId, " +
+                "dayLengthId, " +
                 "uses) " +
               "VALUES ( " +
                 "'" + dtSource.Value.ToString("yyyyMMdd") + "', " +       //оригинальная дата
@@ -347,7 +354,7 @@ namespace TimeWorkTracking
                 "originalDate = '" + dtSource.Value.ToString("yyyyMMdd") + "', " +
                 "transferDate = '" + keySQL + "', " +
                 "dateNameId = " + lstwDataBaseDaysCalendar.Items[lstwDataBaseDaysCalendar.SelectedIndex()].SubItems[4].Text + ", " +
-                "dateTypeId = " + ((DataRowView)cbDataType.SelectedItem).Row["id"] + ", " +
+                "dayLengthId = " + ((DataRowView)cbDataType.SelectedItem).Row["id"] + ", " +
                 "uses = " + (chUse.Checked ? 1 : 0) + " " +
               "WHERE transferDate = '" + keySQL + "'";                      //*рабочая дата (дата переноса)
             MsSqlDatabase.RequestNonQuery(cs, sql, false);

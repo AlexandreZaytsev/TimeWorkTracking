@@ -55,7 +55,7 @@ namespace TimeWorkTracking
                         "\r\nINSERT INTO UserWorkScheme(name) VALUES (N'Поминутный') ";
                     sqlCommand.ExecuteNonQuery();
 
-                    //Тип даты производственного календаря (таблица для списка) Выходной/Сокращенный
+                    //Тип дня производственного календаря (таблица для списка)
                     sqlCommand.CommandText = "CREATE TABLE CalendarDateType (" +
                         "id int PRIMARY KEY IDENTITY, " +
                         "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
@@ -63,33 +63,44 @@ namespace TimeWorkTracking
                         ")";
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText =
-                        "\r\nINSERT INTO CalendarDateType(name) VALUES (N'Полный') " +
-                        "\r\nINSERT INTO CalendarDateType(name) VALUES (N'Сокращенный') " +
-                        "\r\nINSERT INTO CalendarDateType(name) VALUES (N'Удлиненный') " +
                         "\r\nINSERT INTO CalendarDateType(name) VALUES (N'Праздничный') " +
                         "\r\nINSERT INTO CalendarDateType(name) VALUES (N'Выходной') ";
+                    sqlCommand.ExecuteNonQuery();
+
+                    //Продолжительность дня производственного календаря (таблица для списка)
+                    sqlCommand.CommandText = "CREATE TABLE CalendarLengthDay (" +
+                        "id int PRIMARY KEY IDENTITY, " +
+                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
+                        "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
+                        ")";
+                    sqlCommand.ExecuteNonQuery();
+                    sqlCommand.CommandText =
+                        "\r\nINSERT INTO CalendarLengthDay(name) VALUES (N'Короткий') " +
+                        "\r\nINSERT INTO CalendarLengthDay(name) VALUES (N'Полный') " +
+                        "\r\nINSERT INTO CalendarLengthDay(name) VALUES (N'Длинный')";
                     sqlCommand.ExecuteNonQuery();
 
                     //Наименование даты производственного календаря (таблица для списка) 
                     sqlCommand.CommandText = "CREATE TABLE CalendarDateName (" +
                         "id int PRIMARY KEY IDENTITY, " +
                         "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
-                        "date Datetime NULL, " +                                                    //дата (год не учитываем)            
+                        "date Datetime NULL, " +                                                    //дата (год не учитываем)
+                        "dateTypeId int NOT NULL FOREIGN KEY REFERENCES CalendarDateType(id), " +   //->ссылка на тип дня (Праздничный/Выходной и т.д.)
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
                         ")";                                                        
                     sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText = 
-                        "\r\nINSERT INTO CalendarDateName(name, date) VALUES (N'Новый год', '20000101') " +
-                        "\r\nINSERT INTO CalendarDateName(name, date) VALUES (N'Новогодние каникулы', NULL) " +
-                        "\r\nINSERT INTO CalendarDateName(name, date) VALUES (N'Рождество Христово', '20000107') " +
-                        "\r\nINSERT INTO CalendarDateName(name, date) VALUES (N'День защитника Отечества', '20000223') " +
-                        "\r\nINSERT INTO CalendarDateName(name, date) VALUES (N'Международный женский день', '20000308') " +
-                        "\r\nINSERT INTO CalendarDateName(name, date) VALUES (N'Праздник весны и труда', '20000501') " +
-                        "\r\nINSERT INTO CalendarDateName(name, date) VALUES (N'День Победы', '20000509') " +
-                        "\r\nINSERT INTO CalendarDateName(name, date) VALUES (N'День России', '20000612') " +
-                        "\r\nINSERT INTO CalendarDateName(name, date) VALUES (N'День народного единства', '20001104') " +
-                        "\r\nINSERT INTO CalendarDateName(name, date) VALUES (N'Нерабочий день', NULL) " +
-                        "\r\nINSERT INTO CalendarDateName(name, date) VALUES (N'Предпраздничный день', NULL) ";                                                             //другое
+                    sqlCommand.CommandText =
+                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'Новый год', '20000101', 1) " +
+                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'Новогодние каникулы', NULL, 1) " +
+                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'Рождество Христово', '20000107', 1) " +
+                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'День защитника Отечества', '20000223', 1) " +
+                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'Международный женский день', '20000308', 1) " +
+                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'Праздник весны и труда', '20000501', 1) " +
+                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'День Победы', '20000509', 1) " +
+                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'День России', '20000612', 1) " +
+                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'День народного единства', '20001104', 1) " +
+                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'Нерабочий день', NULL, 2) " +
+                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'Предпраздничный день', NULL, 2) ";                                                             //другое
                     sqlCommand.ExecuteNonQuery();
 
                     //Подразделение (таблица для списка)
@@ -187,42 +198,43 @@ namespace TimeWorkTracking
                         "id int PRIMARY KEY IDENTITY, " +
                         "originalDate Datetime NOT NULL , " +                                           //оригинальная дата
                         "transferDate Datetime NOT NULL UNIQUE, " +                                     //*реальная дата (перенос)
-                        "dateNameId int NOT NULL FOREIGN KEY REFERENCES CalendarDateName(id), " +   //->ссылка на наименование даты (наименование даты и т.д.)
-                        "dateTypeId int NOT NULL FOREIGN KEY REFERENCES CalendarDateType(id), " +   //->ссылка на тип даты (тип дня сокращенный, полный и т.д.)
-                        "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
+                        "dateNameId int NOT NULL FOREIGN KEY REFERENCES CalendarDateName(id), " +       //->ссылка на наименование даты (наименование даты и т.д.)
+                        "dayLengthId int NOT NULL FOREIGN KEY REFERENCES CalendarLengthDay(id), " +     //->ссылка на продолжительность дня (сокращенный, полный и т.д.)
+                        "uses bit DEFAULT 1 " +                                                         //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText =
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20210101', '20210101', 1, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20210102', '20211105', 2, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20210103', '20211231', 2, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20210104', '20210104', 2, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20210105', '20210105', 2, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20210106', '20210106', 2, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20210107', '20210107', 3, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20210108', '20210108', 2, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20210220', '20210222', 10, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20210223', '20210223', 4, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20210308', '20210308', 5, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20210501', '20210501', 6, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20210509', '20210509', 7, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20210612', '20210612', 8, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20211104', '20211104', 9, 1, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210101', '20210101', 1, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210102', '20211105', 2, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210103', '20211231', 2, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210104', '20210104', 2, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210105', '20210105', 2, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210106', '20210106', 2, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210107', '20210107', 3, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210108', '20210108', 2, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210220', '20210222', 10, 1, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210223', '20210223', 4, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210308', '20210308', 5, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210501', '20210501', 6, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210509', '20210509', 7, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210612', '20210612', 8, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20211104', '20211104', 9, 2, 1) " +
 
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220101', '20220503', 1, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220102', '20220510', 2, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220103', '20220103', 2, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220104', '20220104', 2, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220105', '20220105', 2, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220106', '20220106', 2, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220107', '20220107', 3, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220108', '20220108', 2, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220223', '20220223', 4, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220305', '20220310', 10, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220308', '20220308', 5, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220509', '20220509', 7, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20220612', '20220612', 8, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES ('20221104', '20221104', 9, 1, 1) ";
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220101', '20220503', 1, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220102', '20220510', 2, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220103', '20220103', 2, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220104', '20220104', 2, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220105', '20220105', 2, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220106', '20220106', 2, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220107', '20220107', 3, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220108', '20220108', 2, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220223', '20220223', 4, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220305', '20220310', 10, 1, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220308', '20220308', 5, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220501', '20220501', 6, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220509', '20220509', 7, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220612', '20220612', 8, 2, 1) " +
+                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20221104', '20221104', 9, 2, 1) ";
 
                     sqlCommand.ExecuteNonQuery();
 
@@ -281,11 +293,13 @@ namespace TimeWorkTracking
                         "\r\n  c.transferDate dWork, " +                                            //рабочая дата (перенос или исходная)
                         "\r\n  c.originalDate dSource, " +                                          //исходная дата
                         "\r\n  n.name dName, " +                                                    //наименование дня
-                        "\r\n  t.name dType, " +                                                    //тип дня (полный/сокращенный)
+                        "\r\n  t.name dType, " +                                                    //тип дня (праздничный/выходной)
+                        "\r\n  l.name dLength, " +                                                  //длина дня (полный/сокращенный)
                         "\r\n  c.uses access " +                                                    //флаг доступа для использования
-                        "\r\nFrom Calendars c, CalendarDateName n, CalendarDateType t " +
+                        "\r\nFrom Calendars c, CalendarDateName n, CalendarDateType t, CalendarLengthDay l " +
                         "\r\nWhere c.dateNameId = n.id " +
-                        "\r\n  and c.dateTypeId = t.id " +
+                        "\r\n  and c.dayLengthId = l.id " +
+                        "\r\n  and n.dateTypeId = t.id " +
                         "\r\n  and (len(n.name)>0 and n.name like('%' + @Name + '%')) " +
                         "\r\n  or (not c.originalDate IS NULL and right(CONVERT(varchar(8), c.originalDate, 112),4) = @Date) " +
                         "\r\n)";

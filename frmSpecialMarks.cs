@@ -37,7 +37,6 @@ namespace TimeWorkTracking
             lstwDataBaseSpecialMarks.FullRowSelect = true;              // Select the item and subitems when selection is made.
             lstwDataBaseSpecialMarks.GridLines = true;                  // Display grid lines.
             lstwDataBaseSpecialMarks.Sorting = SortOrder.Ascending;     // Sort the items in the list in ascending order.
-            lstwDataBaseSpecialMarks.AutoResizeColumn(3, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
 
             // The ListViewItemSorter property allows you to specify the
             // object that performs the sorting of items in the ListView.
@@ -84,6 +83,8 @@ namespace TimeWorkTracking
                     lstwDataBaseSpecialMarks.Items.Add(lvi);                        // Add the list items to the ListView
                 }
             }
+            //после загрузки списка установить авторазмер последней колонки
+            lstwDataBaseSpecialMarks.AutoResizeColumn(3, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
         }
 
         //сортировка по заголовке столбца
