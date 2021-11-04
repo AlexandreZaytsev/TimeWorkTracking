@@ -91,6 +91,16 @@ namespace TimeWorkTracking.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на   &lt;/body&gt;
+        ///&lt;/html&gt;.
+        /// </summary>
+        internal static string footer1 {
+            get {
+                return ResourceManager.GetString("footer1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap form {
@@ -107,6 +117,31 @@ namespace TimeWorkTracking.Properties {
             get {
                 object obj = ResourceManager.GetObject("form_ico", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на &lt;html&gt;
+        /// &lt;head&gt;
+        ///  &lt;meta charset = &apos;utf-8&apos;/&gt;
+        ///  &lt;title&gt; Гороскоп Дни рождения&lt;/title&gt;
+        ///  &lt;style type = &apos;text/css&apos;&gt;
+        ///   body {
+        ///    font-family:&apos;Times New Roman&apos;, &apos;Sans-Serif&apos;, &apos;Lucida Sans Unicode&apos;, &apos;Lucida Grande&apos;; ;
+        ///    font-weight: normal;
+        ///    } 
+        ///   .fix {
+        ///    font-size: 14px;
+        ///    width: 100 %;
+        ///    background: white;
+        ///    padding: 4px 20px;
+        ///    -moz-box-sizing: border-box; /* Для Firefox */
+        ///    -webkit-box-sizing: border-box; /* Для Safari и Chrome */
+        ///    box-sizing: border-box; /* Для IE и Oper [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string header {
+            get {
+                return ResourceManager.GetString("header", resourceCulture);
             }
         }
         

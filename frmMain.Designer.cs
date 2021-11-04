@@ -48,6 +48,8 @@ namespace TimeWorkTracking
             this.toolStripStatusLabel6 = new System.Windows.Forms.ToolStripStatusLabel();
             this.imageListStrip = new System.Windows.Forms.ImageList(this.components);
             this.mainPanelRegistration = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.webInfoDay = new System.Windows.Forms.WebBrowser();
             this.grUsers = new System.Windows.Forms.GroupBox();
             this.panel5 = new System.Windows.Forms.Panel();
             this.tbSatusList = new System.Windows.Forms.TextBox();
@@ -94,6 +96,7 @@ namespace TimeWorkTracking
             this.toolTipMsgMain = new System.Windows.Forms.ToolTip(this.components);
             this.statusStripMain.SuspendLayout();
             this.mainPanelRegistration.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.grUsers.SuspendLayout();
             this.panel5.SuspendLayout();
             this.grRegistrator.SuspendLayout();
@@ -129,7 +132,7 @@ namespace TimeWorkTracking
             this.statusStripMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStripMain.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.statusStripMain.ShowItemToolTips = true;
-            this.statusStripMain.Size = new System.Drawing.Size(973, 26);
+            this.statusStripMain.Size = new System.Drawing.Size(1241, 26);
             this.statusStripMain.SizingGrip = false;
             this.statusStripMain.TabIndex = 15;
             this.statusStripMain.Text = "statusStrip1";
@@ -167,7 +170,7 @@ namespace TimeWorkTracking
             // 
             this.toolStripStatusLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(353, 20);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(621, 20);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "    Справочники:";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -269,6 +272,7 @@ namespace TimeWorkTracking
             // 
             // mainPanelRegistration
             // 
+            this.mainPanelRegistration.Controls.Add(this.panel3);
             this.mainPanelRegistration.Controls.Add(this.grUsers);
             this.mainPanelRegistration.Controls.Add(this.grRegistrator);
             this.mainPanelRegistration.Controls.Add(this.gbNavigator);
@@ -280,8 +284,27 @@ namespace TimeWorkTracking
             this.mainPanelRegistration.Location = new System.Drawing.Point(0, 26);
             this.mainPanelRegistration.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.mainPanelRegistration.Name = "mainPanelRegistration";
-            this.mainPanelRegistration.Size = new System.Drawing.Size(973, 696);
+            this.mainPanelRegistration.Size = new System.Drawing.Size(1241, 696);
             this.mainPanelRegistration.TabIndex = 16;
+            // 
+            // panel3
+            // 
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.webInfoDay);
+            this.panel3.Location = new System.Drawing.Point(969, 33);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(243, 200);
+            this.panel3.TabIndex = 39;
+            // 
+            // webInfoDay
+            // 
+            this.webInfoDay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webInfoDay.Location = new System.Drawing.Point(0, 0);
+            this.webInfoDay.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webInfoDay.Name = "webInfoDay";
+            this.webInfoDay.ScrollBarsEnabled = false;
+            this.webInfoDay.Size = new System.Drawing.Size(241, 198);
+            this.webInfoDay.TabIndex = 0;
             // 
             // grUsers
             // 
@@ -841,7 +864,7 @@ namespace TimeWorkTracking
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(973, 722);
+            this.ClientSize = new System.Drawing.Size(1241, 722);
             this.Controls.Add(this.mainPanelRegistration);
             this.Controls.Add(this.statusStripMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -859,6 +882,7 @@ namespace TimeWorkTracking
             this.statusStripMain.PerformLayout();
             this.mainPanelRegistration.ResumeLayout(false);
             this.mainPanelRegistration.PerformLayout();
+            this.panel3.ResumeLayout(false);
             this.grUsers.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
@@ -937,6 +961,8 @@ namespace TimeWorkTracking
         private System.Windows.Forms.PictureBox pbDay;
         private System.Windows.Forms.Label lbDayValue;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.WebBrowser webInfoDay;
     }
 }
 

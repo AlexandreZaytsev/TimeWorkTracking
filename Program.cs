@@ -4,6 +4,9 @@ using System.Linq;
 //using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 
 namespace TimeWorkTracking
 {
@@ -72,6 +75,14 @@ namespace TimeWorkTracking
             return ret;
         }
 
-
+        //получить base64 из байтового массива картинки из ресурса
+        public static string getBase64StrToHTML(this Image image, ImageFormat format)
+         {
+             using (MemoryStream ms = new MemoryStream())
+             {
+                 image.Save(ms, format);
+                 return Convert.ToBase64String(ms.ToArray());
+             }
+        }
     }
 }

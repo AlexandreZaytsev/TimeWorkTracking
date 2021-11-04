@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -347,8 +349,9 @@ namespace TimeWorkTracking
                     check = true;
                     if (DateTime.Compare((DateTime)drow["dWork"], (DateTime)drow["dSource"]) == 0)
                     {                                               //если дата без переносов
-                        lbDay.Text = drow["dName"].ToString() +      //наименование дня из производственного календаря
-                            "\r\n(" + drow["dType"].ToString().ToLower() + ")";
+                        lbDay.Text = drow["dName"].ToString();// +      //наименование дня из производственного календаря
+                  //          "\r\n(" + drow["dLength"].ToString().ToLower() + ")"
+                                
                         pbDay.Visible = true;
                     }
                     else
@@ -358,7 +361,7 @@ namespace TimeWorkTracking
 //                            lbDay.Text = dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday ? "Выходной день" : "Рабочий день";// drow["dName"].ToString();
 //                            lbDay.Text = drow["dName"].ToString();  //наименование дня из производственного календаря
                             lbDay.Text = "Нерабочий день" +
-                                "\r\n(" + drow["dType"].ToString().ToLower() + ")" +
+                //                "\r\n(" + drow["dLength"].ToString().ToLower() + ")" +
                                 "\r\n\r\n" + "Перенесено с даты\r\n  " + ((DateTime)drow["dSource"]).ToString("dd.MM.yyyy г.") + "\r\n" + drow["dName"].ToString();
                             pbDay.Visible = true;
                         }
@@ -366,17 +369,18 @@ namespace TimeWorkTracking
                         {                                           //это реальный праздник
                             //дополнительная прверка на дату реального праздника
                             
-                            if (dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday)
+                            //if (dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday)
+                            if(drow["dType"].ToString()== "Праздничный")
                             {                                       //праздник попадает на выходной
                                 lbDay.Text = "Выходной день" +
-                                "\r\n(" + drow["dType"].ToString().ToLower() + ")" +
+                                "\r\n(" + drow["dLength"].ToString().ToLower() + ")" +
                                 "\r\n\r\n" + "Перенесено на дату\r\n  " + ((DateTime)drow["dWork"]).ToString("dd.MM.yyyy г.") + "\r\n" + drow["dName"].ToString();
                                 pbDay.Visible = false;
                             }
                             else
                             {                                       //праздник не попадает на выходной
                                 lbDay.Text = "Рабочий день" +
-                                "\r\n(" + drow["dType"].ToString().ToLower() + ")" +
+                                "\r\n(" + drow["dLength"].ToString().ToLower() + ")" +
                                 "\r\n\r\n" + "Перенесено на дату\r\n  " + ((DateTime)drow["dWork"]).ToString("dd.MM.yyyy г.") + "\r\n" + drow["dName"].ToString();
                                 pbDay.Visible = false;
                             }
@@ -390,6 +394,50 @@ namespace TimeWorkTracking
                 lbDay.Text = dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday? "Выходной день":"Рабочий день";
                 pbDay.Visible = false;
             }
+
+
+            /*
+                        string strMsg = "<style>" +
+                                         "  * { " +
+                                         "    font-size: 10pt; " +
+                                         "  }" +
+                                         "  .descr {" +
+                                         //"    font-size: 9pt; " +
+                                         "    font-weight:bold " +
+                                         "  }" +
+                                         "  table {" +
+                                         //    "border: 1px solid black; "+
+                                         "    width:100%;" +
+                                         "    border - collapse: collapse; " +
+                                         "  }" +
+                                         "  th {" +
+                                         "    text-align: left; " +
+                                         //    "font-size: 11pt; " +
+                                         "    font-weight:normal; " +
+                                         "    background-color: rgb(240, 240, 240);" +
+                                         "  }" +
+                                         "</style>" +
+                                         "<body>" +// bgcolor='#FFEFD5'>" +
+                                         "<span class='descr'>&#128270;&nbsp;" + "Create " + "payloadName" + " payload string ERROR(s)" + "</span>" +
+                                         "<hr><table><tbody>";
+            */
+            string WORK_AREA = @" <img src='data:image/png;base64, " + Properties.Resources.holiday_48.getBase64StrToHTML(ImageFormat.Png) + "' height='32' width='32'/>";
+            /*
+            foreach (var err in errorList)
+            {
+                strMsg += "<tr><th colspan='2'>" + err.ConstructorName + "</th></tr>";
+                foreach (var msg in err.Errors)
+                {
+                    strMsg += "<tr><td class='first'>&#10008;</td><td class='last'>" + msg + "</td></tr>";
+                }
+            }
+            strMsg += "</tbody></table>";
+            strMsg += "<hr>&#128736;&nbsp;<i><small>" + "try setting the parameters..." + "</small></i>" +
+                      "</body>";
+            */
+            //     strMsg = @"<div><p>Taken from wikpedia</p>""<img src = 'data:image/bmp;base64, "+ base64ImageRepresentation  + "' alt='Red dot'/></div>";
+            string html = Properties.Resources.header + WORK_AREA + Properties.Resources.footer1;
+            webInfoDay.DocumentText = html;
 
         }
 
