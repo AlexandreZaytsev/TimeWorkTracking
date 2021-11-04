@@ -437,7 +437,7 @@ namespace TimeWorkTracking
             */
             //     strMsg = @"<div><p>Taken from wikpedia</p>""<img src = 'data:image/bmp;base64, "+ base64ImageRepresentation  + "' alt='Red dot'/></div>";
             string html = Properties.Resources.header + WORK_AREA + Properties.Resources.footer1;
-            webInfoDay.DocumentText = html;
+            webInfoDay.DocumentText = html;  
 
         }
 
