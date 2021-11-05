@@ -468,74 +468,50 @@ namespace TimeWorkTracking
             }
             else                                                            //спец отметки есть
             {
-                if (spCount == 0)                                           //если спец отметки занимают один день
+                if (DateTime.Compare(vDate, DateTime.Parse(vSpDateIn).Date) != 0)
                 {
-                    //проверим дату начала действия спец отметок
-                    if (DateTime.Compare(vDate, DateTime.Parse(vSpDateIn).Date) != 0)
-                    {
-                        result = MessageBox.Show(
-                            "Обратите внимание" + "\r\n" + "\r\n" +
-                            vDate.ToString("dd.MM.yyyy") + " - текущая Дата Регистрации" + "\r\n" +
-                            DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - Дата начала Специальных отметок" + "\r\n" +
-                            "не совпадают" + "\r\n" +
-                            "*данные будут записаны на Дату начала Специальных отметок" + "\r\n" + "\r\n" +
-                            "Продолжить?" + "\r\n",
-                            "Изменение даты регистрации",
-                            MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Information,
-                            MessageBoxDefaultButton.Button1,
-                            MessageBoxOptions.DefaultDesktopOnly
-                            );
-                    }
+                    result = MessageBox.Show(
+                        "Обратите внимание" + "\r\n" + "Даты\r\n" +
+                        vDate.ToString("dd.MM.yyyy") + " - текущая дата Регистрации" + "\r\n" +
+                        DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - дата начала Специальных отметок" + "\r\n" +
+                        "не совпадают" + "\r\n" +
+                        (spCount == 0 ?
+                            " *информация будет(пере)записана на дату начала Специальных отметок" :
+                            " *период действия Специальных отметок превышает одни сутки" + "\r\n" +
+                            "  информация будет(пере)записана по периоду действия Специальных отметок"
+                         ) + "\r\n" +
+                            "  c использованием времени из графика сотрудника " +
+                            DateTime.Parse(timeIn).ToString("HH:mm") + "-" + DateTime.Parse(timeOut).ToString("HH:mm") + "\r\n\r\n" +
+                        "Продолжить?" + "\r\n",
+                        "Изменение даты регистрации",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Information,
+                        MessageBoxDefaultButton.Button1,
+                        MessageBoxOptions.DefaultDesktopOnly
+                        );
                     if (result == DialogResult.Yes)
-                        WriteRecord(DateTime.Parse(vSpDateIn).Date, DateTime.Parse(vSpDateIn).Date, vSpDateIn, vSpDateOut);  //добавить/обновить запись прохода
-                }
-                else
-                {                                                           //если спец отметки занимают несколько дней
-                    if (DateTime.Compare(vDate, DateTime.Parse(vSpDateIn).Date) != 0)
                     {
-                        result = MessageBox.Show(
-                            "Обратите внимание" + "\r\n" + "\r\n" +
-                            vDate.ToString("dd.MM.yyyy") + " - текущая Дата Регистрации" + "\r\n" +
-                            DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - Дата начала Специальных отметок" + "\r\n" +
-                            "не совпадают" + "\r\n" +
-                            " - период действия Специальных отметок превышает одни сутки" + "\r\n" +
-                            "*данные будут записаны по периоду действия Cпециальных отметок" +
-                            " с использованием времени из графика сотрудника " +
-                            timeIn + "-" + timeOut + "\r\n" + "\r\n" +
-                            "Продолжить?" + "\r\n",
-                            "Изменение даты и периода регистрации",
-                            MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Information,
-                            MessageBoxDefaultButton.Button1,
-                            MessageBoxOptions.DefaultDesktopOnly
-                            );
-                        if (result == DialogResult.Yes)
-                        {
-                            for (int i = 0; i < spCount; i++)                           //цикл по всем датам диапазона спец отметок начиная со следующего дня 
-                            {
-                                vDate = DateTime.Parse(vSpDateIn).AddDays(i);           //смещение на день
-                                KeyValuePair<int, DataRow> infoDate = pCalendar.checkDay(vDate);
-                                if (infoDate.Key==3 || infoDate.Key==5)                 //если это рабочие дни
-                                {
-                                    vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //Время прихода
-                                    vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
+                    }
+                }
+                for (int i = 0; i <= spCount; i++)                           //цикл по всем датам диапазона спец отметок начиная со следующего дня 
+                {
+                    vDate = DateTime.Parse(vSpDateIn).AddDays(i);           //смещение на день
+                    KeyValuePair<int, DataRow> infoDate = pCalendar.checkDay(vDate);
+                    if (infoDate.Key == 3 || infoDate.Key == 5)                 //если это рабочие дни
+                    {
+                        vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //Время прихода
+                        vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
 
-                                    WriteRecord(DateTime.Parse(vSpDateIn).Date, DateTime.Parse(vSpDateIn).Date, vSpDateIn, vSpDateOut);  //добавить/обновить запись прохода
+                        WriteRecord(DateTime.Parse(vSpDateIn).Date, DateTime.Parse(vSpDateIn).Date, vSpDateIn, vSpDateOut);  //добавить/обновить запись прохода
 
-                                    //       string vSpDateIn = smDStart.Value.ToString("yyyy-MM-dd") + " " + smTStart.Value.ToString("HH:mm");  //Дата начала спец. отметок
-                                    //       string vSpDateOut = smDStop.Value.ToString("yyyy-MM-dd") + " " + smTStop.Value.ToString("HH:mm");   //Дата окончания спец. отметок
-                                    //       string timeIn = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[3].Text;       //Время начала работы по графику
-                                    //       string timeOut = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[4].Text;      //Время окончания работы по графику
-
-                                }
-                            }
-                        }
-
-
-
+                                //       string vSpDateIn = smDStart.Value.ToString("yyyy-MM-dd") + " " + smTStart.Value.ToString("HH:mm");  //Дата начала спец. отметок
+                                //       string vSpDateOut = smDStop.Value.ToString("yyyy-MM-dd") + " " + smTStop.Value.ToString("HH:mm");   //Дата окончания спец. отметок
+                                //       string timeIn = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[3].Text;       //Время начала работы по графику
+                                //       string timeOut = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[4].Text;      //Время окончания работы по графику
 
                     }
+                }
+
                     /*
                           Else
 
@@ -581,7 +557,7 @@ namespace TimeWorkTracking
                           End If
                         End If
                     */
-                }
+                //}
 
             }
         }
