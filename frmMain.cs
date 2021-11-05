@@ -476,97 +476,93 @@ namespace TimeWorkTracking
         //кнопка Добавить/Обновить запись в БД
         private void btInsert_Click(object sender, EventArgs e)
         {
-            DateTime vDate = DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyyMMdd")); //Чистая дата без времени
-            DateTime vDateIn; 
-            DateTime vDateOut;
-            string vSpDateIn="";
+            DateTime vDate = mcRegDate.SelectionStart;                      //дата регистрации (00:00)
+            DateTime vDateIn;                                               //дата вермя входа
+            DateTime vDateOut;                                              //дата время выхода
+            string vSpDateIn ="";
             string vSpDateOut="";
             int spCount=0;
             string msg = "";
             DialogResult result= DialogResult.Yes;
 
+            vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //+ Время прихода
+            vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //+ Время ухода
+            vSpDateIn = smDStart.Value.ToString("yyyy-MM-dd") + " " + smTStart.Value.ToString("HH:mm");   //Дата начала спец. отметок
+            vSpDateOut = smDStop.Value.ToString("yyyy-MM-dd") + " " + smTStop.Value.ToString("HH:mm");    //Дата окончания спец. отметок
 
-            if (cbSMarks.Text == "-")
+
+            if (cbSMarks.Text == "-")                                       //спец отметок нет 
             {
-                vDateIn = DateTime.Parse(vDate.ToString("yyyyMMdd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //+ Время прихода
-                vDateOut = DateTime.Parse(vDate.ToString("yyyyMMdd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //+ Время ухода
                 WriteRecord(vDateIn, vDateOut, "-", "-");                   //Просто рабочий день
             }
-            else 
+            else                                                            //спец отметки есть
             {
-                vSpDateIn = smDStart.Value.ToString("yyyyMMdd") + " " + smTStart.Value.ToString("HH:mm");   //Дата начала спец. отметок
-                vSpDateOut = smDStop.Value.ToString("yyyyMMdd") + " " + smTStop.Value.ToString("HH:mm");    //Дата окончания спец. отметок
+                //количество дней в спецотметках
                 spCount = (DateTime.Parse(vSpDateOut) - DateTime.Parse(vSpDateIn)).Days; 
-            }
-
-            if (spCount == 0)
-            {
-                vDate = DateTime.Parse(vSpDateIn);       //Чистая дата без времени
-                vDateIn = DateTime.Parse(vDate.ToString("yyyyMMdd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //+ Время прихода
-                vDateOut = DateTime.Parse(vDate.ToString("yyyyMMdd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //+ Время ухода
-
-                result = DialogResult.Yes;
-                msg = "";
-                if (mcRegDate.SelectionStart.ToString("yyyyMMdd") != DateTime.Parse(vSpDateIn).ToString("yyyyMMdd"))
+                if (spCount == 0)                                           //если спец отметки занимают один день
                 {
-                    msg = "Обратите внимание" + "\r\n" + "\r\n" +
-                        mcRegDate.SelectionStart.ToString("dd.MM.yyyy") + " - текущая Дата Регистрации" + "\r\n" +
-                        DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - Дата начала Специальных отметок" + "\r\n" +
-                        "не совпадают" + "\r\n" +
-                        "*данные будут записаны на Дату начала Специальных отметок" + "\r\n" + "\r\n" +
-                        "Продолжить?" + "\r\n";
+                    //проверим дату начала действия спец отметок
+                    if(DateTime.Compare(vDate, DateTime.Parse(vSpDateIn).Date) !=0)
+                    {
+                        msg = "Обратите внимание" + "\r\n" + "\r\n" +
+                            vDate.ToString("dd.MM.yyyy") + " - текущая Дата Регистрации" + "\r\n" +
+                            DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - Дата начала Специальных отметок" + "\r\n" +
+                            "не совпадают" + "\r\n" +
+                            "*данные будут записаны на Дату начала Специальных отметок" + "\r\n" + "\r\n" +
+                            "Продолжить?" + "\r\n";
+
+                        result = MessageBox.Show(
+                            "Добавить запись",
+                            msg,
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Information,
+                            MessageBoxDefaultButton.Button1,
+                            MessageBoxOptions.DefaultDesktopOnly
+                            );
+                    }
+
+                    if (result == DialogResult.Yes)
+                        WriteRecord(vDateIn, vDateOut, vSpDateIn, vSpDateOut);              //Просто рабочий день
+                }
+                else
+                {
+                    string timeIn = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[3].Text;  //Время начала работы
+                    string timeOut = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[4].Text; //Время окончания работы
+
+                    result = DialogResult.Yes;
+                    msg = "";
+                    //-- обработка ошибок
+                    if (mcRegDate.SelectionStart.ToString("yyyyMMdd") != DateTime.Parse(vSpDateIn).ToString("yyyyMMdd"))
+                    {
+                        msg = "Обратите внимание" + "\r\n" + "\r\n" +
+                            mcRegDate.SelectionStart.ToString("dd.MM.yyyy") + " - текущая Дата Регистрации" + "\r\n" +
+                            DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - Дата начала Специальных отметок" + "\r\n" +
+                            "не совпадают" + "\r\n" +
+                            "*данные будут записаны на Дату начала Специальных отметок" + "\r\n" + "\r\n" +
+                            "Продолжить?" + "\r\n";
+                    }
+                    msg = msg + DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + "-" + DateTime.Parse(vSpDateOut).ToString("dd.MM.yyyy") +
+                            " - период действия Специальных отметок превышает одни сутки" + "\r\n" +
+                            "*данные будут записаны на данный период с использованием времени из графика сотрудника " +
+                            timeIn + "-" + timeOut + "\r\n" + "\r\n" +
+                            "Продолжить?" + "\r\n";
 
                     result = MessageBox.Show(
-                        "Добавить запись",
-                        msg,
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Information,
-                        MessageBoxDefaultButton.Button1,
-                        MessageBoxOptions.DefaultDesktopOnly
-                        );
-                }
-
-                if (result == DialogResult.Yes)
-                    WriteRecord(vDateIn, vDateOut, vSpDateIn, vSpDateOut);              //Просто рабочий день
-            }
-            else 
-            {
-                string timeIn = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[3].Text;  //Время начала работы
-                string timeOut = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[4].Text; //Время окончания работы
-
-                result = DialogResult.Yes;
-                msg = "";
-                //-- обработка ошибок
-                if (mcRegDate.SelectionStart.ToString("yyyyMMdd") != DateTime.Parse(vSpDateIn).ToString("yyyyMMdd"))
-                {
-                    msg = "Обратите внимание" + "\r\n" + "\r\n" +
-                        mcRegDate.SelectionStart.ToString("dd.MM.yyyy") + " - текущая Дата Регистрации" + "\r\n" +
-                        DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - Дата начала Специальных отметок" + "\r\n" +
-                        "не совпадают" + "\r\n" +
-                        "*данные будут записаны на Дату начала Специальных отметок" + "\r\n" + "\r\n" +
-                        "Продолжить?" + "\r\n";
-                }
-                msg = msg + DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + "-" + DateTime.Parse(vSpDateOut).ToString("dd.MM.yyyy") +
-                        " - период действия Специальных отметок превышает одни сутки" + "\r\n" +
-                        "*данные будут записаны на данный период с использованием времени из графика сотрудника " +
-                        timeIn + "-" + timeOut + "\r\n" + "\r\n" +
-                        "Продолжить?" + "\r\n";
-
-                result = MessageBox.Show(
-                        "Добавить запись",
-                        msg,
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Information,
-                        MessageBoxDefaultButton.Button1,
-                        MessageBoxOptions.DefaultDesktopOnly
-                        );
-                //-- обработка ошибок
-                if (result == DialogResult.Yes) 
-                {
-                    for (int i = 0; i < spCount; i++)                           //цикл по всем датам диапазона спец отметок начиная со следующего дня 
+                            "Добавить запись",
+                            msg,
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Information,
+                            MessageBoxDefaultButton.Button1,
+                            MessageBoxOptions.DefaultDesktopOnly
+                            );
+                    //-- обработка ошибок
+                    if (result == DialogResult.Yes)
                     {
-                        vDate = DateTime.Parse(vSpDateIn).AddDays(i);           //смещение на день
+                        for (int i = 0; i < spCount; i++)                           //цикл по всем датам диапазона спец отметок начиная со следующего дня 
+                        {
+                            vDate = DateTime.Parse(vSpDateIn).AddDays(i);           //смещение на день
 
+                        }
                     }
                 }
 
