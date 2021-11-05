@@ -11,7 +11,7 @@ namespace TimeWorkTracking
 {
     public partial class frmUsers : Form
     {
-        ListViewItemComparer _lvwItemComparer;
+        clListViewItemComparer _lvwItemComparer;
         public frmUsers()
         {
             InitializeComponent();
@@ -21,23 +21,23 @@ namespace TimeWorkTracking
         private void frmUsers_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            mainPanelUsers.Enabled = MsSqlDatabase.CheckConnectWithConnectionStr(cs);
+            mainPanelUsers.Enabled = clMsSqlDatabase.CheckConnectWithConnectionStr(cs);
             if (mainPanelUsers.Enabled)
             {
                 cbDepartment.DisplayMember = "Name";
                 cbDepartment.ValueMember = "id";
-                cbDepartment.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From UserDepartment where uses=1");
+                cbDepartment.DataSource = clMsSqlDatabase.TableRequest(cs, "Select id, name From UserDepartment where uses=1");
 
                 cbPost.DisplayMember = "Name";
                 cbPost.ValueMember = "id";
-                cbPost.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From UserPost where uses=1");
+                cbPost.DataSource = clMsSqlDatabase.TableRequest(cs, "Select id, name From UserPost where uses=1");
 
                 cbSheme.DisplayMember = "Name";
                 cbSheme.ValueMember = "id";
-                cbSheme.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From UserWorkScheme where uses=1 order by name desc");
+                cbSheme.DataSource = clMsSqlDatabase.TableRequest(cs, "Select id, name From UserWorkScheme where uses=1 order by name desc");
 
                 InitializeListView();
-                LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));
+                LoadList(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));
 
                 udBeforeH.Value = new DateTime(2000, 1, 1, 9, 0, 0);
                 udBeforeM.Value = new DateTime(2000, 1, 1, 9, 0, 0);
@@ -68,7 +68,7 @@ namespace TimeWorkTracking
             // object that performs the sorting of items in the ListView.
             // You can use the ListViewItemSorter property in combination
             // with the Sort method to perform custom sorting.
-            _lvwItemComparer = new ListViewItemComparer
+            _lvwItemComparer = new clListViewItemComparer
             {
                 SortColumn = 1,// 1;// e.Column; (3 name)       //сортировка по ФИО
                 Order = SortOrder.Ascending
@@ -259,9 +259,9 @@ namespace TimeWorkTracking
                 ((DataRowView)cbSheme.SelectedItem).Row["id"] + ", " +
                 (chUse.Checked ? 1 : 0) +
               ")";
-            MsSqlDatabase.RequestNonQuery(cs, sql, false);
+            clMsSqlDatabase.RequestNonQuery(cs, sql, false);
 
-            LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));// order by extId desc"));
+            LoadList(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));// order by extId desc"));
             lstwDataBaseUsers.extFindListByColValue(2, key);                   //найти и выделить позицию
             tbName_TextChanged(null, null);                                 //обновить поля и кнопки
         }
@@ -284,9 +284,9 @@ namespace TimeWorkTracking
                 "workSchemeId = " + ((DataRowView)cbSheme.SelectedItem).Row["id"] + ", " +
                 "uses = " + (chUse.Checked ? 1 : 0) + " " +
               "WHERE extId = '" + key + "'";                                //*extid (из даты)
-            MsSqlDatabase.RequestNonQuery(cs, sql, false);
+            clMsSqlDatabase.RequestNonQuery(cs, sql, false);
 
-            LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));// order by extId desc"));
+            LoadList(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));// order by extId desc"));
             lstwDataBaseUsers.extFindListByColValue(2, key);                   //найти и выделить позицию
             tbName_TextChanged(null, null);                                 //обновить поля и кнопки
         }
@@ -314,7 +314,7 @@ namespace TimeWorkTracking
         //кнопка импорт
         private void btImport_Click(object sender, EventArgs e)
         {
-            ImportFromExel.ImportFromExcel();
+            clImportFromExel.ImportFromExcel();
         }
 
         //при закрытии формы запустить сообщение 
