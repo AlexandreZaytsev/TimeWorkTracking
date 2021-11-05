@@ -354,7 +354,7 @@ namespace TimeWorkTracking
                     {                                               //если дата без переносов
                         imgSrc = "'data:image/png;base64, " + Properties.Resources.holiday_48.extImageToBase64Converter(ImageFormat.Png) + "'";
                         WORK_AREA =
-                            "<div style='font-size: 11pt;'>" + drow["dName"].ToString() + "</div>";// +
+                            "<div>" + drow["dName"].ToString() + "</div>";// +
 //                            "<div style='font-size: 9pt; text-align: center'>" + "\r\n(" + drow["dLength"].ToString().ToLower() + ")" + "</div>";
                     }
                     else
@@ -363,7 +363,7 @@ namespace TimeWorkTracking
                         {                                           //это перенесенная дата
                             imgSrc = "'data:image/png;base64, " + Properties.Resources.cDay_48.extImageToBase64Converter(ImageFormat.Png) + "'";
                             WORK_AREA = 
-                                "<div style='font-size: 10pt;'>" + "Нерабочий день" + "</div>" +
+                                "<div>" + "Нерабочий день" + "</div>" +
                                 "<br>"+
                                 "<div style='font-size: 9pt;'>" + "Перенесено с даты<br>" + ((DateTime)drow["dSource"]).ToString("dd.MM.yyyy г.") + "<br>" + drow["dName"].ToString() + "</div>";
                         }
@@ -375,7 +375,7 @@ namespace TimeWorkTracking
                             {                                       //праздник попадает на выходной
                                 imgSrc = "'data:image/png;base64, " + Properties.Resources.cDay_48.extImageToBase64Converter(ImageFormat.Png) + "'";
                                 WORK_AREA =
-                                    "<div style='font-size: 10pt;'>" + "Выходной день" + "</div>" +
+                                    "<div>" + "Выходной день" + "</div>" +
                                     "<br>"+
 //                                    "<div style='font-size: 9pt; text-align: center'>" + "(" + drow["dLength"].ToString().ToLower() + ")" + "</div>"+
                                     "<div style='font-size: 9pt;'>" + "Перенесено на дату" +"<br>" + 
@@ -387,7 +387,7 @@ namespace TimeWorkTracking
                             {                                       //праздник не попадает на выходной
                                 imgSrc = "'data:image/png;base64, " + Properties.Resources.cDay_48.extImageToBase64Converter(ImageFormat.Png) + "'";
                                 WORK_AREA =
-                                    "<div style='font-size: 10pt;'>" + "Рабочий день" + "</div>" +
+                                    "<div>" + "Рабочий день" + "</div>" +
                                     "<br>" +
 //                                    "<div style='font-size: 9pt; text-align: center'>" + "(" + drow["dLength"].ToString().ToLower() + ")" + "</div>" +
                                     "<div style='font-size: 9pt;'>" + "Перенесено на дату" + "<br>" +
@@ -406,20 +406,20 @@ namespace TimeWorkTracking
                 {
                     imgSrc = "'data:image/png;base64, " + Properties.Resources.cDay_48.extImageToBase64Converter(ImageFormat.Png) + "'";
                     WORK_AREA =
-                        "<div style='font-size: 10pt;'>" + "Выходной день" + "</div>";
+                        "<div>" + "Выходной день" + "</div>";
                 }
                 else 
                 {
                     imgSrc = "'data:image/png;base64, " + Properties.Resources.wDay_48.extImageToBase64Converter(ImageFormat.Png) + "'";
                     WORK_AREA =
-                        "<div style='font-size: 10pt;'>" + "Рабочий день" + "</div>";
+                        "<div>" + "Рабочий день" + "</div>";
                 }
             }
             WORK_AREA =
                 "<div style='font-size: 14pt; text-align: center;'>" + dayInfo.ToString("dd-MM-yyyy") + "&nbsp;"+
                 "<img src = " + imgSrc + " height = '24' width = '24' style='vertical-align: middle;'/>" +
                 "</div>" +
-                "<div style='text-align: center;'>" + WORK_AREA+"</div>";
+                "<div style='font-size: 12pt; text-align: center;'><hr>" + WORK_AREA+"</div>";
 
             string html = "<body " +
                             "style = '" +
