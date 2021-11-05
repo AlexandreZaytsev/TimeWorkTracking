@@ -10,7 +10,7 @@ using System.Globalization;
 
 namespace TimeWorkTracking
 {
-    class ImportFromExel
+    class clImportFromExel
     {
 
         public static void ImportFromExcel()

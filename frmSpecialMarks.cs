@@ -8,7 +8,7 @@ namespace TimeWorkTracking
 {
     public partial class frmSpecialMarks : Form
     {
-        ListViewItemComparer _lvwItemComparer;
+        clListViewItemComparer _lvwItemComparer;
         public frmSpecialMarks()
         {
             InitializeComponent();
@@ -19,11 +19,11 @@ namespace TimeWorkTracking
         private void frmSpecialMarks_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            mainPanelSpecialMarks.Enabled = MsSqlDatabase.CheckConnectWithConnectionStr(cs);
+            mainPanelSpecialMarks.Enabled = clMsSqlDatabase.CheckConnectWithConnectionStr(cs);
             if (mainPanelSpecialMarks.Enabled)
             {
                 InitializeListView();
-                LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));
+                LoadList(clMsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));
                 if (lstwDataBaseSpecialMarks.Items.Count != 0)
                     lstwDataBaseSpecialMarks.Items[0].Selected = true;     //выделить элемент по индексу
             }
@@ -42,7 +42,7 @@ namespace TimeWorkTracking
             // object that performs the sorting of items in the ListView.
             // You can use the ListViewItemSorter property in combination
             // with the Sort method to perform custom sorting.
-            _lvwItemComparer = new ListViewItemComparer
+            _lvwItemComparer = new clListViewItemComparer
             {
                 SortColumn = 5,                             //сортировка по id бд
                 Order = SortOrder.Ascending
@@ -189,9 +189,9 @@ namespace TimeWorkTracking
                 "N'" + tbNote.Text.Trim() + "', " +
                 (chUse.Checked ? 1 : 0) +
                 ")";
-            MsSqlDatabase.RequestNonQuery(cs, sql, false);
+            clMsSqlDatabase.RequestNonQuery(cs, sql, false);
  
-            LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));// order by extId desc"));
+            LoadList(clMsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));// order by extId desc"));
             lstwDataBaseSpecialMarks.extFindListByColValue(3, key);            //найти и выделить позицию
             tbName_TextChanged(null, null);                                 //обновить поля и кнопки
         }
@@ -208,9 +208,9 @@ namespace TimeWorkTracking
                 "note = N'" + tbNote.Text.Trim() + "', " +
                 "uses = " + (chUse.Checked ? 1 : 0) + " " +
               "WHERE id = " + tbID.Text.Trim() + "";
-            MsSqlDatabase.RequestNonQuery(cs, sql, false);
+            clMsSqlDatabase.RequestNonQuery(cs, sql, false);
 
-            LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));// order by extId desc"));
+            LoadList(clMsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));// order by extId desc"));
             lstwDataBaseSpecialMarks.extFindListByColValue(3, key);            //найти и выделить позицию
             tbName_TextChanged(null, null);                                 //обновить поля и кнопки
         }

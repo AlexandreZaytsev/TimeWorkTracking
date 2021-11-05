@@ -9,7 +9,7 @@ using System.Data;
 
 namespace TimeWorkTracking
 {
-    class MsSqlDatabase
+    class clMsSqlDatabase
     {
         //создать БД по строке подключения
         private static void CreateDatabase(string connectionString)

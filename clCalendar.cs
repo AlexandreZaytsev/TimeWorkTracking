@@ -6,12 +6,12 @@ using System.Text;
 
 namespace TimeWorkTracking
 {
-    class Calendar 
+    class clCalendar 
     {
         private DataTable dtWorkCalendar;                                           //производственный календаоь
-        public Calendar(string cs, string sql)                      //конструктор
+        public clCalendar(string cs, string sql)                      //конструктор
         {
-            dtWorkCalendar = MsSqlDatabase.TableRequest(cs, sql);
+            dtWorkCalendar = clMsSqlDatabase.TableRequest(cs, sql);
         }
 
         //получить все даты праздников (перенос)

@@ -50,7 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Calendar.cs" />
+    <Compile Include="clCalendar.cs" />
     <Compile Include="frmCalendar.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,9 +87,9 @@
     <Compile Include="frmUsers.Designer.cs">
       <DependentUpon>frmUsers.cs</DependentUpon>
     </Compile>
-    <Compile Include="ImportFromExel.cs" />
-    <Compile Include="ListViewItemComparer.cs" />
-    <Compile Include="MsSqlDatabase.cs" />
+    <Compile Include="clImportFromExel.cs" />
+    <Compile Include="clListViewItemComparer.cs" />
+    <Compile Include="clMsSqlDatabase.cs" />
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>

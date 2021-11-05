@@ -79,7 +79,7 @@ namespace TimeWorkTracking
             bool ret = false;
             string connectionString = GetFormConnectionString();        //полчить строку соединения по настройкам формы
             StringBuilder Messages = new StringBuilder();
-            string statusDB = MsSqlDatabase.GetSqlConnection(connectionString);
+            string statusDB = clMsSqlDatabase.GetSqlConnection(connectionString);
             switch (statusDB)
             {
                 case "-1":      //бд не существует
@@ -135,7 +135,7 @@ namespace TimeWorkTracking
             string connectionString = GetFormConnectionString();        //полчить строку соединения по настройкам формы
             if (connectionString !="" && tbDatabaseTWT.Text != "")
             {
-                MsSqlDatabase.CreateDataBase(connectionString);
+                clMsSqlDatabase.CreateDataBase(connectionString);
                 if (TestFormConnectionTwt())                            //проверить соединение по настройкам формы
                     this.Close();// Hide();                                        //закрыть форму
             }
@@ -144,7 +144,7 @@ namespace TimeWorkTracking
         //проверить соединение с базами
         private void CheckConnects()
         {
-            if (MsSqlDatabase.CheckConnectWithConnectionStr(Properties.Settings.Default.twtConnectionSrting))
+            if (clMsSqlDatabase.CheckConnectWithConnectionStr(Properties.Settings.Default.twtConnectionSrting))
                 this.picStatusTWT.Image = Properties.Resources.ok;
             else
                 this.picStatusTWT.Image = Properties.Resources.no;

@@ -9,12 +9,12 @@ namespace TimeWorkTracking
 {
     //https://www.akadia.com/services/dotnet_listview_sort_dataset.html
     // Этот класс является реализацией интерфейса IComparer
-    public class ListViewItemComparer : IComparer
+    public class clListViewItemComparer : IComparer
     {
         private int ColumnToSort;                               //Определяет столбец для сортировки
         private SortOrder OrderOfSort;                          //Определяет порядок сортировки (т.е. «По возрастанию»).
         private readonly CaseInsensitiveComparer ObjectCompare; //Объект сравнения без учета регистра
-        public ListViewItemComparer()                           //Конструктор класса, инициализирует различные элементы
+        public clListViewItemComparer()                           //Конструктор класса, инициализирует различные элементы
         {
             ColumnToSort = 0;                                   //Инициализирует столбец равным 0
             OrderOfSort = SortOrder.None;                       //Инициализируем порядок сортировки как «нет»

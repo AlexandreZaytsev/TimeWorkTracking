@@ -19,8 +19,8 @@ namespace TimeWorkTracking
 {
     public partial class frmMain : Form
     {
-        ListViewItemComparer _lvwItemComparer;                              //объект сортировки по колонкам
-        private Calendar pCalendar;                                         //класс производственный календаоь
+        clListViewItemComparer _lvwItemComparer;                              //объект сортировки по колонкам
+        private clCalendar pCalendar;                                         //класс производственный календаоь
 
         public frmMain()
         {
@@ -44,7 +44,7 @@ namespace TimeWorkTracking
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             if (CheckConnects())                                //проверить соединение с базами
             {
-                pCalendar = new Calendar(cs, "Select * From twt_GetDateInfo('', '') order by dWork");
+                pCalendar = new clCalendar(cs, "Select * From twt_GetDateInfo('', '') order by dWork");
 //                dtWorkCalendar = MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('', '') order by dWork");
 //                LoadBoldedDatesCalendar(dtWorkCalendar);          //Загрузить производственный календарь в массив непериодических выделенных дат
                 LoadBoldedDatesCalendar(pCalendar.getHoliday());    //Загрузить производственный календарь в массив непериодических выделенных дат
@@ -52,10 +52,10 @@ namespace TimeWorkTracking
 
                 cbSMarks.DisplayMember = "Name";
                 cbSMarks.ValueMember = "id";
-                cbSMarks.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From SpecialMarks where uses=1");
+                cbSMarks.DataSource = clMsSqlDatabase.TableRequest(cs, "Select id, name From SpecialMarks where uses=1");
 
                 InitializeListView();
-                LoadListUser(MsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
+                LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
                 mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
             }
         }
@@ -75,7 +75,7 @@ namespace TimeWorkTracking
             // object that performs the sorting of items in the ListView.
             // You can use the ListViewItemSorter property in combination
             // with the Sort method to perform custom sorting.
-            _lvwItemComparer = new ListViewItemComparer
+            _lvwItemComparer = new clListViewItemComparer
             {
                 SortColumn = 1,// 1;// e.Column; (3 name)       //сортировка по ФИО
                 Order = SortOrder.Ascending
@@ -221,7 +221,7 @@ namespace TimeWorkTracking
         {
             //проверка соединения с SQL
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            bool conSQL = MsSqlDatabase.CheckConnectWithConnectionStr(cs);
+            bool conSQL = clMsSqlDatabase.CheckConnectWithConnectionStr(cs);
             this.tsbtDataBaseSQL.Image = conSQL ? Properties.Resources.ok : Properties.Resources.no;
             mainPanelRegistration.Enabled = conSQL && lstwDataBaseMain.Items.Count > 0;
             return conSQL;
@@ -311,7 +311,7 @@ namespace TimeWorkTracking
         {
             getDateInfo(e.Start);
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            LoadListUser(MsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
+            LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
 
             /*
             var firstDayOfMonth = new DateTime(e.Start.Year, e.Start.Month, 1);
@@ -442,7 +442,7 @@ namespace TimeWorkTracking
         private void CallbackCheckListUsers(string controlName, string controlParentName, Dictionary<String, String> param)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            LoadListUser(MsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
+            LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
             mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
         }
 

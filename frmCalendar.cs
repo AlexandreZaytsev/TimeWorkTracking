@@ -11,7 +11,7 @@ namespace TimeWorkTracking
 {
     public partial class frmCalendar : Form
     {
-        ListViewItemComparer _lvwItemComparer;
+        clListViewItemComparer _lvwItemComparer;
         public frmCalendar()
         {
             InitializeComponent();
@@ -22,18 +22,18 @@ namespace TimeWorkTracking
         private void frmCalendar_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            mainPanelCalendar.Enabled = MsSqlDatabase.CheckConnectWithConnectionStr(cs);
+            mainPanelCalendar.Enabled = clMsSqlDatabase.CheckConnectWithConnectionStr(cs);
             if (mainPanelCalendar.Enabled)
             {
                 //сначала вспомогательные данные
                 cbDataType.DisplayMember = "Name";
                 cbDataType.ValueMember = "id";
-                cbDataType.DataSource = MsSqlDatabase.TableRequest(cs, "Select id, name From CalendarLengthDay where uses=1");
+                cbDataType.DataSource = clMsSqlDatabase.TableRequest(cs, "Select id, name From CalendarLengthDay where uses=1");
                 cbDataType.SelectedValue = "2";
 
                 //таблица типа дня
                 InitializeListViewDaysCalendar();
-                LoadListDaysCalendar(MsSqlDatabase.TableRequest(cs, "Select * From CalendarDateName where uses=1"));     //сортировка по рабочей (перенос) дате
+                LoadListDaysCalendar(clMsSqlDatabase.TableRequest(cs, "Select * From CalendarDateName where uses=1"));     //сортировка по рабочей (перенос) дате
 //                lstwDataBaseDaysCalendar.AutoResizeColumn(2, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
                 if (lstwDataBaseDaysCalendar.Items.Count != 0)
                     lstwDataBaseDaysCalendar.Items[0].Selected = true;     //выделить элемент по индексу
@@ -41,7 +41,7 @@ namespace TimeWorkTracking
                 //потом основную таблицу
                 //таблица календаря
                 InitializeListViewCalendar();
-                LoadListCalendar(MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') order by dWork"));     //сортировка по рабочей (перенос) дате
+                LoadListCalendar(clMsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') order by dWork"));     //сортировка по рабочей (перенос) дате
                 if (lstwDataBaseCalendar.Items.Count != 0)
                 {
                     lstwDataBaseCalendar.Items[0].Selected = true;     //выделить элемент по индексу
@@ -69,7 +69,7 @@ namespace TimeWorkTracking
             // object that performs the sorting of items in the ListView.
             // You can use the ListViewItemSorter property in combination
             // with the Sort method to perform custom sorting.
-            _lvwItemComparer = new ListViewItemComparer
+            _lvwItemComparer = new clListViewItemComparer
             {
                 SortColumn = 2,                             //сортировка по рабочей дате
                 Order = SortOrder.Ascending
@@ -335,9 +335,9 @@ namespace TimeWorkTracking
                 ((DataRowView)cbDataType.SelectedItem).Row["id"] + ", " +
                 (chUse.Checked ? 1 : 0) +
                 ")";
-            MsSqlDatabase.RequestNonQuery(cs, sql, false);
+            clMsSqlDatabase.RequestNonQuery(cs, sql, false);
 
-            LoadListCalendar(MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') order by dWork"));     //сортировка по рабочей (перенос) дате
+            LoadListCalendar(clMsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') order by dWork"));     //сортировка по рабочей (перенос) дате
             lstwDataBaseCalendar.extFindListByColValue(1, key);                //найти и выделить позицию
             dtWork_ValueChanged(null,null);                                 //обновить статус кнопок
         }
@@ -357,9 +357,9 @@ namespace TimeWorkTracking
                 "dayLengthId = " + ((DataRowView)cbDataType.SelectedItem).Row["id"] + ", " +
                 "uses = " + (chUse.Checked ? 1 : 0) + " " +
               "WHERE transferDate = '" + keySQL + "'";                      //*рабочая дата (дата переноса)
-            MsSqlDatabase.RequestNonQuery(cs, sql, false);
+            clMsSqlDatabase.RequestNonQuery(cs, sql, false);
 
-            LoadListCalendar(MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') order by dWork"));     //сортировка по рабочей (перенос) дате
+            LoadListCalendar(clMsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') order by dWork"));     //сортировка по рабочей (перенос) дате
             lstwDataBaseCalendar.extFindListByColValue(1, key);                //найти и выделить позицию
             dtWork_ValueChanged(null, null);                                //обновить статус кнопок
         }
@@ -374,9 +374,9 @@ namespace TimeWorkTracking
             string sql =
               "DELETE FROM Calendars " +
               "WHERE transferDate = '" + keySQL + "'";                      //*рабочая дата (дата переноса)
-            MsSqlDatabase.RequestNonQuery(cs, sql, false);
+            clMsSqlDatabase.RequestNonQuery(cs, sql, false);
 
-            LoadListCalendar(MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') order by dWork"));     //сортировка по рабочей (перенос) дате
+            LoadListCalendar(clMsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') order by dWork"));     //сортировка по рабочей (перенос) дате
             if (lstwDataBaseCalendar.Items.Count != 0)
                 lstwDataBaseCalendar.extFindListByColValue(1, lstwDataBaseCalendar.Items[0].SubItems[1].Text);            //найти и выделить позицию
             dtWork_ValueChanged(null, null);                                //обновить статус кнопок
