@@ -49,7 +49,6 @@ namespace TimeWorkTracking
             this.imageListStrip = new System.Windows.Forms.ImageList(this.components);
             this.mainPanelRegistration = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.webInfoDay = new System.Windows.Forms.WebBrowser();
             this.grUsers = new System.Windows.Forms.GroupBox();
             this.panel5 = new System.Windows.Forms.Panel();
             this.tbSatusList = new System.Windows.Forms.TextBox();
@@ -84,16 +83,13 @@ namespace TimeWorkTracking
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.gbNavigator = new System.Windows.Forms.GroupBox();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.pbDay = new System.Windows.Forms.PictureBox();
-            this.lbDayValue = new System.Windows.Forms.Label();
-            this.lbDay = new System.Windows.Forms.Label();
             this.mcRegDate = new System.Windows.Forms.MonthCalendar();
             this.btInsert = new System.Windows.Forms.Button();
             this.imgListButtonMain = new System.Windows.Forms.ImageList(this.components);
             this.btUpdate = new System.Windows.Forms.Button();
             this.lMsg = new System.Windows.Forms.Label();
             this.toolTipMsgMain = new System.Windows.Forms.ToolTip(this.components);
+            this.webInfoDay = new System.Windows.Forms.WebBrowser();
             this.statusStripMain.SuspendLayout();
             this.mainPanelRegistration.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -103,8 +99,6 @@ namespace TimeWorkTracking
             this.panel7.SuspendLayout();
             this.pPacs.SuspendLayout();
             this.gbNavigator.SuspendLayout();
-            this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbDay)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStripMain
@@ -132,7 +126,7 @@ namespace TimeWorkTracking
             this.statusStripMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStripMain.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.statusStripMain.ShowItemToolTips = true;
-            this.statusStripMain.Size = new System.Drawing.Size(1241, 26);
+            this.statusStripMain.Size = new System.Drawing.Size(974, 26);
             this.statusStripMain.SizingGrip = false;
             this.statusStripMain.TabIndex = 15;
             this.statusStripMain.Text = "statusStrip1";
@@ -170,7 +164,7 @@ namespace TimeWorkTracking
             // 
             this.toolStripStatusLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(621, 20);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(354, 20);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "    Справочники:";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -272,7 +266,6 @@ namespace TimeWorkTracking
             // 
             // mainPanelRegistration
             // 
-            this.mainPanelRegistration.Controls.Add(this.panel3);
             this.mainPanelRegistration.Controls.Add(this.grUsers);
             this.mainPanelRegistration.Controls.Add(this.grRegistrator);
             this.mainPanelRegistration.Controls.Add(this.gbNavigator);
@@ -284,27 +277,17 @@ namespace TimeWorkTracking
             this.mainPanelRegistration.Location = new System.Drawing.Point(0, 26);
             this.mainPanelRegistration.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.mainPanelRegistration.Name = "mainPanelRegistration";
-            this.mainPanelRegistration.Size = new System.Drawing.Size(1241, 696);
+            this.mainPanelRegistration.Size = new System.Drawing.Size(974, 696);
             this.mainPanelRegistration.TabIndex = 16;
             // 
             // panel3
             // 
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel3.Controls.Add(this.webInfoDay);
-            this.panel3.Location = new System.Drawing.Point(969, 33);
+            this.panel3.Location = new System.Drawing.Point(243, 28);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(243, 200);
             this.panel3.TabIndex = 39;
-            // 
-            // webInfoDay
-            // 
-            this.webInfoDay.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webInfoDay.Location = new System.Drawing.Point(0, 0);
-            this.webInfoDay.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webInfoDay.Name = "webInfoDay";
-            this.webInfoDay.ScrollBarsEnabled = false;
-            this.webInfoDay.Size = new System.Drawing.Size(241, 198);
-            this.webInfoDay.TabIndex = 0;
             // 
             // grUsers
             // 
@@ -724,7 +707,7 @@ namespace TimeWorkTracking
             // 
             // gbNavigator
             // 
-            this.gbNavigator.Controls.Add(this.panel2);
+            this.gbNavigator.Controls.Add(this.panel3);
             this.gbNavigator.Controls.Add(this.mcRegDate);
             this.gbNavigator.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.gbNavigator.Location = new System.Drawing.Point(471, 6);
@@ -735,55 +718,6 @@ namespace TimeWorkTracking
             this.gbNavigator.TabIndex = 36;
             this.gbNavigator.TabStop = false;
             this.gbNavigator.Text = "Производственный каледнарь";
-            // 
-            // panel2
-            // 
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.pbDay);
-            this.panel2.Controls.Add(this.lbDayValue);
-            this.panel2.Controls.Add(this.lbDay);
-            this.panel2.Location = new System.Drawing.Point(243, 28);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(243, 200);
-            this.panel2.TabIndex = 8;
-            // 
-            // pbDay
-            // 
-            this.pbDay.Image = global::TimeWorkTracking.Properties.Resources.holiday_48;
-            this.pbDay.Location = new System.Drawing.Point(201, 1);
-            this.pbDay.Margin = new System.Windows.Forms.Padding(4);
-            this.pbDay.Name = "pbDay";
-            this.pbDay.Size = new System.Drawing.Size(39, 38);
-            this.pbDay.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbDay.TabIndex = 5;
-            this.pbDay.TabStop = false;
-            // 
-            // lbDayValue
-            // 
-            this.lbDayValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lbDayValue.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-            this.lbDayValue.ImageIndex = 11;
-            this.lbDayValue.Location = new System.Drawing.Point(0, 3);
-            this.lbDayValue.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lbDayValue.Name = "lbDayValue";
-            this.lbDayValue.Size = new System.Drawing.Size(241, 37);
-            this.lbDayValue.TabIndex = 7;
-            this.lbDayValue.Text = "дата";
-            this.lbDayValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lbDay
-            // 
-            this.lbDay.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lbDay.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lbDay.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-            this.lbDay.ImageIndex = 11;
-            this.lbDay.Location = new System.Drawing.Point(0, 57);
-            this.lbDay.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lbDay.Name = "lbDay";
-            this.lbDay.Size = new System.Drawing.Size(241, 141);
-            this.lbDay.TabIndex = 4;
-            this.lbDay.Text = "наименование дня";
-            this.lbDay.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // mcRegDate
             // 
@@ -860,11 +794,22 @@ namespace TimeWorkTracking
             this.lMsg.Text = "      Новая запись в БД";
             this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // webInfoDay
+            // 
+            this.webInfoDay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webInfoDay.Location = new System.Drawing.Point(0, 0);
+            this.webInfoDay.Margin = new System.Windows.Forms.Padding(0);
+            this.webInfoDay.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webInfoDay.Name = "webInfoDay";
+            this.webInfoDay.ScrollBarsEnabled = false;
+            this.webInfoDay.Size = new System.Drawing.Size(241, 198);
+            this.webInfoDay.TabIndex = 0;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1241, 722);
+            this.ClientSize = new System.Drawing.Size(974, 722);
             this.Controls.Add(this.mainPanelRegistration);
             this.Controls.Add(this.statusStripMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -892,8 +837,6 @@ namespace TimeWorkTracking
             this.pPacs.ResumeLayout(false);
             this.pPacs.PerformLayout();
             this.gbNavigator.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pbDay)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -957,10 +900,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.CheckBox chPacsOut;
         private System.Windows.Forms.CheckBox chPacsIn;
         private System.Windows.Forms.MonthCalendar mcRegDate;
-        private System.Windows.Forms.Label lbDay;
-        private System.Windows.Forms.PictureBox pbDay;
-        private System.Windows.Forms.Label lbDayValue;
-        private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.WebBrowser webInfoDay;
     }

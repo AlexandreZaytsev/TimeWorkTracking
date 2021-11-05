@@ -153,7 +153,7 @@ namespace TimeWorkTracking
         {
             if (lstwDataBaseCalendar.Focused || lstwDataBaseCalendar.SelectedItems.Count>0)                      //если календарь активен (в фокусе)
             {
-                int ind = lstwDataBaseCalendar.SelectedIndex();
+                int ind = lstwDataBaseCalendar.extSelectedIndex();
                 if (ind >= 0)
                 {
 
@@ -234,7 +234,7 @@ namespace TimeWorkTracking
         {
             if (lstwDataBaseDaysCalendar.Focused)                      //если календарь дат активен (в фокусе)
             {     
-                int ind = lstwDataBaseDaysCalendar.SelectedIndex();             //индекс выделенной строки
+                int ind = lstwDataBaseDaysCalendar.extSelectedIndex();             //индекс выделенной строки
                 lbdtSource.Font = new System.Drawing.Font(lbdtSource.Font, System.Drawing.FontStyle.Regular);
                 if (ind >= 0)                                                    //если есть выделенная строка
                 {
@@ -292,7 +292,7 @@ namespace TimeWorkTracking
         private void dtWork_ValueChanged(object sender, EventArgs e)
         {
             lbDirect.Text = dtWork.Value != dtSource.Value ? "ï" : "ó";
-            if (lstwDataBaseCalendar.FindListByColValue(1, dtWork.Value.ToString("yyyy-MM-dd")) >= 0) 
+            if (lstwDataBaseCalendar.extFindListByColValue(1, dtWork.Value.ToString("yyyy-MM-dd")) >= 0) 
             {
                 lbdtWork.Font = new System.Drawing.Font(lbdtSource.Font, System.Drawing.FontStyle.Bold);
                 btInsert.Enabled = false;                               //заблокировать кнопку INSERT    
@@ -331,14 +331,14 @@ namespace TimeWorkTracking
               "VALUES ( " +
                 "'" + dtSource.Value.ToString("yyyyMMdd") + "', " +       //оригинальная дата
                 "'" + keySQL + "', " +                                    //*рабочая дата (дата переноса)
-                lstwDataBaseDaysCalendar.Items[lstwDataBaseDaysCalendar.SelectedIndex()].SubItems[4].Text + ", " +
+                lstwDataBaseDaysCalendar.Items[lstwDataBaseDaysCalendar.extSelectedIndex()].SubItems[4].Text + ", " +
                 ((DataRowView)cbDataType.SelectedItem).Row["id"] + ", " +
                 (chUse.Checked ? 1 : 0) +
                 ")";
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
 
             LoadListCalendar(MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') order by dWork"));     //сортировка по рабочей (перенос) дате
-            lstwDataBaseCalendar.FindListByColValue(1, key);                //найти и выделить позицию
+            lstwDataBaseCalendar.extFindListByColValue(1, key);                //найти и выделить позицию
             dtWork_ValueChanged(null,null);                                 //обновить статус кнопок
         }
 
@@ -353,14 +353,14 @@ namespace TimeWorkTracking
               "UPDATE Calendars Set " +
                 "originalDate = '" + dtSource.Value.ToString("yyyyMMdd") + "', " +
                 "transferDate = '" + keySQL + "', " +
-                "dateNameId = " + lstwDataBaseDaysCalendar.Items[lstwDataBaseDaysCalendar.SelectedIndex()].SubItems[4].Text + ", " +
+                "dateNameId = " + lstwDataBaseDaysCalendar.Items[lstwDataBaseDaysCalendar.extSelectedIndex()].SubItems[4].Text + ", " +
                 "dayLengthId = " + ((DataRowView)cbDataType.SelectedItem).Row["id"] + ", " +
                 "uses = " + (chUse.Checked ? 1 : 0) + " " +
               "WHERE transferDate = '" + keySQL + "'";                      //*рабочая дата (дата переноса)
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
 
             LoadListCalendar(MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') order by dWork"));     //сортировка по рабочей (перенос) дате
-            lstwDataBaseCalendar.FindListByColValue(1, key);                //найти и выделить позицию
+            lstwDataBaseCalendar.extFindListByColValue(1, key);                //найти и выделить позицию
             dtWork_ValueChanged(null, null);                                //обновить статус кнопок
         }
 
@@ -378,7 +378,7 @@ namespace TimeWorkTracking
 
             LoadListCalendar(MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('','') order by dWork"));     //сортировка по рабочей (перенос) дате
             if (lstwDataBaseCalendar.Items.Count != 0)
-                lstwDataBaseCalendar.FindListByColValue(1, lstwDataBaseCalendar.Items[0].SubItems[1].Text);            //найти и выделить позицию
+                lstwDataBaseCalendar.extFindListByColValue(1, lstwDataBaseCalendar.Items[0].SubItems[1].Text);            //найти и выделить позицию
             dtWork_ValueChanged(null, null);                                //обновить статус кнопок
         }
 

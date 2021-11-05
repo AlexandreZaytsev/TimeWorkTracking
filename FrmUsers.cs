@@ -137,7 +137,7 @@ namespace TimeWorkTracking
         private void lstwDataBaseUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
             DateTime dt;
-            int ind = lstwDataBaseUsers.SelectedIndex();
+            int ind = lstwDataBaseUsers.extSelectedIndex();
             if (ind >= 0)
             {
                 tbExtID.Text = lstwDataBaseUsers.Items[ind].SubItems[2].Text;                   //extID
@@ -262,7 +262,7 @@ namespace TimeWorkTracking
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
 
             LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));// order by extId desc"));
-            lstwDataBaseUsers.FindListByColValue(2, key);                   //найти и выделить позицию
+            lstwDataBaseUsers.extFindListByColValue(2, key);                   //найти и выделить позицию
             tbName_TextChanged(null, null);                                 //обновить поля и кнопки
         }
 
@@ -287,7 +287,7 @@ namespace TimeWorkTracking
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
 
             LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));// order by extId desc"));
-            lstwDataBaseUsers.FindListByColValue(2, key);                   //найти и выделить позицию
+            lstwDataBaseUsers.extFindListByColValue(2, key);                   //найти и выделить позицию
             tbName_TextChanged(null, null);                                 //обновить поля и кнопки
         }
 

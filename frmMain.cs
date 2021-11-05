@@ -143,7 +143,7 @@ namespace TimeWorkTracking
         private void lstwDataBaseMain_SelectedIndexChanged(object sender, EventArgs e)
         {
             DateTime dt;
-            int ind = lstwDataBaseMain.SelectedIndex();
+            int ind = lstwDataBaseMain.extSelectedIndex();
             if (ind >= 0)
             {
  //               tbExtID.Text = lstwDataBaseUsers.Items[ind].SubItems[2].Text;                 //extID
@@ -335,8 +335,11 @@ namespace TimeWorkTracking
         //прочитать харектеристики дня по производственному календарю 
         private void getDateInfo(DateTime dayInfo, DataTable dtable)
         {
+                
             bool check = false;
-            lbDayValue.Text = dayInfo.ToString("dd-MM-yyyy");
+            string WORK_AREA = "";
+            string imgSrc = "";
+
             for (int i = 0; i < dtable.Rows.Count; i++)             //Display items in the ListView control
             {
                 DataRow drow = dtable.Rows[i];
@@ -349,40 +352,48 @@ namespace TimeWorkTracking
                     check = true;
                     if (DateTime.Compare((DateTime)drow["dWork"], (DateTime)drow["dSource"]) == 0)
                     {                                               //если дата без переносов
-                        lbDay.Text = drow["dName"].ToString();// +      //наименование дня из производственного календаря
-                  //          "\r\n(" + drow["dLength"].ToString().ToLower() + ")"
-                                
-                        pbDay.Visible = true;
+                        imgSrc = "'data:image/png;base64, " + Properties.Resources.holiday_48.extImageToBase64Converter(ImageFormat.Png) + "'";
+                        WORK_AREA =
+                            "<div style='font-size: 11pt;'>" + drow["dName"].ToString() + "</div>";// +
+//                            "<div style='font-size: 9pt; text-align: center'>" + "\r\n(" + drow["dLength"].ToString().ToLower() + ")" + "</div>";
                     }
                     else
                     {                                               //дата с переносом
                         if (DateTime.Compare((DateTime)drow["dWork"], dayInfo) == 0)
                         {                                           //это перенесенная дата
-//                            lbDay.Text = dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday ? "Выходной день" : "Рабочий день";// drow["dName"].ToString();
-//                            lbDay.Text = drow["dName"].ToString();  //наименование дня из производственного календаря
-                            lbDay.Text = "Нерабочий день" +
-                //                "\r\n(" + drow["dLength"].ToString().ToLower() + ")" +
-                                "\r\n\r\n" + "Перенесено с даты\r\n  " + ((DateTime)drow["dSource"]).ToString("dd.MM.yyyy г.") + "\r\n" + drow["dName"].ToString();
-                            pbDay.Visible = true;
+                            imgSrc = "'data:image/png;base64, " + Properties.Resources.cDay_48.extImageToBase64Converter(ImageFormat.Png) + "'";
+                            WORK_AREA = 
+                                "<div style='font-size: 10pt;'>" + "Нерабочий день" + "</div>" +
+                                "<br>"+
+                                "<div style='font-size: 9pt;'>" + "Перенесено с даты<br>" + ((DateTime)drow["dSource"]).ToString("dd.MM.yyyy г.") + "<br>" + drow["dName"].ToString() + "</div>";
                         }
                         else
                         {                                           //это реальный праздник
                             //дополнительная прверка на дату реального праздника
-                            
                             //if (dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday)
                             if(drow["dType"].ToString()== "Праздничный")
                             {                                       //праздник попадает на выходной
-                                lbDay.Text = "Выходной день" +
-                                "\r\n(" + drow["dLength"].ToString().ToLower() + ")" +
-                                "\r\n\r\n" + "Перенесено на дату\r\n  " + ((DateTime)drow["dWork"]).ToString("dd.MM.yyyy г.") + "\r\n" + drow["dName"].ToString();
-                                pbDay.Visible = false;
+                                imgSrc = "'data:image/png;base64, " + Properties.Resources.cDay_48.extImageToBase64Converter(ImageFormat.Png) + "'";
+                                WORK_AREA =
+                                    "<div style='font-size: 10pt;'>" + "Выходной день" + "</div>" +
+                                    "<br>"+
+//                                    "<div style='font-size: 9pt; text-align: center'>" + "(" + drow["dLength"].ToString().ToLower() + ")" + "</div>"+
+                                    "<div style='font-size: 9pt;'>" + "Перенесено на дату" +"<br>" + 
+                                    ((DateTime)drow["dWork"]).ToString("dd.MM.yyyy г.") + "<br>" + 
+                                    drow["dName"].ToString() + 
+                                    "</div>";
                             }
                             else
                             {                                       //праздник не попадает на выходной
-                                lbDay.Text = "Рабочий день" +
-                                "\r\n(" + drow["dLength"].ToString().ToLower() + ")" +
-                                "\r\n\r\n" + "Перенесено на дату\r\n  " + ((DateTime)drow["dWork"]).ToString("dd.MM.yyyy г.") + "\r\n" + drow["dName"].ToString();
-                                pbDay.Visible = false;
+                                imgSrc = "'data:image/png;base64, " + Properties.Resources.cDay_48.extImageToBase64Converter(ImageFormat.Png) + "'";
+                                WORK_AREA =
+                                    "<div style='font-size: 10pt;'>" + "Рабочий день" + "</div>" +
+                                    "<br>" +
+//                                    "<div style='font-size: 9pt; text-align: center'>" + "(" + drow["dLength"].ToString().ToLower() + ")" + "</div>" +
+                                    "<div style='font-size: 9pt;'>" + "Перенесено на дату" + "<br>" +
+                                    ((DateTime)drow["dWork"]).ToString("dd.MM.yyyy г.") + "<br>" +
+                                    drow["dName"].ToString() +
+                                    "</div>";
                             }
 
                         }
@@ -391,54 +402,32 @@ namespace TimeWorkTracking
             }
             if (!check) 
             {
-                lbDay.Text = dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday? "Выходной день":"Рабочий день";
-                pbDay.Visible = false;
-            }
-
-
-            /*
-                        string strMsg = "<style>" +
-                                         "  * { " +
-                                         "    font-size: 10pt; " +
-                                         "  }" +
-                                         "  .descr {" +
-                                         //"    font-size: 9pt; " +
-                                         "    font-weight:bold " +
-                                         "  }" +
-                                         "  table {" +
-                                         //    "border: 1px solid black; "+
-                                         "    width:100%;" +
-                                         "    border - collapse: collapse; " +
-                                         "  }" +
-                                         "  th {" +
-                                         "    text-align: left; " +
-                                         //    "font-size: 11pt; " +
-                                         "    font-weight:normal; " +
-                                         "    background-color: rgb(240, 240, 240);" +
-                                         "  }" +
-                                         "</style>" +
-                                         "<body>" +// bgcolor='#FFEFD5'>" +
-                                         "<span class='descr'>&#128270;&nbsp;" + "Create " + "payloadName" + " payload string ERROR(s)" + "</span>" +
-                                         "<hr><table><tbody>";
-            */
-            string WORK_AREA = @" <img src='data:image/png;base64, " + Properties.Resources.holiday_48.getBase64StrToHTML(ImageFormat.Png) + "' height='32' width='32'/>";
-            /*
-            foreach (var err in errorList)
-            {
-                strMsg += "<tr><th colspan='2'>" + err.ConstructorName + "</th></tr>";
-                foreach (var msg in err.Errors)
+                if (dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday) 
                 {
-                    strMsg += "<tr><td class='first'>&#10008;</td><td class='last'>" + msg + "</td></tr>";
+                    imgSrc = "'data:image/png;base64, " + Properties.Resources.cDay_48.extImageToBase64Converter(ImageFormat.Png) + "'";
+                    WORK_AREA =
+                        "<div style='font-size: 10pt;'>" + "Выходной день" + "</div>";
+                }
+                else 
+                {
+                    imgSrc = "'data:image/png;base64, " + Properties.Resources.wDay_48.extImageToBase64Converter(ImageFormat.Png) + "'";
+                    WORK_AREA =
+                        "<div style='font-size: 10pt;'>" + "Рабочий день" + "</div>";
                 }
             }
-            strMsg += "</tbody></table>";
-            strMsg += "<hr>&#128736;&nbsp;<i><small>" + "try setting the parameters..." + "</small></i>" +
-                      "</body>";
-            */
-            //     strMsg = @"<div><p>Taken from wikpedia</p>""<img src = 'data:image/bmp;base64, "+ base64ImageRepresentation  + "' alt='Red dot'/></div>";
-            string html = Properties.Resources.header + WORK_AREA + Properties.Resources.footer1;
-            webInfoDay.DocumentText = html;  
+            WORK_AREA =
+                "<div style='font-size: 14pt; text-align: center;'>" + dayInfo.ToString("dd-MM-yyyy") + "&nbsp;"+
+                "<img src = " + imgSrc + " height = '24' width = '24' style='vertical-align: middle;'/>" +
+                "</div>" +
+                "<div style='text-align: center;'>" + WORK_AREA+"</div>";
 
+            string html = "<body " +
+                            "style = '" +
+                            "background - color: " + SystemColors.Control.extHexConverter() + "; " +
+                            "font-family: Geneva, Arial, Helvetica, sans-serif; "+
+                            "'" +
+                            ">" + WORK_AREA + "</body>";
+            webInfoDay.DocumentText = html;
         }
 
         //подсчитать количество рабочих дней
@@ -542,8 +531,8 @@ namespace TimeWorkTracking
             }
             else 
             {
-                string timeIn = lstwDataBaseMain.Items[lstwDataBaseMain.SelectedIndex()].SubItems[3].Text;  //Время начала работы
-                string timeOut = lstwDataBaseMain.Items[lstwDataBaseMain.SelectedIndex()].SubItems[4].Text; //Время окончания работы
+                string timeIn = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[3].Text;  //Время начала работы
+                string timeOut = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[4].Text; //Время окончания работы
 
                 result = DialogResult.Yes;
                 msg = "";

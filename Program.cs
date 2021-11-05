@@ -27,10 +27,10 @@ namespace TimeWorkTracking
     /*----------------------------------------------------------------------------------------------------------
     *  РАСШИРЕНИЯ
     -----------------------------------------------------------------------------------------------------------*/
-    //получить номер выделенной строки в ListView
     public static class Extension
     {
-        public static int SelectedIndex(this ListView listView)
+        //получить индекс выделенной строки ListView
+        public static int extSelectedIndex(this ListView listView)
         {
             for (int index = 0; index <= listView.Items.Count - 1; index++)
             {
@@ -45,7 +45,8 @@ namespace TimeWorkTracking
                 return ret;
 */
         }
-        public static int FindListByColValue(this ListView lstView, int numCol, string find)
+        //найти индекс строки ListView в колонке SubItem по значению
+        public static int extFindListByColValue(this ListView lstView, int numCol, string find)
         {
             int ret = -1;
             if (lstView.Items.Count > 0)
@@ -76,13 +77,24 @@ namespace TimeWorkTracking
         }
 
         //получить base64 из байтового массива картинки из ресурса
-        public static string getBase64StrToHTML(this Image image, ImageFormat format)
+        public static string extImageToBase64Converter(this Image image, ImageFormat format)
          {
              using (MemoryStream ms = new MemoryStream())
              {
                  image.Save(ms, format);
                  return Convert.ToBase64String(ms.ToArray());
              }
+        }
+        //конвертировать цвет в HEX строку
+        public static String extHexConverter(this System.Drawing.Color c)
+        {
+            return "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
+        }
+
+        //конвертировать цвет в RGB строку
+        public static String extRGBConverter(this System.Drawing.Color c)
+        {
+            return "RGB(" + c.R.ToString() + "," + c.G.ToString() + "," + c.B.ToString() + ")";
         }
     }
 }

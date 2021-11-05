@@ -113,7 +113,7 @@ namespace TimeWorkTracking
         //выбор значения из списка
         private void lstwDataBaseSpecialMarks_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int ind = lstwDataBaseSpecialMarks.SelectedIndex();
+            int ind = lstwDataBaseSpecialMarks.extSelectedIndex();
             if (ind >= 0)
             {
                 tbID.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[6].Text;
@@ -192,7 +192,7 @@ namespace TimeWorkTracking
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
  
             LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));// order by extId desc"));
-            lstwDataBaseSpecialMarks.FindListByColValue(3, key);            //найти и выделить позицию
+            lstwDataBaseSpecialMarks.extFindListByColValue(3, key);            //найти и выделить позицию
             tbName_TextChanged(null, null);                                 //обновить поля и кнопки
         }
         //кнопка обновить запись в БД
@@ -211,7 +211,7 @@ namespace TimeWorkTracking
             MsSqlDatabase.RequestNonQuery(cs, sql, false);
 
             LoadList(MsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));// order by extId desc"));
-            lstwDataBaseSpecialMarks.FindListByColValue(3, key);            //найти и выделить позицию
+            lstwDataBaseSpecialMarks.extFindListByColValue(3, key);            //найти и выделить позицию
             tbName_TextChanged(null, null);                                 //обновить поля и кнопки
         }
 
