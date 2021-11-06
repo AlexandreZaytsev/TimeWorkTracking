@@ -215,7 +215,7 @@ namespace TimeWorkTracking
                     tbNote.Text = lstwDataBaseMain.Items[ind].SubItems[8].Text;             //комментарий к специальной отметке
 
                     btDelete.Visible = true;                                                //разблокировать кнопку DELETE    
-                    btInsertUpdate.Text = "Обновть";
+                    btInsertUpdate.Text = "Обновить";
                     btInsertUpdate.ImageIndex = 2;
                     btInsertUpdate.Enabled = true;                                          //разблокировать кнопку UPDATE  
                 }
@@ -493,7 +493,7 @@ namespace TimeWorkTracking
 
             int chLunch = lstwDataBaseMain.Items[index].SubItems[11].Text == "1" ? 0 : 60;  //0 мин не обедает 60 мин обедает
             int wScheme = lstwDataBaseMain.Items[index].SubItems[12].Text == "1" ? 1 : 0;   //1 режим почасовой 0 режим поминутный
-            double timeScheduleFact = (vDateOut - vDateIn).Minutes;                           //Всего минут по факту 
+            double timeScheduleFact = (vDateOut - vDateIn).TotalMinutes;                           //Всего минут по факту 
 
             int extMin = pCalendar.getLengthWorkHoliday(vDateIn);           //количество минут для короткого длинного и обычного дня     
             //------------------------
@@ -565,17 +565,17 @@ namespace TimeWorkTracking
                 dSpecBg = DateTime.Parse("1984-05-22" + " " + DateTime.Parse(vSpDateIn).ToString("HH:mm")); //Начало Спец
                 dSpecEn = DateTime.Parse("1984-05-22" + " " + DateTime.Parse(vSpDateOut).ToString("HH:mm"));//Конец Спец
 
-                totalHoursInWork = Math.Abs((dSpecEn - dSpecBg).Minutes);                                   //Итоги. Время всего
+                totalHoursInWork = Math.Abs((dSpecEn - dSpecBg).TotalMinutes);                                   //Итоги. Время всего
 
                 //если диапазоны не пересекаются (Итоги. Вне рабочего дня)
                 if ((dSpecEn < dMainBg && dSpecEn <= dMainBg) || (dSpecBg >= dMainEn && dSpecEn > dMainEn))
-                    totalHoursOutsideWork = Math.Abs((dSpecEn - dSpecBg).Minutes);  //берем все время диапазона спец отметок
+                    totalHoursOutsideWork = Math.Abs((dSpecEn - dSpecBg).TotalMinutes);  //берем все время диапазона спец отметок
                 //если нос спецотметок входит в основное время
                 if (dSpecBg < dMainBg && (dSpecEn > dMainBg && dSpecEn <= dMainEn))
-                    totalHoursOutsideWork = Math.Abs((dSpecBg - dMainBg).Minutes);  //разница между началами диапазонов
+                    totalHoursOutsideWork = Math.Abs((dSpecBg - dMainBg).TotalMinutes);  //разница между началами диапазонов
                 //если хвост спецотметок задержался в основном времени
                 if ((dSpecBg >= dMainBg && dSpecBg < dMainEn) && dSpecEn > dMainEn)
-                    totalHoursOutsideWork = Math.Abs((dSpecEn - dMainEn).Minutes);  //разница между концами диапазонов
+                    totalHoursOutsideWork = Math.Abs((dSpecEn - dMainEn).TotalMinutes);  //разница между концами диапазонов
                 //если диапазон внутри основного времени - не считаем
                 if (dSpecBg >= dMainBg && dSpecEn <= dMainEn) 
                     totalHoursOutsideWork = 0;                                      //спец диапазон входит в фактический диапазон
