@@ -329,24 +329,24 @@ namespace TimeWorkTracking
         }
 
         //подсчитать количество рабочих дней
-/*
-        private static double getBusinessDays(DateTime startD, DateTime endD)
-        {
-            double calcBusinessDays =
-                1 + ((endD - startD).TotalDays * 5 -
-                (startD.DayOfWeek - endD.DayOfWeek) * 2) / 7;
+        /*
+                private static double getBusinessDays(DateTime startD, DateTime endD)
+                {
+                    double calcBusinessDays =
+                        1 + ((endD - startD).TotalDays * 5 -
+                        (startD.DayOfWeek - endD.DayOfWeek) * 2) / 7;
 
-            if (endD.DayOfWeek == DayOfWeek.Saturday) calcBusinessDays--;
-            if (startD.DayOfWeek == DayOfWeek.Sunday) calcBusinessDays--;
+                    if (endD.DayOfWeek == DayOfWeek.Saturday) calcBusinessDays--;
+                    if (startD.DayOfWeek == DayOfWeek.Sunday) calcBusinessDays--;
 
-            return calcBusinessDays;
-        }
-*/
+                    return calcBusinessDays;
+                }
+        */
         //кнопка Добавить/Обновить запись в БД
-        private void btUpdate_Click(object sender, EventArgs e)
+        private void btInsertUpdate_Click(object sender, EventArgs e)
         {
             DialogResult response = DialogResult.No;
-            string msg = "";
+            string msg;
             DateTime vDate;
             DateTime vDateIn;
             DateTime vDateOut;
@@ -376,7 +376,6 @@ namespace TimeWorkTracking
                     vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
 
                     //обработка исключений
-                    msg = "";
                     response = DialogResult.Yes;
                     if (DateTime.Compare(mcRegDate.SelectionStart.Date, DateTime.Parse(vSpDateIn).Date) != 0)    //дата регистрации и дата начала спец отметок              
                     {
@@ -548,13 +547,24 @@ namespace TimeWorkTracking
                     tbName_TextChanged(null, null);                                 //обновить поля и кнопки
         */
                 }
-
-
-
-        private void btInsert_Click(object sender, EventArgs e)
-
+        //кнопка удалить запись в БД
+        private void btDelete_Click(object sender, EventArgs e)
         {
+            int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
+            string keyUser = lstwDataBaseMain.Items[index].SubItems[2].Text;//ключевое поле внешний id пользователя
+            string keyDate = mcRegDate.SelectionStart.ToString("yyyyMMdd"); //ключевое поле дата прохода
 
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            string sql =
+              "DELETE FROM EventsPass " +
+              "WHERE passDate = '" + keyDate + "' " +                       //*дата прохода
+                    "and passId = '" + keyUser + "'";                       //*внешний id сотрудника
+            clMsSqlDatabase.RequestNonQuery(cs, sql, false);
+
+            LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + keyDate + "','') order by fio"));
+            lstwDataBaseMain.Items[index].Selected = true;
+            lstwDataBaseMain.HideSelection = false;                         //оставить выделение строки при потере фокуса ListView
+            lstwDataBaseMain.EnsureVisible(index);                          //показать в области видимости окна
         }
 
         /*--------------------------------------------------------------------------------------------  
@@ -585,6 +595,7 @@ namespace TimeWorkTracking
             LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
             mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
         }
+
 
     }
 

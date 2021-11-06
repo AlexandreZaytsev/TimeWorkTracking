@@ -10,7 +10,7 @@ namespace TimeWorkTracking
 {
     class clCalendar 
     {
-        private DataTable dtWorkCalendar;                                           //производственный календаоь
+        private readonly DataTable dtWorkCalendar;                    //производственный календаоь
         public clCalendar(string cs, string sql)                      //конструктор
         {
             dtWorkCalendar = clMsSqlDatabase.TableRequest(cs, sql);

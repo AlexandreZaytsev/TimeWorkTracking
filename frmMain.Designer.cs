@@ -755,7 +755,7 @@ namespace TimeWorkTracking
             this.btDelete.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btDelete.UseVisualStyleBackColor = true;
-            this.btDelete.Click += new System.EventHandler(this.btInsert_Click);
+            this.btDelete.Click += new System.EventHandler(this.btDelete_Click);
             // 
             // imgListButtonMain
             // 
@@ -789,7 +789,7 @@ namespace TimeWorkTracking
             this.btInsertUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btInsertUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btInsertUpdate.UseVisualStyleBackColor = true;
-            this.btInsertUpdate.Click += new System.EventHandler(this.btUpdate_Click);
+            this.btInsertUpdate.Click += new System.EventHandler(this.btInsertUpdate_Click);
             // 
             // lMsg
             // 
