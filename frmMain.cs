@@ -37,6 +37,8 @@ namespace TimeWorkTracking
             smTStart.Value = DateTime.Now;
             smDStop.Value = DateTime.Now;
             smTStop.Value = DateTime.Now.AddHours(1);
+
+            btDelete.Visible = false;                                       //заблокировать кнопку DELETE 
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -161,7 +163,7 @@ namespace TimeWorkTracking
                     udAfterH.Value = dt;
                     udAfterM.Value = dt;
 
-                    btDelete.Enabled = false;                                                  //заблокировать кнопку DELETE    
+                    btDelete.Visible = false;                                                  //заблокировать кнопку DELETE    
                     btInsertUpdate.Text = "Добавить";
                     btInsertUpdate.ImageIndex = 1;
                     btInsertUpdate.Enabled = true;                                             //заблокировать кнопку UPDATE  
@@ -186,7 +188,7 @@ namespace TimeWorkTracking
 
                     tbNote.Text = lstwDataBaseMain.Items[ind].SubItems[8].Text;                 //комментарий
 
-                    btDelete.Enabled = true;                                                    //разблокировать кнопку DELETE    
+                    btDelete.Visible = true;                                                    //разблокировать кнопку DELETE    
                     btInsertUpdate.Text = "Обновть";
                     btInsertUpdate.ImageIndex = 2;
                     btInsertUpdate.Enabled = true;                                              //разблокировать кнопку UPDATE  
@@ -465,10 +467,10 @@ namespace TimeWorkTracking
                             lstwDataBaseMain.Items[index].Selected = true;
                         }
                     }
-                }
-                lstwDataBaseMain.EnsureVisible(index);          //показать в области видимости окна
-                lstwDataBaseMain.HideSelection = false;         //оставить выделение строки при потере фокуса ListView                }
 
+                    lstwDataBaseMain.EnsureVisible(index);          //показать в области видимости окна
+                    lstwDataBaseMain.HideSelection = false;         //оставить выделение строки при потере фокуса ListView                }
+                }
             }
         }
         //Добавить/Обновить запись в БД
