@@ -259,12 +259,12 @@ namespace TimeWorkTracking
                     sqlCommand.CommandText = "CREATE TABLE EventsPass (" +
                         "id bigint PRIMARY KEY IDENTITY, " +
                         "author VARCHAR(150) NOT NULL, " +                                          //имя учетной записи сеанса
-                        "passDate Datetime NOT NULL, " +                                                //*дата события (без времени) 
+                        "passDate Datetime NOT NULL, " +                                            //*дата события (без времени) 
                         "passId VARCHAR(20) NOT NULL FOREIGN KEY REFERENCES Users(extId), " +       //*->ссылка на внешний id пользователя
-                        "passTimeStart Datetime NOT NULL, " +                                           //время первого входа (без даты)
-                        "passTimeStop Datetime NOT NULL, " +                                            //время последнего выхода (без даты)
-                        "infoLunchId bit DEFAULT 1, " +                                             //флаг признака обеда
-                        "infoWorkSchemeId int NULL FOREIGN KEY REFERENCES UserWorkScheme(id), " +   //->ссылка на схему работы
+                        "passTimeStart Datetime NOT NULL, " +                                       //время первого входа (без даты)
+                        "passTimeStop Datetime NOT NULL, " +                                        //время последнего выхода (без даты)
+                        "pacsTimeStart Datetime NULL, " +                                           //время первого входа по СКУД (без даты)
+                        "pacsTimeStop Datetime NULL, " +                                            //время последнего выхода по СКУД (без даты)
                         "timeScheduleFact int DEFAULT 0, " +                                        //отработанное время (мин)
                         "timeScheduleWithoutLunch int DEFAULT 0, " +                                //отработанное время без обеда (мин)
                         "timeScheduleLess int DEFAULT 0, " +                                        //время недоработки (мин)
@@ -349,12 +349,12 @@ namespace TimeWorkTracking
                         "\r\n  , u.timeStop gtStop " +
                         "\r\n  , u.noLunch " +
                         "\r\n  , u.workSchemeId " +
+                        "\r\n  , e.passTimeStart ptSart " +
+                        "\r\n  , e.passTimeStop ptStop " +
                         "\r\n  , e.specmarkId " +
                         "\r\n  , e.specmarkNote " +
                         "\r\n  , e.specmarkTimeStart stSatrt " +
                         "\r\n  , e.specmarkTimeStop stStop " +
-                        "\r\n  , e.passTimeStart ptSart " +
-                        "\r\n  , e.passTimeStop ptStop " +
                         "\r\n  , e.timeScheduleFact " +
                         "\r\n  , e.timeScheduleLess " +
                         "\r\n  , e.timeScheduleOver " +
