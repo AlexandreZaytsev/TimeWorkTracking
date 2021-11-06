@@ -85,7 +85,7 @@ namespace TimeWorkTracking
             this.panel3 = new System.Windows.Forms.Panel();
             this.webInfoDay = new System.Windows.Forms.WebBrowser();
             this.mcRegDate = new System.Windows.Forms.MonthCalendar();
-            this.btInsert = new System.Windows.Forms.Button();
+            this.btDelete = new System.Windows.Forms.Button();
             this.imgListButtonMain = new System.Windows.Forms.ImageList(this.components);
             this.btUpdate = new System.Windows.Forms.Button();
             this.lMsg = new System.Windows.Forms.Label();
@@ -269,7 +269,7 @@ namespace TimeWorkTracking
             this.mainPanelRegistration.Controls.Add(this.grUsers);
             this.mainPanelRegistration.Controls.Add(this.grRegistrator);
             this.mainPanelRegistration.Controls.Add(this.gbNavigator);
-            this.mainPanelRegistration.Controls.Add(this.btInsert);
+            this.mainPanelRegistration.Controls.Add(this.btDelete);
             this.mainPanelRegistration.Controls.Add(this.btUpdate);
             this.mainPanelRegistration.Controls.Add(this.lMsg);
             this.mainPanelRegistration.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -742,21 +742,21 @@ namespace TimeWorkTracking
             this.mcRegDate.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.mcRegDate_DateChanged);
             this.mcRegDate.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.mcRegDate_DateSelected);
             // 
-            // btInsert
+            // btDelete
             // 
-            this.btInsert.Enabled = false;
-            this.btInsert.ImageIndex = 1;
-            this.btInsert.ImageList = this.imgListButtonMain;
-            this.btInsert.Location = new System.Drawing.Point(471, 635);
-            this.btInsert.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btInsert.Name = "btInsert";
-            this.btInsert.Size = new System.Drawing.Size(140, 39);
-            this.btInsert.TabIndex = 34;
-            this.btInsert.Text = "Добавить";
-            this.btInsert.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btInsert.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btInsert.UseVisualStyleBackColor = true;
-            this.btInsert.Click += new System.EventHandler(this.btInsert_Click);
+            this.btDelete.Enabled = false;
+            this.btDelete.ImageIndex = 3;
+            this.btDelete.ImageList = this.imgListButtonMain;
+            this.btDelete.Location = new System.Drawing.Point(471, 635);
+            this.btDelete.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btDelete.Name = "btDelete";
+            this.btDelete.Size = new System.Drawing.Size(140, 39);
+            this.btDelete.TabIndex = 34;
+            this.btDelete.Text = "Удалить";
+            this.btDelete.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btDelete.UseVisualStyleBackColor = true;
+            this.btDelete.Click += new System.EventHandler(this.btInsert_Click);
             // 
             // imgListButtonMain
             // 
@@ -765,15 +765,16 @@ namespace TimeWorkTracking
             this.imgListButtonMain.Images.SetKeyName(0, "db_48.png");
             this.imgListButtonMain.Images.SetKeyName(1, "db_add_48.png");
             this.imgListButtonMain.Images.SetKeyName(2, "db_edit_48.png");
-            this.imgListButtonMain.Images.SetKeyName(3, "db_find_48.png");
-            this.imgListButtonMain.Images.SetKeyName(4, "db_lock_48.png");
-            this.imgListButtonMain.Images.SetKeyName(5, "db_unlock_48.png");
-            this.imgListButtonMain.Images.SetKeyName(6, "db_upload_48.png");
-            this.imgListButtonMain.Images.SetKeyName(7, "db_import_48.png");
-            this.imgListButtonMain.Images.SetKeyName(8, "db_export_48.png");
-            this.imgListButtonMain.Images.SetKeyName(9, "attention_48.png");
-            this.imgListButtonMain.Images.SetKeyName(10, "info_48.png");
-            this.imgListButtonMain.Images.SetKeyName(11, "holiday_48.png");
+            this.imgListButtonMain.Images.SetKeyName(3, "db_del_48.png");
+            this.imgListButtonMain.Images.SetKeyName(4, "db_find_48.png");
+            this.imgListButtonMain.Images.SetKeyName(5, "db_lock_48.png");
+            this.imgListButtonMain.Images.SetKeyName(6, "db_unlock_48.png");
+            this.imgListButtonMain.Images.SetKeyName(7, "db_upload_48.png");
+            this.imgListButtonMain.Images.SetKeyName(8, "db_import_48.png");
+            this.imgListButtonMain.Images.SetKeyName(9, "db_export_48.png");
+            this.imgListButtonMain.Images.SetKeyName(10, "attention_48.png");
+            this.imgListButtonMain.Images.SetKeyName(11, "info_48.png");
+            this.imgListButtonMain.Images.SetKeyName(12, "holiday_48.png");
             // 
             // btUpdate
             // 
@@ -860,7 +861,7 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ToolStripDropDownButton tsbtDataBasePACS;
         public System.Windows.Forms.ImageList imageListStrip;
         private System.Windows.Forms.Panel mainPanelRegistration;
-        private System.Windows.Forms.Button btInsert;
+        private System.Windows.Forms.Button btDelete;
         private System.Windows.Forms.Button btUpdate;
         private System.Windows.Forms.DateTimePicker udAfterM;
         private System.Windows.Forms.DateTimePicker udAfterH;

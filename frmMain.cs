@@ -42,13 +42,11 @@ namespace TimeWorkTracking
         private void frmMain_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            if (CheckConnects())                                //проверить соединение с базами
+            if (CheckConnects())                                            //проверить соединение с базами
             {
                 pCalendar = new clCalendar(cs, "Select * From twt_GetDateInfo('', '') order by dWork");
-//                dtWorkCalendar = MsSqlDatabase.TableRequest(cs, "Select * From twt_GetDateInfo('', '') order by dWork");
-//                LoadBoldedDatesCalendar(dtWorkCalendar);          //Загрузить производственный календарь в массив непериодических выделенных дат
-                LoadBoldedDatesCalendar(pCalendar.getHoliday());    //Загрузить производственный календарь в массив непериодических выделенных дат
-                getDateInfo(DateTime.Now);                          //прочитать харектеристики дня по производственному календарю 
+                LoadBoldedDatesCalendar(pCalendar.getListWorkHoliday());    //Загрузить производственный календарь в массив непериодических выделенных дат
+                webInfoDay.DocumentText = pCalendar.getDateInfo(mcRegDate.SelectionStart);   //прочитать харектеристики дня по производственному календарю 
 
                 cbSMarks.DisplayMember = "Name";
                 cbSMarks.ValueMember = "id";
@@ -163,8 +161,8 @@ namespace TimeWorkTracking
                     udAfterH.Value = dt;
                     udAfterM.Value = dt;
 
-                    btInsert.Enabled = true;                                                    //разблокировать кнопку INSERT    
-                    btUpdate.Enabled = false;                                                   //заблокировать кнопку UPDATE  
+                    btDelete.Enabled = false;                                                  //заблокировать кнопку DELETE    
+                    btUpdate.Enabled = true;                                                   //заблокировать кнопку UPDATE  
                 }
                 else
                 {                                                                               //данные о проходе есть
@@ -186,7 +184,7 @@ namespace TimeWorkTracking
 
                     tbNote.Text = lstwDataBaseMain.Items[ind].SubItems[8].Text;                 //комментарий
 
-                    btInsert.Enabled = false;                                                   //заблокировать кнопку INSERT    
+                    btDelete.Enabled = true;                                                    //разблокировать кнопку DELETE    
                     btUpdate.Enabled = true;                                                    //разблокировать кнопку UPDATE  
                 }
 
@@ -309,7 +307,7 @@ namespace TimeWorkTracking
         //изменение даты в календаре
         private void mcRegDate_DateChanged(object sender, DateRangeEventArgs e)
         {
-            getDateInfo(e.Start);
+            webInfoDay.DocumentText = pCalendar.getDateInfo(e.Start);
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
 
@@ -332,77 +330,6 @@ namespace TimeWorkTracking
             //           lbDay.Text = inf[0].ToString();
         }
 
-        //прочитать харектеристики дня по производственному календарю 
-        private void getDateInfo(DateTime dayInfo)
-        {
-            string WORK_AREA = "";
-            string imgSrc = "";
-            KeyValuePair<int, DataRow> infoDate = pCalendar.checkDay(dayInfo);
-            switch (infoDate.Key)
-            {
-                case 0:                         //это Праздничный день (без переносов)                 
-                    imgSrc = "'data:image/png;base64, " + Properties.Resources.holiday_48.extImageToBase64Converter(ImageFormat.Png) + "'";
-                    WORK_AREA =
-                        "<div>" + infoDate.Value["dName"].ToString() + "</div>";// +
-                                                                                //                            "<div style='font-size: 9pt; text-align: center'>" + "\r\n(" + drow["dLength"].ToString().ToLower() + ")" + "</div>";
-                    break;
-                case 1:                         //это Праздничный день (перенесенная дата)
-                    imgSrc = "'data:image/png;base64, " + Properties.Resources.cDay_48.extImageToBase64Converter(ImageFormat.Png) + "'";
-                    WORK_AREA =
-                        "<div>" + "Нерабочий день" + "</div>" +
-                        "<br>" +
-                        "<div style='font-size: 9pt;'>" + "Перенесено с даты<br>" + ((DateTime)infoDate.Value["dSource"]).ToString("dd.MM.yyyy г.") + "<br>" + infoDate.Value["dName"].ToString() + "</div>";
-                    break;
-                case 2:                         //это Выходной день (праздник попадает на выходной)
-                    imgSrc = "'data:image/png;base64, " + Properties.Resources.cDay_48.extImageToBase64Converter(ImageFormat.Png) + "'";
-                    WORK_AREA =
-                        "<div>" + "Выходной день" + "</div>" +
-                        "<br>" +
-                        //                                    "<div style='font-size: 9pt; text-align: center'>" + "(" + drow["dLength"].ToString().ToLower() + ")" + "</div>"+
-                        "<div style='font-size: 9pt;'>" + "Перенесено на дату" + "<br>" +
-                        ((DateTime)infoDate.Value["dWork"]).ToString("dd.MM.yyyy г.") + "<br>" +
-                        infoDate.Value["dName"].ToString() +
-                        "</div>";
-                    break;
-                case 3:                         //это Рабочий день (праздник не попадает на выходной)
-                    imgSrc = "'data:image/png;base64, " + Properties.Resources.cDay_48.extImageToBase64Converter(ImageFormat.Png) + "'";
-                    WORK_AREA =
-                        "<div>" + "Рабочий день" + "</div>" +
-                        "<br>" +
-                        //                     "<div style='font-size: 9pt; text-align: center'>" + "(" + drow["dLength"].ToString().ToLower() + ")" + "</div>" +
-                        "<div style='font-size: 9pt;'>" + "Перенесено на дату" + "<br>" +
-                        ((DateTime)infoDate.Value["dWork"]).ToString("dd.MM.yyyy г.") + "<br>" +
-                        infoDate.Value["dName"].ToString() +
-                        "</div>";
-                    break;
-                case 4:                         //это просто Выходной день
-                    imgSrc = "'data:image/png;base64, " + Properties.Resources.cDay_48.extImageToBase64Converter(ImageFormat.Png) + "'";
-                    WORK_AREA =
-                        "<div>" + "Выходной день" + "</div>";
-                    break;
-                case 5:                         //это просто Рабочий день
-                    imgSrc = "'data:image/png;base64, " + Properties.Resources.wDay_48.extImageToBase64Converter(ImageFormat.Png) + "'";
-                    WORK_AREA =
-                        "<div>" + "Рабочий день" + "</div>";
-                    break;
-                default:
-                    break;
-            }
-            WORK_AREA =
-                "<div style='font-size: 14pt; text-align: center;'>" + dayInfo.ToString("dd-MM-yyyy") + "&nbsp;" +
-                "<img src = " + imgSrc + " height = '24' width = '24' style='vertical-align: middle;'/>" +
-                "</div>" +
-                "<div style='font-size: 12pt; text-align: center;'><hr>" + WORK_AREA + "</div>";
-
-            string html = "<body " +
-                            "style = '" +
-                            "background - color: " + SystemColors.Control.extHexConverter() + "; " +
-                            "font-family: Geneva, Arial, Helvetica, sans-serif; " +
-                            "'" +
-                            ">" + WORK_AREA + "</body>";
-            webInfoDay.DocumentText = html;
-        }
-
         //подсчитать количество рабочих дней
         private static double getBusinessDays(DateTime startD, DateTime endD)
         {
@@ -416,131 +343,109 @@ namespace TimeWorkTracking
             return calcBusinessDays;
         }
 
-
-        /*--------------------------------------------------------------------------------------------  
-        CALLBACK InPut (подписка на внешние сообщения)
-        --------------------------------------------------------------------------------------------*/
-        /// <summary>
-        /// Callbacks the reload.
-        /// входящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров
-        /// </summary>
-        /// <param name="controlName">имя CTRL</param>
-        /// <param name="controlParentName">имя родителя CNTRL</param>
-        /// <param name="param">параметры ключ-значение.</param>
-        private void CallbackReload(string controlName, string controlParentName, Dictionary<String, String> param)
-        {
-            CheckConnects();        //проверить соединение с базами
-            /*
-            if (param.Count() != 0)
-            {
-                Control[] cntrl = this.FilterControls(c => c.Name != null && c.Name.Equals(controlName) && c is DataGridView);
-                ((DataGridView)cntrl[0]).DataSource = param;
-            }
-            */
-        }
-        //обновить список юзеров в главном окне
-        private void CallbackCheckListUsers(string controlName, string controlParentName, Dictionary<String, String> param)
-        {
-            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
-            mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
-        }
-
-
-
         //кнопка Добавить/Обновить запись в БД
-        private void btInsert_Click(object sender, EventArgs e)
+        private void btUpdate_Click(object sender, EventArgs e)
         {
-            DialogResult result = DialogResult.No;
-
-            DateTime vDate = mcRegDate.SelectionStart;                      //дата регистрации (00:00)
-            DateTime vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //Время прихода
-            DateTime vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
-            string vSpDateIn = smDStart.Value.ToString("yyyy-MM-dd") + " " + smTStart.Value.ToString("HH:mm");  //Дата начала спец. отметок
-            string vSpDateOut = smDStop.Value.ToString("yyyy-MM-dd") + " " + smTStop.Value.ToString("HH:mm");   //Дата окончания спец. отметок
-            string timeIn = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[3].Text;       //Время начала работы по графику
-            string timeOut = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[4].Text;      //Время окончания работы по графику
-            int spCount = (DateTime.Parse(vSpDateOut) - DateTime.Parse(vSpDateIn)).Days;                        //количество дней в спецотметках
+            DialogResult response = DialogResult.No;
+            string msg = "";
+            DateTime vDate;
+            DateTime vDateIn;
+            DateTime vDateOut;
+            string vSpDateIn;
+            string vSpDateOut;
+            string timeIn;
+            string timeOut;
+            int spCount;
 
             if (cbSMarks.Text == "-")                                       //спец отметок нет 
             {
+                vDate = mcRegDate.SelectionStart;                           //дата из формы + время их формы
+                vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //Время прихода
+                vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
                 WriteRecord(vDateIn, vDateOut, "-", "-");                   //добавить/обновить запись прохода
             }
             else                                                            //спец отметки есть
             {
-                if (DateTime.Compare(vDate, DateTime.Parse(vSpDateIn).Date) != 0)
+                vSpDateIn = smDStart.Value.ToString("yyyy-MM-dd") + " " + smTStart.Value.ToString("HH:mm"); //строка Дата начала спец. отметок
+                vSpDateOut = smDStop.Value.ToString("yyyy-MM-dd") + " " + smTStop.Value.ToString("HH:mm");  //строка Дата окончания спец. отметок
+                spCount = (DateTime.Parse(vSpDateOut) - DateTime.Parse(vSpDateIn)).Days;                    //количество дней в спецотметках
+
+                if (spCount == 0)                                           //спец отметки в пределах дня    
                 {
-                    result = MessageBox.Show(
-                        "Обратите внимание" + "\r\n" + "Даты\r\n" +
-                        vDate.ToString("dd.MM.yyyy") + " - текущая дата Регистрации" + "\r\n" +
-                        DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - дата начала Специальных отметок" + "\r\n" +
-                        "не совпадают" + "\r\n" +
-                        (spCount == 0 ?
-                            " *информация будет(пере)записана на дату начала Специальных отметок" :
-                            " *период действия Специальных отметок превышает одни сутки" + "\r\n" +
-                            "  информация будет(пере)записана по периоду действия Специальных отметок"
-                         ) + "\r\n" +
-                            "  c использованием времени из графика сотрудника " +
-                            DateTime.Parse(timeIn).ToString("HH:mm") + "-" + DateTime.Parse(timeOut).ToString("HH:mm") + "\r\n\r\n" +
-                        "Продолжить?" + "\r\n",
-                        "Изменение даты регистрации",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Information,
-                        MessageBoxDefaultButton.Button1,
-                        MessageBoxOptions.DefaultDesktopOnly
-                        );
-                    if (result == DialogResult.Yes)
+                    vDate = DateTime.Parse(vSpDateIn);                      //дата из начала спец отметок + время их формы
+                    vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //Время прихода
+                    vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
+
+                    //обработка исключений
+                    msg = "";
+                    response = DialogResult.Yes;
+                    if (DateTime.Compare(mcRegDate.SelectionStart.Date, DateTime.Parse(vSpDateIn).Date) != 0)    //дата регистрации и дата начала спец отметок              
                     {
+                        response = MessageBox.Show(
+                            "Обратите внимание на даты" + "\r\n" +
+                            mcRegDate.SelectionStart.ToString("dd.MM.yyyy") + " - текущая дата Регистрации" + "\r\n" +
+                            DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - дата начала Специальных отметок" + "\r\n" +
+                            "не совпадают" + "\r\n" +
+                            " *данные будут записаны на Дату начала Специальных отметок" + "\r\n\r\n" +
+                            "Продолжить?" + "\r\n",
+                            "Изменение даты регистрации",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Information,
+                            MessageBoxDefaultButton.Button2,
+                            MessageBoxOptions.DefaultDesktopOnly
+                            );
                     }
+                    if (response == DialogResult.Yes)
+                        WriteRecord(vDateIn, vDateOut, vSpDateIn, vSpDateOut);  //добавить/обновить запись прохода
                 }
-                for (int i = 0; i <= spCount; i++)                           //цикл по всем датам диапазона спец отметок начиная со следующего дня 
+                else                                                        //спец отметки более одного дня
                 {
-                    vDate = DateTime.Parse(vSpDateIn).AddDays(i);           //смещение на день
-                    KeyValuePair<int, DataRow> infoDate = pCalendar.checkDay(vDate);
-                    if (infoDate.Key == 3 || infoDate.Key == 5)                 //если это рабочие дни
+                    timeIn = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[3].Text;      //Время начала работы по графику
+                    timeOut = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[4].Text;     //Время окончания работы по графику
+
+                    //обработка исключений
+                    msg = "";
+                    response = DialogResult.Yes;
+                    if (DateTime.Compare(mcRegDate.SelectionStart.Date, DateTime.Parse(vSpDateIn).Date) != 0)   //дата регистрации и дата начала спец отметок              
                     {
-                        vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //Время прихода
-                        vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
+                        msg = "Обратите внимание на даты" + "\r\n" +
+                         mcRegDate.SelectionStart.ToString("dd.MM.yyyy") + " - текущая дата Регистрации" + "\r\n" +
+                         DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - дата начала Специальных отметок" + "\r\n" +
+                         "не совпадают" + "\r\n" +
+                         " *данные будут записаны на Дату начала Специальных отметок" + "\r\n\r\n";
+                    }
+                    msg += DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + "-" + DateTime.Parse(vSpDateOut).ToString("dd.MM.yyyy") +
+                        " - период действия Специальных отметок превышает одни сутки" + "\r\n" +
+                        " *данные будут записаны на данный период с использованием времени из графика сотрудника " +
+                        DateTime.Parse(timeIn).ToString("HH:mm") + "-" + DateTime.Parse(timeOut).ToString("HH:mm") + "\r\n\r\n" +
+                        "Продолжить?" + "\r\n";
+                    response = MessageBox.Show(
+                            msg,
+                            "Изменение даты регистрации",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Information,
+                            MessageBoxDefaultButton.Button2,
+                            MessageBoxOptions.DefaultDesktopOnly
+                            );
+                    if (response == DialogResult.Yes)
+                    {
+                        for (int i = 0; i < spCount; i++)                           //цикл по всем датам диапазона спец отметок начиная со следующего дня 
+                        {
+                            vDate = DateTime.Parse(vSpDateIn).AddDays(i);           //смещение на день
+                            vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + DateTime.Parse(timeIn).ToString("HH:mm"));        //+ Время начала из графика
+                            vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + DateTime.Parse(timeOut).ToString("HH:mm"));      //+ Время окончания из графика
 
-                        WriteRecord(DateTime.Parse(vSpDateIn).Date, DateTime.Parse(vSpDateIn).Date, vSpDateIn, vSpDateOut);  //добавить/обновить запись прохода
-
-                                //       string vSpDateIn = smDStart.Value.ToString("yyyy-MM-dd") + " " + smTStart.Value.ToString("HH:mm");  //Дата начала спец. отметок
-                                //       string vSpDateOut = smDStop.Value.ToString("yyyy-MM-dd") + " " + smTStop.Value.ToString("HH:mm");   //Дата окончания спец. отметок
-                                //       string timeIn = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[3].Text;       //Время начала работы по графику
-                                //       string timeOut = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[4].Text;      //Время окончания работы по графику
+                            if (!pCalendar.chechWorkHoliday(vDate))                 //если это не праздник
+                                WriteRecord(vDateIn, vDateOut, vSpDateIn, vSpDateOut);  //добавить/обновить запись прохода                            }
+                        }
 
                     }
+
                 }
+
+
 
                     /*
-                          Else
-
-                            If response = vbYes Then 'vbOK Then   ' User chose Yes.
-                              For i = 0 To spCount                                                      ' цикл по всем датам диапазона начиная со следующего дня
-                                vDate = ClearDataString(DateAdd("d", i, vSpDateIn))                     ' смещение на день
-                                vDateIn = CDate(vDate & " " & FormatDateTime(CDate(timeIn), vbShortTime))     '  + Время начала из графика
-                                vDateOut = CDate(vDate & " " & FormatDateTime(CDate(timeOut), vbShortTime))    '  + Время окончания из графика
-                    '            If Not GetHolyday(ActiveWorkbook, CDate(vDate)) Then
-                                If Not GetHolyday(ThisWorkbook, CDate(vDate)) Then
-
-                                  Call WriteRecord(vDateIn, vDateOut, vSpDateIn, vSpDateOut)            ' Просто рабочий (не праздничный не выходной) день
-                                End If
-                              Next
-                            End If
-                          End If
-                        End If
-
-
-                          'сортировка по 3,5 колоке
-                        With Worksheets("DataBase").ListObjects("Data")
-                          .Sort.SortFields.Clear
-                    '      .Sort.SortFields.Add Key:=.ListColumns(4).Range, SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
-                          .Sort.SortFields.Add.ListColumns(3).Range, , xlDescending, , xlSortNormal
-                    '      .Sort.SortFields.Add .ListColumns(5).Range, , xlAscending, , xlSortNormal
-                          .Sort.Apply
-                        End With
-
-
                         'перемещение по списку
                         If btRegAdd.Caption <> "Обновить" Then
                           If cdDirect.Value = "слева направо" Then                                      ' слева направо
@@ -644,11 +549,40 @@ namespace TimeWorkTracking
 
 
 
-        private void btUpdate_Click(object sender, EventArgs e)
+        private void btInsert_Click(object sender, EventArgs e)
+
         {
 
         }
 
+        /*--------------------------------------------------------------------------------------------  
+        CALLBACK InPut (подписка на внешние сообщения)
+        --------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// Callbacks the reload.
+        /// входящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров
+        /// </summary>
+        /// <param name="controlName">имя CTRL</param>
+        /// <param name="controlParentName">имя родителя CNTRL</param>
+        /// <param name="param">параметры ключ-значение.</param>
+        private void CallbackReload(string controlName, string controlParentName, Dictionary<String, String> param)
+        {
+            CheckConnects();        //проверить соединение с базами
+            /*
+            if (param.Count() != 0)
+            {
+                Control[] cntrl = this.FilterControls(c => c.Name != null && c.Name.Equals(controlName) && c is DataGridView);
+                ((DataGridView)cntrl[0]).DataSource = param;
+            }
+            */
+        }
+        //обновить список юзеров в главном окне
+        private void CallbackCheckListUsers(string controlName, string controlParentName, Dictionary<String, String> param)
+        {
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
+            mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
+        }
 
     }
 
