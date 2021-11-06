@@ -162,7 +162,9 @@ namespace TimeWorkTracking
                     udAfterM.Value = dt;
 
                     btDelete.Enabled = false;                                                  //заблокировать кнопку DELETE    
-                    btUpdate.Enabled = true;                                                   //заблокировать кнопку UPDATE  
+                    btInsertUpdate.Text = "Добавить";
+                    btInsertUpdate.ImageIndex = 1;
+                    btInsertUpdate.Enabled = true;                                             //заблокировать кнопку UPDATE  
                 }
                 else
                 {                                                                               //данные о проходе есть
@@ -185,7 +187,9 @@ namespace TimeWorkTracking
                     tbNote.Text = lstwDataBaseMain.Items[ind].SubItems[8].Text;                 //комментарий
 
                     btDelete.Enabled = true;                                                    //разблокировать кнопку DELETE    
-                    btUpdate.Enabled = true;                                                    //разблокировать кнопку UPDATE  
+                    btInsertUpdate.Text = "Обновть";
+                    btInsertUpdate.ImageIndex = 2;
+                    btInsertUpdate.Enabled = true;                                              //разблокировать кнопку UPDATE  
                 }
 
 
@@ -307,22 +311,18 @@ namespace TimeWorkTracking
         //изменение даты в календаре
         private void mcRegDate_DateChanged(object sender, DateRangeEventArgs e)
         {
+            int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
+                
             webInfoDay.DocumentText = pCalendar.getDateInfo(e.Start);
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
 
-            /*
-            var firstDayOfMonth = new DateTime(e.Start.Year, e.Start.Month, 1);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-            double bd = getBusinessDays(firstDayOfMonth, lastDayOfMonth);
-            lbBusinessDayCount.Text = "рабочих дней - " + bd.ToString();
-
-            if (e.Start.DayOfWeek == DayOfWeek.Monday)
-            {
-                MessageBox.Show("I hate mondays");
-                mcRegDate.SelectionStart = e.Start.AddDays(1);
+            if (index != -1) 
+            {                                                               //выделить строку по индексу
+                lstwDataBaseMain.Items[index].Selected = true;
+                lstwDataBaseMain.HideSelection = false;                     //оставить выделение строки при потере фокуса ListView
+                lstwDataBaseMain.EnsureVisible(index);                      //показать в области видимости окна
             }
-            */
         }
         private void mcRegDate_DateSelected(object sender, DateRangeEventArgs e)
         {
@@ -442,27 +442,32 @@ namespace TimeWorkTracking
                     }
 
                 }
+            }
 
-
-
-                    /*
-                        'перемещение по списку
-                        If btRegAdd.Caption <> "Обновить" Then
-                          If cdDirect.Value = "слева направо" Then                                      ' слева направо
-                            sbDate.Value = sbDate.Value + 1
-                            tbDate.Value = ClearDataString(DateValue(tbDate.Value) + 1)
-                            Call ChangeTime
-                            vDate = ClearDataString(tbDate.Value)                                       ' Чистая дата без времени
-                          Else                                                                          ' Сверху вниз
-                            If lbUsers.ListIndex = lbUsers.ListCount - 1 Then
-                              lbUsers.ListIndex = 0
-                            Else
-                              lbUsers.ListIndex = lbUsers.ListIndex + 1
-                            End If
-                          End If
-                        End If
-                    */
-                //}
+            //перемещение по списку
+            if (btInsertUpdate.Text != "Обновить")
+            {
+                int index = lstwDataBaseMain.extSelectedIndex();
+                if (cbDirect.Text == "слева направо")
+                    mcRegDate.SelectionStart = mcRegDate.SelectionStart.AddDays(1);
+                else
+                {
+                    if (index == lstwDataBaseMain.Items.Count - 1)
+                    {
+                        index = 0;
+                        lstwDataBaseMain.Items[index].Selected = true;
+                    }
+                    else
+                    {
+                        if (index < lstwDataBaseMain.Items.Count - 1)
+                        {
+                            index += 1;
+                            lstwDataBaseMain.Items[index].Selected = true;
+                        }
+                    }
+                }
+                lstwDataBaseMain.EnsureVisible(index);          //показать в области видимости окна
+                lstwDataBaseMain.HideSelection = false;         //оставить выделение строки при потере фокуса ListView                }
 
             }
         }

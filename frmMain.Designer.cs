@@ -87,7 +87,7 @@ namespace TimeWorkTracking
             this.mcRegDate = new System.Windows.Forms.MonthCalendar();
             this.btDelete = new System.Windows.Forms.Button();
             this.imgListButtonMain = new System.Windows.Forms.ImageList(this.components);
-            this.btUpdate = new System.Windows.Forms.Button();
+            this.btInsertUpdate = new System.Windows.Forms.Button();
             this.lMsg = new System.Windows.Forms.Label();
             this.toolTipMsgMain = new System.Windows.Forms.ToolTip(this.components);
             this.statusStripMain.SuspendLayout();
@@ -270,7 +270,7 @@ namespace TimeWorkTracking
             this.mainPanelRegistration.Controls.Add(this.grRegistrator);
             this.mainPanelRegistration.Controls.Add(this.gbNavigator);
             this.mainPanelRegistration.Controls.Add(this.btDelete);
-            this.mainPanelRegistration.Controls.Add(this.btUpdate);
+            this.mainPanelRegistration.Controls.Add(this.btInsertUpdate);
             this.mainPanelRegistration.Controls.Add(this.lMsg);
             this.mainPanelRegistration.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanelRegistration.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -776,21 +776,21 @@ namespace TimeWorkTracking
             this.imgListButtonMain.Images.SetKeyName(11, "info_48.png");
             this.imgListButtonMain.Images.SetKeyName(12, "holiday_48.png");
             // 
-            // btUpdate
+            // btInsertUpdate
             // 
-            this.btUpdate.Enabled = false;
-            this.btUpdate.ImageIndex = 2;
-            this.btUpdate.ImageList = this.imgListButtonMain;
-            this.btUpdate.Location = new System.Drawing.Point(823, 635);
-            this.btUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btUpdate.Name = "btUpdate";
-            this.btUpdate.Size = new System.Drawing.Size(140, 39);
-            this.btUpdate.TabIndex = 32;
-            this.btUpdate.Text = "Обновить";
-            this.btUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btUpdate.UseVisualStyleBackColor = true;
-            this.btUpdate.Click += new System.EventHandler(this.btUpdate_Click);
+            this.btInsertUpdate.Enabled = false;
+            this.btInsertUpdate.ImageIndex = 1;
+            this.btInsertUpdate.ImageList = this.imgListButtonMain;
+            this.btInsertUpdate.Location = new System.Drawing.Point(823, 635);
+            this.btInsertUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btInsertUpdate.Name = "btInsertUpdate";
+            this.btInsertUpdate.Size = new System.Drawing.Size(140, 39);
+            this.btInsertUpdate.TabIndex = 32;
+            this.btInsertUpdate.Text = "Добавить";
+            this.btInsertUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btInsertUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btInsertUpdate.UseVisualStyleBackColor = true;
+            this.btInsertUpdate.Click += new System.EventHandler(this.btUpdate_Click);
             // 
             // lMsg
             // 
@@ -862,7 +862,7 @@ namespace TimeWorkTracking
         public System.Windows.Forms.ImageList imageListStrip;
         private System.Windows.Forms.Panel mainPanelRegistration;
         private System.Windows.Forms.Button btDelete;
-        private System.Windows.Forms.Button btUpdate;
+        private System.Windows.Forms.Button btInsertUpdate;
         private System.Windows.Forms.DateTimePicker udAfterM;
         private System.Windows.Forms.DateTimePicker udAfterH;
         private System.Windows.Forms.DateTimePicker udBeforeM;
