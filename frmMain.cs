@@ -32,12 +32,12 @@ namespace TimeWorkTracking
             InitializeComponent();
             lMsg.Visible = false;                                           //погасить сообщение о записи в БД
             cbDirect.SelectedIndex = 0;
-
+/*
             smDStart.Value = DateTime.Now;
             smTStart.Value = DateTime.Now;
             smDStop.Value = DateTime.Now;
             smTStop.Value = DateTime.Now.AddHours(1);
-
+*/
             btDelete.Visible = false;                                       //заблокировать кнопку DELETE 
         }
 
@@ -95,23 +95,21 @@ namespace TimeWorkTracking
                     lstwDataBaseMain.LabelEdit = false;      //запрет редактирования item
                     ListViewItem lvi = new ListViewItem(drow["used"].ToString(), 0) //имя для сортировки
                     {
-                        ImageIndex = (int)drow["used"]
-                        ,
-                        StateImageIndex = (int)drow["used"]
-                        ,
+                        ImageIndex = (int)drow["used"],
+                        StateImageIndex = (int)drow["used"],
                         Checked = (int)drow["used"] == 1
                         //                        , UseItemStyleForSubItems = true
                     };
-                    lvi.SubItems.Add(drow["fio"].ToString());
-                    lvi.SubItems.Add(drow["extId"].ToString());
-                    lvi.SubItems.Add(drow["gtStart"].ToString());
-                    lvi.SubItems.Add(drow["gtStop"].ToString());
-                    lvi.SubItems.Add(drow["specmarkId"].ToString());
-                    lvi.SubItems.Add(drow["stSatrt"].ToString());
-                    lvi.SubItems.Add(drow["stStop"].ToString());
-                    lvi.SubItems.Add(drow["specmarkNote"].ToString());
-                    lvi.SubItems.Add(drow["ptSart"].ToString());
-                    lvi.SubItems.Add(drow["ptStop"].ToString());
+                    lvi.SubItems.Add(drow["fio"].ToString());                       //ФИО
+                    lvi.SubItems.Add(drow["extId"].ToString());                     //внешний id
+                    lvi.SubItems.Add(drow["gtStart"].ToString());                   //время начала работы по графику
+                    lvi.SubItems.Add(drow["gtStop"].ToString());                    //время окончания работы по графику    
+                    lvi.SubItems.Add(drow["specmarkId"].ToString());                //тип специальной отметки
+                    lvi.SubItems.Add(drow["stSatrt"].ToString());                   //время начала специальной отметки
+                    lvi.SubItems.Add(drow["stStop"].ToString());                    //время окончания специальной отметки
+                    lvi.SubItems.Add(drow["specmarkNote"].ToString());              //комментарий к специальной отметке
+                    lvi.SubItems.Add(drow["ptSart"].ToString());                    //время первого прохода
+                    lvi.SubItems.Add(drow["ptStop"].ToString());                    //время последнего прохода
 
                     lstwDataBaseMain.Items.Add(lvi);       // Add the list items to the ListView
                 }
@@ -120,6 +118,7 @@ namespace TimeWorkTracking
             lstwDataBaseMain.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
 
             tbSatusList.Text = getPassCount();
+            grRegistrator.Enabled = false;
         }
         //сортировка по заголовке столбца
         private void lstwDataBaseUsers_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -150,64 +149,65 @@ namespace TimeWorkTracking
             int ind = lstwDataBaseMain.extSelectedIndex();
             if (ind >= 0)
             {
+                grRegistrator.Enabled = true;
                 //               tbExtID.Text = lstwDataBaseUsers.Items[ind].SubItems[2].Text;                 //extID
                 //crmId
                 //               chUse.Checked = lstwDataBaseUsers.Items[ind].Text == "True";                  //access    
                 tbName.Text = lstwDataBaseMain.Items[ind].SubItems[1].Text;                     //fio
                 if (lstwDataBaseMain.Items[ind].Text == "0")
-                {                                                                               //данных о проходе нет           
-                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[3].Text);
+                {                                                                           //данных о проходе нет           
+                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[3].Text);  //время начала работы по графику
                     udBeforeH.Value = dt;
                     udBeforeM.Value = dt;
-                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[4].Text);
+                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[4].Text);  //время окончания работы по графику
                     udAfterH.Value = dt;
                     udAfterM.Value = dt;
 
-                    btDelete.Visible = false;                                                  //заблокировать кнопку DELETE    
-                    btInsertUpdate.Text = "Добавить";
-                    btInsertUpdate.ImageIndex = 1;
-                    btInsertUpdate.Enabled = true;                                             //заблокировать кнопку UPDATE  
-                }
-                else
-                {                                                                               //данные о проходе есть
-                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[9].Text);
-                    udBeforeH.Value = dt;
-                    udBeforeM.Value = dt;
-                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[10].Text);
-                    udAfterH.Value = dt;
-                    udAfterM.Value = dt;
+                    //                    cbSMarks.SelectedValue = lstwDataBaseMain.Items[ind].SubItems[5].Text;  //тип специальной отметки
 
-                    cbSMarks.SelectedValue = lstwDataBaseMain.Items[ind].SubItems[4].Text;      //выбор по id
-
-                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[6].Text);
+                    //дата время начала специальной отметки
+                    dt = DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH:mm"));
                     smDStart.Value = dt;
                     smTStart.Value = dt;
-                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[7].Text);
+                    //дата время окончания специальной отметки
+                    dt = DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH:mm"));
                     smDStop.Value = dt;
                     smTStop.Value = dt;
 
-                    tbNote.Text = lstwDataBaseMain.Items[ind].SubItems[8].Text;                 //комментарий
+                    tbNote.Text = "";// lstwDataBaseMain.Items[ind].SubItems[8].Text;       //комментарий к специальной отметке
 
-                    btDelete.Visible = true;                                                    //разблокировать кнопку DELETE    
+                    btDelete.Visible = false;                                               //заблокировать кнопку DELETE    
+                    btInsertUpdate.Text = "Добавить";
+                    btInsertUpdate.ImageIndex = 1;
+                    btInsertUpdate.Enabled = true;                                          //заблокировать кнопку UPDATE  
+                }
+                else
+                {                                                                           //данные о проходе есть
+                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[9].Text);  //время первого прохода
+                    udBeforeH.Value = dt;
+                    udBeforeM.Value = dt;
+                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[10].Text); //время последнего прохода
+                    udAfterH.Value = dt;
+                    udAfterM.Value = dt;
+
+                    cbSMarks.SelectedValue = lstwDataBaseMain.Items[ind].SubItems[5].Text;  //тип специальной отметки
+
+                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[6].Text);  //время начала специальной отметки
+                    smDStart.Value = dt;
+                    smTStart.Value = dt;
+                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[7].Text);  //время окончания специальной отметки
+                    smDStop.Value = dt;
+                    smTStop.Value = dt;
+
+                    tbNote.Text = lstwDataBaseMain.Items[ind].SubItems[8].Text;             //комментарий к специальной отметке
+
+                    btDelete.Visible = true;                                                //разблокировать кнопку DELETE    
                     btInsertUpdate.Text = "Обновть";
                     btInsertUpdate.ImageIndex = 2;
-                    btInsertUpdate.Enabled = true;                                              //разблокировать кнопку UPDATE  
+                    btInsertUpdate.Enabled = true;                                          //разблокировать кнопку UPDATE  
                 }
-
-
-                /*
-                                tbNote.Text = lstwDataBaseUsers.Items[ind].SubItems[9].Text;                    //note
-                                cbDepartment.Text = lstwDataBaseUsers.Items[ind].SubItems[3].Text;              //department    
-                                cbPost.Text = lstwDataBaseUsers.Items[ind].SubItems[4].Text;                    //post
-
-                                chbLunch.Checked = lstwDataBaseUsers.Items[ind].SubItems[7].Text == "True";     //lunch
-                                cbSheme.Text = lstwDataBaseUsers.Items[ind].SubItems[8].Text;                   //work    
-                                tbCrmID.Text = lstwDataBaseUsers.Items[ind].SubItems[10].Text;                  //crmID
-                */
             }
         }
-
-
 
         //Загрузить Производственный календарь Data из DataSet в Calendar
         private void LoadBoldedDatesCalendar(List<DateTime> dList)
@@ -328,8 +328,6 @@ namespace TimeWorkTracking
         }
         private void mcRegDate_DateSelected(object sender, DateRangeEventArgs e)
         {
-            //            getDateInfo(e.Start, dtWorkCalendar);
-            //           lbDay.Text = inf[0].ToString();
         }
 
         //подсчитать количество рабочих дней
@@ -385,8 +383,8 @@ namespace TimeWorkTracking
                     {
                         response = MessageBox.Show(
                             "Обратите внимание на даты" + "\r\n" +
-                            mcRegDate.SelectionStart.ToString("dd.MM.yyyy") + " - текущая дата Регистрации" + "\r\n" +
-                            DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - дата начала Специальных отметок" + "\r\n" +
+                            "  " + mcRegDate.SelectionStart.ToString("dd.MM.yyyy") + " - текущая дата Регистрации" + "\r\n" +
+                            "  " + DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - дата начала Специальных отметок" + "\r\n" +
                             "не совпадают" + "\r\n" +
                             " *данные будут записаны на Дату начала Специальных отметок" + "\r\n\r\n" +
                             "Продолжить?" + "\r\n",
@@ -411,8 +409,8 @@ namespace TimeWorkTracking
                     if (DateTime.Compare(mcRegDate.SelectionStart.Date, DateTime.Parse(vSpDateIn).Date) != 0)   //дата регистрации и дата начала спец отметок              
                     {
                         msg = "Обратите внимание на даты" + "\r\n" +
-                         mcRegDate.SelectionStart.ToString("dd.MM.yyyy") + " - текущая дата Регистрации" + "\r\n" +
-                         DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - дата начала Специальных отметок" + "\r\n" +
+                         "  " + mcRegDate.SelectionStart.ToString("dd.MM.yyyy") + " - текущая дата Регистрации" + "\r\n" +
+                         "  " + DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - дата начала Специальных отметок" + "\r\n" +
                          "не совпадают" + "\r\n" +
                          " *данные будут записаны на Дату начала Специальных отметок" + "\r\n\r\n";
                     }
@@ -440,9 +438,7 @@ namespace TimeWorkTracking
                             if (!pCalendar.chechWorkHoliday(vDate))                 //если это не праздник
                                 WriteRecord(vDateIn, vDateOut, vSpDateIn, vSpDateOut);  //добавить/обновить запись прохода                            }
                         }
-
                     }
-
                 }
             }
 
