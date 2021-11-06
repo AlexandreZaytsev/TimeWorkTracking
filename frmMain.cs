@@ -153,9 +153,10 @@ namespace TimeWorkTracking
                 //               tbExtID.Text = lstwDataBaseUsers.Items[ind].SubItems[2].Text;                 //extID
                 //crmId
                 //               chUse.Checked = lstwDataBaseUsers.Items[ind].Text == "True";                  //access    
-                tbName.Text = lstwDataBaseMain.Items[ind].SubItems[1].Text;                     //fio
-                if (lstwDataBaseMain.Items[ind].Text == "0")
-                {                                                                           //данных о проходе нет           
+                tbName.Text = lstwDataBaseMain.Items[ind].SubItems[1].Text;                 //fio
+
+                if (lstwDataBaseMain.Items[ind].Text == "0")                                //данных о проходе нет
+                {                                                                                      
                     dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[3].Text);  //время начала работы по графику
                     udBeforeH.Value = dt;
                     udBeforeM.Value = dt;
@@ -163,7 +164,7 @@ namespace TimeWorkTracking
                     udAfterH.Value = dt;
                     udAfterM.Value = dt;
 
-                    //                    cbSMarks.SelectedValue = lstwDataBaseMain.Items[ind].SubItems[5].Text;  //тип специальной отметки
+                    cbSMarks.Text = "-";                                                    //тип специальной отметки
 
                     //дата время начала специальной отметки
                     dt = DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH:mm"));
@@ -174,15 +175,15 @@ namespace TimeWorkTracking
                     smDStop.Value = dt;
                     smTStop.Value = dt;
 
-                    tbNote.Text = "";// lstwDataBaseMain.Items[ind].SubItems[8].Text;       //комментарий к специальной отметке
+                    tbNote.Text = "";                                                       //комментарий к специальной отметке
 
                     btDelete.Visible = false;                                               //заблокировать кнопку DELETE    
                     btInsertUpdate.Text = "Добавить";
                     btInsertUpdate.ImageIndex = 1;
                     btInsertUpdate.Enabled = true;                                          //заблокировать кнопку UPDATE  
                 }
-                else
-                {                                                                           //данные о проходе есть
+                else                                                                        //данные о проходе есть
+                {                                                                           
                     dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[9].Text);  //время первого прохода
                     udBeforeH.Value = dt;
                     udBeforeM.Value = dt;
@@ -326,11 +327,9 @@ namespace TimeWorkTracking
                 lstwDataBaseMain.EnsureVisible(index);                      //показать в области видимости окна
             }
         }
-        private void mcRegDate_DateSelected(object sender, DateRangeEventArgs e)
-        {
-        }
 
         //подсчитать количество рабочих дней
+/*
         private static double getBusinessDays(DateTime startD, DateTime endD)
         {
             double calcBusinessDays =
@@ -342,7 +341,7 @@ namespace TimeWorkTracking
 
             return calcBusinessDays;
         }
-
+*/
         //кнопка Добавить/Обновить запись в БД
         private void btUpdate_Click(object sender, EventArgs e)
         {

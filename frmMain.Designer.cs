@@ -740,7 +740,6 @@ namespace TimeWorkTracking
             this.mcRegDate.ShowWeekNumbers = true;
             this.mcRegDate.TabIndex = 2;
             this.mcRegDate.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.mcRegDate_DateChanged);
-            this.mcRegDate.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.mcRegDate_DateSelected);
             // 
             // btDelete
             // 
