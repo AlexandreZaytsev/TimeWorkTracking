@@ -743,7 +743,6 @@ namespace TimeWorkTracking
             // 
             // btDelete
             // 
-            this.btDelete.Enabled = false;
             this.btDelete.ImageIndex = 3;
             this.btDelete.ImageList = this.imgListButtonMain;
             this.btDelete.Location = new System.Drawing.Point(471, 635);

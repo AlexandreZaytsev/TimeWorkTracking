@@ -110,6 +110,9 @@ namespace TimeWorkTracking
                     lvi.SubItems.Add(drow["specmarkNote"].ToString());              //комментарий к специальной отметке
                     lvi.SubItems.Add(drow["ptSart"].ToString());                    //время первого прохода
                     lvi.SubItems.Add(drow["ptStop"].ToString());                    //время последнего прохода
+                    lvi.SubItems.Add(drow["noLunch"].ToString());                   //признак обеда
+                    lvi.SubItems.Add(drow["workSchemeId"].ToString());              //схема работы
+                    lvi.SubItems.Add(drow["passDate"].ToString());                  //дата регистрации
 
                     lstwDataBaseMain.Items.Add(lvi);       // Add the list items to the ListView
                 }
@@ -193,10 +196,19 @@ namespace TimeWorkTracking
 
                     cbSMarks.SelectedValue = lstwDataBaseMain.Items[ind].SubItems[5].Text;  //тип специальной отметки
 
-                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[6].Text);  //время начала специальной отметки
+                    if (lstwDataBaseMain.Items[ind].SubItems[6].Text == "")
+                        dt = DateTime.Parse(DateTime.Parse(lstwDataBaseMain.Items[ind].SubItems[13].Text).ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH:mm"));
+                    else
+                        dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[6].Text);  //время начала специальной отметки
+
                     smDStart.Value = dt;
                     smTStart.Value = dt;
-                    dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[7].Text);  //время окончания специальной отметки
+
+                    if (lstwDataBaseMain.Items[ind].SubItems[7].Text == "")
+                        dt = DateTime.Parse(DateTime.Parse(lstwDataBaseMain.Items[ind].SubItems[13].Text).ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH:mm"));
+                    else
+                        dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[7].Text);  //время окончания специальной отметки
+
                     smDStop.Value = dt;
                     smTStop.Value = dt;
 
@@ -469,84 +481,177 @@ namespace TimeWorkTracking
         }
         //Добавить/Обновить запись в БД
         void WriteRecord(DateTime vDateIn, DateTime vDateOut, string vSpDateIn, string vSpDateOut)
-                {
-                    string key = DateTime.Now.ToString("yyyyMMddHHmmss");           //ключевое поле
-                    string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-                    /*
-                                            "id bigint PRIMARY KEY IDENTITY, " +
-                                            "author VARCHAR(150) NOT NULL, " +                                          //имя учетной записи сеанса
-                                            "passDate Datetime NOT NULL, " +                                                //*дата события (без времени) 
-                                            "passId VARCHAR(20) NOT NULL FOREIGN KEY REFERENCES Users(extId), " +       //*->ссылка на внешний id пользователя
-                                            "passTimeStart Datetime NOT NULL, " +                                           //время первого входа (без даты)
-                                            "passTimeStop Datetime NOT NULL, " +                                            //время последнего выхода (без даты)
-                                            "infoLunchId bit DEFAULT 1, " +                                             //флаг признака обеда
-                                            "infoWorkSchemeId int NULL FOREIGN KEY REFERENCES UserWorkScheme(id), " +   //->ссылка на схему работы
-                                            "timeScheduleFact int DEFAULT 0, " +                                        //отработанное время (мин)
-                                            "timeScheduleWithoutLunch int DEFAULT 0, " +                                //отработанное время без обеда (мин)
-                                            "timeScheduleLess int DEFAULT 0, " +                                        //время недоработки (мин)
-                                            "timeScheduleOver int DEFAULT 0, " +                                        //время переработки (мин)
-                                            "specmarkId int NOT NULL FOREIGN KEY REFERENCES SpecialMarks(id), " +       //->ссылка на специальные отметки
-                                            "specmarkTimeStart Datetime NULL, " +                                       //датавремя начала действия специальных отметок
-                                            "specmarkTimeStop Datetime NULL, " +                                        //датавремя окончания специальных отметок
-                                            "specmarkNote VARCHAR(1024) NULL, " +                                       //комментарий к специальным отметкам
-                                            "totalHoursInWork int DEFAULT 0, " +                                        //итог рабочего времени в графике (мин)
-                                            "totalHoursOutsideWork int DEFAULT 0" +                                     //итог рабочего времени вне графика (мин)
-                                            "UNIQUE(passDate, passId) " +                                               //уникальность на уровне таблицы
+        {
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            string sql = "";
+            int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
+            string keyUser = lstwDataBaseMain.Items[index].SubItems[2].Text;//ключевое поле внешний id пользователя
+            string keyDate = mcRegDate.SelectionStart.ToString("yyyyMMdd"); //ключевое поле дата прохода
 
-                     */
-                    /*
-                    string sql =
-                      "UPDATE EventsPass Set " +
-                        "departmentId = " + departmentId + ", " +
-                        "postId = " + postId + ", " +
-                        "timeStart = " + "'" + ((DateTime)meta[4]).ToShortTimeString() + "', " +
-                        "timeStop = " + "'" + ((DateTime)meta[5]).ToShortTimeString() + "', " +
-                        "noLunch = " + ((Boolean)meta[6] ? 1 : 0) + ", " +
-                        "workSchemeId = " + workSchemeId + ", " +
-                        "uses = " + ((Boolean)meta[8] ? 1 : 0) + " " +
-                        "WHERE extId = '" + meta[0].ToString() + "' and name = '" + meta[3].ToString() + "'; " +
-                      "IF @@ROWCOUNT = 0 " +
-                      "INSERT INTO EventsPass(" +
-                        "author, " +
-                        "passDate, " +
-                        "passId, " +
-                        "passTimeStart, " +
-                        "passTimeStop, " +
-                        "infoLunchId, " +
-                        "infoWorkSchemeId, " +
-                        "timeScheduleFact, " +
-                        "timeScheduleWithoutLunch, " +
-                        "timeScheduleLess, " +
-                        "timeScheduleOver, " +
-                        "specmarkId, " +
-                        "specmarkTimeStart, " +
-                        "specmarkTimeStop, " +
-                        "specmarkNote, " +
-                        "totalHoursInWork, " +
-                        "totalHoursOutsideWork) " +
-                      "VALUES (" +
-                        "N'" + Environment.UserName.ToString() + "', " +                                         //
-                        "'" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "', " +
-                        "'" + lstwDataBaseMain.Items[lstwDataBaseMain.SelectedIndex()].SubItems[2].Text + "', " +
-                        "'" + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm") + "', " +
-                        "'" + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm") + "', " +
+            string pacsTimeStart = "";                                      //строка Дата Время прохода СКУД
+            string pacsTimeStop = "";                                       //строка Дата Время выхода СКУД
 
-                        0 + ", " +
-                        "N'" + tbName.Text.Trim() + "', " +
-                        "N'" + tbNote.Text.Trim() + "', " +
-                        ((DataRowView)cbDepartment.SelectedItem).Row["id"] + ", " +
-                        ((DataRowView)cbPost.SelectedItem).Row["id"] + ", " +
-                        (chbLunch.Checked ? 1 : 0) + ", " +
-                        ((DataRowView)cbSheme.SelectedItem).Row["id"] + ", " +
-                        (chUse.Checked ? 1 : 0) +
-                      ")";
-                    MsSqlDatabase.RequestNonQuery(cs, sql, false);
+            int chLunch = lstwDataBaseMain.Items[index].SubItems[11].Text == "1" ? 0 : 60;  //0 мин не обедает 60 мин обедает
+            int wScheme = lstwDataBaseMain.Items[index].SubItems[12].Text == "1" ? 1 : 0;   //1 режим почасовой 0 режим поминутный
+            double timeScheduleFact = (vDateOut - vDateIn).Minutes;                           //Всего минут по факту 
 
-                    LoadList(MsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));// order by extId desc"));
-                    lstwDataBaseUsers.FindListByColValue(2, key);                   //найти и выделить позицию
-                    tbName_TextChanged(null, null);                                 //обновить поля и кнопки
-        */
-                }
+            int extMin = pCalendar.getLengthWorkHoliday(vDateIn);           //количество минут для короткого длинного и обычного дня     
+            //------------------------
+            double cMin = timeScheduleFact;
+            double tempMin = cMin;                                          //Сохраним текущее время
+            switch (wScheme)                                                 //Тариф    
+            {
+                case 1:                                                     //Почасовой
+                    cMin = cMin - chLunch;                                  //Учитывая Обед
+                    //! исключения сокращенный день только для полной занятости
+                    cMin = cMin < 0 ? tempMin : cMin;                       //Если ушли в минус вернемся обратно
+                    tempMin = cMin;                                         //Сохраним текущее время
+                    //!!!!! Плюс потому что секретарь отмечает фактическое время ухода а человек уходит раньше на час за счет праздника
+                    cMin = cMin + extMin;                                   //Учтем Сокращенный Предпраздничный День
+                    //!!!!! Поэтому этот ранний уход компенсируем добавляя час из сокращенного времени
+                    cMin = cMin < 0 ? tempMin : cMin;                       //Если ушли в минус вернемся обратно
+                    break;
+                case 0:                                                     //Поминутный
+                    cMin = cMin >= 300 ? cMin - chLunch : cMin;             //Если студент отработал больше чем 4 часа (Учитываем Обед)
+                    break;
+            }
+            double timeScheduleWithoutLunch = cMin;                         //За минусом обеда и сокращений
+            //------------------------
+            double timeScheduleLess;                                        //Недоработка
+            double timeScheduleOver;                                        //Переработка
+
+            if (cMin == 0)
+            {
+                timeScheduleLess = 0;                                       //Недоработка
+                timeScheduleOver = 0;                                       //Переработка
+            }
+            else
+            {
+                double dMin = (8 * 60) + extMin;                            //Прочитать количество рабочих часов в дне по календарю
+                if (cMin < dMin)                                            //Недоработка
+                    timeScheduleLess = dMin - cMin;
+                else
+                    timeScheduleLess = 0;
+
+                if (cMin > dMin)                                            //Переработка
+                    timeScheduleOver = cMin - dMin;
+                else
+                    timeScheduleOver = 0;
+            }
+            //------------------------
+            int specmarkId = (int)((DataRowView)cbSMarks.SelectedItem).Row["id"];   //код спец отметок
+            string specmarkTimeStart = cbSMarks.Text == "-" ? "" : smDStart.Value.ToString("yyyy-MM-dd") + " " + smTStart.Value.ToString("HH:mm"); //строка Дата начала спец. отметок 
+            string specmarkTimeStop = cbSMarks.Text == "-" ? "" : smDStop.Value.ToString("yyyy-MM-dd") + " " + smTStop.Value.ToString("HH:mm");  //строка Дата окончания спец. отметок
+            string specmarkNote = tbNote.Text.Trim();                       //Комментарий спец отметок
+            //------------------------
+            //формулы
+            double totalHoursInWork;
+            double totalHoursOutsideWork=0;
+            DateTime dMainBg;
+            DateTime dMainEn;
+            DateTime dSpecBg;
+            DateTime dSpecEn;
+
+            if (cbSMarks.Text == "-") 
+            {
+                totalHoursInWork = 0;                                       //Итоги. Время всего
+                totalHoursOutsideWork = 0;                                  //Итоги. Вне рабочего дня
+            }
+            else
+            {
+                //приведем все к одной дате
+                dMainBg = DateTime.Parse("1984-05-22" + " " + vDateIn.ToString("HH:mm"));                   //Начало Факт
+                dMainEn = DateTime.Parse("1984-05-22" + " " + vDateOut.ToString("HH:mm"));                  //Конец Факт
+                dSpecBg = DateTime.Parse("1984-05-22" + " " + DateTime.Parse(vSpDateIn).ToString("HH:mm")); //Начало Спец
+                dSpecEn = DateTime.Parse("1984-05-22" + " " + DateTime.Parse(vSpDateOut).ToString("HH:mm"));//Конец Спец
+
+                totalHoursInWork = Math.Abs((dSpecEn - dSpecBg).Minutes);                                   //Итоги. Время всего
+
+                //если диапазоны не пересекаются (Итоги. Вне рабочего дня)
+                if ((dSpecEn < dMainBg && dSpecEn <= dMainBg) || (dSpecBg >= dMainEn && dSpecEn > dMainEn))
+                    totalHoursOutsideWork = Math.Abs((dSpecEn - dSpecBg).Minutes);  //берем все время диапазона спец отметок
+                //если нос спецотметок входит в основное время
+                if (dSpecBg < dMainBg && (dSpecEn > dMainBg && dSpecEn <= dMainEn))
+                    totalHoursOutsideWork = Math.Abs((dSpecBg - dMainBg).Minutes);  //разница между началами диапазонов
+                //если хвост спецотметок задержался в основном времени
+                if ((dSpecBg >= dMainBg && dSpecBg < dMainEn) && dSpecEn > dMainEn)
+                    totalHoursOutsideWork = Math.Abs((dSpecEn - dMainEn).Minutes);  //разница между концами диапазонов
+                //если диапазон внутри основного времени - не считаем
+                if (dSpecBg >= dMainBg && dSpecEn <= dMainEn) 
+                    totalHoursOutsideWork = 0;                                      //спец диапазон входит в фактический диапазон
+              }
+            //------------------------
+            if (btInsertUpdate.Text == "Добавить") 
+            {
+                sql =
+                  "INSERT INTO EventsPass(" +
+                    "author, " +                                    //имя учетной записи сеанса
+                    "passDate, " +                                  //*дата события (без времени)
+                    "passId, " +                                    //*внешний id пользователя
+                    "passTimeStart, " +                             //время первого входа (без даты)
+                    "passTimeStop, " +                              //время последнего выхода (без даты)
+                    "pacsTimeStart, " +                             //время первого входа по СКУД (без даты)
+                    "pacsTimeStop, " +                              //время последнего выхода по СКУД (без даты)
+                    "timeScheduleFact, " +                          //отработанное время (мин)
+                    "timeScheduleWithoutLunch, " +                  //отработанное время без обеда (мин)
+                    "timeScheduleLess, " +                          //время недоработки (мин)
+                    "timeScheduleOver, " +                          //время переработки (мин)
+                    "specmarkId, " +                                //->ссылка на специальные отметки
+                    "specmarkTimeStart, " +                         //датавремя начала действия специальных отметок
+                    "specmarkTimeStop, " +                          //датавремя окончания специальных отметок
+                    "specmarkNote, " +                              //комментарий к специальным отметкам
+                    "totalHoursInWork, " +                          //итог рабочего времени в графике (мин)
+                    "totalHoursOutsideWork) " +                     //итог рабочего времени вне графика (мин)
+                  "VALUES (" +
+                    "N'" + Environment.UserName.ToString() + "', " +                                         
+                    "'" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "', " +
+                    "'" + keyUser + "', " +
+                    "'" + vDateIn.ToString() + "', " +
+                    "'" + vDateOut.ToString() + "', " +
+                    (pacsTimeStart == "" ? "NULL" : "'" + pacsTimeStart + "'") +", " +
+                    (pacsTimeStop == "" ? "NULL" : "'" + pacsTimeStop + "'") + ", " +
+                    timeScheduleFact + ", " +
+                    timeScheduleWithoutLunch + ", " +
+                    timeScheduleLess + ", " +
+                    timeScheduleOver + ", " +
+                    specmarkId + ", " +
+                    (specmarkTimeStart == "" ? "NULL" : "'" + specmarkTimeStart + "'") + ", " +
+                    (specmarkTimeStop == "" ? "NULL" : "'" + specmarkTimeStop + "'") + ", " +
+                    "N'" + specmarkNote + "', " +
+                    totalHoursInWork + ", " +
+                    totalHoursOutsideWork +
+                  ")";
+            }
+            else 
+            {
+                sql =
+                  "UPDATE EventsPass Set " +
+                    "author = " + "N'" + Environment.UserName.ToString() + "', " +
+                    "passTimeStart = " + "'" + vDateIn.ToString() + "', " +
+                    "passTimeStop = " + "'" + vDateOut.ToString() + "', " +
+                    "pacsTimeStart = " + (pacsTimeStart == "" ? "NULL" : "'" + pacsTimeStart + "'") + ", " +
+                    "pacsTimeStop = " + (pacsTimeStop == "" ? "NULL" : "'" + pacsTimeStop + "'") + ", " +
+                    "timeScheduleFact = " + timeScheduleFact + ", " +
+                    "timeScheduleWithoutLunch = " + timeScheduleWithoutLunch + ", " +
+                    "timeScheduleLess = " + timeScheduleLess + ", " +
+                    "timeScheduleOver = " + timeScheduleOver + ", " +
+                    "specmarkId = " + specmarkId + ", " +
+                    "specmarkTimeStart = " + (specmarkTimeStart == "" ? "NULL" : "'" + specmarkTimeStart + "'") + ", " +
+                    "specmarkTimeStop = " + (specmarkTimeStop == "" ? "NULL" : "'" + specmarkTimeStop + "'") + ", " +
+                    "specmarkNote = " + "N'" + specmarkNote + "', " +
+                    "totalHoursInWork = " + totalHoursInWork + ", " +
+                    "totalHoursOutsideWork = " + totalHoursOutsideWork + " " +
+                  "WHERE passDate = '" + keyDate + "' " +                   //*дата прохода
+                    "and passId = '" + keyUser + "'";                       //*внешний id сотрудника
+            }
+
+            clMsSqlDatabase.RequestNonQuery(cs, sql, false);
+
+            LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + keyDate + "','') order by fio"));
+            lstwDataBaseMain.Items[index].Selected = true;
+            lstwDataBaseMain.HideSelection = false;                         //оставить выделение строки при потере фокуса ListView
+            lstwDataBaseMain.EnsureVisible(index);                          //показать в области видимости окна
+        }
         //кнопка удалить запись в БД
         private void btDelete_Click(object sender, EventArgs e)
         {

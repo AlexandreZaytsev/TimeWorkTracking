@@ -31,6 +31,35 @@ namespace TimeWorkTracking
             return dateList;
         }
 
+        //проверить дату на длину (длинный короткий нормальный)
+        public int getLengthWorkHoliday(DateTime chDate)
+        {
+            int ret = 0;
+            for (int i = 0; i < dtWorkCalendar.Rows.Count; i++)         //Display items in the ListView control
+            {
+                DataRow drow = dtWorkCalendar.Rows[i];
+                if (drow.RowState != DataRowState.Deleted)              //Only row that have not been deleted
+                {
+                    if (DateTime.Compare(chDate.Date, (DateTime)drow["dWork"]) == 0)
+                    {
+                        switch (drow["dLength"].ToString()) 
+                        {
+                            case "Короткий":                            //меньше на час
+                                ret = -60;
+                                break;
+                            case "Длинный":                             //больше на час
+                                ret = 60;
+                                break;
+                            default:
+                                ret = 0;
+                                break;
+                        }
+                    }
+                }
+            }
+            return ret;
+        }
+
         //проdерить дату на праздник (перенос)
         public bool chechWorkHoliday(DateTime chDate)
         {

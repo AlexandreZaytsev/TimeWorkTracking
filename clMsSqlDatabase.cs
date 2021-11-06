@@ -247,8 +247,8 @@ namespace TimeWorkTracking
                         "note VARCHAR(1024) NULL, " +                                               //расшифровка
                         "departmentId int NOT NULL FOREIGN KEY REFERENCES UserDepartment(id), " +   //->ссылка на департамент
                         "postId int NOT NULL FOREIGN KEY REFERENCES UserPost(id), " +               //->ссылка на должность
-                        "timeStart Datetime NULL, " +                                                   //время начала работы по графику (без даты)    
-                        "timeStop Datetime NULL, " +                                                    //время окончания работы по графику (без даты)
+                        "timeStart Datetime NULL, " +                                               //время начала работы по графику (без даты)    
+                        "timeStop Datetime NULL, " +                                                //время окончания работы по графику (без даты)
                         "noLunch bit DEFAULT 1, " +                                                 //флаг признака обеда
                         "workSchemeId int NOT NULL FOREIGN KEY REFERENCES UserWorkScheme(id), " +   //->ссылка на схему работы
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
