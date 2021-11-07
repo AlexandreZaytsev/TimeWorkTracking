@@ -84,7 +84,8 @@ namespace TimeWorkTracking
 
                     Excel.Worksheet sheet = (Excel.Worksheet)workbook.Sheets["Reference"];
                     Excel.Range range = (Excel.Range)sheet.Range["Users"];// ().Cells[row, col];
-                    string n = "'" + range.Parent + "'!" + range.Address;
+                 
+                    //   string n = "'" + range.Parent + "'!" + range.Address;
 //                    Set b = Worksheets(2).Range("Users")
 //s = "'" & b.Parent.name & "'!" & b.Address(External:= False)
                     foreach (var rangeName in workbook.Names)
