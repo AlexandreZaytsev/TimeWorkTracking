@@ -90,6 +90,7 @@ namespace TimeWorkTracking
             this.btInsertUpdate = new System.Windows.Forms.Button();
             this.lMsg = new System.Windows.Forms.Label();
             this.toolTipMsgMain = new System.Windows.Forms.ToolTip(this.components);
+            this.btPanel = new System.Windows.Forms.Panel();
             this.statusStripMain.SuspendLayout();
             this.mainPanelRegistration.SuspendLayout();
             this.grUsers.SuspendLayout();
@@ -99,6 +100,7 @@ namespace TimeWorkTracking
             this.pPacs.SuspendLayout();
             this.gbNavigator.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.btPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStripMain
@@ -126,7 +128,7 @@ namespace TimeWorkTracking
             this.statusStripMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStripMain.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.statusStripMain.ShowItemToolTips = true;
-            this.statusStripMain.Size = new System.Drawing.Size(974, 26);
+            this.statusStripMain.Size = new System.Drawing.Size(971, 26);
             this.statusStripMain.SizingGrip = false;
             this.statusStripMain.TabIndex = 15;
             this.statusStripMain.Text = "statusStrip1";
@@ -164,7 +166,7 @@ namespace TimeWorkTracking
             // 
             this.toolStripStatusLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(354, 20);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(351, 20);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "    Справочники:";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -266,18 +268,16 @@ namespace TimeWorkTracking
             // 
             // mainPanelRegistration
             // 
+            this.mainPanelRegistration.Controls.Add(this.btPanel);
             this.mainPanelRegistration.Controls.Add(this.grUsers);
             this.mainPanelRegistration.Controls.Add(this.grRegistrator);
             this.mainPanelRegistration.Controls.Add(this.gbNavigator);
-            this.mainPanelRegistration.Controls.Add(this.btDelete);
-            this.mainPanelRegistration.Controls.Add(this.btInsertUpdate);
-            this.mainPanelRegistration.Controls.Add(this.lMsg);
             this.mainPanelRegistration.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanelRegistration.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mainPanelRegistration.Location = new System.Drawing.Point(0, 26);
             this.mainPanelRegistration.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.mainPanelRegistration.Name = "mainPanelRegistration";
-            this.mainPanelRegistration.Size = new System.Drawing.Size(974, 696);
+            this.mainPanelRegistration.Size = new System.Drawing.Size(971, 696);
             this.mainPanelRegistration.TabIndex = 16;
             // 
             // grUsers
@@ -745,7 +745,7 @@ namespace TimeWorkTracking
             // 
             this.btDelete.ImageIndex = 3;
             this.btDelete.ImageList = this.imgListButtonMain;
-            this.btDelete.Location = new System.Drawing.Point(471, 635);
+            this.btDelete.Location = new System.Drawing.Point(3, 2);
             this.btDelete.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btDelete.Name = "btDelete";
             this.btDelete.Size = new System.Drawing.Size(140, 39);
@@ -779,7 +779,7 @@ namespace TimeWorkTracking
             this.btInsertUpdate.Enabled = false;
             this.btInsertUpdate.ImageIndex = 1;
             this.btInsertUpdate.ImageList = this.imgListButtonMain;
-            this.btInsertUpdate.Location = new System.Drawing.Point(823, 635);
+            this.btInsertUpdate.Location = new System.Drawing.Point(349, 2);
             this.btInsertUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btInsertUpdate.Name = "btInsertUpdate";
             this.btInsertUpdate.Size = new System.Drawing.Size(140, 39);
@@ -797,18 +797,28 @@ namespace TimeWorkTracking
             this.lMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lMsg.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lMsg.ImageIndex = 6;
-            this.lMsg.Location = new System.Drawing.Point(747, 645);
+            this.lMsg.Location = new System.Drawing.Point(279, 12);
             this.lMsg.Name = "lMsg";
             this.lMsg.Size = new System.Drawing.Size(200, 20);
             this.lMsg.TabIndex = 29;
             this.lMsg.Text = "      Новая запись в БД";
             this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // btPanel
+            // 
+            this.btPanel.Controls.Add(this.btInsertUpdate);
+            this.btPanel.Controls.Add(this.btDelete);
+            this.btPanel.Controls.Add(this.lMsg);
+            this.btPanel.Location = new System.Drawing.Point(471, 632);
+            this.btPanel.Name = "btPanel";
+            this.btPanel.Size = new System.Drawing.Size(492, 44);
+            this.btPanel.TabIndex = 39;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(974, 722);
+            this.ClientSize = new System.Drawing.Size(971, 722);
             this.Controls.Add(this.mainPanelRegistration);
             this.Controls.Add(this.statusStripMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -825,7 +835,6 @@ namespace TimeWorkTracking
             this.statusStripMain.ResumeLayout(false);
             this.statusStripMain.PerformLayout();
             this.mainPanelRegistration.ResumeLayout(false);
-            this.mainPanelRegistration.PerformLayout();
             this.grUsers.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
@@ -836,6 +845,8 @@ namespace TimeWorkTracking
             this.pPacs.PerformLayout();
             this.gbNavigator.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
+            this.btPanel.ResumeLayout(false);
+            this.btPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -901,6 +912,7 @@ namespace TimeWorkTracking
         private System.Windows.Forms.MonthCalendar mcRegDate;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.WebBrowser webInfoDay;
+        private System.Windows.Forms.Panel btPanel;
     }
 }
 

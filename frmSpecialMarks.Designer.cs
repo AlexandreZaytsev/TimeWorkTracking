@@ -54,8 +54,10 @@ namespace TimeWorkTracking
             this.name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lMsg = new System.Windows.Forms.Label();
             this.toolTipMsgMarks = new System.Windows.Forms.ToolTip(this.components);
+            this.btPanel = new System.Windows.Forms.Panel();
             this.mainPanelSpecialMarks.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.btPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // imgListStatusMarks
@@ -69,11 +71,9 @@ namespace TimeWorkTracking
             // 
             // mainPanelSpecialMarks
             // 
-            this.mainPanelSpecialMarks.Controls.Add(this.btUpdate);
-            this.mainPanelSpecialMarks.Controls.Add(this.btInsert);
+            this.mainPanelSpecialMarks.Controls.Add(this.btPanel);
             this.mainPanelSpecialMarks.Controls.Add(this.panel1);
             this.mainPanelSpecialMarks.Controls.Add(this.lstwDataBaseSpecialMarks);
-            this.mainPanelSpecialMarks.Controls.Add(this.lMsg);
             this.mainPanelSpecialMarks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanelSpecialMarks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mainPanelSpecialMarks.Location = new System.Drawing.Point(0, 0);
@@ -88,7 +88,7 @@ namespace TimeWorkTracking
             this.btUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btUpdate.ImageIndex = 2;
             this.btUpdate.ImageList = this.imgListButtonMarks;
-            this.btUpdate.Location = new System.Drawing.Point(752, 249);
+            this.btUpdate.Location = new System.Drawing.Point(238, 2);
             this.btUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btUpdate.Name = "btUpdate";
             this.btUpdate.Size = new System.Drawing.Size(140, 32);
@@ -119,7 +119,7 @@ namespace TimeWorkTracking
             this.btInsert.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btInsert.ImageIndex = 1;
             this.btInsert.ImageList = this.imgListButtonMarks;
-            this.btInsert.Location = new System.Drawing.Point(512, 249);
+            this.btInsert.Location = new System.Drawing.Point(3, 2);
             this.btInsert.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btInsert.Name = "btInsert";
             this.btInsert.Size = new System.Drawing.Size(140, 32);
@@ -167,7 +167,7 @@ namespace TimeWorkTracking
             this.tbID.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbID.Enabled = false;
             this.tbID.Location = new System.Drawing.Point(176, 9);
-            this.tbID.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbID.Margin = new System.Windows.Forms.Padding(4);
             this.tbID.Name = "tbID";
             this.tbID.Size = new System.Drawing.Size(48, 17);
             this.tbID.TabIndex = 23;
@@ -316,12 +316,22 @@ namespace TimeWorkTracking
             this.lMsg.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lMsg.ImageIndex = 6;
             this.lMsg.ImageList = this.imgListButtonMarks;
-            this.lMsg.Location = new System.Drawing.Point(676, 254);
+            this.lMsg.Location = new System.Drawing.Point(167, 7);
             this.lMsg.Name = "lMsg";
             this.lMsg.Size = new System.Drawing.Size(200, 20);
             this.lMsg.TabIndex = 20;
             this.lMsg.Text = "      Новая запись в БД";
             this.lMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // btPanel
+            // 
+            this.btPanel.Controls.Add(this.btInsert);
+            this.btPanel.Controls.Add(this.btUpdate);
+            this.btPanel.Controls.Add(this.lMsg);
+            this.btPanel.Location = new System.Drawing.Point(511, 239);
+            this.btPanel.Name = "btPanel";
+            this.btPanel.Size = new System.Drawing.Size(380, 36);
+            this.btPanel.TabIndex = 21;
             // 
             // frmSpecialMarks
             // 
@@ -331,14 +341,15 @@ namespace TimeWorkTracking
             this.Controls.Add(this.mainPanelSpecialMarks);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmSpecialMarks";
             this.Text = "Специальные отметки";
             this.Load += new System.EventHandler(this.frmSpecialMarks_Load);
             this.mainPanelSpecialMarks.ResumeLayout(false);
-            this.mainPanelSpecialMarks.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.btPanel.ResumeLayout(false);
+            this.btPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -367,5 +378,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Label lMsg;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbID;
+        private System.Windows.Forms.Panel btPanel;
     }
 }

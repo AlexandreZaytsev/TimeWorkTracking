@@ -31,7 +31,7 @@ namespace TimeWorkTracking
             return dateList;
         }
 
-        //проверить дату на длину (длинный короткий нормальный)
+        //проверить дату на длину (по производственному календарю)
         public int getLengthWorkHoliday(DateTime chDate)
         {
             int ret = 0;
@@ -40,7 +40,10 @@ namespace TimeWorkTracking
                 DataRow drow = dtWorkCalendar.Rows[i];
                 if (drow.RowState != DataRowState.Deleted)              //Only row that have not been deleted
                 {
-                    if (DateTime.Compare(chDate.Date, (DateTime)drow["dWork"]) == 0)
+                    if (
+                        (DateTime.Compare(chDate.Date, (DateTime)drow["dWork"]) == 0) ||
+                        (DateTime.Compare(chDate.Date, (DateTime)drow["dSource"]) == 0)
+                        )
                     {
                         switch (drow["dLength"].ToString()) 
                         {
@@ -69,13 +72,27 @@ namespace TimeWorkTracking
                 DataRow drow = dtWorkCalendar.Rows[i];
                 if (drow.RowState != DataRowState.Deleted)              //Only row that have not been deleted
                 {
-                    if (DateTime.Compare(chDate.Date, (DateTime)drow["dWork"]) == 0 || drow["dType"].ToString()== "Праздничный") 
+                    if (DateTime.Compare(chDate.Date, (DateTime)drow["dWork"]) == 0 && drow["dType"].ToString()== "Праздничный") 
                     {
                         ret= true;
                     }
                 }
             }
             return ret;
+        }
+
+        //проdерить дату на рабочий день
+        public bool chechWorkDay(DateTime chDate)
+        {
+            KeyValuePair<int, DataRow> infoDate = checkDay(chDate.Date);
+            switch (infoDate.Key)
+            {
+                case 3:                                             //это рабочий день из перенесенного праздника
+                case 5:                                             //это просто рабочий день
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         //проверить день на предмет что это праздникне праздник, выходной или рабочий
@@ -87,8 +104,8 @@ namespace TimeWorkTracking
                 DataRow drow = dtWorkCalendar.Rows[i];
                 if (                                                            //если день совпадает с днем из производственного кадендаря
                     (drow.RowState != DataRowState.Deleted) &&                  //Only row that have not been deleted
-                    ((DateTime.Compare((DateTime)drow["dWork"], dayInfo) == 0) ||
-                     (DateTime.Compare((DateTime)drow["dSource"], dayInfo) == 0))
+                    ((DateTime.Compare((DateTime)drow["dWork"], dayInfo.Date) == 0) ||
+                     (DateTime.Compare((DateTime)drow["dSource"], dayInfo.Date) == 0))
                     )
                 {
                     check = true;
@@ -96,7 +113,7 @@ namespace TimeWorkTracking
                         return new KeyValuePair<int, DataRow>(0, drow);         //это Праздничный день (без переносов)
                     else
                     {                                                           //перенесенная дата
-                        if (DateTime.Compare((DateTime)drow["dWork"], dayInfo) == 0)
+                        if (DateTime.Compare((DateTime)drow["dWork"], dayInfo.Date) == 0)
                             return new KeyValuePair<int, DataRow>(1, drow);     //это Праздничный день (перенесенная дата)
                         else
                         {                                                       //это реальная дата
@@ -110,7 +127,7 @@ namespace TimeWorkTracking
             }
             if (!check)
             {
-                if (dayInfo.DayOfWeek == DayOfWeek.Saturday || dayInfo.DayOfWeek == DayOfWeek.Sunday)
+                if (dayInfo.Date.DayOfWeek == DayOfWeek.Saturday || dayInfo.Date.DayOfWeek == DayOfWeek.Sunday)
                     return new KeyValuePair<int, DataRow>(4, null);             //это просто Выходной день
                 else
                     return new KeyValuePair<int, DataRow>(5, null);             //это просто Рабочий день
@@ -123,7 +140,7 @@ namespace TimeWorkTracking
         {
             string WORK_AREA = "";
             string imgSrc = "";
-            KeyValuePair<int, DataRow> infoDate = checkDay(dayInfo);
+            KeyValuePair<int, DataRow> infoDate = checkDay(dayInfo.Date);
             switch (infoDate.Key)
             {
                 case 0:                         //это Праздничный день (без переносов)                 
@@ -154,8 +171,8 @@ namespace TimeWorkTracking
                     imgSrc = "'data:image/png;base64, " + Properties.Resources.cDay_48.extImageToBase64Converter(ImageFormat.Png) + "'";
                     WORK_AREA =
                         "<div>" + "Рабочий день" + "</div>" +
+                        "<div style='font-size: 8pt; text-align: center'>" + "(" + infoDate.Value["dLength"].ToString().ToLower() + ")" + "</div>" +
                         "<br>" +
-                        //                     "<div style='font-size: 9pt; text-align: center'>" + "(" + drow["dLength"].ToString().ToLower() + ")" + "</div>" +
                         "<div style='font-size: 9pt;'>" + "Перенесено на дату" + "<br>" +
                         ((DateTime)infoDate.Value["dWork"]).ToString("dd.MM.yyyy г.") + "<br>" +
                         infoDate.Value["dName"].ToString() +

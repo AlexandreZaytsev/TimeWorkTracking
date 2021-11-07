@@ -141,32 +141,42 @@ namespace TimeWorkTracking
         //редактирование ключевого поля Имя
         private void tbName_TextChanged(object sender, EventArgs e)
         {
-            if (tbName.Text.Trim().Length == 0)                             //если поле пустое
+            if (tbName.Text.Trim() == "-") 
             {
-                tbName.BackColor = System.Drawing.SystemColors.Window;      //белый фон
-                lstwDataBaseSpecialMarks.HideSelection = true;              //сбросить выделение строки при потере фокуса ListView
-                btInsert.Enabled = false;                                   //заблокировать кнопку INSERT    
-                btUpdate.Enabled = false;                                   //заблокировать кнопку UPDATE    
+                panel1.Enabled = false;                                         //значение не радактируется
+                btPanel.Enabled = false;
             }
-            else                                                            //если поле не пустое          
+            else 
             {
-                btUpdate.Enabled = true;                                    //разблокировать кнопку записи в БД    
-                if (lstwDataBaseSpecialMarks.Items.Cast<ListViewItem>()     //попробовать найти значение ключевого поля (name) в списке ListView
-                    .Where(x => (x.SubItems[3].Text == tbName.Text.Trim()))
-                    .FirstOrDefault() != null)
-                {                                                           //значение есть
-                    tbName.BackColor = System.Drawing.SystemColors.Control; //серый фон
-                    lstwDataBaseSpecialMarks.HideSelection = false;         //оставить выделение строки при потере фокуса ListView
-
-                    btInsert.Enabled = false;                               //заблокировать кнопку INSERT    
-                    btUpdate.Enabled = true;                                //разблокировать кнопку UPDATE    
-                }
-                else                                                        //значения нет 
+                panel1.Enabled = true;
+                btPanel.Enabled = true;
+                if (tbName.Text.Trim().Length == 0)                             //если поле пустое
                 {
-                    tbName.BackColor = System.Drawing.SystemColors.Window;  //белый фон
-                    lstwDataBaseSpecialMarks.HideSelection = true;          //сбросить выделение строки при потере фокуса ListView
-                    btInsert.Enabled = true;                                //разблокировать кнопку INSERT    
-                    btUpdate.Enabled = true;                                //разблокировать кнопку UPDATE    
+                    tbName.BackColor = System.Drawing.SystemColors.Window;      //белый фон
+                    lstwDataBaseSpecialMarks.HideSelection = true;              //сбросить выделение строки при потере фокуса ListView
+                    btInsert.Enabled = false;                                   //заблокировать кнопку INSERT    
+                    btUpdate.Enabled = false;                                   //заблокировать кнопку UPDATE    
+                }
+                else                                                            //если поле не пустое          
+                {
+                    btUpdate.Enabled = true;                                    //разблокировать кнопку записи в БД    
+                    if (lstwDataBaseSpecialMarks.Items.Cast<ListViewItem>()     //попробовать найти значение ключевого поля (name) в списке ListView
+                        .Where(x => (x.SubItems[3].Text == tbName.Text.Trim()))
+                        .FirstOrDefault() != null)
+                    {                                                           //значение есть
+                        tbName.BackColor = System.Drawing.SystemColors.Control; //серый фон
+                        lstwDataBaseSpecialMarks.HideSelection = false;         //оставить выделение строки при потере фокуса ListView
+
+                        btInsert.Enabled = false;                               //заблокировать кнопку INSERT    
+                        btUpdate.Enabled = true;                                //разблокировать кнопку UPDATE    
+                    }
+                    else                                                        //значения нет 
+                    {
+                        tbName.BackColor = System.Drawing.SystemColors.Window;  //белый фон
+                        lstwDataBaseSpecialMarks.HideSelection = true;          //сбросить выделение строки при потере фокуса ListView
+                        btInsert.Enabled = true;                                //разблокировать кнопку INSERT    
+                        btUpdate.Enabled = true;                                //разблокировать кнопку UPDATE    
+                    }
                 }
             }
         }
