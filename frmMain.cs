@@ -376,7 +376,14 @@ namespace TimeWorkTracking
                 vDate = mcRegDate.SelectionStart;                           //дата из формы + время их формы
                 vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //Время прихода
                 vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
-                WriteRecord(vDateIn, vDateOut, "-", "-");                   //добавить/обновить запись прохода
+                WriteRecord(
+                    vDate, 
+                    vDateIn, 
+                    vDateOut, 
+                    (int)((DataRowView)cbSMarks.SelectedItem).Row["id"], 
+                    "-", 
+                    "-", 
+                    tbNote.Text.Trim());//добавить/обновить запись прохода
             }
             else                                                            //спец отметки есть
             {
@@ -409,7 +416,14 @@ namespace TimeWorkTracking
                             );
                     }
                     if (response == DialogResult.Yes)
-                        WriteRecord(vDateIn, vDateOut, vSpDateIn, vSpDateOut);  //добавить/обновить запись прохода
+                        WriteRecord(
+                            vDate,
+                            vDateIn,
+                            vDateOut,
+                            (int)((DataRowView)cbSMarks.SelectedItem).Row["id"],
+                            vSpDateIn,
+                            vSpDateOut,
+                            tbNote.Text.Trim());//добавить/обновить запись прохода
                 }
                 else                                                        //спец отметки более одного дня
                 {
@@ -447,9 +461,15 @@ namespace TimeWorkTracking
                             vDate = DateTime.Parse(vSpDateIn).AddDays(i);           //смещение на день
                             vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + DateTime.Parse(timeIn).ToString("HH:mm"));        //+ Время начала из графика
                             vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + DateTime.Parse(timeOut).ToString("HH:mm"));      //+ Время окончания из графика
-//                              if (!pCalendar.chechWorkHoliday(vDate))             //если это не праздник
-                                if (pCalendar.chechWorkDay(vDate))                  //если это рабочий день
-                                    WriteRecord(vDateIn, vDateOut, vSpDateIn, vSpDateOut);  //добавить/обновить запись прохода                            }
+                            if (pCalendar.chechWorkDay(vDate))                  //если это рабочий день
+                                WriteRecord(
+                                    vDate,
+                                    vDateIn,
+                                    vDateOut,
+                                    (int)((DataRowView)cbSMarks.SelectedItem).Row["id"],
+                                    vSpDateIn, 
+                                    vSpDateOut,
+                                    tbNote.Text.Trim());//добавить/обновить запись прохода
                         }
                     }
                 }
@@ -483,12 +503,12 @@ namespace TimeWorkTracking
             }
         }
         //Добавить/Обновить запись в БД
-        void WriteRecord(DateTime regDateIn, DateTime vDateIn, DateTime vDateOut, int vSpID, string vSpDateIn, string vSpDateOut, string vSpNote)
+        void WriteRecord(DateTime regDate, DateTime vDateIn, DateTime vDateOut, int vSpID, string vSpDateIn, string vSpDateOut, string vSpNote)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
             string keyUser = lstwDataBaseMain.Items[index].SubItems[2].Text;//ключевое поле внешний id пользователя
-            string keyDate = mcRegDate.SelectionStart.ToString("yyyyMMdd"); //ключевое поле дата прохода
+            string keyDate = regDate.ToString("yyyyMMdd");  //mcRegDate.SelectionStart.ToString("yyyyMMdd"); //ключевое поле дата прохода
 
             string pacsTimeStart = "";                                      //строка Дата Время прохода СКУД
             string pacsTimeStop = "";                                       //строка Дата Время выхода СКУД
@@ -541,12 +561,12 @@ namespace TimeWorkTracking
                     timeScheduleOver = 0;
             }
             //------------------------
-            int specmarkId = (int)((DataRowView)cbSMarks.SelectedItem).Row["id"];   //код спец отметок
+            int specmarkId = vSpID;// (int)((DataRowView)cbSMarks.SelectedItem).Row["id"];   //код спец отметок
 //            string specmarkTimeStart = cbSMarks.Text == "-" ? "" : smDStart.Value.ToString("yyyy-MM-dd") + " " + smTStart.Value.ToString("HH:mm"); //строка Дата начала спец. отметок 
 //            string specmarkTimeStop = cbSMarks.Text == "-" ? "" : smDStop.Value.ToString("yyyy-MM-dd") + " " + smTStop.Value.ToString("HH:mm");  //строка Дата окончания спец. отметок
             string specmarkTimeStart;   //строка Дата начала спец. отметок 
             string specmarkTimeStop;  //строка Дата окончания спец. отметок
-            string specmarkNote = tbNote.Text.Trim();                       //Комментарий спец отметок
+            string specmarkNote = vSpNote;// tbNote.Text.Trim();                       //Комментарий спец отметок
             //------------------------
             //формулы
             double totalHoursInWork;
@@ -556,7 +576,7 @@ namespace TimeWorkTracking
             DateTime dSpecBg;
             DateTime dSpecEn;
 
-            if (vSpDateIn == "-" && vSpDateOut=="-") 
+            if (vSpID == 1) 
             {
                 specmarkTimeStart = "NULL";
                 specmarkTimeStop = "NULL";
@@ -608,7 +628,7 @@ namespace TimeWorkTracking
                 "specmarkNote = " + "N'" + specmarkNote + "', " +
                 "totalHoursInWork = " + totalHoursInWork + ", " +
                 "totalHoursOutsideWork = " + totalHoursOutsideWork + " " +
-              "WHERE passDate = '" + vDateIn.ToString("yyyyMMdd") + "' " +                   //*дата прохода
+              "WHERE passDate = '" + regDate.ToString("yyyyMMdd") + "' " +                   //*дата прохода
                 "and passId = '" + keyUser + "' ; " +                   //*внешний id сотрудника
               "IF @@ROWCOUNT = 0 " +
               "INSERT INTO EventsPass(" +
@@ -631,7 +651,7 @@ namespace TimeWorkTracking
                     "totalHoursOutsideWork) " +                     //итог рабочего времени вне графика (мин)
                   "VALUES (" +
                     "N'" + Environment.UserName.ToString() + "', " +
-                    "'" + vDateIn.ToString("yyyyMMdd") + "', " + // mcRegDate.SelectionStart.ToString("yyyyMMdd") + "', " +
+                    "'" + regDate.ToString("yyyyMMdd") + "', " + // mcRegDate.SelectionStart.ToString("yyyyMMdd") + "', " +
                     "'" + keyUser + "', " +
                     "'" + vDateIn.ToString("yyyyMMdd") + "', " +
                     "'" + vDateOut.ToString("yyyyMMdd") + "', " +
