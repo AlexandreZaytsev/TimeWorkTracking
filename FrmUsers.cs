@@ -44,13 +44,8 @@ namespace TimeWorkTracking
                 udAfterH.Value = new DateTime(2000, 1, 1, 18, 0, 0);
                 udAfterH.Value = new DateTime(2000, 1, 1, 18, 0, 0);
 
-                if (lstwDataBaseUsers.Items.Count == 0)
-                    btImport.Visible = true;                        //загасить импорт если список не пустой
-                else
-                {
-                    btImport.Visible = false;                       //загасить импорт если список не пустой
+                if (lstwDataBaseUsers.Items.Count != 0)
                     lstwDataBaseUsers.Items[0].Selected = true;     //выделить элемент по индексу
-                }
             }
         }
         // Initialize ListView
@@ -310,43 +305,5 @@ namespace TimeWorkTracking
         {
             e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
         }
-
-        //кнопка импорт
-        private void btImport_Click(object sender, EventArgs e)
-        {
-            clImportFromExel.ImportFromExcel();
-            CallBack_FrmUsers_outEvent.callbackEventHandler("", "", null);  //send a general notification
-        }
-
-        //при закрытии формы запустить сообщение 
-        private void frmUsers_FormClosed(object sender, FormClosedEventArgs e)
-        {
-//            CallBack_FrmUsers_outEvent.callbackEventHandler("", "", null);  //send a general notification
-        }
     }
-
-    /*--------------------------------------------------------------------------------------------  
-   CALLBACK OutPut (собственные сообщения)
-   --------------------------------------------------------------------------------------------*/
-    //general notification
-    /// <summary>
-    /// CallBack_GetParam
-    /// исходящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров 
-    /// </summary>
-    public static class CallBack_FrmUsers_outEvent
-    {
-        /// <summary>
-        /// Delegate callbackEvent
-        /// </summary>
-        /// <param name="controlName">имя CTRL</param>
-        /// <param name="controlParentName">имя родителя CNTRL</param>
-        /// <param name="parameterPairs">параметры ключ-значение</param>
-        public delegate void callbackEvent(string controlName, string controlParentName, Dictionary<String, String> parameterPairs);
-        /// <summary>
-        /// The callback event handler
-        /// </summary>
-        public static callbackEvent callbackEventHandler;
-    }
-
-
 }

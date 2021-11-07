@@ -62,8 +62,6 @@ namespace TimeWorkTracking
 
         private void btTestConnectionPacs_Click_1(object sender, EventArgs e)
         {
-
-
             CallBack_FrmDataBasePACS_outEvent.callbackEventHandler("", "", null);  //send a general notification
         }
     }

@@ -27,7 +27,7 @@ namespace TimeWorkTracking
             //подписка события внешних форм 
             CallBack_FrmDataBaseSQL_outEvent.callbackEventHandler = new CallBack_FrmDataBaseSQL_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
             CallBack_FrmDataBasePACS_outEvent.callbackEventHandler = new CallBack_FrmDataBasePACS_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
-            CallBack_FrmUsers_outEvent.callbackEventHandler = new CallBack_FrmUsers_outEvent.callbackEvent(this.CallbackCheckListUsers);    //subscribe (listen) to the general notification
+            CallBack_FrmSetting_outEvent.callbackEventHandler = new CallBack_FrmSetting_outEvent.callbackEvent(this.CallbackCheckListUsers);    //subscribe (listen) to the general notification
 
             InitializeComponent();
             lMsg.Visible = false;                                           //погасить сообщение о записи в БД
@@ -277,6 +277,13 @@ namespace TimeWorkTracking
         private void tsbtDataBasePACS_Click(object sender, EventArgs e)
         {
             frmDataBasePACS frm = new frmDataBasePACS { Owner = this };
+            CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
+            frm.ShowDialog();
+        }
+        //кнопка Импорт Экспорт
+        private void toolSetting_Click(object sender, EventArgs e)
+        {
+            frmSetting frm = new frmSetting { Owner = this };
             CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
             frm.ShowDialog();
         }
