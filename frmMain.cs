@@ -483,7 +483,7 @@ namespace TimeWorkTracking
             }
         }
         //Добавить/Обновить запись в БД
-        void WriteRecord(DateTime vDateIn, DateTime vDateOut, string vSpDateIn, string vSpDateOut)
+        void WriteRecord(DateTime regDateIn, DateTime vDateIn, DateTime vDateOut, int vSpID, string vSpDateIn, string vSpDateOut, string vSpNote)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
