@@ -315,12 +315,13 @@ namespace TimeWorkTracking
         private void btImport_Click(object sender, EventArgs e)
         {
             clImportFromExel.ImportFromExcel();
+            CallBack_FrmUsers_outEvent.callbackEventHandler("", "", null);  //send a general notification
         }
 
         //при закрытии формы запустить сообщение 
         private void frmUsers_FormClosed(object sender, FormClosedEventArgs e)
         {
-            CallBack_FrmUsers_outEvent.callbackEventHandler("", "", null);  //send a general notification
+//            CallBack_FrmUsers_outEvent.callbackEventHandler("", "", null);  //send a general notification
         }
     }
 

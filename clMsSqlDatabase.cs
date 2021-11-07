@@ -46,6 +46,7 @@ namespace TimeWorkTracking
                     //График работы (таблица для списка) Почасовой/Поминутный
                     sqlCommand.CommandText = "CREATE TABLE UserWorkScheme (" +
                         "id int PRIMARY KEY IDENTITY, " +
+                        "cd datetime NOT NULL DEFAULT GETDATE(), " +
                         "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
                         ")";
@@ -58,6 +59,7 @@ namespace TimeWorkTracking
                     //Тип дня производственного календаря (таблица для списка)
                     sqlCommand.CommandText = "CREATE TABLE CalendarDateType (" +
                         "id int PRIMARY KEY IDENTITY, " +
+                        "cd datetime NOT NULL DEFAULT GETDATE(), " +
                         "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
                         ")";
@@ -70,6 +72,7 @@ namespace TimeWorkTracking
                     //Продолжительность дня производственного календаря (таблица для списка)
                     sqlCommand.CommandText = "CREATE TABLE CalendarLengthDay (" +
                         "id int PRIMARY KEY IDENTITY, " +
+                        "cd datetime NOT NULL DEFAULT GETDATE(), " +
                         "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
                         ")";
@@ -83,6 +86,7 @@ namespace TimeWorkTracking
                     //Наименование даты производственного календаря (таблица для списка) 
                     sqlCommand.CommandText = "CREATE TABLE CalendarDateName (" +
                         "id int PRIMARY KEY IDENTITY, " +
+                        "cd datetime NOT NULL DEFAULT GETDATE(), " +
                         "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
                         "date Datetime NULL, " +                                                    //дата (год не учитываем)
                         "dateTypeId int NOT NULL FOREIGN KEY REFERENCES CalendarDateType(id), " +   //->ссылка на тип дня (Праздничный/Выходной и т.д.)
@@ -106,6 +110,7 @@ namespace TimeWorkTracking
                     //Подразделение (таблица для списка)
                     sqlCommand.CommandText = "CREATE TABLE UserDepartment (" +
                         "id int PRIMARY KEY IDENTITY, " +
+                        "cd datetime NOT NULL DEFAULT GETDATE(), " +
                         "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
                         ")";
@@ -126,6 +131,7 @@ namespace TimeWorkTracking
                     //Должность (таблица для списка)
                     sqlCommand.CommandText = "CREATE TABLE UserPost (" +
                         "id int PRIMARY KEY IDENTITY, " +
+                        "cd datetime NOT NULL DEFAULT GETDATE(), " +
                         "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
                         ")";
@@ -156,6 +162,7 @@ namespace TimeWorkTracking
                     //Специальные отметки (самостоятельная таблица)
                     sqlCommand.CommandText = "CREATE TABLE SpecialMarks (" +
                         "id int PRIMARY KEY IDENTITY, " +
+                        "cd datetime NOT NULL DEFAULT GETDATE(), " +
                         "digitalCode VARCHAR(4) NOT NULL, " +                                       //числовой код 
                         "letterCode VARCHAR(4) NOT NULL, " +                                        //строковый код
                         "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
@@ -196,6 +203,7 @@ namespace TimeWorkTracking
                     //Производственный Календарь (таблица использующая внешние данные)
                     sqlCommand.CommandText = "CREATE TABLE Calendars (" +
                         "id int PRIMARY KEY IDENTITY, " +
+                        "cd datetime NOT NULL DEFAULT GETDATE(), " +
                         "originalDate Datetime NOT NULL , " +                                           //оригинальная дата
                         "transferDate Datetime NOT NULL UNIQUE, " +                                     //*реальная дата (перенос)
                         "dateNameId int NOT NULL FOREIGN KEY REFERENCES CalendarDateName(id), " +       //->ссылка на наименование даты (наименование даты и т.д.)
@@ -241,6 +249,7 @@ namespace TimeWorkTracking
                     //Пользователь (таблица использующая внешние данные)
                     sqlCommand.CommandText = "CREATE TABLE Users (" +
                         "id int PRIMARY KEY IDENTITY, " +
+                        "cd datetime NOT NULL DEFAULT GETDATE(), " +
                         "extId VARCHAR(20) NOT NULL UNIQUE, " +                                     //*внешний id для интеграции
                         "crmId NUMERIC DEFAULT 0, " +                                               //внешний id для интеграции с crm
                         "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
@@ -258,6 +267,7 @@ namespace TimeWorkTracking
                     //Учет рабочего времени (таблица использующая внешние данные)
                     sqlCommand.CommandText = "CREATE TABLE EventsPass (" +
                         "id bigint PRIMARY KEY IDENTITY, " +
+                        "cd datetime NOT NULL DEFAULT GETDATE(), " +
                         "author VARCHAR(150) NOT NULL, " +                                          //имя учетной записи сеанса
                         "passDate Datetime NOT NULL, " +                                            //*дата события (без времени) 
                         "passId VARCHAR(20) NOT NULL FOREIGN KEY REFERENCES Users(extId), " +       //*->ссылка на внешний id пользователя
