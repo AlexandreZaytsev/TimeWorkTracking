@@ -5,10 +5,17 @@ using System.Data;
 using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using Excel = Microsoft.Office.Interop.Excel;
+
+
+//using DocumentFormat.OpenXml;
+//using DocumentFormat.OpenXml.Packaging;
+//using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace TimeWorkTracking
 {
@@ -46,7 +53,8 @@ namespace TimeWorkTracking
             OpenFileDialog od = new OpenFileDialog
             {
                 //                Filter = "Excell|*.xls;*.xlsx;*.xlsm;"
-                Filter = "Excel 2010(*.xlsm) | *.xlsm"              //"Excel Worksheets 2003(*.xls)|*.xls|Excel Worksheets 2007(*.xlsx)|*.xlsx|Word Documents(*.doc)|*.doc"
+                Filter = "Excel 2010(*.xlsm) | *.xlsm|XML Documents(*.xml)|*.xml"
+                //"Excel Worksheets 2003(*.xls)|*.xls|Excel Worksheets 2007(*.xlsx)|*.xlsx|Word Documents(*.doc)|*.doc"
             };
             DialogResult dr = od.ShowDialog();
             if (dr == DialogResult.Abort)
@@ -195,6 +203,7 @@ namespace TimeWorkTracking
         //импорт проходов
         private void btImportPass_Click(object sender, EventArgs e)
         {
+
             toolStripProgressBarImport.Value = 0;
             //проверим наличие провайдера
             OleDbEnumerator enumerator = new OleDbEnumerator();
@@ -217,7 +226,12 @@ namespace TimeWorkTracking
                 string excelFilePath = getPathSourse();
                 if (excelFilePath != "")
                 {
-                    string csExcel="", reqExcel="";
+
+                    List<string[]> d = import_xlsx(excelFilePath, 1);
+
+
+
+                    string csExcel ="", reqExcel="";
                 //    DataSet ds = new DataSet();
 
                     /*
@@ -261,6 +275,7 @@ namespace TimeWorkTracking
                     try
                     {
 
+                        /*
                         OleDbConnection connExcel = new OleDbConnection(csExcel);
                         OleDbCommand cmdExcel = new OleDbCommand();
                         try
@@ -296,14 +311,13 @@ namespace TimeWorkTracking
                             connExcel.Dispose();
                         }
 
-                        /*
+                        */
 
 
-                                                using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
-                                                {
-                                                    cnExcel.Open();
-
-                                                    //прочитать имена листов
+                        using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
+                        {
+                            cnExcel.Open();
+                            //прочитать имена листов
                                                     DataTable dtTablesList = cnExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
                                                     foreach (DataRow drTable in dtTablesList.Rows)
                                                     {
@@ -316,17 +330,20 @@ namespace TimeWorkTracking
                                                         }
                                                     }
 
-                                                    using (OleDbCommand cmdExcel1 = new OleDbCommand(reqExcel,cnExcel))
-                                                    {
-                                                        OleDbDataReader result = cmdExcel1.ExecuteReader();
-                                                        while (result.Read())
-                                                        {
-                                              //              Console.WriteLine(result[0].ToString());
-                                                        }
-                                                    }
-                                                }
-                        */
+                        using (OleDbCommand cmdExcel1 = new OleDbCommand(reqExcel,cnExcel))
+                        {
+                            OleDbDataReader result = cmdExcel1.ExecuteReader();
 
+                            toolStripProgressBarImport.Minimum = 0;
+                            toolStripProgressBarImport.Maximum = 56206;
+                            toolStripProgressBarImport.Value = 0;
+                            while (result.Read())
+                            {
+                                    //              Console.WriteLine(result[0].ToString());
+                               toolStripProgressBarImport.Value += 1;
+                            }
+                        }
+                    }
                         MessageBox.Show("Список сотрудников загружен в БД");
                         toolStripProgressBarImport.Value = 0;
                     }
@@ -338,6 +355,77 @@ namespace TimeWorkTracking
             }
         }
 
+        //https://c-sharp.pro/?p=1744
+
+        //https://ru.stackoverflow.com/questions/588737/%D1%8D%D0%BA%D1%81%D0%BF%D0%BE%D1%80%D1%82-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D0%B8%D0%B7-excel-%D1%87%D0%B5%D1%80%D0%B5%D0%B7-oledbdataadapter
+        public static List<string[]> import_xlsx(String filename, int sheet_no)
+        {
+            FileStream file = new FileStream(filename, FileMode.Open);
+            //XmlDocument sharedString = new XmlDocument();
+            XmlDocument page = new XmlDocument();
+            List<string> sharedString = new List<string>();
+            List<string> colums = new List<string>();
+            List<string[]> data = new List<string[]>();
+            string Query = "xl/worksheets/sheet" + sheet_no + ".xml";
+            int ready = 0;
+            while (ready < 2)
+            {
+                byte[] head = new byte[30]; file.Read(head, 0, 30); if (head[0] != 'P') break;  //zip-header
+                int i = (head[27] + head[29]) * 256 + head[28]; //  extra len
+                long paked = head[18] + ((head[19] + (head[20] + head[21] * 256) * 256) * 256);
+                byte[] nam = new byte[255];
+                file.Read(nam, 0, head[26]);
+                if (i != 0) file.Seek(i, SeekOrigin.Current);
+                String aname = System.Text.Encoding.ASCII.GetString(nam, 0, head[26]);
+                if ((aname == "xl/sharedStrings.xml") || (aname == Query) || (paked == 0))
+                {
+                    long lastpos = file.Position;
+                    System.IO.Compression.DeflateStream deflate = new System.IO.Compression.DeflateStream(file, System.IO.Compression.CompressionMode.Decompress);
+                    if (aname == "xl/sharedStrings.xml")
+                    {
+                        XmlDocument xml = new XmlDocument();
+                        xml.Load(deflate);
+                        foreach (XmlNode node in xml.SelectNodes("/*/*/*"))
+                            sharedString.Add(node.InnerText);
+                        ready++;
+                    }
+                    else if (aname == Query) { page.Load(deflate); ready++; };
+                    file.Position = lastpos + paked;
+                }
+                else file.Seek(paked, SeekOrigin.Current);
+            };
+            int line = 1;
+            foreach (XmlNode n in page.SelectNodes("/*/*/*"))
+            {  /*nodes*/
+                if (n.LocalName == "row")
+                    foreach (XmlNode nn in n.ChildNodes)
+                    {
+                        string xpos = nn.Attributes["r"].Value;
+                        int line2 = 0; int ss = -1; int v = -1;
+                        int.TryParse(xpos.Substring(1), out line2);
+                        if (line2 != line) 
+                        { 
+                            data.Add(colums.ToArray()); /*ИМПОРТ ТУТ*/   
+                            colums.Clear(); 
+                            line = line2; 
+                        }
+                        if (nn.FirstChild != null) 
+                            int.TryParse(nn.FirstChild.InnerText, out v);
+                        
+                        colums.Add((nn.Attributes["t"] == null) ? ((nn.FirstChild == null) ? "" : nn.FirstChild.InnerText) : ((v < 0) ? "" : sharedString[v]));
+                    };
+                if (colums.Count != 0) 
+                    data.Add(colums.ToArray());  /*ИМПОРТ ТУТ*/
+            };
+            return data;
+        }
+        //---------
+
+
+
+
+
+        //----------
         /*--------------------------------------------------------------------------------------------  
         CALLBACK InPut (подписка на внешние сообщения)
         --------------------------------------------------------------------------------------------*/
