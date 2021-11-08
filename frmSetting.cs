@@ -204,6 +204,8 @@ namespace TimeWorkTracking
         private void btImportPass_Click(object sender, EventArgs e)
         {
 
+
+
             toolStripProgressBarImport.Value = 0;
             //проверим наличие провайдера
             OleDbEnumerator enumerator = new OleDbEnumerator();
@@ -227,7 +229,26 @@ namespace TimeWorkTracking
                 if (excelFilePath != "")
                 {
 
-                    List<string[]> d = import_xlsx(excelFilePath, 1);
+
+
+                    Excel.Application excelapp = new Excel.Application();
+                    //excelapp.Visible = true;
+                    Excel.Workbook workbook = excelapp.Workbooks.Open(
+                        excelFilePath,
+                        Type.Missing, true, Type.Missing, Type.Missing,
+                        Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                        Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                        Type.Missing, Type.Missing);
+
+                    Excel.Worksheet sheet = (Excel.Worksheet)workbook.Sheets["Reference"];
+                    Excel.Range range = (Excel.Range)sheet.Range["Users"];// ().Cells[row, col];
+                    workbook.Close(false, Type.Missing, Type.Missing);  // Закройте книгу без сохранения изменений.
+                    excelapp.Quit();
+
+
+
+
+                    //         List<string[]> d = import_xlsx(excelFilePath, 1);
 
 
 
