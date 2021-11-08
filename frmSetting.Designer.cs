@@ -55,7 +55,7 @@ namespace TimeWorkTracking
             this.mainPanelSetting.Location = new System.Drawing.Point(0, 0);
             this.mainPanelSetting.Margin = new System.Windows.Forms.Padding(2);
             this.mainPanelSetting.Name = "mainPanelSetting";
-            this.mainPanelSetting.Size = new System.Drawing.Size(368, 143);
+            this.mainPanelSetting.Size = new System.Drawing.Size(276, 116);
             this.mainPanelSetting.TabIndex = 16;
             // 
             // groupBox1
@@ -64,9 +64,11 @@ namespace TimeWorkTracking
             this.groupBox1.Controls.Add(this.btImportPass);
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.btImportUsers);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(9, 10);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(348, 100);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Size = new System.Drawing.Size(261, 81);
             this.groupBox1.TabIndex = 26;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Инициализация БД";
@@ -74,10 +76,9 @@ namespace TimeWorkTracking
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 63);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(5, 51);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(72, 18);
+            this.label1.Size = new System.Drawing.Size(59, 15);
             this.label1.TabIndex = 25;
             this.label1.Text = "Проходы";
             // 
@@ -85,15 +86,16 @@ namespace TimeWorkTracking
             // 
             this.btImportPass.ImageIndex = 7;
             this.btImportPass.ImageList = this.imgListButtonSetting;
-            this.btImportPass.Location = new System.Drawing.Point(188, 56);
-            this.btImportPass.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btImportPass.Location = new System.Drawing.Point(141, 46);
+            this.btImportPass.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btImportPass.Name = "btImportPass";
-            this.btImportPass.Size = new System.Drawing.Size(145, 32);
+            this.btImportPass.Size = new System.Drawing.Size(109, 26);
             this.btImportPass.TabIndex = 26;
             this.btImportPass.Text = "Импорт";
             this.btImportPass.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btImportPass.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btImportPass.UseVisualStyleBackColor = true;
+            this.btImportPass.Click += new System.EventHandler(this.btImportPass_Click);
             // 
             // imgListButtonSetting
             // 
@@ -114,10 +116,9 @@ namespace TimeWorkTracking
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(7, 27);
-            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label11.Location = new System.Drawing.Point(5, 22);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(91, 18);
+            this.label11.Size = new System.Drawing.Size(75, 15);
             this.label11.TabIndex = 10;
             this.label11.Text = "Сотрудники";
             // 
@@ -125,10 +126,10 @@ namespace TimeWorkTracking
             // 
             this.btImportUsers.ImageIndex = 7;
             this.btImportUsers.ImageList = this.imgListButtonSetting;
-            this.btImportUsers.Location = new System.Drawing.Point(188, 20);
-            this.btImportUsers.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btImportUsers.Location = new System.Drawing.Point(141, 16);
+            this.btImportUsers.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btImportUsers.Name = "btImportUsers";
-            this.btImportUsers.Size = new System.Drawing.Size(145, 32);
+            this.btImportUsers.Size = new System.Drawing.Size(109, 26);
             this.btImportUsers.TabIndex = 24;
             this.btImportUsers.Text = "Импорт";
             this.btImportUsers.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -141,10 +142,11 @@ namespace TimeWorkTracking
             this.statusStripSetting.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStripSetting.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBarImport});
-            this.statusStripSetting.Location = new System.Drawing.Point(0, 119);
+            this.statusStripSetting.Location = new System.Drawing.Point(0, 94);
             this.statusStripSetting.Name = "statusStripSetting";
+            this.statusStripSetting.Padding = new System.Windows.Forms.Padding(1, 0, 10, 0);
             this.statusStripSetting.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStripSetting.Size = new System.Drawing.Size(368, 24);
+            this.statusStripSetting.Size = new System.Drawing.Size(276, 22);
             this.statusStripSetting.SizingGrip = false;
             this.statusStripSetting.TabIndex = 25;
             this.statusStripSetting.Text = "statusStripSetting";
@@ -152,16 +154,17 @@ namespace TimeWorkTracking
             // toolStripProgressBarImport
             // 
             this.toolStripProgressBarImport.Name = "toolStripProgressBarImport";
-            this.toolStripProgressBarImport.Size = new System.Drawing.Size(360, 16);
+            this.toolStripProgressBarImport.Size = new System.Drawing.Size(270, 16);
             // 
             // frmSetting
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(368, 143);
+            this.ClientSize = new System.Drawing.Size(276, 116);
             this.Controls.Add(this.mainPanelSetting);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "frmSetting";
             this.Text = "Импорт Экспорт";
             this.Load += new System.EventHandler(this.frmSetting_Load);

@@ -192,6 +192,151 @@ namespace TimeWorkTracking
             }
         }
 
+        //импорт проходов
+        private void btImportPass_Click(object sender, EventArgs e)
+        {
+            toolStripProgressBarImport.Value = 0;
+            //проверим наличие провайдера
+            OleDbEnumerator enumerator = new OleDbEnumerator();
+            DataTable table1 = enumerator.GetElements();
+            bool jetOleDb = false, aceOleDb = false;
+            foreach (DataRow row in table1.Rows)
+            {
+                if (row["SOURCES_NAME"].ToString() == "Microsoft.Jet.OLEDB.4.0") jetOleDb = true;
+                if (row["SOURCES_NAME"].ToString() == "Microsoft.ACE.OLEDB.12.0") aceOleDb = true;
+            }
+
+            if (aceOleDb) //если провайдер есть
+            {
+                //https://www.nookery.ru/c-work-c-excel/
+                //https://yoursandmyideas.com/2011/02/05/how-to-read-or-write-excel-file-using-ace-oledb-data-provider/
+                //https://gist.github.com/maestrow/fd68246f6bca87891d2ace7a67d180e0
+                //https://www.codeproject.com/Tips/705470/Read-and-Write-Excel-Documents-Using-OLEDB
+
+
+                string excelFilePath = getPathSourse();
+                if (excelFilePath != "")
+                {
+                    string csExcel="", reqExcel="";
+                //    DataSet ds = new DataSet();
+
+                    /*
+                        csExcel = "Provider=Microsoft.Jet.OLEDB.4.0; "Data Source=" + excelFilePath + Extended Properties=Excel 12.0 Macro;";
+                        csExcel = @"provider=microsoft.ACE.OLEDB.12.0;data source=" + excelFilePath + ";extended properties=" + "\"Excel 12.0 Macro;hdr=yes;\"";
+                        csExcel = $@"provider=microsoft.ACE.OLEDB.12.0;data source ={excelFilePath};extended properties=" + "\"excel 12.0;hdr=yes;\"";
+                        csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={excelFilePath};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES;ReadOnly=true\"";
+                        csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={excelFilePath};Extended Properties = " + "\"Excel 12.0 Xml;HDR=NO\"";
+                           HDR = YES | NO.HDR = YES означает, что первую строку листа, следует рассматривать как заголовки колонок. Т.о.значение из первой строки можно использовать как имена полей в sql запросах(любых: select, insert, update, delete).
+                          IMEX = 1 | 3. 1 - открыть соединение для чтения. 3 - для записи.
+
+                          "'[Учет рабочего времени.xlsm]Reference'!$B$4:$J$68"
+                        reqExcel = @"Select * from '[Учет рабочего времени.xlsm]Reference'!$B$4:$J$68";     //ругается на скобки
+                        reqExcel = @"Select * from 'Reference'!$B$4:$J$68";                                 //синтаксическая ошибка неполный запрос
+                        reqExcel = @"Select * from $B$4:$J$68";                                             //ошибка в предложении from
+                        reqExcel = "Select * from [Reference$B3:J68]";                                      //ок
+                        reqExcel = @"Select * from Reference!$B$4:$J$68";                                   //ошибка синтаксиса в предложении from
+                        reqExcel = "Select * from Reference!$B$4:$J$68";                                    //ошибка синтаксиса в предложении from
+                        reqExcel = "Select * from Reference$B3:J68";                                        //ошибка синтаксиса в предложении from
+                        reqExcel = "Select * from [Reference$B3:J68]";                                      //ок
+                        reqExcel = "Select * from [Reference$users]";                                       //не найжен ядром
+                        reqExcel = "Select * from [Reference$Users]";                                       //не найжен ядром
+                        reqExcel = "Select * from [users]";                                                 //не найжен ядром
+                        reqExcel = "Select * from [Users]";                                                 //не найжен ядром
+                        reqExcel = "Select * from Users";                                                   //не найжен ядром
+                        reqExcel = "Select * from users";                                                   //не найжен ядром
+                        reqExcel = "Select * from [B3:J68]";                                                //ок но лист не тот
+                        reqExcel = "Select * from B3:J68";                                                  //ок но лист не тот
+                        reqExcel = "Select * from Reference!B3:J68";                                        //ошибка синтаксиса в предложении from
+                        reqExcel = "Select * from Reference$B3:J68";                                        //ошибка синтаксиса в предложении from
+                        reqExcel = "Select * from [Reference$B3:J68]";                                      //ок
+                        reqExcel = "Select * from Data";
+                        reqExcel = "SELECT * FROM USERS";
+                        reqExcel = "SELECT * FROM DATA";
+                        reqExcel = "SELECT * FROM [Reference$]";
+                     */
+                    csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={excelFilePath};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
+                    reqExcel = "Select * from [Reference$B3:J68]";                      //диапазон Users (без заголовка)
+ //                   reqExcel = "SELECT * FROM [Reference$] WHERE ID='Users'";
+                    reqExcel = "Select * from [DataBase$B7:T56213]";                    //диапазон Data (без заголовка)
+                    try
+                    {
+
+                        OleDbConnection connExcel = new OleDbConnection(csExcel);
+                        OleDbCommand cmdExcel = new OleDbCommand();
+                        try
+                        {
+                            cmdExcel.Connection = connExcel;
+                            //Read Data from Sheet1
+                            connExcel.Open();
+                            OleDbDataAdapter da = new OleDbDataAdapter();
+                            DataSet ds = new DataSet();
+                         //   string SheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                            cmdExcel.CommandText = reqExcel;
+
+                            da.SelectCommand = cmdExcel;
+                            da.Fill(ds);
+                            connExcel.Close();
+
+                            toolStripProgressBarImport.Minimum = 0;
+                            toolStripProgressBarImport.Maximum = ds.Tables[0].Rows.Count;
+                            toolStripProgressBarImport.Value = 0;
+                            foreach (var row in ds.Tables[0].Rows) 
+                            {
+                                toolStripProgressBarImport.Value += 1;
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message.ToString());
+                        }
+                        finally
+                        {
+                            cmdExcel.Dispose();
+                            connExcel.Dispose();
+                        }
+
+                        /*
+
+
+                                                using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
+                                                {
+                                                    cnExcel.Open();
+
+                                                    //прочитать имена листов
+                                                    DataTable dtTablesList = cnExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                                                    foreach (DataRow drTable in dtTablesList.Rows)
+                                                    {
+                                                        //Do Something
+                                                        //But be careful as this will also return Defined Names. i.e ranges created using the Defined Name functionality
+                                                        //Actual Sheet names end with $ or $'
+                                                        if (drTable["Table_Name"].ToString().EndsWith("$") || drTable["Table_Name"].ToString().EndsWith("$'"))
+                                                        {
+                                                            Console.WriteLine(drTable["Table_Name"]);
+                                                        }
+                                                    }
+
+                                                    using (OleDbCommand cmdExcel1 = new OleDbCommand(reqExcel,cnExcel))
+                                                    {
+                                                        OleDbDataReader result = cmdExcel1.ExecuteReader();
+                                                        while (result.Read())
+                                                        {
+                                              //              Console.WriteLine(result[0].ToString());
+                                                        }
+                                                    }
+                                                }
+                        */
+
+                        MessageBox.Show("Список сотрудников загружен в БД");
+                        toolStripProgressBarImport.Value = 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message.ToString());
+                    }
+                }
+            }
+        }
 
         /*--------------------------------------------------------------------------------------------  
         CALLBACK InPut (подписка на внешние сообщения)
