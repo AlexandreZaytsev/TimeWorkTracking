@@ -149,7 +149,7 @@ namespace TimeWorkTracking
         //кнопка импорт пользователей
         private void btImportUsers_Click(object sender, EventArgs e)
         {
-            ImportUserDataFromExcel();
+            ImportUserDataFromExcel(tbPath.Text, cbSheetUser.Text + "$" + tbRangeUser.Text);
             CallBack_FrmSetting_outEvent.callbackEventHandler("", "", null);  //send a general notification
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             int count = Convert.ToInt32(clMsSqlDatabase.RequesScalar(cs, "select count(*) from Users", false));
@@ -158,7 +158,7 @@ namespace TimeWorkTracking
         }
 
         //импорт сотрудников через OleDbDataAdapter & DataSet
-        public void ImportUserDataFromExcel()
+        public void ImportUserDataFromExcel(string path, string range)
         {
             DialogResult response = MessageBox.Show(
                 "Внимание Таблицы Прохода и Сотрудников будут Очищены" + "\r\n" +
@@ -174,13 +174,12 @@ namespace TimeWorkTracking
                 toolStripProgressBarImport.Value = 0;
                 try
                 {
-                    string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={tbPath.Text};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
+                    string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={path};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
                     using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
                     {
                         cnExcel.Open();
                         OleDbDataAdapter da = new OleDbDataAdapter();
                         DataSet ds = new DataSet();
-                        string range = Properties.Settings.Default.importUserRange;
                         using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
                         {
                             cmdExcel.CommandText = $"Select count(*) from [{range}]";
@@ -263,8 +262,14 @@ namespace TimeWorkTracking
             }
         }
 
-        //импорт проходов через DataReader
-        private void btImportPass_Click(object sender, EventArgs e)
+        //кнопка импорт проходов 
+        private void btImportPass_Click(object sender, EventArgs e) 
+        {
+            ImportPassDataFromExcel(tbPath.Text, cbSheetPass.Text + "$" + tbRangePass.Text);
+        } 
+
+        //импорт сотрудников через OleDbDataAdapter & DataSet
+        public void ImportPassDataFromExcel(string path, string range)
         {
             DialogResult response = MessageBox.Show(
                 "Внимание Таблица Проходов будет Очищена" + "\r\n" +
@@ -281,11 +286,10 @@ namespace TimeWorkTracking
                 toolStripProgressBarImport.Value = 0;
                 try
                 {
-                    string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={tbPath.Text};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
+                    string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={path};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
                     using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
                     {
                         cnExcel.Open();
-                        string range = Properties.Settings.Default.importPassRange;
                         using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
                         {
                             cmdExcel.CommandText = $"Select count(*) from [{range}]";
@@ -307,6 +311,9 @@ namespace TimeWorkTracking
                                     toolStripProgressBarImport.Value = 0;
                                     while (result.Read())
                                     {
+                                        //Явное приведение типов
+                                        int totalHoursOutsideWork = result.GetValue(18) == DBNull.Value ? 0 : Convert.ToInt32(result.GetValue(18));
+                                        string specmarkNote = result.GetValue(16) == DBNull.Value ? "NULL" : Convert.ToString(result.GetValue(16));
                                         string sp = result.GetString(13).Trim();
                                         switch (sp) 
                                         {
@@ -332,9 +339,9 @@ namespace TimeWorkTracking
                                                 "specmarkId = " + specialMarksId + ", " +
                                                 "specmarkTimeStart = " + (specialMarksId == 1 ? "NULL" : "'" + result.GetDateTime(14).ToString("yyyyMMdd HH:mm") + "'" ) + ", " +
                                                 "specmarkTimeStop = " + (specialMarksId ==1 ? "NULL" : "'" + result.GetDateTime(15).ToString("yyyyMMdd HH:mm") + "'") + ", " +
-                                                "specmarkNote = " + "N'" + Convert.ToString(result.GetValue(16)) + "', " +
+                                                "specmarkNote = " + "N'" + specmarkNote + "', " +
                                                 "totalHoursInWork = " + Convert.ToInt32(result.GetValue(17)) + ", " +
-                                                "totalHoursOutsideWork = " + Convert.ToInt32(result.GetValue(18)) + " " +
+                                                "totalHoursOutsideWork = " + totalHoursOutsideWork + " " +
                                             "WHERE passDate = '" + result.GetDateTime(2).ToString("yyyyMMdd") + "' " +                   //*дата прохода
                                                 "and passId = '" + Convert.ToString(result.GetValue(3)) + "' ; " +                   //*внешний id сотрудника
                                             "IF @@ROWCOUNT = 0 " +
@@ -371,9 +378,9 @@ namespace TimeWorkTracking
                                                 specialMarksId + ", " +
                                                 (specialMarksId == 1 ? "NULL" : "'" + result.GetDateTime(14).ToString("yyyyMMdd HH:mm") + "'") + ", " +
                                                 (specialMarksId == 1 ? "NULL" : "'" + result.GetDateTime(15).ToString("yyyyMMdd HH:mm") + "'") + ", " +
-                                                "N'" + Convert.ToString(result.GetValue(16)) + "', " +
+                                                "N'" + specmarkNote + "', " +
                                                 Convert.ToInt32(result.GetValue(17)) + ", " +
-                                                Convert.ToInt32(result.GetValue(18)) +
+                                                totalHoursOutsideWork +
                                                 ")";
                                         sqlCommand.CommandText = sql;
                                         sqlCommand.ExecuteNonQuery();
