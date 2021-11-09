@@ -32,5 +32,14 @@
     <Setting Name="pacsConnectionString" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="importUserRange" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Reference$B3:J68</Value>
+    </Setting>
+    <Setting Name="importPassRange" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DataBase$B7:T56213</Value>
+    </Setting>
+    <Setting Name="importFilename" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

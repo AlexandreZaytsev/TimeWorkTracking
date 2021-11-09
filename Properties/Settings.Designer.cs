@@ -142,5 +142,41 @@ namespace TimeWorkTracking.Properties {
                 this["pacsConnectionString"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Reference$B3:J68")]
+        public string importUserRange {
+            get {
+                return ((string)(this["importUserRange"]));
+            }
+            set {
+                this["importUserRange"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DataBase$B7:T56213")]
+        public string importPassRange {
+            get {
+                return ((string)(this["importPassRange"]));
+            }
+            set {
+                this["importPassRange"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string importFilename {
+            get {
+                return ((string)(this["importFilename"]));
+            }
+            set {
+                this["importFilename"] = value;
+            }
+        }
     }
 }
