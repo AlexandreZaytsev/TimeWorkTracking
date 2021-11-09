@@ -102,7 +102,7 @@ namespace TimeWorkTracking
 
             if (newPath == "" || !(File.Exists(newPath))) 
             {
-                tbPath.Text = "";
+                tbPath.Text = ""; 
                 groupBox1.Enabled = false;
             }
             else
