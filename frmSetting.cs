@@ -157,23 +157,8 @@ namespace TimeWorkTracking
 
         }
 
-        public static string getPathSourse()
-        {
-            OpenFileDialog od = new OpenFileDialog
-            {
-                //                Filter = "Excell|*.xls;*.xlsx;*.xlsm;"
-                Filter = "Excel 2010(*.xlsm) | *.xlsm|XML Documents(*.xml)|*.xml"
-                //"Excel Worksheets 2003(*.xls)|*.xls|Excel Worksheets 2007(*.xlsx)|*.xlsx|Word Documents(*.doc)|*.doc"
-            };
-            DialogResult dr = od.ShowDialog();
-            if (dr == DialogResult.Abort)
-                return "";
-            if (dr == DialogResult.Cancel)
-                return "" ;
-            return od.FileName.ToString();
-        }
-
-        public static void ImportUserDataFromExcel()
+        //импорт сотрудников через OleDbDataAdapter & DataSet
+        public void ImportUserDataFromExcel()
         {
           //  string excelFilePath = "";
             DialogResult response = MessageBox.Show(
@@ -186,122 +171,100 @@ namespace TimeWorkTracking
                 MessageBoxOptions.DefaultDesktopOnly
                 );
             if (response == DialogResult.Yes) 
-            { 
-            string excelFilePath = getPathSourse();
-                if (excelFilePath != "")
+            {
+                toolStripProgressBarImport.Value = 0;
+                try
                 {
-                    Excel.Application excelapp = new Excel.Application();
-                    //excelapp.Visible = true;
-                    Excel.Workbook workbook = excelapp.Workbooks.Open(
-                        excelFilePath,
-                        Type.Missing, true, Type.Missing, Type.Missing,
-                        Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                        Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                        Type.Missing, Type.Missing);
-
-                    Excel.Worksheet sheet = (Excel.Worksheet)workbook.Sheets["Reference"];
-                    Excel.Range range = (Excel.Range)sheet.Range["Users"];// ().Cells[row, col];
-                 
-                    //   string n = "'" + range.Parent + "'!" + range.Address;
-//                    Set b = Worksheets(2).Range("Users")
-//s = "'" & b.Parent.name & "'!" & b.Address(External:= False)
-                    foreach (var rangeName in workbook.Names)
+                    string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={tbPath.Text};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
+                    using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
                     {
-                       // Range c = ws.Cells[row++, 3];
-                       // c.Value = rangeName.NameLocal;
-                    }
-                    //                    string address= workbook.Worksheets[2].R
-                    workbook.Close(false, Type.Missing, Type.Missing);  // Закройте книгу без сохранения изменений.
-                    excelapp.Quit();                                   // Закройте сервер Excel.
-                    using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
-                    {
-                        string myexceldataquery = "Select * from [Reference$B3:J68]";
-                        //               string myexceldataquery = "Select * from users";
-                        try
+                        cnExcel.Open();
+                        OleDbDataAdapter da = new OleDbDataAdapter();
+                        DataSet ds = new DataSet();
+                        string range = Properties.Settings.Default.importUserRange;
+                        using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
                         {
-                            string sexcelconnectionstring = @"provider=microsoft.ACE.OLEDB.12.0;data source=" + excelFilePath +
-                            ";extended properties=" + "\"Excel 12.0 Macro;hdr=yes;\"";
+                            cmdExcel.CommandText = $"Select count(*) from [{range}]";
+                            int linesCount = (int)cmdExcel.ExecuteScalar();
 
+                            cmdExcel.CommandText = $"Select * from [{range}]";    //диапазон Data (без заголовка)
+                            //OleDbDataReader result = cmdExcel.ExecuteReader();
+                            da.SelectCommand = cmdExcel;
+                            da.Fill(ds);
+
+                        }
+                        cnExcel.Close();
+                        using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
+                        {
                             sqlConnection.Open();
-                            OleDbConnection oledbconn = new OleDbConnection(sexcelconnectionstring);
-                            OleDbCommand oledbcmd = new OleDbCommand(myexceldataquery, oledbconn);
-                            oledbconn.Open();
-                            OleDbDataReader dr = oledbcmd.ExecuteReader();
-
-                            object[] meta = new object[10];
-                            bool read;
-
                             using (var sqlCommand = sqlConnection.CreateCommand())
                             {
                                 sqlCommand.CommandText = "DELETE FROM EventsPass";
                                 sqlCommand.ExecuteScalar();
 
-                                sqlCommand.CommandText = "DELETE FROM Users";
-                                sqlCommand.ExecuteScalar();
-                                if (dr.Read() == true)
+                                toolStripProgressBarImport.Minimum = 0;
+                                toolStripProgressBarImport.Maximum = ds.Tables[0].Rows.Count;
+                                toolStripProgressBarImport.Value = 0;
+                                foreach (DataRow row in ds.Tables[0].Rows)
                                 {
-                                    do
-                                    {
-                                        int NumberOfColums = dr.GetValues(meta);
+                                    sqlCommand.CommandText = "SELECT id FROM UserDepartment Where name='" + row[1].ToString() + "'";
+                                    int departmentId = (int)sqlCommand.ExecuteScalar();
+                                    sqlCommand.CommandText = "SELECT id FROM UserPost Where name='" + row[2].ToString() + "'";
+                                    int postId = (int)sqlCommand.ExecuteScalar();
+                                    sqlCommand.CommandText = "SELECT id FROM UserWorkScheme Where name='" + row[7].ToString() + "'";
+                                    int workSchemeId = (int)sqlCommand.ExecuteScalar();
 
-                                        sqlCommand.CommandText = "SELECT id FROM UserDepartment Where name='" + meta[1].ToString() + "'";
-                                        int departmentId = (int)sqlCommand.ExecuteScalar();
-                                        sqlCommand.CommandText = "SELECT id FROM UserPost Where name='" + meta[2].ToString() + "'";
-                                        int postId = (int)sqlCommand.ExecuteScalar();
-                                        sqlCommand.CommandText = "SELECT id FROM UserWorkScheme Where name='" + meta[7].ToString() + "'";
-                                        int workSchemeId = (int)sqlCommand.ExecuteScalar();
+                                    sqlCommand.CommandText =
+                                        "UPDATE Users Set " +
+                                          "departmentId = " + departmentId + ", " +
+                                          "postId = " + postId + ", " +
+                                          "timeStart = " + "'" + ((DateTime)row[4]).ToShortTimeString() + "', " +
+                                          "timeStop = " + "'" + ((DateTime)row[5]).ToShortTimeString() + "', " +
+                                          "noLunch = " + ((Boolean)row[6] ? 1 : 0) + ", " +
+                                          "workSchemeId = " + workSchemeId + ", " +
+                                          "uses = " + ((Boolean)row[8] ? 1 : 0) + " " +
+                                        "WHERE extId = '" + row[0].ToString() + "' and name = '" + row[3].ToString() + "'; " +
+                                        "IF @@ROWCOUNT = 0 " +
+                                        "INSERT INTO Users(" +
+                                          "extId, " +
+                                          "name, " +
+                                          "departmentId, " +
+                                          "postId, " +
+                                          "timeStart, " +
+                                          "timeStop, " +
+                                          "noLunch, " +
+                                          "workSchemeId, " +
+                                          "uses) " +
+                                        "VALUES (" +
+                                          "N'" + row[0].ToString() + "', " +
+                                          "N'" + row[3].ToString() + "', " +
+                                          departmentId + ", " +
+                                          postId + ", " +
+                                          "'" + ((DateTime)row[4]).ToShortTimeString() + "', " +
+                                          "'" + ((DateTime)row[5]).ToShortTimeString() + "', " +
+                                          ((Boolean)row[6] ? 1 : 0) + ", " +
+                                          workSchemeId + ", " +
+                                          ((Boolean)row[8] ? 1 : 0) +
+                                          ")";
+                                    sqlCommand.ExecuteNonQuery();
 
-                                        sqlCommand.CommandText =
-                                            "UPDATE Users Set " +
-                                              "departmentId = " + departmentId + ", " +
-                                              "postId = " + postId + ", " +
-                                              "timeStart = " + "'" + ((DateTime)meta[4]).ToShortTimeString() + "', " +
-                                              "timeStop = " + "'" + ((DateTime)meta[5]).ToShortTimeString() + "', " +
-                                              "noLunch = " + ((Boolean)meta[6] ? 1 : 0) + ", " +
-                                              "workSchemeId = " + workSchemeId + ", " +
-                                              "uses = " + ((Boolean)meta[8] ? 1 : 0) + " " +
-                                            "WHERE extId = '" + meta[0].ToString() + "' and name = '" + meta[3].ToString() + "'; " +
-                                            "IF @@ROWCOUNT = 0 " +
-                                            "INSERT INTO Users(" +
-                                              "extId, " +
-                                              "name, " +
-                                              "departmentId, " +
-                                              "postId, " +
-                                              "timeStart, " +
-                                              "timeStop, " +
-                                              "noLunch, " +
-                                              "workSchemeId, " +
-                                              "uses) " +
-                                            "VALUES (" +
-                                              "N'" + meta[0].ToString() + "', " +
-                                              "N'" + meta[3].ToString() + "', " +
-                                              departmentId + ", " +
-                                              postId + ", " +
-                                              "'" + ((DateTime)meta[4]).ToShortTimeString() + "', " +
-                                              "'" + ((DateTime)meta[5]).ToShortTimeString() + "', " +
-                                              ((Boolean)meta[6] ? 1 : 0) + ", " +
-                                              workSchemeId + ", " +
-                                              ((Boolean)meta[8] ? 1 : 0) +
-                                              ")";
-                                        sqlCommand.ExecuteNonQuery();
-                                        read = dr.Read();
-                                    } while (read == true);
+                                    toolStripProgressBarImport.Value += 1;
                                 }
                             }
-                            dr.Close();
-                            oledbconn.Close();
-                            MessageBox.Show("Список сотрудников загружен в БД");
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message.ToString());
+                            sqlConnection.Close();
                         }
                     }
+                    MessageBox.Show("Список сотрудников в БД");
+                    toolStripProgressBarImport.Value = 0;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString());
                 }
             }
         }
 
-        //импорт проходов
+        //импорт проходов через DataReader
         private void btImportPass_Click(object sender, EventArgs e)
         {
             toolStripProgressBarImport.Value = 0;
@@ -490,5 +453,130 @@ finally
     cmdExcel.Dispose();
     connExcel.Dispose();
 }
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------
+
+
+string excelFilePath = "";// getPathSourse();
+                if (excelFilePath != "")
+                {
+                    Excel.Application excelapp = new Excel.Application();
+                    //excelapp.Visible = true;
+                    Excel.Workbook workbook = excelapp.Workbooks.Open(
+                        excelFilePath,
+                        Type.Missing, true, Type.Missing, Type.Missing,
+                        Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                        Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                        Type.Missing, Type.Missing);
+
+                    Excel.Worksheet sheet = (Excel.Worksheet)workbook.Sheets["Reference"];
+                    Excel.Range range = (Excel.Range)sheet.Range["Users"];// ().Cells[row, col];
+                 
+                    //   string n = "'" + range.Parent + "'!" + range.Address;
+//                    Set b = Worksheets(2).Range("Users")
+//s = "'" & b.Parent.name & "'!" & b.Address(External:= False)
+                    foreach (var rangeName in workbook.Names)
+                    {
+                       // Range c = ws.Cells[row++, 3];
+                       // c.Value = rangeName.NameLocal;
+                    }
+                    //                    string address= workbook.Worksheets[2].R
+                    workbook.Close(false, Type.Missing, Type.Missing);  // Закройте книгу без сохранения изменений.
+                    excelapp.Quit();                                   // Закройте сервер Excel.
+                    using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
+                    {
+                        string myexceldataquery = "Select * from [Reference$B3:J68]";
+                        //               string myexceldataquery = "Select * from users";
+                        try
+                        {
+                            string sexcelconnectionstring = @"provider=microsoft.ACE.OLEDB.12.0;data source=" + excelFilePath +
+                            ";extended properties=" + "\"Excel 12.0 Macro;hdr=yes;\"";
+
+                            sqlConnection.Open();
+                            OleDbConnection oledbconn = new OleDbConnection(sexcelconnectionstring);
+                            OleDbCommand oledbcmd = new OleDbCommand(myexceldataquery, oledbconn);
+                            oledbconn.Open();
+                            OleDbDataReader dr = oledbcmd.ExecuteReader();
+
+                            object[] meta = new object[10];
+                            bool read;
+
+                            using (var sqlCommand = sqlConnection.CreateCommand())
+                            {
+                                sqlCommand.CommandText = "DELETE FROM EventsPass";
+                                sqlCommand.ExecuteScalar();
+
+                                sqlCommand.CommandText = "DELETE FROM Users";
+                                sqlCommand.ExecuteScalar();
+                                if (dr.Read() == true)
+                                {
+                                    do
+                                    {
+                                        int NumberOfColums = dr.GetValues(meta);
+
+                                        sqlCommand.CommandText = "SELECT id FROM UserDepartment Where name='" + meta[1].ToString() + "'";
+                                        int departmentId = (int)sqlCommand.ExecuteScalar();
+                                        sqlCommand.CommandText = "SELECT id FROM UserPost Where name='" + meta[2].ToString() + "'";
+                                        int postId = (int)sqlCommand.ExecuteScalar();
+                                        sqlCommand.CommandText = "SELECT id FROM UserWorkScheme Where name='" + meta[7].ToString() + "'";
+                                        int workSchemeId = (int)sqlCommand.ExecuteScalar();
+
+                                        sqlCommand.CommandText =
+                                            "UPDATE Users Set " +
+                                              "departmentId = " + departmentId + ", " +
+                                              "postId = " + postId + ", " +
+                                              "timeStart = " + "'" + ((DateTime)meta[4]).ToShortTimeString() + "', " +
+                                              "timeStop = " + "'" + ((DateTime)meta[5]).ToShortTimeString() + "', " +
+                                              "noLunch = " + ((Boolean)meta[6] ? 1 : 0) + ", " +
+                                              "workSchemeId = " + workSchemeId + ", " +
+                                              "uses = " + ((Boolean)meta[8] ? 1 : 0) + " " +
+                                            "WHERE extId = '" + meta[0].ToString() + "' and name = '" + meta[3].ToString() + "'; " +
+                                            "IF @@ROWCOUNT = 0 " +
+                                            "INSERT INTO Users(" +
+                                              "extId, " +
+                                              "name, " +
+                                              "departmentId, " +
+                                              "postId, " +
+                                              "timeStart, " +
+                                              "timeStop, " +
+                                              "noLunch, " +
+                                              "workSchemeId, " +
+                                              "uses) " +
+                                            "VALUES (" +
+                                              "N'" + meta[0].ToString() + "', " +
+                                              "N'" + meta[3].ToString() + "', " +
+                                              departmentId + ", " +
+                                              postId + ", " +
+                                              "'" + ((DateTime)meta[4]).ToShortTimeString() + "', " +
+                                              "'" + ((DateTime)meta[5]).ToShortTimeString() + "', " +
+                                              ((Boolean)meta[6] ? 1 : 0) + ", " +
+                                              workSchemeId + ", " +
+                                              ((Boolean)meta[8] ? 1 : 0) +
+                                              ")";
+                                        sqlCommand.ExecuteNonQuery();
+                                        read = dr.Read();
+                                    } while (read == true);
+                                }
+                            }
+                            dr.Close();
+                            oledbconn.Close();
+                            MessageBox.Show("Список сотрудников загружен в БД");
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message.ToString());
+                        }
+                    }
+                }
+
 
 */
