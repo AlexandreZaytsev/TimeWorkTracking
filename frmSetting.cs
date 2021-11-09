@@ -160,7 +160,6 @@ namespace TimeWorkTracking
         //импорт сотрудников через OleDbDataAdapter & DataSet
         public void ImportUserDataFromExcel()
         {
-          //  string excelFilePath = "";
             DialogResult response = MessageBox.Show(
                 "Внимание Таблицы Прохода и Сотрудников будут Очищены" + "\r\n" +
                 "Продолжить?" + "\r\n",
@@ -267,38 +266,133 @@ namespace TimeWorkTracking
         //импорт проходов через DataReader
         private void btImportPass_Click(object sender, EventArgs e)
         {
-            toolStripProgressBarImport.Value = 0;
-            try
+            DialogResult response = MessageBox.Show(
+                "Внимание Таблица Проходов будет Очищена" + "\r\n" +
+                "Продолжить?" + "\r\n",
+                "Начальное заполнение данных",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Information,
+                MessageBoxDefaultButton.Button2,
+                MessageBoxOptions.DefaultDesktopOnly
+                );
+            if (response == DialogResult.Yes)
             {
-                string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={tbPath.Text};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
-                using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
-                {
-                    cnExcel.Open();
-                    string range = Properties.Settings.Default.importPassRange;
-                    using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
-                    {
-                        cmdExcel.CommandText = $"Select count(*) from [{range}]";
-                        int linesCount = (int)cmdExcel.ExecuteScalar();
 
-                        cmdExcel.CommandText = $"Select * from [{range}]";    //диапазон Data (без заголовка)
-                        OleDbDataReader result = cmdExcel.ExecuteReader();
-
-                        toolStripProgressBarImport.Minimum = 0;
-                        toolStripProgressBarImport.Maximum = linesCount;
-                        toolStripProgressBarImport.Value = 0;
-                        while (result.Read())
-                        {
-                            toolStripProgressBarImport.Value += 1;
-                        }
-                    }
-                    cnExcel.Close();
-                }
-                MessageBox.Show("Список проходов загружен в БД");
                 toolStripProgressBarImport.Value = 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message.ToString());
+                try
+                {
+                    string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={tbPath.Text};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
+                    using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
+                    {
+                        cnExcel.Open();
+                        string range = Properties.Settings.Default.importPassRange;
+                        using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
+                        {
+                            cmdExcel.CommandText = $"Select count(*) from [{range}]";
+                            int linesCount = (int)cmdExcel.ExecuteScalar();
+
+                            cmdExcel.CommandText = $"Select * from [{range}]";    //диапазон Data (без заголовка)
+                            OleDbDataReader result = cmdExcel.ExecuteReader();
+
+                            using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
+                            {
+                                sqlConnection.Open();
+                                using (var sqlCommand = sqlConnection.CreateCommand())
+                                {
+                                    sqlCommand.CommandText = "DELETE FROM EventsPass";
+                                    sqlCommand.ExecuteScalar();
+
+                                    toolStripProgressBarImport.Minimum = 0;
+                                    toolStripProgressBarImport.Maximum = linesCount;
+                                    toolStripProgressBarImport.Value = 0;
+                                    while (result.Read())
+                                    {
+                                        string sp = result.GetString(13).Trim();
+                                        switch (sp) 
+                                        {
+                                            case "Больничный":
+                                                sp = "Больничный с оплатой";
+                                                break;
+                                        }
+                                        sqlCommand.CommandText = "SELECT id FROM SpecialMarks Where name='" + sp + "'";
+                                        int specialMarksId = (int)sqlCommand.ExecuteScalar();
+
+
+                                        string sql =
+                                            "UPDATE EventsPass Set " +
+                                                "author = " + "N'" + result.GetString(1) + "', " +
+                                                "passTimeStart = " + "'" + result.GetDateTime(5).ToString("yyyyMMdd") + "', " +
+                                                "passTimeStop = " + "'" + result.GetDateTime(6).ToString("yyyyMMdd") + "', " +
+                                                //"pacsTimeStart = " + "NULL" + ", " +
+                                                //"pacsTimeStop = " +  "NULL" + ", " +
+                                                "timeScheduleFact = " + Convert.ToInt32(result.GetValue(9)) + ", " +
+                                                "timeScheduleWithoutLunch = " + Convert.ToInt32(result.GetValue(10)) + ", " +
+                                                "timeScheduleLess = " + Convert.ToInt32(result.GetValue(11)) + ", " +
+                                                "timeScheduleOver = " + Convert.ToInt32(result.GetValue(12)) + ", " +
+                                                "specmarkId = " + specialMarksId + ", " +
+                                                "specmarkTimeStart = " + (specialMarksId == 1 ? "NULL" : "'" + result.GetDateTime(14).ToString("yyyyMMdd HH:mm") + "'" ) + ", " +
+                                                "specmarkTimeStop = " + (specialMarksId ==1 ? "NULL" : "'" + result.GetDateTime(15).ToString("yyyyMMdd HH:mm") + "'") + ", " +
+                                                "specmarkNote = " + "N'" + Convert.ToString(result.GetValue(16)) + "', " +
+                                                "totalHoursInWork = " + Convert.ToInt32(result.GetValue(17)) + ", " +
+                                                "totalHoursOutsideWork = " + Convert.ToInt32(result.GetValue(18)) + " " +
+                                            "WHERE passDate = '" + result.GetDateTime(2).ToString("yyyyMMdd") + "' " +                   //*дата прохода
+                                                "and passId = '" + Convert.ToString(result.GetValue(3)) + "' ; " +                   //*внешний id сотрудника
+                                            "IF @@ROWCOUNT = 0 " +
+                                            "INSERT INTO EventsPass(" +
+                                                "author, " +                                    //имя учетной записи сеанса
+                                                "passDate, " +                                  //*дата события (без времени)
+                                                "passId, " +                                    //*внешний id пользователя
+                                                "passTimeStart, " +                             //время первого входа (без даты)
+                                                "passTimeStop, " +                              //время последнего выхода (без даты)
+                                                //"pacsTimeStart, " +                             //время первого входа по СКУД (без даты)
+                                                //"pacsTimeStop, " +                              //время последнего выхода по СКУД (без даты)
+                                                "timeScheduleFact, " +                          //отработанное время (мин)
+                                                "timeScheduleWithoutLunch, " +                  //отработанное время без обеда (мин)
+                                                "timeScheduleLess, " +                          //время недоработки (мин)
+                                                "timeScheduleOver, " +                          //время переработки (мин)
+                                                "specmarkId, " +                                //->ссылка на специальные отметки
+                                                "specmarkTimeStart, " +                         //датавремя начала действия специальных отметок
+                                                "specmarkTimeStop, " +                          //датавремя окончания специальных отметок
+                                                "specmarkNote, " +                              //комментарий к специальным отметкам
+                                                "totalHoursInWork, " +                          //итог рабочего времени в графике (мин)
+                                                "totalHoursOutsideWork) " +                     //итог рабочего времени вне графика (мин)
+                                            "VALUES (" +
+                                                "N'" + result.GetString(1) + "', " +
+                                                "'" + result.GetDateTime(2).ToString("yyyyMMdd") + "', " + // mcRegDate.SelectionStart.ToString("yyyyMMdd") + "', " +
+                                                "'" + Convert.ToString(result.GetValue(3)) + "', " +
+                                                "'" + result.GetDateTime(5).ToString("yyyyMMdd") + "', " +
+                                                "'" + result.GetDateTime(6).ToString("yyyyMMdd") + "', " +
+                                                //"NULL" + ", " +
+                                                //"NULL" + ", " +
+                                                Convert.ToInt32(result.GetValue(9)) + ", " +
+                                                Convert.ToInt32(result.GetValue(10)) + ", " +
+                                                Convert.ToInt32(result.GetValue(11)) + ", " +
+                                                Convert.ToInt32(result.GetValue(12)) + ", " +
+                                                specialMarksId + ", " +
+                                                (specialMarksId == 1 ? "NULL" : "'" + result.GetDateTime(14).ToString("yyyyMMdd HH:mm") + "'") + ", " +
+                                                (specialMarksId == 1 ? "NULL" : "'" + result.GetDateTime(15).ToString("yyyyMMdd HH:mm") + "'") + ", " +
+                                                "N'" + Convert.ToString(result.GetValue(16)) + "', " +
+                                                Convert.ToInt32(result.GetValue(17)) + ", " +
+                                                Convert.ToInt32(result.GetValue(18)) +
+                                                ")";
+                                        sqlCommand.CommandText = sql;
+                                        sqlCommand.ExecuteNonQuery();
+                                        
+                                        toolStripProgressBarImport.Value += 1;
+                                    }
+                                }
+                                sqlConnection.Close();
+                            }
+                        }
+                        cnExcel.Close();
+                    }
+                    MessageBox.Show("Список проходов загружен в БД");
+                    toolStripProgressBarImport.Value = 0;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString());
+                }
             }
         }
 
