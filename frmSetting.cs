@@ -55,18 +55,15 @@ namespace TimeWorkTracking
             BackgroundWorker worker = sender as BackgroundWorker;           //передать объект (BackgroundWorker) вызвавший данное событие
 
             List<string> arg = e.Argument as List<string>;
+            //Назначить результат вычисления к свойству результата DoWorkEventArgs объект.
+            //Это будет доступно обработчику событий RunWorkerCompleted.
             switch (arg[0])   // the 'argument' parameter resurfaces here
             {
                 case "users":
-                    //Назначить результат вычисления к свойству результата DoWorkEventArgs объект.
-                    //Это будет доступно обработчику событий RunWorkerCompleted.
-                    //e.Result = ImportUserDataFromExcel(arg[1], arg[2]);  
-
-                    e.Result = ImportUserDataFromExcel(arg[1], arg[2], worker, e);
+                    e.Result = ImportUserDataFromExcel(worker, e);
                     break;
                 case "pass":
-                    //e.Result = ImportUserDataFromExcel(arg[1], arg[2]);
-                    //ImportUserDataFromExcel(arg[1], arg[2]);
+                    e.Result = ImportPassDataFromExcel(worker, e);
                     break;
             }
         }
@@ -270,17 +267,11 @@ namespace TimeWorkTracking
         }
 
         //импорт сотрудников через OleDbDataAdapter & DataSet
-        public string ImportUserDataFromExcel(string path, string range, BackgroundWorker worker, DoWorkEventArgs e)
+        public string ImportUserDataFromExcel(BackgroundWorker worker, DoWorkEventArgs e)
         {
-            List<string> arguments = new List<string>();                //возврат аргументов из потока на обработку
-            arguments.Add("init");                                      //init инициализация прогрессбара work отображение значения
-            arguments.Add("min");                                       //минимальное значение
-            arguments.Add("max");                                       //максимальное значение
-            arguments.Add("step");                                      //шаг
-            arguments.Add("note");                                      //комментарий
-            arguments.Add("ret");                                       //возврат
-
-            int countRows;  //общее количество строк в запросе
+            List<string> inArgument = e.Argument as List<string>;   //распарсить входнык параметры
+            List<string> outArguments = new List<string>();         //возврат аргументов из потока на обработку
+            int countRows;                                          //общее количество строк в запросе
 
             DialogResult response = MessageBox.Show(
                 "Внимание Таблицы Прохода и Сотрудников будут Очищены" + "\r\n" +
@@ -295,7 +286,7 @@ namespace TimeWorkTracking
             {
                 try
                 {
-                    string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={path};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
+                    string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={inArgument[1]};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
                     using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
                     {
                         cnExcel.Open();
@@ -303,21 +294,20 @@ namespace TimeWorkTracking
                         DataSet ds = new DataSet();
                         using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
                         {
-                            cmdExcel.CommandText = $"Select count(*) from [{range}]";
+                            cmdExcel.CommandText = $"Select count(*) from [{inArgument[2]}]";
                             countRows = (int)cmdExcel.ExecuteScalar();
 
-                            cmdExcel.CommandText = $"Select * from [{range}]";    //диапазон Data (без заголовка)
+                            outArguments.Add("init");                       //init инициализация прогрессбара work отображение значения
+                            outArguments.Add("0");                          //минимальное значение
+                            outArguments.Add(countRows.ToString());         //максимальное значение
+                            outArguments.Add("1");                          //шаг
+                            outArguments.Add("импорт");                     //комментарий
+                            worker.ReportProgress(0, outArguments);         //отобразить (вызвать событие) результаты progressbar
+
+                            cmdExcel.CommandText = $"Select * from [{inArgument[2]}]";    //диапазон Data (без заголовка)
                             //OleDbDataReader result = cmdExcel.ExecuteReader();
                             da.SelectCommand = cmdExcel;
                             da.Fill(ds);
-
-                            arguments[0] = "init";                  //init инициализация прогрессбара work отображение значения
-                            arguments[1] = "0";                     //минимальное значение
-                            arguments[2] = countRows.ToString();    //максимальное значение
-                            arguments[3] = "1";                     //шаг
-                            arguments[4] = "импорт";                //комментарий
-                            arguments[5] = "0";                     //возврат
-                            worker.ReportProgress(0,arguments);     //отобразить (вызвать событие) результаты progressbar
                         }
                         cnExcel.Close();
                         using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
@@ -372,8 +362,9 @@ namespace TimeWorkTracking
                                           ")";
                                     sqlCommand.ExecuteNonQuery();
                                     currentRow += 1;
-                                    arguments[0] = "work";                                          //init инициализация прогрессбара work отображение значения
-                                    worker.ReportProgress((currentRow*100)/ countRows, arguments);  //отобразить (вызвать событие) результаты progressbar
+
+                                    outArguments[0] = "work";                                          //init инициализация прогрессбара work отображение значения
+                                    worker.ReportProgress((currentRow*100)/ countRows, outArguments);  //отобразить (вызвать событие) результаты progressbar
                                 }
                             }
                             sqlConnection.Close();
@@ -392,21 +383,21 @@ namespace TimeWorkTracking
         //кнопка импорт проходов 
         private void btImportPass_Click(object sender, EventArgs e) 
         {
-            ImportPassDataFromExcel(tbPath.Text, cbSheetPass.Text + "$" + tbRangePass.Text);
+            List<string> arguments = new List<string>();
+            arguments.Add("pass");                                      //для вызова нужного метода
+            arguments.Add(tbPath.Text);                                 //путь к файлу импорта Excel
+            arguments.Add(cbSheetPass.Text + "$" + tbRangePass.Text);   //диапазон ячеек формата ИМЯ_ЛИСТА$ДИАПАЗОН
+
+            if (!backgroundWorkerSetting.IsBusy)                        //Запустить фоновую операцию (поток)(с аргументами) вызвав событие DoWork
+                backgroundWorkerSetting.RunWorkerAsync(arguments);
         }
 
         //импорт сотрудников через OleDbDataAdapter & DataSet
-        public string ImportPassDataFromExcel(string path, string range)
+        public string ImportPassDataFromExcel(BackgroundWorker worker, DoWorkEventArgs e)
         {
-            List<string> arguments = new List<string>();                //возврат аргументов из потока на обработку
-            arguments.Add("init");                                      //init инициализация прогрессбара work отображение значения
-            arguments.Add("min");                                       //минимальное значение
-            arguments.Add("max");                                       //максимальное значение
-            arguments.Add("step");                                      //шаг
-            arguments.Add("note");                                      //комментарий
-            arguments.Add("ret");                                       //возврат
-
-            int countRows;  //общее количество строк в запросе
+            List<string> inArgument = e.Argument as List<string>;   //распарсить входнык параметры
+            List<string> outArguments = new List<string>();         //возврат аргументов из потока на обработку
+            int countRows;                                          //общее количество строк в запросе
 
             DialogResult response = MessageBox.Show(
                 "Внимание Таблица Проходов будет Очищена" + "\r\n" +
@@ -421,23 +412,23 @@ namespace TimeWorkTracking
             {
                 try
                 {
-                    string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={path};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
+                    string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={inArgument[1]};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
                     using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
                     {
                         cnExcel.Open();
                         using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
                         {
-                            cmdExcel.CommandText = $"Select count(*) from [{range}]";
+                            cmdExcel.CommandText = $"Select count(*) from [{inArgument[2]}]";
                             countRows = (int)cmdExcel.ExecuteScalar();
-                            arguments[0] = "init";                  //init инициализация прогрессбара work отображение значения
-                            arguments[1] = "0";                     //минимальное значение
-                            arguments[2] = countRows.ToString();    //максимальное значение
-                            arguments[3] = "1";                     //шаг
-                            arguments[4] = "импорт";                //комментарий
-                            arguments[5] = "0";                     //возврат
-                            worker.ReportProgress(0, arguments);     //отобразить (вызвать событие) результаты progressbar
 
-                            cmdExcel.CommandText = $"Select * from [{range}]";    //диапазон Data (без заголовка)
+                            outArguments.Add("init");                       //init инициализация прогрессбара work отображение значения
+                            outArguments.Add("0");                          //минимальное значение
+                            outArguments.Add(countRows.ToString());         //максимальное значение
+                            outArguments.Add("1");                          //шаг
+                            outArguments.Add("импорт");                     //комментарий
+                            worker.ReportProgress(0, outArguments);         //отобразить (вызвать событие) результаты progressbar
+
+                            cmdExcel.CommandText = $"Select * from [{inArgument[2]}]";    //диапазон Data (без заголовка)
                             OleDbDataReader result = cmdExcel.ExecuteReader();
 
                             using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
@@ -450,108 +441,111 @@ namespace TimeWorkTracking
                                     sqlCommand.ExecuteScalar();
                                     int currentRow = 0;
                                     while (result.Read())
+                                    {
+                                        try
+                                        {
+                                            //Явное приведение типов
+                                            string author = result.GetString(1);
+                                            string passDate = result.GetDateTime(2).ToString("yyyyMMdd");
+                                            string passId = Convert.ToString(result.GetValue(3));
+                                            string passTimeStart = result.GetDateTime(5).ToString("yyyyMMdd");
+                                            string passTimeStop = result.GetDateTime(6).ToString("yyyyMMdd");
+                                            int timeScheduleFact = Convert.ToInt32(result.GetValue(9));
+                                            int timeScheduleWithoutLunch = Convert.ToInt32(result.GetValue(10));
+                                            int timeScheduleLess = Convert.ToInt32(result.GetValue(11));
+                                            int timeScheduleOver = Convert.ToInt32(result.GetValue(12));
+                                            string sp = result.GetString(13).Trim();
+                                            switch (sp)
                                             {
-                                                try
-                                                {
-                                                    //Явное приведение типов
-                                                    string author = result.GetString(1);
-                                                    string passDate = result.GetDateTime(2).ToString("yyyyMMdd");
-                                                    string passId = Convert.ToString(result.GetValue(3));
-                                                    string passTimeStart = result.GetDateTime(5).ToString("yyyyMMdd");
-                                                    string passTimeStop = result.GetDateTime(6).ToString("yyyyMMdd");
-                                                    int timeScheduleFact = Convert.ToInt32(result.GetValue(9));
-                                                    int timeScheduleWithoutLunch = Convert.ToInt32(result.GetValue(10));
-                                                    int timeScheduleLess = Convert.ToInt32(result.GetValue(11));
-                                                    int timeScheduleOver = Convert.ToInt32(result.GetValue(12));
-                                                    string sp = result.GetString(13).Trim();
-                                                    switch (sp)
-                                                    {
-                                                        case "Больничный":
-                                                            sp = "Больничный с оплатой";
-                                                            break;
-                                                    }
-                                                    sqlCommand.CommandText = "SELECT id FROM SpecialMarks Where name='" + sp + "'";
-                                                    int specialMarksId = (int)sqlCommand.ExecuteScalar();
-                                                    string specmarkTimeStart = specialMarksId == 1 ? "NULL" : "'" + result.GetDateTime(14).ToString("yyyyMMdd HH:mm") + "'";
-                                                    string specmarkTimeStop = specialMarksId == 1 ? "NULL" : "'" + result.GetDateTime(15).ToString("yyyyMMdd HH:mm") + "'";
-                                                    string specmarkNote = result.GetValue(16) == DBNull.Value ? "NULL" : Convert.ToString(result.GetValue(16));
-                                                    int totalHoursInWork = Convert.ToInt32(result.GetValue(17));
-                                                    int totalHoursOutsideWork = result.GetValue(18) == DBNull.Value ? 0 : Convert.ToInt32(result.GetValue(18));
-
-                                                    string sql =
-                                                        "UPDATE EventsPass Set " +
-                                                            "author = " + "N'" + author + "', " +
-                                                            "passTimeStart = " + "'" + passTimeStart + "', " +
-                                                            "passTimeStop = " + "'" + passTimeStop + "', " +
-                                                            //"pacsTimeStart = " + "NULL" + ", " +
-                                                            //"pacsTimeStop = " +  "NULL" + ", " +
-                                                            "timeScheduleFact = " + timeScheduleFact + ", " +
-                                                            "timeScheduleWithoutLunch = " + timeScheduleWithoutLunch + ", " +
-                                                            "timeScheduleLess = " + timeScheduleLess + ", " +
-                                                            "timeScheduleOver = " + timeScheduleOver + ", " +
-                                                            "specmarkId = " + specialMarksId + ", " +
-                                                            "specmarkTimeStart = " + specmarkTimeStart + ", " +
-                                                            "specmarkTimeStop = " + specmarkTimeStop + ", " +
-                                                            "specmarkNote = " + "N'" + specmarkNote + "', " +
-                                                            "totalHoursInWork = " + totalHoursInWork + ", " +
-                                                            "totalHoursOutsideWork = " + totalHoursOutsideWork + " " +
-                                                        "WHERE passDate = '" + passDate + "' " +                   //*дата прохода
-                                                            "and passId = '" + passId + "' ; " +                   //*внешний id сотрудника
-                                                        "IF @@ROWCOUNT = 0 " +
-                                                        "INSERT INTO EventsPass(" +
-                                                            "author, " +                                    //имя учетной записи сеанса
-                                                            "passDate, " +                                  //*дата события (без времени)
-                                                            "passId, " +                                    //*внешний id пользователя
-                                                            "passTimeStart, " +                             //время первого входа (без даты)
-                                                            "passTimeStop, " +                              //время последнего выхода (без даты)
-                                                                                                            //"pacsTimeStart, " +                             //время первого входа по СКУД (без даты)
-                                                                                                            //"pacsTimeStop, " +                              //время последнего выхода по СКУД (без даты)
-                                                            "timeScheduleFact, " +                          //отработанное время (мин)
-                                                            "timeScheduleWithoutLunch, " +                  //отработанное время без обеда (мин)
-                                                            "timeScheduleLess, " +                          //время недоработки (мин)
-                                                            "timeScheduleOver, " +                          //время переработки (мин)
-                                                            "specmarkId, " +                                //->ссылка на специальные отметки
-                                                            "specmarkTimeStart, " +                         //датавремя начала действия специальных отметок
-                                                            "specmarkTimeStop, " +                          //датавремя окончания специальных отметок
-                                                            "specmarkNote, " +                              //комментарий к специальным отметкам
-                                                            "totalHoursInWork, " +                          //итог рабочего времени в графике (мин)
-                                                            "totalHoursOutsideWork) " +                     //итог рабочего времени вне графика (мин)
-                                                        "VALUES (" +
-                                                            "N'" + author + "', " +
-                                                            "'" + passDate + "', " + // mcRegDate.SelectionStart.ToString("yyyyMMdd") + "', " +
-                                                            "'" + passId + "', " +
-                                                            "'" + passTimeStart + "', " +
-                                                            "'" + passTimeStop + "', " +
-                                                            //"NULL" + ", " +
-                                                            //"NULL" + ", " +
-                                                            timeScheduleFact + ", " +
-                                                            timeScheduleWithoutLunch + ", " +
-                                                            timeScheduleLess + ", " +
-                                                            timeScheduleOver + ", " +
-                                                            specialMarksId + ", " +
-                                                            specmarkTimeStart + ", " +
-                                                            specmarkTimeStop + ", " +
-                                                            "N'" + specmarkNote + "', " +
-                                                            totalHoursInWork + ", " +
-                                                            totalHoursOutsideWork +
-                                                            ")";
-                                                    sqlCommand.CommandText = sql;
-                                                }
-                                                catch (Exception ex)
-                                                {
-                                                    MessageBox.Show(ex.Message.ToString());
-                                                }
-                                                sqlCommand.ExecuteNonQuery();
-                                                cProgress += 1;
+                                                case "Больничный":
+                                                    sp = "Больничный с оплатой";
+                                                    break;
                                             }
+                                            sqlCommand.CommandText = "SELECT id FROM SpecialMarks Where name='" + sp + "'";
+                                            int specialMarksId = (int)sqlCommand.ExecuteScalar();
+                                            string specmarkTimeStart = specialMarksId == 1 ? "NULL" : "'" + result.GetDateTime(14).ToString("yyyyMMdd HH:mm") + "'";
+                                            string specmarkTimeStop = specialMarksId == 1 ? "NULL" : "'" + result.GetDateTime(15).ToString("yyyyMMdd HH:mm") + "'";
+                                            string specmarkNote = result.GetValue(16) == DBNull.Value ? "NULL" : "N'" + Convert.ToString(result.GetValue(16)) + "'";
+                                            int totalHoursInWork = Convert.ToInt32(result.GetValue(17));
+                                            int totalHoursOutsideWork = result.GetValue(18) == DBNull.Value ? 0 : Convert.ToInt32(result.GetValue(18));
+
+                                            string sql =
+                                                "UPDATE EventsPass Set " +
+                                                    "author = " + "N'" + author + "', " +
+                                                    "passTimeStart = " + "'" + passTimeStart + "', " +
+                                                    "passTimeStop = " + "'" + passTimeStop + "', " +
+                                                    //"pacsTimeStart = " + "NULL" + ", " +
+                                                    //"pacsTimeStop = " +  "NULL" + ", " +
+                                                    "timeScheduleFact = " + timeScheduleFact + ", " +
+                                                    "timeScheduleWithoutLunch = " + timeScheduleWithoutLunch + ", " +
+                                                    "timeScheduleLess = " + timeScheduleLess + ", " +
+                                                    "timeScheduleOver = " + timeScheduleOver + ", " +
+                                                    "specmarkId = " + specialMarksId + ", " +
+                                                    "specmarkTimeStart = " + specmarkTimeStart + ", " +
+                                                    "specmarkTimeStop = " + specmarkTimeStop + ", " +
+                                                    "specmarkNote = " + specmarkNote + ", " +
+                                                    "totalHoursInWork = " + totalHoursInWork + ", " +
+                                                    "totalHoursOutsideWork = " + totalHoursOutsideWork + " " +
+                                                "WHERE passDate = '" + passDate + "' " +                   //*дата прохода
+                                                    "and passId = '" + passId + "' ; " +                   //*внешний id сотрудника
+                                                "IF @@ROWCOUNT = 0 " +
+                                                "INSERT INTO EventsPass(" +
+                                                    "author, " +                                    //имя учетной записи сеанса
+                                                    "passDate, " +                                  //*дата события (без времени)
+                                                    "passId, " +                                    //*внешний id пользователя
+                                                    "passTimeStart, " +                             //время первого входа (без даты)
+                                                    "passTimeStop, " +                              //время последнего выхода (без даты)
+                                                    //"pacsTimeStart, " +                             //время первого входа по СКУД (без даты)
+                                                    //"pacsTimeStop, " +                              //время последнего выхода по СКУД (без даты)
+                                                    "timeScheduleFact, " +                          //отработанное время (мин)
+                                                    "timeScheduleWithoutLunch, " +                  //отработанное время без обеда (мин)
+                                                    "timeScheduleLess, " +                          //время недоработки (мин)
+                                                    "timeScheduleOver, " +                          //время переработки (мин)
+                                                    "specmarkId, " +                                //->ссылка на специальные отметки
+                                                    "specmarkTimeStart, " +                         //датавремя начала действия специальных отметок
+                                                    "specmarkTimeStop, " +                          //датавремя окончания специальных отметок
+                                                    "specmarkNote, " +                              //комментарий к специальным отметкам
+                                                    "totalHoursInWork, " +                          //итог рабочего времени в графике (мин)
+                                                    "totalHoursOutsideWork) " +                     //итог рабочего времени вне графика (мин)
+                                                "VALUES (" +
+                                                    "N'" + author + "', " +
+                                                    "'" + passDate + "', " + 
+                                                    "'" + passId + "', " +
+                                                    "'" + passTimeStart + "', " +
+                                                    "'" + passTimeStop + "', " +
+                                                    //"NULL" + ", " +
+                                                    //"NULL" + ", " +
+                                                    timeScheduleFact + ", " +
+                                                    timeScheduleWithoutLunch + ", " +
+                                                    timeScheduleLess + ", " +
+                                                    timeScheduleOver + ", " +
+                                                    specialMarksId + ", " +
+                                                    specmarkTimeStart + ", " +
+                                                    specmarkTimeStop + ", " +
+                                                    specmarkNote + ", " +
+                                                    totalHoursInWork + ", " +
+                                                    totalHoursOutsideWork +
+                                                    ")";
+                                                    sqlCommand.CommandText = sql;
                                         }
-                                        sqlConnection.Close();
+                                        catch (Exception ex)
+                                        {
+                                            MessageBox.Show(ex.Message.ToString());
+                                        }
+                                        sqlCommand.ExecuteNonQuery();
+                                        currentRow += 1;
+
+                                        outArguments[0] = "work";                                               //init инициализация прогрессбара work отображение значения
+                                        worker.ReportProgress((currentRow * 100) / countRows, outArguments);    //отобразить (вызвать событие) результаты progressbar
                                     }
                                 }
-                                cnExcel.Close();
+                                sqlConnection.Close();
                             }
-                            MessageBox.Show("Список проходов загружен в БД");
-                            toolStripProgressBarImport.Value = 0;
+                        }
+                        cnExcel.Close();
+                    }
+                    MessageBox.Show("Список проходов загружен в БД");
+                    toolStripProgressBarImport.Value = 0;
                 }
                 catch (Exception ex)
                 {
