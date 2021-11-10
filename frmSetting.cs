@@ -334,11 +334,6 @@ namespace TimeWorkTracking
                             {
                                 sqlCommand.CommandText = "DELETE FROM EventsPass";
                                 sqlCommand.ExecuteScalar();
-
-
-                                //                                toolStripProgressBarImport.Minimum = 0;
-                                //                                toolStripProgressBarImport.Maximum = ds.Tables[0].Rows.Count;
-                                //                                toolStripProgressBarImport.Value = 0;
                                 int currentRow = 0;
                                 foreach (DataRow row in ds.Tables[0].Rows)
                                 {
@@ -384,8 +379,8 @@ namespace TimeWorkTracking
                                           ")";
                                     sqlCommand.ExecuteNonQuery();
                                     currentRow += 1;
-                                    arguments[0] = "work";                  //init инициализация прогрессбара work отображение значения
-                                    worker.ReportProgress((currentRow*100)/ countRows, arguments);                                       //отобразить (вызвать событие) результаты progressbar
+                                    arguments[0] = "work";                                          //init инициализация прогрессбара work отображение значения
+                                    worker.ReportProgress((currentRow*100)/ countRows, arguments);  //отобразить (вызвать событие) результаты progressbar
                                 }
                             }
                             sqlConnection.Close();
