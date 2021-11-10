@@ -273,7 +273,7 @@ namespace TimeWorkTracking
             // toolStripStatusLabelInfo
             // 
             this.toolStripStatusLabelInfo.Name = "toolStripStatusLabelInfo";
-            this.toolStripStatusLabelInfo.Size = new System.Drawing.Size(204, 19);
+            this.toolStripStatusLabelInfo.Size = new System.Drawing.Size(235, 19);
             this.toolStripStatusLabelInfo.Spring = true;
             this.toolStripStatusLabelInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 

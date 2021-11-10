@@ -55,6 +55,7 @@ namespace TimeWorkTracking
             backgroundWorkerSetting.ProgressChanged += new ProgressChangedEventHandler(backgroundWorkerSetting_ProgressChanged);
             backgroundWorkerSetting.WorkerReportsProgress = true;       //Разрешить использовать событие по отображению прогресса
             backgroundWorkerSetting.WorkerSupportsCancellation = true;  //Разрешить использовать средства остановки(отмены выполнения) потока.
+//            backgroundWorkerSetting.GenerateMember = true;              
         }
 
         //Событие возникает после запуска потока методом RunAsync()
@@ -71,7 +72,7 @@ namespace TimeWorkTracking
                     //Это будет доступно обработчику событий RunWorkerCompleted.
                     //e.Result = ImportUserDataFromExcel(arg[1], arg[2]);  
 
-                    ImportUserDataFromExcel(arg[1], arg[2], sender as BackgroundWorker, e);
+                    ImportUserDataFromExcel(arg[1], arg[2], worker, e);
                     break;
                 case "Pass":
                     //e.Result = ImportUserDataFromExcel(arg[1], arg[2]);
@@ -103,7 +104,8 @@ namespace TimeWorkTracking
             {
                 // Finally, handle the case where the operation 
                 // succeeded.
-                toolStripStatusLabelInfo.Text = e.Result.ToString();
+                toolStripStatusLabelInfo.Text = ""; //e.Result.ToString();
+                toolStripProgressBarImport.Value = 0;
             }
 
          //   ImportUserDataFromExcel(tbPath.Text, cbSheetUser.Text + "$" + tbRangeUser.Text);
@@ -145,8 +147,8 @@ namespace TimeWorkTracking
                     //Отобразить процент и текст
                     toolStripStatusLabelInfo.Text = "Обработано " +
                                                     toolStripProgressBarImport.Value.ToString() + " из " +
-                                                    toolStripProgressBarImport.Maximum.ToString() + " " +
-                                                    Convert.ToString(e.ProgressPercentage) + "%";
+                                                    toolStripProgressBarImport.Maximum.ToString() + " (" +
+                                                    Convert.ToString(e.ProgressPercentage) + "%)";
                     break;
             }
         }
@@ -456,14 +458,12 @@ namespace TimeWorkTracking
                                     currentRow += 1;
                                     arguments[0] = "work";                  //init инициализация прогрессбара work отображение значения
                                     worker.ReportProgress((currentRow*100)/ countRows, arguments);                                       //отобразить (вызвать событие) результаты progressbar
-                                    //CallBack_frmSetting_workPogressBar.callbackEventHandler();
                                 }
                             }
                             sqlConnection.Close();
                         }
                     }
                     MessageBox.Show("Список сотрудников в БД");
-                    toolStripProgressBarImport.Value = 0;
                 }
                 catch (Exception ex)
                 {
