@@ -14,6 +14,7 @@ using System.Xml;
 using Excel = Microsoft.Office.Interop.Excel;
 
 
+
 //using DocumentFormat.OpenXml;
 //using DocumentFormat.OpenXml.Packaging;
 //using DocumentFormat.OpenXml.Spreadsheet;
@@ -22,16 +23,191 @@ namespace TimeWorkTracking
 {
     public partial class frmSetting : Form
     {
+        private int numberToCompute = 0;
+        private int highestPercentageReached = 0;
         public frmSetting()
         {
             //подписка события внешних форм 
             CallBack_FrmMain_outEvent.callbackEventHandler = new CallBack_FrmMain_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
-            //подписка свои события (pogressbar) 
-            CallBack_frmSetting_initPogressBar.callbackEventHandler = new CallBack_frmSetting_initPogressBar.callbackEvent(this.initProgressBar);    //subscribe (listen) to the general notification
-            CallBack_frmSetting_workPogressBar.callbackEventHandler = new CallBack_frmSetting_workPogressBar.callbackEvent(this.workProgressBar);    //subscribe (listen) to the general notification
-
             InitializeComponent();
+            InitializeBackgroundWorker();
         }
+
+        //инициализация progressBar
+        private void initProgressBar(int min, int max, int value, int step, string note)
+        {
+            toolStripProgressBarImport.Minimum = min;
+            toolStripProgressBarImport.Maximum = max;
+            toolStripProgressBarImport.Value = value;
+            toolStripProgressBarImport.Step = step;
+            toolStripStatusLabelInfo.Text = note;
+        }
+
+
+        //https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.backgroundworker?redirectedfrom=MSDN&view=net-5.0
+        //https://www.bestprog.net/ru/2021/03/28/c-control-component-backgroundworker-ru/
+        //https://www.bestprog.net/ru/2021/03/31/c-windows-forms-the-backgroundworker-control-displays-the-progress-of-completed-work-canceling-the-execution-of-a-thread-ru/
+        //Настройка объекта BackgroundWorker добавим свои события.
+        private void InitializeBackgroundWorker()
+        {
+            backgroundWorkerSetting.DoWork += new DoWorkEventHandler(backgroundWorkerSetting_DoWork);
+            backgroundWorkerSetting.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorkerSetting_RunWorkerCompleted);
+            backgroundWorkerSetting.ProgressChanged += new ProgressChangedEventHandler(backgroundWorkerSetting_ProgressChanged);
+            backgroundWorkerSetting.WorkerReportsProgress = true;       //Разрешить использовать событие по отображению прогресса
+            backgroundWorkerSetting.WorkerSupportsCancellation = true;  //Разрешить использовать средства остановки(отмены выполнения) потока.
+        }
+
+        //Событие возникает после запуска потока методом RunAsync()
+        //В обработчик этого события вписывается код выполнения потока.
+        private void backgroundWorkerSetting_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;           //передать объект (BackgroundWorker) вызвавший данное событие
+
+            List<string> arg = e.Argument as List<string>;
+            switch (arg[0])   // the 'argument' parameter resurfaces here
+            {
+                case "users":
+                    //Назначить результат вычисления к свойству результата DoWorkEventArgs объект.
+                    //Это будет доступно обработчику событий RunWorkerCompleted.
+                    //e.Result = ImportUserDataFromExcel(arg[1], arg[2]);  
+
+                    ImportUserDataFromExcel(arg[1], arg[2], sender as BackgroundWorker, e);
+                    break;
+                case "Pass":
+                    //e.Result = ImportUserDataFromExcel(arg[1], arg[2]);
+                    //ImportUserDataFromExcel(arg[1], arg[2]);
+                    break;
+            }
+        }
+
+        //Событие возникает когда происходит завершение потока выполнения
+        //В обработчик этого события целесообразно вписывать код завершающих операций, вывод соответствующих сообщений и т.п.
+        private void backgroundWorkerSetting_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            // Проверить как завершился поток с ошибками или без
+            if (e.Error != null)
+            {
+                MessageBox.Show(e.Error.Message);
+            }
+            else if (e.Cancelled)
+            {
+                // Next, handle the case where the user canceled 
+                // the operation.
+                // Note that due to a race condition in 
+                // the DoWork event handler, the Cancelled
+                // flag may not have been set, even though
+                // CancelAsync was called.
+                toolStripStatusLabelInfo.Text = "Canceled";
+            }
+            else
+            {
+                // Finally, handle the case where the operation 
+                // succeeded.
+                toolStripStatusLabelInfo.Text = e.Result.ToString();
+            }
+
+         //   ImportUserDataFromExcel(tbPath.Text, cbSheetUser.Text + "$" + tbRangeUser.Text);
+            CallBack_FrmSetting_outEvent.callbackEventHandler("", "", null);  //send a general notification
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            int count = Convert.ToInt32(clMsSqlDatabase.RequesScalar(cs, "select count(*) from Users", false));
+            btImportUsers.Enabled = count == 0;
+
+
+            // Enable the UpDown control.
+            //         this.numericUpDown1.Enabled = true;
+
+            // Enable the Start button.
+            //         startAsyncButton.Enabled = true;
+
+            // Disable the Cancel button.
+            //         cancelAsyncButton.Enabled = false;
+        }
+
+        //Событие возникает, когда рабочий поток указывает на то, что был достигнут некоторый прогресс
+        //вызывается из DoWork запуском ReportProgress которое вызывает данное событие
+        //В обработчике события ProgressChanged указывается код визуализации прогресса с помощью известных компонент, таких как ProgressBar, Label и т.д.;
+        private void backgroundWorkerSetting_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            List<string> arg = e.UserState as List<string>;
+            switch (arg[0])
+            {
+                case "init":
+                    toolStripProgressBarImport.Minimum = Convert.ToInt32(arg[1]);
+                    toolStripProgressBarImport.Maximum = Convert.ToInt32(arg[2]);
+                    toolStripProgressBarImport.Step = Convert.ToInt32(arg[3]);
+                    toolStripStatusLabelInfo.Text = arg[4];
+                    break;
+                case "work":
+                    //Задать изменение процента в progressBar
+                    toolStripProgressBarImport.PerformStep();               //сдвинуться на шаг
+                    //toolStripProgressBarImport.Value = e.ProgressPercentage;
+                    //            this.toolStripProgressBarImport.Value = e.ProgressPercentage;
+                    //Отобразить процент и текст
+                    toolStripStatusLabelInfo.Text = "Обработано " +
+                                                    toolStripProgressBarImport.Value.ToString() + " из " +
+                                                    toolStripProgressBarImport.Maximum.ToString() + " " +
+                                                    Convert.ToString(e.ProgressPercentage) + "%";
+                    break;
+            }
+        }
+
+        // This is the method that does the actual work. For this
+        // example, it computes a Fibonacci number and
+        // reports progress as it does its work.
+        long ComputeFibonacci(int n, BackgroundWorker worker, DoWorkEventArgs e)
+        {
+            // The parameter n must be >= 0 and <= 91.
+            // Fib(n), with n > 91, overflows a long.
+            if ((n < 0) || (n > 91))
+            {
+                throw new ArgumentException(
+                    "value must be >= 0 and <= 91", "n");
+            }
+
+            long result = 0;
+
+            // Abort the operation if the user has canceled.
+            // Note that a call to CancelAsync may have set 
+            // CancellationPending to true just after the
+            // last invocation of this method exits, so this 
+            // code will not have the opportunity to set the 
+            // DoWorkEventArgs.Cancel flag to true. This means
+            // that RunWorkerCompletedEventArgs.Cancelled will
+            // not be set to true in your RunWorkerCompleted
+            // event handler. This is a race condition.
+
+            if (worker.CancellationPending)
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                if (n < 2)
+                {
+                    result = 1;
+                }
+                else
+                {
+                    result = ComputeFibonacci(n - 1, worker, e) +
+                             ComputeFibonacci(n - 2, worker, e);
+                }
+
+                // Report progress as a percentage of the total task.
+                int percentComplete =
+                    (int)((float)n / (float)numberToCompute * 100);
+                if (percentComplete > highestPercentageReached)
+                {
+                    highestPercentageReached = percentComplete;
+                    worker.ReportProgress(percentComplete); //вызывает обработчик ProgressChanged 
+                }
+            }
+
+            return result;
+        }
+
+
+
+
 
         private void frmSetting_Load(object sender, EventArgs e)
         {
@@ -154,17 +330,33 @@ namespace TimeWorkTracking
         //кнопка импорт пользователей
         private void btImportUsers_Click(object sender, EventArgs e)
         {
-            ImportUserDataFromExcel(tbPath.Text, cbSheetUser.Text + "$" + tbRangeUser.Text);
-            CallBack_FrmSetting_outEvent.callbackEventHandler("", "", null);  //send a general notification
-            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            int count = Convert.ToInt32(clMsSqlDatabase.RequesScalar(cs, "select count(*) from Users", false));
-            btImportUsers.Enabled = count == 0;
+            List<string> arguments = new List<string>();
+            arguments.Add("users");                                     //для вызова нужного метода
+            arguments.Add(tbPath.Text);                                 //путь к файлу импорта Excel
+            arguments.Add(cbSheetUser.Text + "$" + tbRangeUser.Text);   //диапазон ячеек формата ИМЯ_ЛИСТА$ДИАПАЗОН
 
+            if (!backgroundWorkerSetting.IsBusy)                        //Запустить фоновую операцию (поток)(с аргументами) вызвав событие DoWork
+                backgroundWorkerSetting.RunWorkerAsync(arguments);
         }
 
         //импорт сотрудников через OleDbDataAdapter & DataSet
-        public void ImportUserDataFromExcel(string path, string range)
+        public void ImportUserDataFromExcel(string path, string range, BackgroundWorker worker, DoWorkEventArgs e)
         {
+            List<string> arguments = new List<string>();                //возврат аргументов из потока на обработку
+            arguments.Add("init");                                      //init инициализация прогрессбара work отображение значения
+            arguments.Add("min");                                       //минимальное значение
+            arguments.Add("max");                                       //максимальное значение
+            arguments.Add("step");                                      //шаг
+            arguments.Add("note");                                      //комментарий
+            arguments.Add("ret");                                       //возврат
+
+            //            arguments.Add(tbPath.Text);                                 //путь к файлу импорта Excel
+            //            arguments.Add(cbSheetUser.Text + "$" + tbRangeUser.Text);   //диапазон ячеек формата ИМЯ_ЛИСТА$ДИАПАЗОН
+
+
+
+            int countRows;  //общее количество строк в запросе
+
             DialogResult response = MessageBox.Show(
                 "Внимание Таблицы Прохода и Сотрудников будут Очищены" + "\r\n" +
                 "Продолжить?" + "\r\n",
@@ -176,7 +368,7 @@ namespace TimeWorkTracking
                 );
             if (response == DialogResult.Yes) 
             {
-                toolStripProgressBarImport.Value = 0;
+//                toolStripProgressBarImport.Value = 0;
                 try
                 {
                     string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={path};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
@@ -188,13 +380,21 @@ namespace TimeWorkTracking
                         using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
                         {
                             cmdExcel.CommandText = $"Select count(*) from [{range}]";
-                            int linesCount = (int)cmdExcel.ExecuteScalar();
+                            countRows = (int)cmdExcel.ExecuteScalar();
 
                             cmdExcel.CommandText = $"Select * from [{range}]";    //диапазон Data (без заголовка)
                             //OleDbDataReader result = cmdExcel.ExecuteReader();
                             da.SelectCommand = cmdExcel;
                             da.Fill(ds);
 
+                            arguments[0] = "init";                  //init инициализация прогрессбара work отображение значения
+                            arguments[1] = "0";                     //минимальное значение
+                            arguments[2] = countRows.ToString();    //максимальное значение
+                            arguments[3] = "1";                     //шаг
+                            arguments[4] = "импорт";                //комментарий
+                            arguments[5] = "0";                     //возврат
+                            worker.ReportProgress(0,arguments);     //отобразить (вызвать событие) результаты progressbar
+                            //                            CallBack_frmSetting_initPogressBar.callbackEventHandler(0, linesCount, 0, 1, "");  //send a general notification
                         }
                         cnExcel.Close();
                         using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
@@ -205,11 +405,14 @@ namespace TimeWorkTracking
                                 sqlCommand.CommandText = "DELETE FROM EventsPass";
                                 sqlCommand.ExecuteScalar();
 
-                                toolStripProgressBarImport.Minimum = 0;
-                                toolStripProgressBarImport.Maximum = ds.Tables[0].Rows.Count;
-                                toolStripProgressBarImport.Value = 0;
+
+                                //                                toolStripProgressBarImport.Minimum = 0;
+                                //                                toolStripProgressBarImport.Maximum = ds.Tables[0].Rows.Count;
+                                //                                toolStripProgressBarImport.Value = 0;
+                                int currentRow = 0;
                                 foreach (DataRow row in ds.Tables[0].Rows)
                                 {
+                                    System.Threading.Thread.Sleep(50);
                                     sqlCommand.CommandText = "SELECT id FROM UserDepartment Where name='" + row[1].ToString() + "'";
                                     int departmentId = (int)sqlCommand.ExecuteScalar();
                                     sqlCommand.CommandText = "SELECT id FROM UserPost Where name='" + row[2].ToString() + "'";
@@ -249,9 +452,11 @@ namespace TimeWorkTracking
                                           workSchemeId + ", " +
                                           ((Boolean)row[8] ? 1 : 0) +
                                           ")";
-                                    sqlCommand.ExecuteNonQuery();
-
-                                    toolStripProgressBarImport.Value += 1;
+                                    //sqlCommand.ExecuteNonQuery();
+                                    currentRow += 1;
+                                    arguments[0] = "work";                  //init инициализация прогрессбара work отображение значения
+                                    worker.ReportProgress((currentRow*100)/ countRows, arguments);                                       //отобразить (вызвать событие) результаты progressbar
+                                    //CallBack_frmSetting_workPogressBar.callbackEventHandler();
                                 }
                             }
                             sqlConnection.Close();
@@ -287,43 +492,34 @@ namespace TimeWorkTracking
                 );
             if (response == DialogResult.Yes)
             {
-                toolStripProgressBarImport.Value = 0;
-                toolStripStatusLabelInfo.Text = "";
                 try
                 {
-
-                    using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
+                    string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={path};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
+                    using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
                     {
-                        sqlConnection.Open();
-                        using (var sqlCommand = sqlConnection.CreateCommand())
+                        cnExcel.Open();
+                        using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
                         {
+                            cmdExcel.CommandText = $"Select count(*) from [{range}]";
+                            int linesCount = (int)cmdExcel.ExecuteScalar();
 
-                            string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={path};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
-                            using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
+                            cmdExcel.CommandText = $"Select * from [{range}]";    //диапазон Data (без заголовка)
+                            OleDbDataReader result = cmdExcel.ExecuteReader();
+
+                            using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
                             {
-                                cnExcel.Open();
-                                using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
-                                {
-                                    cmdExcel.CommandText = $"Select count(*) from [{range}]";
-                                    int linesCount = (int)cmdExcel.ExecuteScalar();
+                                sqlConnection.Open();
+                                using (var sqlCommand = sqlConnection.CreateCommand())
+                                { 
+                                    //sqlCommand.CommandTimeout = 10;
+                                    sqlCommand.CommandText = "DELETE FROM EventsPass";
+                                    sqlCommand.ExecuteScalar();
+                                    //CallBack_frmSetting_initPogressBar.callbackEventHandler(0, linesCount, 0, 1, "");  //send a general notification
+                               //     worker.ReportProgress(0);                                       //отобразить (вызвать событие) результаты progressbar
 
-                                    cmdExcel.CommandText = $"Select * from [{range}]";    //диапазон Data (без заголовка)
-                                    OleDbDataReader result = cmdExcel.ExecuteReader();
-
-            //                        using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
-              //                      {
-                //                        sqlConnection.Open();
-                  //                      using (var sqlCommand = sqlConnection.CreateCommand())
-                    //                    {
-                                            sqlCommand.CommandTimeout = 10;
-                                            sqlCommand.CommandText = "DELETE FROM EventsPass";
-                                            sqlCommand.ExecuteScalar();
-
-                                            CallBack_frmSetting_initPogressBar.callbackEventHandler(0, linesCount, 0, "");  //send a general notification
-
-                                            //                                    Thread t = new Thread(new ThreadStart(delegate 
-                                            //                                    {
-                                            int cProgress = 0;
+                                    //                                    Thread t = new Thread(new ThreadStart(delegate 
+                                    //                                    {
+                                    int cProgress = 0;
                                             while (result.Read())
                                             {
                                                 //                                            this.Invoke(new ThreadStart(delegate
@@ -420,36 +616,28 @@ namespace TimeWorkTracking
                                                 }
                                                 sqlCommand.ExecuteNonQuery();
                                                 cProgress += 1;
-                                                CallBack_frmSetting_workPogressBar.callbackEventHandler(cProgress, "Обработано " +
-                                                            cProgress.ToString() + " из " + linesCount.ToString());
+                                     //   worker.ReportProgress(0);                                       //отобразить (вызвать событие) результаты progressbar
+//                                        CallBack_frmSetting_workPogressBar.callbackEventHandler();
 
                                                 //       }));
                                             }
                                             //  }));
                                             //  t.Start();
-                                      //  }
-                                      //  sqlConnection.Close();
-                                    //}
+                                        }
+                                        sqlConnection.Close();
+                                    }
                                 }
                                 cnExcel.Close();
                             }
                             MessageBox.Show("Список проходов загружен в БД");
                             toolStripProgressBarImport.Value = 0;
-                        }
-                        sqlConnection.Close();
-                    }
+
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message.ToString());
                 }
             }
-        }
-
-        private void updateProgressBar(string label) 
-        {
-            toolStripProgressBarImport.PerformStep();
-            toolStripStatusLabelInfo.Text = label;
         }
 
         /*--------------------------------------------------------------------------------------------  
@@ -472,20 +660,6 @@ namespace TimeWorkTracking
             }
             */
         }
-        private void initProgressBar(int min, int max, int value, string note)
-        {
-            toolStripProgressBarImport.Minimum = min;
-            toolStripProgressBarImport.Maximum = max;
-            toolStripProgressBarImport.Value = value;
-            toolStripStatusLabelInfo.Text = note;
-        }
-
-        private void workProgressBar(int value, string note)
-        {
-//            toolStripProgressBarImport.PerformStep();
-            toolStripProgressBarImport.Value = value;
-            toolStripStatusLabelInfo.Text = note;
-        }
     }
     /*--------------------------------------------------------------------------------------------  
     CALLBACK OutPut (собственные сообщения)
@@ -507,16 +681,6 @@ namespace TimeWorkTracking
         /// <summary>
         /// The callback event handler
         /// </summary>
-        public static callbackEvent callbackEventHandler;
-    }
-    public static class CallBack_frmSetting_initPogressBar 
-    {
-        public delegate void callbackEvent(int min, int max, int value, string note);
-        public static callbackEvent callbackEventHandler;
-    }
-    public static class CallBack_frmSetting_workPogressBar
-    {
-        public delegate void callbackEvent(int value, string note);
         public static callbackEvent callbackEventHandler;
     }
 }
