@@ -33,17 +33,7 @@ namespace TimeWorkTracking
             InitializeBackgroundWorker();
         }
 
-        //инициализация progressBar
-        private void initProgressBar(int min, int max, int value, int step, string note)
-        {
-            toolStripProgressBarImport.Minimum = min;
-            toolStripProgressBarImport.Maximum = max;
-            toolStripProgressBarImport.Value = value;
-            toolStripProgressBarImport.Step = step;
-            toolStripStatusLabelInfo.Text = note;
-        }
-
-
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
         //https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.backgroundworker?redirectedfrom=MSDN&view=net-5.0
         //https://www.bestprog.net/ru/2021/03/28/c-control-component-backgroundworker-ru/
         //https://www.bestprog.net/ru/2021/03/31/c-windows-forms-the-backgroundworker-control-displays-the-progress-of-completed-work-canceling-the-execution-of-a-thread-ru/
@@ -51,8 +41,8 @@ namespace TimeWorkTracking
         private void InitializeBackgroundWorker()
         {
             backgroundWorkerSetting.DoWork += new DoWorkEventHandler(backgroundWorkerSetting_DoWork);
-            backgroundWorkerSetting.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorkerSetting_RunWorkerCompleted);
             backgroundWorkerSetting.ProgressChanged += new ProgressChangedEventHandler(backgroundWorkerSetting_ProgressChanged);
+            backgroundWorkerSetting.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorkerSetting_RunWorkerCompleted);
             backgroundWorkerSetting.WorkerReportsProgress = true;       //Разрешить использовать событие по отображению прогресса
             backgroundWorkerSetting.WorkerSupportsCancellation = true;  //Разрешить использовать средства остановки(отмены выполнения) потока.
 //            backgroundWorkerSetting.GenerateMember = true;              
@@ -72,9 +62,9 @@ namespace TimeWorkTracking
                     //Это будет доступно обработчику событий RunWorkerCompleted.
                     //e.Result = ImportUserDataFromExcel(arg[1], arg[2]);  
 
-                    ImportUserDataFromExcel(arg[1], arg[2], worker, e);
+                    e.Result = ImportUserDataFromExcel(arg[1], arg[2], worker, e);
                     break;
-                case "Pass":
+                case "pass":
                     //e.Result = ImportUserDataFromExcel(arg[1], arg[2]);
                     //ImportUserDataFromExcel(arg[1], arg[2]);
                     break;
@@ -85,6 +75,7 @@ namespace TimeWorkTracking
         //В обработчик этого события целесообразно вписывать код завершающих операций, вывод соответствующих сообщений и т.п.
         private void backgroundWorkerSetting_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+        //    List<string> arg = e.Argument as List<string>;
             // Проверить как завершился поток с ошибками или без
             if (e.Error != null)
             {
@@ -106,23 +97,18 @@ namespace TimeWorkTracking
                 // succeeded.
                 toolStripStatusLabelInfo.Text = ""; //e.Result.ToString();
                 toolStripProgressBarImport.Value = 0;
+                switch (e.Result.ToString())                
+                {
+                    case "users":                                                           //если завершился иморт пользователей
+                        CallBack_FrmSetting_outEvent.callbackEventHandler("", "", null);    //отправитьс ообщение главной форме что импрот произошел
+                        string cs = Properties.Settings.Default.twtConnectionSrting;        //connection string
+                        int count = Convert.ToInt32(clMsSqlDatabase.RequesScalar(cs, "select count(*) from Users", false));
+                        btImportUsers.Enabled = count == 0;
+                        break;
+                    case "pass":                                                            //если завершился иморт проходов
+                        break;
+                }
             }
-
-         //   ImportUserDataFromExcel(tbPath.Text, cbSheetUser.Text + "$" + tbRangeUser.Text);
-            CallBack_FrmSetting_outEvent.callbackEventHandler("", "", null);  //send a general notification
-            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            int count = Convert.ToInt32(clMsSqlDatabase.RequesScalar(cs, "select count(*) from Users", false));
-            btImportUsers.Enabled = count == 0;
-
-
-            // Enable the UpDown control.
-            //         this.numericUpDown1.Enabled = true;
-
-            // Enable the Start button.
-            //         startAsyncButton.Enabled = true;
-
-            // Disable the Cancel button.
-            //         cancelAsyncButton.Enabled = false;
         }
 
         //Событие возникает, когда рабочий поток указывает на то, что был достигнут некоторый прогресс
@@ -133,13 +119,13 @@ namespace TimeWorkTracking
             List<string> arg = e.UserState as List<string>;
             switch (arg[0])
             {
-                case "init":
+                case "init":                                                //инициализируем прогрессбар
                     toolStripProgressBarImport.Minimum = Convert.ToInt32(arg[1]);
                     toolStripProgressBarImport.Maximum = Convert.ToInt32(arg[2]);
                     toolStripProgressBarImport.Step = Convert.ToInt32(arg[3]);
                     toolStripStatusLabelInfo.Text = arg[4];
                     break;
-                case "work":
+                case "work":                                                //двигаем прогрессбар
                     //Задать изменение процента в progressBar
                     toolStripProgressBarImport.PerformStep();               //сдвинуться на шаг
                     //toolStripProgressBarImport.Value = e.ProgressPercentage;
@@ -152,64 +138,7 @@ namespace TimeWorkTracking
                     break;
             }
         }
-
-        // This is the method that does the actual work. For this
-        // example, it computes a Fibonacci number and
-        // reports progress as it does its work.
-        long ComputeFibonacci(int n, BackgroundWorker worker, DoWorkEventArgs e)
-        {
-            // The parameter n must be >= 0 and <= 91.
-            // Fib(n), with n > 91, overflows a long.
-            if ((n < 0) || (n > 91))
-            {
-                throw new ArgumentException(
-                    "value must be >= 0 and <= 91", "n");
-            }
-
-            long result = 0;
-
-            // Abort the operation if the user has canceled.
-            // Note that a call to CancelAsync may have set 
-            // CancellationPending to true just after the
-            // last invocation of this method exits, so this 
-            // code will not have the opportunity to set the 
-            // DoWorkEventArgs.Cancel flag to true. This means
-            // that RunWorkerCompletedEventArgs.Cancelled will
-            // not be set to true in your RunWorkerCompleted
-            // event handler. This is a race condition.
-
-            if (worker.CancellationPending)
-            {
-                e.Cancel = true;
-            }
-            else
-            {
-                if (n < 2)
-                {
-                    result = 1;
-                }
-                else
-                {
-                    result = ComputeFibonacci(n - 1, worker, e) +
-                             ComputeFibonacci(n - 2, worker, e);
-                }
-
-                // Report progress as a percentage of the total task.
-                int percentComplete =
-                    (int)((float)n / (float)numberToCompute * 100);
-                if (percentComplete > highestPercentageReached)
-                {
-                    highestPercentageReached = percentComplete;
-                    worker.ReportProgress(percentComplete); //вызывает обработчик ProgressChanged 
-                }
-            }
-
-            return result;
-        }
-
-
-
-
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         private void frmSetting_Load(object sender, EventArgs e)
         {
@@ -325,7 +254,6 @@ namespace TimeWorkTracking
                 {
                     MessageBox.Show(ex.Message.ToString());
                 }
-
             }
         }
 
@@ -342,7 +270,7 @@ namespace TimeWorkTracking
         }
 
         //импорт сотрудников через OleDbDataAdapter & DataSet
-        public void ImportUserDataFromExcel(string path, string range, BackgroundWorker worker, DoWorkEventArgs e)
+        public string ImportUserDataFromExcel(string path, string range, BackgroundWorker worker, DoWorkEventArgs e)
         {
             List<string> arguments = new List<string>();                //возврат аргументов из потока на обработку
             arguments.Add("init");                                      //init инициализация прогрессбара work отображение значения
@@ -454,7 +382,7 @@ namespace TimeWorkTracking
                                           workSchemeId + ", " +
                                           ((Boolean)row[8] ? 1 : 0) +
                                           ")";
-                                    //sqlCommand.ExecuteNonQuery();
+                                    sqlCommand.ExecuteNonQuery();
                                     currentRow += 1;
                                     arguments[0] = "work";                  //init инициализация прогрессбара work отображение значения
                                     worker.ReportProgress((currentRow*100)/ countRows, arguments);                                       //отобразить (вызвать событие) результаты progressbar
@@ -470,6 +398,7 @@ namespace TimeWorkTracking
                     MessageBox.Show(ex.Message.ToString());
                 }
             }
+            return "users";
         }
 
         //кнопка импорт проходов 
