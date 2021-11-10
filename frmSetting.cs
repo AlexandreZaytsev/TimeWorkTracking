@@ -280,11 +280,6 @@ namespace TimeWorkTracking
             arguments.Add("note");                                      //комментарий
             arguments.Add("ret");                                       //возврат
 
-            //            arguments.Add(tbPath.Text);                                 //путь к файлу импорта Excel
-            //            arguments.Add(cbSheetUser.Text + "$" + tbRangeUser.Text);   //диапазон ячеек формата ИМЯ_ЛИСТА$ДИАПАЗОН
-
-
-
             int countRows;  //общее количество строк в запросе
 
             DialogResult response = MessageBox.Show(
@@ -298,7 +293,6 @@ namespace TimeWorkTracking
                 );
             if (response == DialogResult.Yes) 
             {
-//                toolStripProgressBarImport.Value = 0;
                 try
                 {
                     string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={path};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
@@ -324,7 +318,6 @@ namespace TimeWorkTracking
                             arguments[4] = "импорт";                //комментарий
                             arguments[5] = "0";                     //возврат
                             worker.ReportProgress(0,arguments);     //отобразить (вызвать событие) результаты progressbar
-                            //                            CallBack_frmSetting_initPogressBar.callbackEventHandler(0, linesCount, 0, 1, "");  //send a general notification
                         }
                         cnExcel.Close();
                         using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
@@ -403,8 +396,18 @@ namespace TimeWorkTracking
         }
 
         //импорт сотрудников через OleDbDataAdapter & DataSet
-        public void ImportPassDataFromExcel(string path, string range)
+        public string ImportPassDataFromExcel(string path, string range)
         {
+            List<string> arguments = new List<string>();                //возврат аргументов из потока на обработку
+            arguments.Add("init");                                      //init инициализация прогрессбара work отображение значения
+            arguments.Add("min");                                       //минимальное значение
+            arguments.Add("max");                                       //максимальное значение
+            arguments.Add("step");                                      //шаг
+            arguments.Add("note");                                      //комментарий
+            arguments.Add("ret");                                       //возврат
+
+            int countRows;  //общее количество строк в запросе
+
             DialogResult response = MessageBox.Show(
                 "Внимание Таблица Проходов будет Очищена" + "\r\n" +
                 "Продолжить?" + "\r\n",
@@ -425,7 +428,14 @@ namespace TimeWorkTracking
                         using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
                         {
                             cmdExcel.CommandText = $"Select count(*) from [{range}]";
-                            int linesCount = (int)cmdExcel.ExecuteScalar();
+                            countRows = (int)cmdExcel.ExecuteScalar();
+                            arguments[0] = "init";                  //init инициализация прогрессбара work отображение значения
+                            arguments[1] = "0";                     //минимальное значение
+                            arguments[2] = countRows.ToString();    //максимальное значение
+                            arguments[3] = "1";                     //шаг
+                            arguments[4] = "импорт";                //комментарий
+                            arguments[5] = "0";                     //возврат
+                            worker.ReportProgress(0, arguments);     //отобразить (вызвать событие) результаты progressbar
 
                             cmdExcel.CommandText = $"Select * from [{range}]";    //диапазон Data (без заголовка)
                             OleDbDataReader result = cmdExcel.ExecuteReader();
@@ -438,16 +448,9 @@ namespace TimeWorkTracking
                                     //sqlCommand.CommandTimeout = 10;
                                     sqlCommand.CommandText = "DELETE FROM EventsPass";
                                     sqlCommand.ExecuteScalar();
-                                    //CallBack_frmSetting_initPogressBar.callbackEventHandler(0, linesCount, 0, 1, "");  //send a general notification
-                               //     worker.ReportProgress(0);                                       //отобразить (вызвать событие) результаты progressbar
-
-                                    //                                    Thread t = new Thread(new ThreadStart(delegate 
-                                    //                                    {
-                                    int cProgress = 0;
-                                            while (result.Read())
+                                    int currentRow = 0;
+                                    while (result.Read())
                                             {
-                                                //                                            this.Invoke(new ThreadStart(delegate
-                                                //                                            {
                                                 try
                                                 {
                                                     //Явное приведение типов
@@ -540,13 +543,7 @@ namespace TimeWorkTracking
                                                 }
                                                 sqlCommand.ExecuteNonQuery();
                                                 cProgress += 1;
-                                     //   worker.ReportProgress(0);                                       //отобразить (вызвать событие) результаты progressbar
-//                                        CallBack_frmSetting_workPogressBar.callbackEventHandler();
-
-                                                //       }));
                                             }
-                                            //  }));
-                                            //  t.Start();
                                         }
                                         sqlConnection.Close();
                                     }
@@ -555,13 +552,13 @@ namespace TimeWorkTracking
                             }
                             MessageBox.Show("Список проходов загружен в БД");
                             toolStripProgressBarImport.Value = 0;
-
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message.ToString());
                 }
             }
+            return "pass";
         }
 
         /*--------------------------------------------------------------------------------------------  
