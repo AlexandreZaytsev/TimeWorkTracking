@@ -320,7 +320,7 @@ namespace TimeWorkTracking
                                 int currentRow = 0;
                                 foreach (DataRow row in ds.Tables[0].Rows)
                                 {
-                                    System.Threading.Thread.Sleep(50);
+                                    //System.Threading.Thread.Sleep(50);
                                     sqlCommand.CommandText = "SELECT id FROM UserDepartment Where name='" + row[1].ToString() + "'";
                                     int departmentId = (int)sqlCommand.ExecuteScalar();
                                     sqlCommand.CommandText = "SELECT id FROM UserPost Where name='" + row[2].ToString() + "'";
