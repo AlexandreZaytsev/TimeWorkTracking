@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -370,7 +371,7 @@ namespace TimeWorkTracking
                             sqlConnection.Close();
                         }
                     }
-                    MessageBox.Show("Список сотрудников в БД");
+                    MessageBox.Show("Список сотрудников загружен в БД");
                 }
                 catch (Exception ex)
                 {
@@ -448,8 +449,8 @@ namespace TimeWorkTracking
                                             string author = result.GetString(1);
                                             string passDate = result.GetDateTime(2).ToString("yyyyMMdd");
                                             string passId = Convert.ToString(result.GetValue(3));
-                                            string passTimeStart = result.GetDateTime(5).ToString("yyyyMMdd");
-                                            string passTimeStop = result.GetDateTime(6).ToString("yyyyMMdd");
+                                            string passTimeStart = result.GetDateTime(5).ToString("yyyyMMdd HH:mm");
+                                            string passTimeStop = result.GetDateTime(6).ToString("yyyyMMdd HH:mm");
                                             int timeScheduleFact = Convert.ToInt32(result.GetValue(9));
                                             int timeScheduleWithoutLunch = Convert.ToInt32(result.GetValue(10));
                                             int timeScheduleLess = Convert.ToInt32(result.GetValue(11));
@@ -463,8 +464,9 @@ namespace TimeWorkTracking
                                             }
                                             sqlCommand.CommandText = "SELECT id FROM SpecialMarks Where name='" + sp + "'";
                                             int specialMarksId = (int)sqlCommand.ExecuteScalar();
-                                            string specmarkTimeStart = specialMarksId == 1 ? "NULL" : "'" + result.GetDateTime(14).ToString("yyyyMMdd HH:mm") + "'";
-                                            string specmarkTimeStop = specialMarksId == 1 ? "NULL" : "'" + result.GetDateTime(15).ToString("yyyyMMdd HH:mm") + "'";
+//                                            DateTime.ParseExact(result.GetValue(14).ToString(), "dd MMMM HH:mm", CultureInfo.GetCultureInfo("ru-RU"))
+                                            string specmarkTimeStart = specialMarksId == 1 ? "NULL" : "'" + Convert.ToDateTime(result.GetValue(14)).ToString("yyyyMMdd HH:mm") + "'";
+                                            string specmarkTimeStop = specialMarksId == 1 ? "NULL" : "'" + Convert.ToDateTime(result.GetValue(15)).ToString("yyyyMMdd HH:mm") + "'";
                                             string specmarkNote = result.GetValue(16) == DBNull.Value ? "NULL" : "N'" + Convert.ToString(result.GetValue(16)) + "'";
                                             int totalHoursInWork = Convert.ToInt32(result.GetValue(17));
                                             int totalHoursOutsideWork = result.GetValue(18) == DBNull.Value ? 0 : Convert.ToInt32(result.GetValue(18));
