@@ -294,16 +294,22 @@ namespace TimeWorkTracking
         //кнопка настройки базы SQL
         private void tsbtDataBaseSQL_Click(object sender, EventArgs e)
         {
-            frmDataBaseSQL frm = new frmDataBaseSQL { Owner = this };
-            CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
-            frm.ShowDialog();
+            if (userType) 
+            { 
+                frmDataBaseSQL frm = new frmDataBaseSQL { Owner = this };
+                CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
+                frm.ShowDialog();
+            }
         }
         //кнопка настройки базы СКУД
         private void tsbtDataBasePACS_Click(object sender, EventArgs e)
         {
-            frmDataBasePACS frm = new frmDataBasePACS { Owner = this };
-            CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
-            frm.ShowDialog();
+            if (userType)
+            {
+                frmDataBasePACS frm = new frmDataBasePACS { Owner = this };
+                CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
+                frm.ShowDialog();
+            }
         }
         //кнопка Импорт Экспорт
         private void toolSetting_Click(object sender, EventArgs e)
