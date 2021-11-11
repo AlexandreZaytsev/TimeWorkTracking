@@ -651,11 +651,11 @@ namespace TimeWorkTracking
             // 
             this.chPacsOut.AutoSize = true;
             this.chPacsOut.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chPacsOut.Location = new System.Drawing.Point(300, 8);
+            this.chPacsOut.Location = new System.Drawing.Point(293, 8);
             this.chPacsOut.Name = "chPacsOut";
-            this.chPacsOut.Size = new System.Drawing.Size(60, 22);
+            this.chPacsOut.Size = new System.Drawing.Size(71, 22);
             this.chPacsOut.TabIndex = 1;
-            this.chPacsOut.Text = "вход";
+            this.chPacsOut.Text = "выход";
             this.chPacsOut.UseVisualStyleBackColor = true;
             // 
             // chPacsIn
@@ -845,6 +845,7 @@ namespace TimeWorkTracking
             this.Text = "Учет рабочего времени";
             this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.frmMain_HelpButtonClicked);
             this.Load += new System.EventHandler(this.frmMain_Load);
+            this.Shown += new System.EventHandler(this.frmMain_Shown);
             this.statusStripMain.ResumeLayout(false);
             this.statusStripMain.PerformLayout();
             this.mainPanelRegistration.ResumeLayout(false);

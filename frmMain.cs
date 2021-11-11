@@ -28,8 +28,9 @@ namespace TimeWorkTracking
         {
             //подписка события внешних форм 
             CallBack_FrmDataBaseSQL_outEvent.callbackEventHandler = new CallBack_FrmDataBaseSQL_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
-            CallBack_FrmDataBasePACS_outEvent.callbackEventHandler = new CallBack_FrmDataBasePACS_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
+            CallBack_FrmDataBasePACS_outEvent.callbackEventHandler = new CallBack_FrmDataBasePACS_outEvent.callbackEvent(this.CallbackReload);  //subscribe (listen) to the general notification
             CallBack_FrmSetting_outEvent.callbackEventHandler = new CallBack_FrmSetting_outEvent.callbackEvent(this.CallbackCheckListUsers);    //subscribe (listen) to the general notification
+            CallBack_FrmLogIn_outEvent.callbackEventHandler = new CallBack_FrmLogIn_outEvent.callbackEvent(this.CallbackLogIn);                 //subscribe (listen) to the general notification
 
             InitializeComponent();
             lMsg.Visible = false;                                           //погасить сообщение о записи в БД
@@ -42,7 +43,6 @@ namespace TimeWorkTracking
 */
             btDelete.Visible = false;                                       //заблокировать кнопку DELETE 
         }
-
         private void frmMain_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
@@ -60,6 +60,20 @@ namespace TimeWorkTracking
                 LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
                 mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
             }
+        }
+
+        //при первом показе формы
+        private void frmMain_Shown(object sender, EventArgs e)
+        {
+            LogIn();        //авторизация
+        }
+
+        //Диалог Авторизации
+        private void LogIn() 
+        {
+            frmLogIn frm = new frmLogIn { Owner = this };
+            CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
+            frm.ShowDialog();
         }
 
         // Initialize ListView
@@ -806,6 +820,23 @@ namespace TimeWorkTracking
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
             mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
+        }
+        //проверить кто будет работать с программой
+        private void CallbackLogIn(string typeLogIn, string controlParentName, Dictionary<String, String> param)
+        {
+            switch (typeLogIn)
+            {
+                case "Администратор":
+                    userType = true;
+                    toolSetting.Visible = true;
+                    this.Text = "Учет рабочего времени (Администратор)";
+                    break;
+                case "Пользователь":
+                    userType = false;
+                    toolSetting.Visible = false;
+                    this.Text = "Учет рабочего времени (Регистратор)";
+                    break;
+            }
         }
     }
 
