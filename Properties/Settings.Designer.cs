@@ -178,5 +178,17 @@ namespace TimeWorkTracking.Properties {
                 this["importFilename"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string adminPass {
+            get {
+                return ((string)(this["adminPass"]));
+            }
+            set {
+                this["adminPass"] = value;
+            }
+        }
     }
 }

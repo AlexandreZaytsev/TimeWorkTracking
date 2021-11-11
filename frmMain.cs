@@ -19,8 +19,10 @@ namespace TimeWorkTracking
 {
     public partial class frmMain : Form
     {
-        clListViewItemComparer _lvwItemComparer;                              //объект сортировки по колонкам
-        private clCalendar pCalendar;                                         //класс производственный календаоь
+        clListViewItemComparer _lvwItemComparer;                            //объект сортировки по колонкам
+        private clCalendar pCalendar;                                       //класс производственный календаоь
+        public bool userType;                                               //false - пользователь true - админ
+        private bool readType;                                              //true - чтение из списка/БД false - запись в БД  
 
         public frmMain()
         {
@@ -124,7 +126,7 @@ namespace TimeWorkTracking
             grRegistrator.Enabled = false;
         }
         //сортировка по заголовке столбца
-        private void lstwDataBaseUsers_ColumnClick(object sender, ColumnClickEventArgs e)
+        private void lstwDataBaseMain_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             // Determine if clicked column is already the column that is being sorted.
             if (e.Column == _lvwItemComparer.SortColumn)
@@ -145,9 +147,17 @@ namespace TimeWorkTracking
             this.lstwDataBaseMain.Sort();
         }
 
+        //запретить изменение размеров
+        private void lstwDataBaseMain_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            e.Cancel = true;
+            e.NewWidth = lstwDataBaseMain.Columns[e.ColumnIndex].Width;
+        }
+
         //выбор значения из списка инициализация переменных формы
         private void lstwDataBaseMain_SelectedIndexChanged(object sender, EventArgs e)
         {
+            readType = true;                                                                //включить режим чтения данных
             DateTime dt;
             int ind = lstwDataBaseMain.extSelectedIndex();
             if (ind >= 0)
@@ -220,6 +230,7 @@ namespace TimeWorkTracking
                     btInsertUpdate.Enabled = true;                                          //разблокировать кнопку UPDATE  
                 }
             }
+            readType = false;                                                               //выключить режим чтения данных
         }
 
         //Загрузить Производственный календарь Data из DataSet в Calendar
@@ -318,7 +329,7 @@ namespace TimeWorkTracking
         //проверка дат в специальных отметках
         private void checkDateSpecialMarks(object sender, EventArgs e)//DateTime dStart, DateTime tStart, DateTime dStop, DateTime tStop)
         {
-            if ((cbSMarks.Text != "-" && cbSMarks.Text != "") && mainPanelRegistration.Enabled)
+            if ((cbSMarks.Text != "-" && cbSMarks.Text != "") && mainPanelRegistration.Enabled && !readType)
             {
                 if (DateTime.Compare(DateTime.Parse(smDStart.Value.ToString("yyyy-MM-dd ") + smTStart.Value.ToString("HH:mm ")),
                                      DateTime.Parse(smDStop.Value.ToString("yyyy-MM-dd ") + smTStop.Value.ToString("HH:mm "))) > 0)
@@ -796,8 +807,6 @@ namespace TimeWorkTracking
             LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
             mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
         }
-
-
     }
 
     /*--------------------------------------------------------------------------------------------  
