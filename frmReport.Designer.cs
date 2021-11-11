@@ -38,6 +38,7 @@ namespace TimeWorkTracking
             this.mcReport.Name = "mcReport";
             this.mcReport.ShowWeekNumbers = true;
             this.mcReport.TabIndex = 0;
+            this.mcReport.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.mcReport_DateChanged);
             // 
             // frmReport
             // 
