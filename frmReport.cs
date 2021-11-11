@@ -44,7 +44,7 @@ namespace TimeWorkTracking
                     mcReport.MaxSelectionCount = dt.DaysInMonth();
                     mcReport.SelectionEnd = dt.LastDayOfMonth();
                     mcReport.SelectionStart = dt.FirstDayOfMonth();
-                 //   mcReport.Select();
+                 //   mcReport.Select(); 
                     break;
             }
         }
