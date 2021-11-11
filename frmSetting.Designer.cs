@@ -131,8 +131,8 @@ namespace TimeWorkTracking
             this.tbRangePass.Name = "tbRangePass";
             this.tbRangePass.Size = new System.Drawing.Size(100, 21);
             this.tbRangePass.TabIndex = 37;
-            this.toolTipMsgSetting.SetToolTip(this.tbRangePass, "укажите диапазон НА ОДНУ СТРОЧКУ ВЫШЕ (в вармате Имя столбца : Номер строки (без " +
-        "использования абсрлютной адресации $))");
+            this.toolTipMsgSetting.SetToolTip(this.tbRangePass, "укажите диапазон НА ОДНУ СТРОЧКУ ВЫШЕ\r\nв формате -  Имя столбца : Номер строки\r\n(" +
+        "без использования абсрлютной адресации $))\r\n");
             // 
             // label5
             // 
@@ -166,8 +166,8 @@ namespace TimeWorkTracking
             this.tbRangeUser.Name = "tbRangeUser";
             this.tbRangeUser.Size = new System.Drawing.Size(100, 21);
             this.tbRangeUser.TabIndex = 33;
-            this.toolTipMsgSetting.SetToolTip(this.tbRangeUser, "укажите диапазон НА ОДНУ СТРОЧКУ ВЫШЕ (в вармате Имя столбца : Номер строки (без " +
-        "использования абсрлютной адресации $))");
+            this.toolTipMsgSetting.SetToolTip(this.tbRangeUser, "укажите диапазон НА ОДНУ СТРОЧКУ ВЫШЕ\r\nв формате -  Имя столбца : Номер строки\r\n(" +
+        "без использования абсрлютной адресации $))");
             // 
             // label4
             // 
@@ -297,6 +297,7 @@ namespace TimeWorkTracking
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "frmSetting";
             this.Text = "Импорт Экспорт";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSetting_FormClosing);
             this.Load += new System.EventHandler(this.frmSetting_Load);
             this.mainPanelSetting.ResumeLayout(false);
             this.mainPanelSetting.PerformLayout();

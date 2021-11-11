@@ -24,8 +24,6 @@ namespace TimeWorkTracking
 {
     public partial class frmSetting : Form
     {
-        private int numberToCompute = 0;
-        private int highestPercentageReached = 0;
         public frmSetting()
         {
             //подписка события внешних форм 
@@ -99,9 +97,6 @@ namespace TimeWorkTracking
                 {
                     case "users":                                                           //если завершился иморт пользователей
                         CallBack_FrmSetting_outEvent.callbackEventHandler("", "", null);    //отправитьс ообщение главной форме что импрот произошел
-                        string cs = Properties.Settings.Default.twtConnectionSrting;        //connection string
-                        int count = Convert.ToInt32(clMsSqlDatabase.RequesScalar(cs, "select count(*) from Users", false));
-                        btImportUsers.Enabled = count == 0;
                         break;
                     case "pass":                                                            //если завершился иморт проходов
                         break;
@@ -196,7 +191,6 @@ namespace TimeWorkTracking
             checkFileImport(tbPath.Text);
         }
 
-
         //проверить файл импорта и настройка
         private void checkFileImport(string newPath) 
         {
@@ -258,150 +252,11 @@ namespace TimeWorkTracking
         //кнопка импорт пользователей
         private void btImportUsers_Click(object sender, EventArgs e)
         {
-            List<string> arguments = new List<string>();
-            arguments.Add("users");                                     //для вызова нужного метода
-            arguments.Add(tbPath.Text);                                 //путь к файлу импорта Excel
-            arguments.Add(cbSheetUser.Text + "$" + tbRangeUser.Text);   //диапазон ячеек формата ИМЯ_ЛИСТА$ДИАПАЗОН
-
-            if (!backgroundWorkerSetting.IsBusy)                        //Запустить фоновую операцию (поток)(с аргументами) вызвав событие DoWork
-                backgroundWorkerSetting.RunWorkerAsync(arguments);
-        }
-
-        //импорт сотрудников через OleDbDataAdapter & DataSet
-        public string ImportUserDataFromExcel(BackgroundWorker worker, DoWorkEventArgs e)
-        {
-            List<string> inArgument = e.Argument as List<string>;   //распарсить входнык параметры
-            List<string> outArguments = new List<string>();         //возврат аргументов из потока на обработку
-            int countRows;                                          //общее количество строк в запросе
-
             DialogResult response = MessageBox.Show(
-                "Внимание Таблицы Прохода и Сотрудников будут Очищены" + "\r\n" +
-                "Продолжить?" + "\r\n",
-                "Начальное заполнение данных",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Information,
-                MessageBoxDefaultButton.Button2,
-                MessageBoxOptions.DefaultDesktopOnly
-                );
-            if (response == DialogResult.Yes) 
-            {
-                try
-                {
-                    string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={inArgument[1]};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
-                    using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
-                    {
-                        cnExcel.Open();
-                        OleDbDataAdapter da = new OleDbDataAdapter();
-                        DataSet ds = new DataSet();
-                        using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
-                        {
-                            cmdExcel.CommandText = $"Select count(*) from [{inArgument[2]}]";
-                            countRows = (int)cmdExcel.ExecuteScalar();
-
-                            outArguments.Add("init");                       //init инициализация прогрессбара work отображение значения
-                            outArguments.Add("0");                          //минимальное значение
-                            outArguments.Add(countRows.ToString());         //максимальное значение
-                            outArguments.Add("1");                          //шаг
-                            outArguments.Add("импорт");                     //комментарий
-                            worker.ReportProgress(0, outArguments);         //отобразить (вызвать событие) результаты progressbar
-
-                            cmdExcel.CommandText = $"Select * from [{inArgument[2]}]";    //диапазон Data (без заголовка)
-                            //OleDbDataReader result = cmdExcel.ExecuteReader();
-                            da.SelectCommand = cmdExcel;
-                            da.Fill(ds);
-                        }
-                        cnExcel.Close();
-                        using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
-                        {
-                            sqlConnection.Open();
-                            using (var sqlCommand = sqlConnection.CreateCommand())
-                            {
-                                sqlCommand.CommandText = "DELETE FROM EventsPass";
-                                sqlCommand.ExecuteScalar();
-                                int currentRow = 0;
-                                foreach (DataRow row in ds.Tables[0].Rows)
-                                {
-                                    //System.Threading.Thread.Sleep(50);
-                                    sqlCommand.CommandText = "SELECT id FROM UserDepartment Where name='" + row[1].ToString() + "'";
-                                    int departmentId = (int)sqlCommand.ExecuteScalar();
-                                    sqlCommand.CommandText = "SELECT id FROM UserPost Where name='" + row[2].ToString() + "'";
-                                    int postId = (int)sqlCommand.ExecuteScalar();
-                                    sqlCommand.CommandText = "SELECT id FROM UserWorkScheme Where name='" + row[7].ToString() + "'";
-                                    int workSchemeId = (int)sqlCommand.ExecuteScalar();
-
-                                    sqlCommand.CommandText =
-                                        "UPDATE Users Set " +
-                                          "departmentId = " + departmentId + ", " +
-                                          "postId = " + postId + ", " +
-                                          "timeStart = " + "'" + ((DateTime)row[4]).ToShortTimeString() + "', " +
-                                          "timeStop = " + "'" + ((DateTime)row[5]).ToShortTimeString() + "', " +
-                                          "noLunch = " + ((Boolean)row[6] ? 1 : 0) + ", " +
-                                          "workSchemeId = " + workSchemeId + ", " +
-                                          "uses = " + ((Boolean)row[8] ? 1 : 0) + " " +
-                                        "WHERE extId = '" + row[0].ToString() + "' and name = '" + row[3].ToString() + "'; " +
-                                        "IF @@ROWCOUNT = 0 " +
-                                        "INSERT INTO Users(" +
-                                          "extId, " +
-                                          "name, " +
-                                          "departmentId, " +
-                                          "postId, " +
-                                          "timeStart, " +
-                                          "timeStop, " +
-                                          "noLunch, " +
-                                          "workSchemeId, " +
-                                          "uses) " +
-                                        "VALUES (" +
-                                          "N'" + row[0].ToString() + "', " +
-                                          "N'" + row[3].ToString() + "', " +
-                                          departmentId + ", " +
-                                          postId + ", " +
-                                          "'" + ((DateTime)row[4]).ToShortTimeString() + "', " +
-                                          "'" + ((DateTime)row[5]).ToShortTimeString() + "', " +
-                                          ((Boolean)row[6] ? 1 : 0) + ", " +
-                                          workSchemeId + ", " +
-                                          ((Boolean)row[8] ? 1 : 0) +
-                                          ")";
-                                    sqlCommand.ExecuteNonQuery();
-                                    currentRow += 1;
-
-                                    outArguments[0] = "work";                                          //init инициализация прогрессбара work отображение значения
-                                    worker.ReportProgress((currentRow*100)/ countRows, outArguments);  //отобразить (вызвать событие) результаты progressbar
-                                }
-                            }
-                            sqlConnection.Close();
-                        }
-                    }
-                    MessageBox.Show("Список сотрудников загружен в БД");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message.ToString());
-                }
-            }
-            return "users";
-        }
-
-        //кнопка импорт проходов 
-        private void btImportPass_Click(object sender, EventArgs e) 
-        {
-            List<string> arguments = new List<string>();
-            arguments.Add("pass");                                      //для вызова нужного метода
-            arguments.Add(tbPath.Text);                                 //путь к файлу импорта Excel
-            arguments.Add(cbSheetPass.Text + "$" + tbRangePass.Text);   //диапазон ячеек формата ИМЯ_ЛИСТА$ДИАПАЗОН
-
-            if (!backgroundWorkerSetting.IsBusy)                        //Запустить фоновую операцию (поток)(с аргументами) вызвав событие DoWork
-                backgroundWorkerSetting.RunWorkerAsync(arguments);
-        }
-
-        //импорт сотрудников через OleDbDataAdapter & DataSet
-        public string ImportPassDataFromExcel(BackgroundWorker worker, DoWorkEventArgs e)
-        {
-            List<string> inArgument = e.Argument as List<string>;   //распарсить входнык параметры
-            List<string> outArguments = new List<string>();         //возврат аргументов из потока на обработку
-            int countRows;                                          //общее количество строк в запросе
-
-            DialogResult response = MessageBox.Show(
-                "Внимание Таблица Проходов будет Очищена" + "\r\n" +
+                "Внимание Таблицы:\r\n" +
+                "  EventsPass (События проходов)\r\n" +
+                "  Users      (Список сотрудников)\r\n" +
+                " будут ОЧИЩЕНЫ!!!" + "\r\n\r\n" +
                 "Продолжить?" + "\r\n",
                 "Начальное заполнение данных",
                 MessageBoxButtons.YesNo,
@@ -411,124 +266,271 @@ namespace TimeWorkTracking
                 );
             if (response == DialogResult.Yes)
             {
-                try
+                List<string> arguments = new List<string>();
+                arguments.Add("users");                                     //для вызова нужного метода
+                arguments.Add(tbPath.Text);                                 //путь к файлу импорта Excel
+                arguments.Add(cbSheetUser.Text + "$" + tbRangeUser.Text);   //диапазон ячеек формата ИМЯ_ЛИСТА$ДИАПАЗОН
+
+                if (!backgroundWorkerSetting.IsBusy)                        //Запустить фоновую операцию (поток)(с аргументами) вызвав событие DoWork
+                    backgroundWorkerSetting.RunWorkerAsync(arguments);
+            }
+        }
+
+        //импорт сотрудников через OleDbDataAdapter & DataSet
+        public string ImportUserDataFromExcel(BackgroundWorker worker, DoWorkEventArgs e)
+        {
+            List<string> inArgument = e.Argument as List<string>;   //распарсить входнык параметры
+            List<string> outArguments = new List<string>();         //возврат аргументов из потока на обработку
+            int countRows;                                          //общее количество строк в запросе
+            try
+            {
+                string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={inArgument[1]};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
+                using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
                 {
-                    string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={inArgument[1]};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
-                    using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
+                    cnExcel.Open();
+                    OleDbDataAdapter da = new OleDbDataAdapter();
+                    DataSet ds = new DataSet();
+                    using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
                     {
-                        cnExcel.Open();
-                        using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
+                        cmdExcel.CommandText = $"Select count(*) from [{inArgument[2]}]";
+                        countRows = (int)cmdExcel.ExecuteScalar();
+
+                        outArguments.Add("init");                       //init инициализация прогрессбара work отображение значения
+                        outArguments.Add("0");                          //минимальное значение
+                        outArguments.Add(countRows.ToString());         //максимальное значение
+                        outArguments.Add("1");                          //шаг
+                        outArguments.Add("импорт");                     //комментарий
+                        worker.ReportProgress(0, outArguments);         //отобразить (вызвать событие) результаты progressbar
+
+                        cmdExcel.CommandText = $"Select * from [{inArgument[2]}]";    //диапазон Data (без заголовка)
+                        //OleDbDataReader result = cmdExcel.ExecuteReader();
+                        da.SelectCommand = cmdExcel;
+                        da.Fill(ds);
+                    }
+                    cnExcel.Close();
+                    
+                    using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
+                    {
+                        sqlConnection.Open();
+                        using (var sqlCommand = sqlConnection.CreateCommand())
                         {
-                            cmdExcel.CommandText = $"Select count(*) from [{inArgument[2]}]";
-                            countRows = (int)cmdExcel.ExecuteScalar();
+                            sqlCommand.CommandText = "DELETE FROM EventsPass";
+                            sqlCommand.ExecuteScalar();
+                            
+                            sqlCommand.CommandText = "DELETE FROM Users";
+                            sqlCommand.ExecuteScalar();
 
-                            outArguments.Add("init");                       //init инициализация прогрессбара work отображение значения
-                            outArguments.Add("0");                          //минимальное значение
-                            outArguments.Add(countRows.ToString());         //максимальное значение
-                            outArguments.Add("1");                          //шаг
-                            outArguments.Add("импорт");                     //комментарий
-                            worker.ReportProgress(0, outArguments);         //отобразить (вызвать событие) результаты progressbar
-
-                            cmdExcel.CommandText = $"Select * from [{inArgument[2]}]";    //диапазон Data (без заголовка)
-                            OleDbDataReader result = cmdExcel.ExecuteReader();
-
-                            using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
+                            int currentRow = 0;
+                            foreach (DataRow row in ds.Tables[0].Rows)
                             {
-                                sqlConnection.Open();
-                                using (var sqlCommand = sqlConnection.CreateCommand())
-                                { 
-                                    //sqlCommand.CommandTimeout = 10;
-                                    sqlCommand.CommandText = "DELETE FROM EventsPass";
-                                    sqlCommand.ExecuteScalar();
-                                    int currentRow = 0;
-                                    while (result.Read())
-                                    {
-                                        try
-                                        {
-                                            //Явное приведение типов
-                                            string author = result.GetString(1);
-                                            string passDate = result.GetDateTime(2).ToString("yyyyMMdd");
-                                            string passId = Convert.ToString(result.GetValue(3));
-                                            string passTimeStart = result.GetDateTime(5).ToString("yyyyMMdd HH:mm");
-                                            string passTimeStop = result.GetDateTime(6).ToString("yyyyMMdd HH:mm");
-                                            int timeScheduleFact = Convert.ToInt32(result.GetValue(9));
-                                            int timeScheduleWithoutLunch = Convert.ToInt32(result.GetValue(10));
-                                            int timeScheduleLess = Convert.ToInt32(result.GetValue(11));
-                                            int timeScheduleOver = Convert.ToInt32(result.GetValue(12));
-                                            string sp = result.GetString(13).Trim();
-                                            switch (sp)
-                                            {
-                                                case "Больничный":
-                                                    sp = "Больничный с оплатой";
-                                                    break;
-                                            }
-                                            sqlCommand.CommandText = "SELECT id FROM SpecialMarks Where name='" + sp + "'";
-                                            int specialMarksId = (int)sqlCommand.ExecuteScalar();
-//                                            DateTime.ParseExact(result.GetValue(14).ToString(), "dd MMMM HH:mm", CultureInfo.GetCultureInfo("ru-RU"))
-                                            string specmarkTimeStart = specialMarksId == 1 ? "NULL" : "'" + Convert.ToDateTime(result.GetValue(14)).ToString("yyyyMMdd HH:mm") + "'";
-                                            string specmarkTimeStop = specialMarksId == 1 ? "NULL" : "'" + Convert.ToDateTime(result.GetValue(15)).ToString("yyyyMMdd HH:mm") + "'";
-                                            string specmarkNote = result.GetValue(16) == DBNull.Value ? "NULL" : "N'" + Convert.ToString(result.GetValue(16)).Replace("'","''") + "'";
-                                            int totalHoursInWork = Convert.ToInt32(result.GetValue(17));
-                                            int totalHoursOutsideWork = result.GetValue(18) == DBNull.Value ? 0 : Convert.ToInt32(result.GetValue(18));
+                                //System.Threading.Thread.Sleep(50);
+                                sqlCommand.CommandText = "SELECT id FROM UserDepartment Where name='" + row[1].ToString() + "'";
+                                int departmentId = (int)sqlCommand.ExecuteScalar();
+                                sqlCommand.CommandText = "SELECT id FROM UserPost Where name='" + row[2].ToString() + "'";
+                                int postId = (int)sqlCommand.ExecuteScalar();
+                                sqlCommand.CommandText = "SELECT id FROM UserWorkScheme Where name='" + row[7].ToString() + "'";
+                                int workSchemeId = (int)sqlCommand.ExecuteScalar();
 
-                                            string sql =
-                                                "UPDATE EventsPass Set " +
-                                                    "author = " + "N'" + author + "', " +
-                                                    "passTimeStart = " + "'" + passTimeStart + "', " +
-                                                    "passTimeStop = " + "'" + passTimeStop + "', " +
-                                                    //"pacsTimeStart = " + "NULL" + ", " +
-                                                    //"pacsTimeStop = " +  "NULL" + ", " +
-                                                    "timeScheduleFact = " + timeScheduleFact + ", " +
-                                                    "timeScheduleWithoutLunch = " + timeScheduleWithoutLunch + ", " +
-                                                    "timeScheduleLess = " + timeScheduleLess + ", " +
-                                                    "timeScheduleOver = " + timeScheduleOver + ", " +
-                                                    "specmarkId = " + specialMarksId + ", " +
-                                                    "specmarkTimeStart = " + specmarkTimeStart + ", " +
-                                                    "specmarkTimeStop = " + specmarkTimeStop + ", " +
-                                                    "specmarkNote = " + specmarkNote + ", " +
-                                                    "totalHoursInWork = " + totalHoursInWork + ", " +
-                                                    "totalHoursOutsideWork = " + totalHoursOutsideWork + " " +
-                                                "WHERE passDate = '" + passDate + "' " +                   //*дата прохода
-                                                    "and passId = '" + passId + "' ; " +                   //*внешний id сотрудника
-                                                "IF @@ROWCOUNT = 0 " +
-                                                "INSERT INTO EventsPass(" +
-                                                    "author, " +                                    //имя учетной записи сеанса
-                                                    "passDate, " +                                  //*дата события (без времени)
-                                                    "passId, " +                                    //*внешний id пользователя
-                                                    "passTimeStart, " +                             //время первого входа (без даты)
-                                                    "passTimeStop, " +                              //время последнего выхода (без даты)
-                                                    //"pacsTimeStart, " +                             //время первого входа по СКУД (без даты)
-                                                    //"pacsTimeStop, " +                              //время последнего выхода по СКУД (без даты)
-                                                    "timeScheduleFact, " +                          //отработанное время (мин)
-                                                    "timeScheduleWithoutLunch, " +                  //отработанное время без обеда (мин)
-                                                    "timeScheduleLess, " +                          //время недоработки (мин)
-                                                    "timeScheduleOver, " +                          //время переработки (мин)
-                                                    "specmarkId, " +                                //->ссылка на специальные отметки
-                                                    "specmarkTimeStart, " +                         //датавремя начала действия специальных отметок
-                                                    "specmarkTimeStop, " +                          //датавремя окончания специальных отметок
-                                                    "specmarkNote, " +                              //комментарий к специальным отметкам
-                                                    "totalHoursInWork, " +                          //итог рабочего времени в графике (мин)
-                                                    "totalHoursOutsideWork) " +                     //итог рабочего времени вне графика (мин)
-                                                "VALUES (" +
-                                                    "N'" + author + "', " +
-                                                    "'" + passDate + "', " + 
-                                                    "'" + passId + "', " +
-                                                    "'" + passTimeStart + "', " +
-                                                    "'" + passTimeStop + "', " +
-                                                    //"NULL" + ", " +
-                                                    //"NULL" + ", " +
-                                                    timeScheduleFact + ", " +
-                                                    timeScheduleWithoutLunch + ", " +
-                                                    timeScheduleLess + ", " +
-                                                    timeScheduleOver + ", " +
-                                                    specialMarksId + ", " +
-                                                    specmarkTimeStart + ", " +
-                                                    specmarkTimeStop + ", " +
-                                                    specmarkNote + ", " +
-                                                    totalHoursInWork + ", " +
-                                                    totalHoursOutsideWork +
-                                                    ")";
-                                                    sqlCommand.CommandText = sql;
+                                sqlCommand.CommandText =
+                                    "UPDATE Users Set " +
+                                        "departmentId = " + departmentId + ", " +
+                                        "postId = " + postId + ", " +
+                                        "timeStart = " + "'" + ((DateTime)row[4]).ToShortTimeString() + "', " +
+                                        "timeStop = " + "'" + ((DateTime)row[5]).ToShortTimeString() + "', " +
+                                        "noLunch = " + ((Boolean)row[6] ? 1 : 0) + ", " +
+                                        "workSchemeId = " + workSchemeId + ", " +
+                                        "uses = " + ((Boolean)row[8] ? 1 : 0) + " " +
+                                    "WHERE extId = '" + row[0].ToString() + "' and name = '" + row[3].ToString() + "'; " +
+                                    "IF @@ROWCOUNT = 0 " +
+                                    "INSERT INTO Users(" +
+                                        "extId, " +
+                                        "name, " +
+                                        "departmentId, " +
+                                        "postId, " +
+                                        "timeStart, " +
+                                        "timeStop, " +
+                                        "noLunch, " +
+                                        "workSchemeId, " +
+                                        "uses) " +
+                                    "VALUES (" +
+                                        "N'" + row[0].ToString() + "', " +
+                                        "N'" + row[3].ToString() + "', " +
+                                        departmentId + ", " +
+                                        postId + ", " +
+                                        "'" + ((DateTime)row[4]).ToShortTimeString() + "', " +
+                                        "'" + ((DateTime)row[5]).ToShortTimeString() + "', " +
+                                        ((Boolean)row[6] ? 1 : 0) + ", " +
+                                        workSchemeId + ", " +
+                                        ((Boolean)row[8] ? 1 : 0) +
+                                        ")";
+                                sqlCommand.ExecuteNonQuery();
+                                currentRow += 1;
+
+                                outArguments[0] = "work";                                          //init инициализация прогрессбара work отображение значения
+                                worker.ReportProgress((currentRow*100)/ countRows, outArguments);  //отобразить (вызвать событие) результаты progressbar
+                            }
+                        }
+                        sqlConnection.Close();
+                    }
+                }
+                MessageBox.Show("Список сотрудников загружен в БД");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+            }
+            return "users";
+        }
+
+        //кнопка импорт проходов 
+        private void btImportPass_Click(object sender, EventArgs e) 
+        {
+            DialogResult response = MessageBox.Show(
+                "Внимание Таблица:\r\n" +
+                "  EventsPass (События проходов)\r\n" +
+                " будет ОЧИЩЕНА!!!" + "\r\n\r\n" +
+                "Продолжить?" + "\r\n",
+                "Начальное заполнение данных",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Information,
+            MessageBoxDefaultButton.Button2,
+            MessageBoxOptions.DefaultDesktopOnly
+            );
+            if (response == DialogResult.Yes)
+            {
+                List<string> arguments = new List<string>();
+                arguments.Add("pass");                                      //для вызова нужного метода
+                arguments.Add(tbPath.Text);                                 //путь к файлу импорта Excel
+                arguments.Add(cbSheetPass.Text + "$" + tbRangePass.Text);   //диапазон ячеек формата ИМЯ_ЛИСТА$ДИАПАЗОН
+
+                if (!backgroundWorkerSetting.IsBusy)                        //Запустить фоновую операцию (поток)(с аргументами) вызвав событие DoWork
+                    backgroundWorkerSetting.RunWorkerAsync(arguments);
+            }
+        }
+
+        //импорт сотрудников через OleDbDataAdapter & DataSet
+        public string ImportPassDataFromExcel(BackgroundWorker worker, DoWorkEventArgs e)
+        {
+            List<string> inArgument = e.Argument as List<string>;   //распарсить входнык параметры
+            List<string> outArguments = new List<string>();         //возврат аргументов из потока на обработку
+            int countRows;                                          //общее количество строк в запросе
+            try
+            {
+                string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={inArgument[1]};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
+                using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
+                {
+                    cnExcel.Open();
+                    using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
+                    {
+                        cmdExcel.CommandText = $"Select count(*) from [{inArgument[2]}]";
+                        countRows = (int)cmdExcel.ExecuteScalar();
+
+                        outArguments.Add("init");                       //init инициализация прогрессбара work отображение значения
+                        outArguments.Add("0");                          //минимальное значение
+                        outArguments.Add(countRows.ToString());         //максимальное значение
+                        outArguments.Add("1");                          //шаг
+                        outArguments.Add("импорт");                     //комментарий
+                        worker.ReportProgress(0, outArguments);         //отобразить (вызвать событие) результаты progressbar
+
+                        cmdExcel.CommandText = $"Select * from [{inArgument[2]}]";    //диапазон Data (без заголовка)
+                        OleDbDataReader result = cmdExcel.ExecuteReader();
+
+                        using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
+                        {
+                            sqlConnection.Open();
+                            using (var sqlCommand = sqlConnection.CreateCommand())
+                            { 
+                                //sqlCommand.CommandTimeout = 10;
+                                sqlCommand.CommandText = "DELETE FROM EventsPass";
+                                sqlCommand.ExecuteScalar();
+                                int currentRow = 0;
+                                while (result.Read())
+                                {
+                                    try
+                                    {
+                                        //Явное приведение типов
+                                        string author = result.GetString(1);
+                                        string passDate = result.GetDateTime(2).ToString("yyyyMMdd");
+                                        string passId = Convert.ToString(result.GetValue(3));
+                                        string passTimeStart = result.GetDateTime(5).ToString("yyyyMMdd HH:mm");
+                                        string passTimeStop = result.GetDateTime(6).ToString("yyyyMMdd HH:mm");
+                                        int timeScheduleFact = Convert.ToInt32(result.GetValue(9));
+                                        int timeScheduleWithoutLunch = Convert.ToInt32(result.GetValue(10));
+                                        int timeScheduleLess = Convert.ToInt32(result.GetValue(11));
+                                        int timeScheduleOver = Convert.ToInt32(result.GetValue(12));
+                                        string sp = result.GetString(13).Trim();
+                                        switch (sp)
+                                        {
+                                            case "Больничный":
+                                                sp = "Больничный с оплатой";
+                                                break;
+                                        }
+                                        sqlCommand.CommandText = "SELECT id FROM SpecialMarks Where name='" + sp + "'";
+                                        int specialMarksId = (int)sqlCommand.ExecuteScalar();
+                                        string specmarkTimeStart = specialMarksId == 1 ? "NULL" : "'" + Convert.ToDateTime(result.GetValue(14)).ToString("yyyyMMdd HH:mm") + "'";
+                                        string specmarkTimeStop = specialMarksId == 1 ? "NULL" : "'" + Convert.ToDateTime(result.GetValue(15)).ToString("yyyyMMdd HH:mm") + "'";
+                                        string specmarkNote = result.GetValue(16) == DBNull.Value ? "NULL" : "N'" + Convert.ToString(result.GetValue(16)).Replace("'","''") + "'";
+                                        int totalHoursInWork = Convert.ToInt32(result.GetValue(17));
+                                        int totalHoursOutsideWork = result.GetValue(18) == DBNull.Value ? 0 : Convert.ToInt32(result.GetValue(18));
+
+                                        string sql =
+                                            "UPDATE EventsPass Set " +
+                                                "author = " + "N'" + author + "', " +
+                                                "passTimeStart = " + "'" + passTimeStart + "', " +
+                                                "passTimeStop = " + "'" + passTimeStop + "', " +
+                                                //"pacsTimeStart = " + "NULL" + ", " +
+                                                //"pacsTimeStop = " +  "NULL" + ", " +
+                                                "timeScheduleFact = " + timeScheduleFact + ", " +
+                                                "timeScheduleWithoutLunch = " + timeScheduleWithoutLunch + ", " +
+                                                "timeScheduleLess = " + timeScheduleLess + ", " +
+                                                "timeScheduleOver = " + timeScheduleOver + ", " +
+                                                "specmarkId = " + specialMarksId + ", " +
+                                                "specmarkTimeStart = " + specmarkTimeStart + ", " +
+                                                "specmarkTimeStop = " + specmarkTimeStop + ", " +
+                                                "specmarkNote = " + specmarkNote + ", " +
+                                                "totalHoursInWork = " + totalHoursInWork + ", " +
+                                                "totalHoursOutsideWork = " + totalHoursOutsideWork + " " +
+                                            "WHERE passDate = '" + passDate + "' " +                   //*дата прохода
+                                                "and passId = '" + passId + "' ; " +                   //*внешний id сотрудника
+                                            "IF @@ROWCOUNT = 0 " +
+                                            "INSERT INTO EventsPass(" +
+                                                "author, " +                                    //имя учетной записи сеанса
+                                                "passDate, " +                                  //*дата события (без времени)
+                                                "passId, " +                                    //*внешний id пользователя
+                                                "passTimeStart, " +                             //время первого входа (без даты)
+                                                "passTimeStop, " +                              //время последнего выхода (без даты)
+                                                //"pacsTimeStart, " +                             //время первого входа по СКУД (без даты)
+                                                //"pacsTimeStop, " +                              //время последнего выхода по СКУД (без даты)
+                                                "timeScheduleFact, " +                          //отработанное время (мин)
+                                                "timeScheduleWithoutLunch, " +                  //отработанное время без обеда (мин)
+                                                "timeScheduleLess, " +                          //время недоработки (мин)
+                                                "timeScheduleOver, " +                          //время переработки (мин)
+                                                "specmarkId, " +                                //->ссылка на специальные отметки
+                                                "specmarkTimeStart, " +                         //датавремя начала действия специальных отметок
+                                                "specmarkTimeStop, " +                          //датавремя окончания специальных отметок
+                                                "specmarkNote, " +                              //комментарий к специальным отметкам
+                                                "totalHoursInWork, " +                          //итог рабочего времени в графике (мин)
+                                                "totalHoursOutsideWork) " +                     //итог рабочего времени вне графика (мин)
+                                            "VALUES (" +
+                                                "N'" + author + "', " +
+                                                "'" + passDate + "', " + 
+                                                "'" + passId + "', " +
+                                                "'" + passTimeStart + "', " +
+                                                "'" + passTimeStop + "', " +
+                                                //"NULL" + ", " +
+                                                //"NULL" + ", " +
+                                                timeScheduleFact + ", " +
+                                                timeScheduleWithoutLunch + ", " +
+                                                timeScheduleLess + ", " +
+                                                timeScheduleOver + ", " +
+                                                specialMarksId + ", " +
+                                                specmarkTimeStart + ", " +
+                                                specmarkTimeStop + ", " +
+                                                specmarkNote + ", " +
+                                                totalHoursInWork + ", " +
+                                                totalHoursOutsideWork +
+                                                ")";
+                                            sqlCommand.CommandText = sql;
                                         }
                                         catch (Exception ex)
                                         {
@@ -552,7 +554,6 @@ namespace TimeWorkTracking
                 {
                     MessageBox.Show(ex.Message.ToString());
                 }
-            }
             return "pass";
         }
 
@@ -575,6 +576,15 @@ namespace TimeWorkTracking
                 ((DataGridView)cntrl[0]).DataSource = param;
             }
             */
+        }
+
+        private void frmSetting_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Properties.Settings.Default.importFilename = @tbPath.Text;
+            Properties.Settings.Default.importUserRange = @cbSheetUser.Text + "$" + tbRangeUser.Text;
+            Properties.Settings.Default.importPassRange = @cbSheetPass.Text + "$" + tbRangePass.Text;
+
+            Properties.Settings.Default.Save();
         }
     }
     /*--------------------------------------------------------------------------------------------  

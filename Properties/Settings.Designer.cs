@@ -157,7 +157,7 @@ namespace TimeWorkTracking.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("DataBase$B7:T56213")]
+        [global::System.Configuration.DefaultSettingValueAttribute("DataBase$B6:T56213")]
         public string importPassRange {
             get {
                 return ((string)(this["importPassRange"]));
