@@ -34,6 +34,7 @@ namespace TimeWorkTracking
             this.mainPanelLogIn = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panelAdmin = new System.Windows.Forms.Panel();
+            this.pictureBoxLogIn = new System.Windows.Forms.PictureBox();
             this.panelPasswordChange = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.tbNewPassword = new System.Windows.Forms.TextBox();
@@ -50,6 +51,7 @@ namespace TimeWorkTracking
             this.mainPanelLogIn.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panelAdmin.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogIn)).BeginInit();
             this.panelPasswordChange.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,6 +78,7 @@ namespace TimeWorkTracking
             // 
             // panelAdmin
             // 
+            this.panelAdmin.Controls.Add(this.pictureBoxLogIn);
             this.panelAdmin.Controls.Add(this.panelPasswordChange);
             this.panelAdmin.Controls.Add(this.chChangePassword);
             this.panelAdmin.Controls.Add(this.lbPassword);
@@ -84,6 +87,16 @@ namespace TimeWorkTracking
             this.panelAdmin.Name = "panelAdmin";
             this.panelAdmin.Size = new System.Drawing.Size(253, 82);
             this.panelAdmin.TabIndex = 7;
+            // 
+            // pictureBoxLogIn
+            // 
+            this.pictureBoxLogIn.Image = global::TimeWorkTracking.Properties.Resources.closed_48;
+            this.pictureBoxLogIn.Location = new System.Drawing.Point(19, 5);
+            this.pictureBoxLogIn.Name = "pictureBoxLogIn";
+            this.pictureBoxLogIn.Size = new System.Drawing.Size(24, 24);
+            this.pictureBoxLogIn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxLogIn.TabIndex = 9;
+            this.pictureBoxLogIn.TabStop = false;
             // 
             // panelPasswordChange
             // 
@@ -230,6 +243,7 @@ namespace TimeWorkTracking
             this.panel1.ResumeLayout(false);
             this.panelAdmin.ResumeLayout(false);
             this.panelAdmin.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogIn)).EndInit();
             this.panelPasswordChange.ResumeLayout(false);
             this.panelPasswordChange.PerformLayout();
             this.ResumeLayout(false);
@@ -254,5 +268,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbNewPassword;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.PictureBox pictureBoxLogIn;
     }
 }

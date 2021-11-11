@@ -91,6 +91,16 @@ namespace TimeWorkTracking.Properties {
         }
         
         /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap closed_48 {
+            get {
+                object obj = ResourceManager.GetObject("closed_48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на   &lt;/body&gt;
         ///&lt;/html&gt;.
         /// </summary>
@@ -201,6 +211,16 @@ namespace TimeWorkTracking.Properties {
         internal static System.Drawing.Bitmap ok {
             get {
                 object obj = ResourceManager.GetObject("ok", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap open_48 {
+            get {
+                object obj = ResourceManager.GetObject("open_48", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

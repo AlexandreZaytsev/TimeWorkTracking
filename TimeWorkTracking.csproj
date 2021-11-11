@@ -211,6 +211,8 @@
     <None Include="Resources\holiday_48.png" />
     <None Include="Resources\wDay_48.png" />
     <None Include="Resources\cDay_48.png" />
+    <None Include="Resources\closed_48.png" />
+    <None Include="Resources\open_48.png" />
     <Content Include="twt.ico" />
   </ItemGroup>
   <ItemGroup>

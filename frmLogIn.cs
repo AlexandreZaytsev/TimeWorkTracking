@@ -74,11 +74,13 @@ namespace TimeWorkTracking
                 {
                     pass = true;
                     tbPassword.BackColor = SystemColors.Control;
+                    pictureBoxLogIn.Image = Properties.Resources.open_48;
                 }
                 else
                 {
                     pass = false;
                     tbPassword.BackColor = SystemColors.Window;
+                    pictureBoxLogIn.Image = Properties.Resources.closed_48;
                 }
             }
             else
