@@ -128,6 +128,7 @@ namespace TimeWorkTracking
             this.tbNewPassword.PasswordChar = '*';
             this.tbNewPassword.Size = new System.Drawing.Size(143, 24);
             this.tbNewPassword.TabIndex = 9;
+            this.tbNewPassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbNewPassword_KeyPress);
             // 
             // btSave
             // 
@@ -139,6 +140,8 @@ namespace TimeWorkTracking
             this.btSave.Text = "Сохранить";
             this.btSave.UseVisualStyleBackColor = true;
             this.btSave.Click += new System.EventHandler(this.btSave_Click);
+            this.btSave.MouseLeave += new System.EventHandler(this.btSave_MouseLeave);
+            this.btSave.MouseHover += new System.EventHandler(this.btSave_MouseHover);
             // 
             // label3
             // 

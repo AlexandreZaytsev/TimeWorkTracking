@@ -54,17 +54,40 @@ namespace TimeWorkTracking
                 tbPassword.Text = "";
             
             checkBasePassword();                                        //проверить пароль
+            checkLoginAndSendEvent();                                   //проинформировать родителя
         }
         //ввод рабочего пароля
         private void tbPassword_TextChanged(object sender, EventArgs e)
         {
             checkBasePassword();                                        //проверить пароль
+            checkLoginAndSendEvent();                                   //проинформировать родителя
         }
         //ввод старого пароля при изменении 
         private void tbOldPassword_TextChanged(object sender, EventArgs e)
         {
             checkBasePassword();                                        //проверить пароль
         }
+        //проверка вводимых симолов нового пароля
+        private void tbNewPassword_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char val = e.KeyChar;
+            if (!Char.IsLetterOrDigit(val) && !Char.IsDigit(val) && val != 8 && (val <= 39 || val >= 46) && val != 47 && val != 61) //калькулятор
+            {
+                e.Handled = true;
+            }
+        }
+        //показать пароль при наезде на кнопку
+        private void btSave_MouseHover(object sender, EventArgs e)
+        {
+            tbNewPassword.PasswordChar = '\0';
+        }
+        //скрыть пароль при съезде с кнопки
+        private void btSave_MouseLeave(object sender, EventArgs e)
+        {
+            tbNewPassword.PasswordChar = Convert.ToChar("*");
+        }
+
+
         //проверим корректность введенного пароля
         private void checkBasePassword()
         {
@@ -82,23 +105,26 @@ namespace TimeWorkTracking
                     tbPassword.BackColor = SystemColors.Window;
                     pictureBoxLogIn.Image = Properties.Resources.closed_48;
                 }
+                pictureBoxLogIn.Visible = true;
             }
             else
             {                                                           //работаем с изменением пароля
+                pass = false;
                 if (tbOldPassword.Text == adminPassword)                //пароль из настроек и из текстбокса совпадают
                 {
-                    pass = true;
+//                    pass = true;
                     tbOldPassword.BackColor = SystemColors.Control;
                     tbNewPassword.Enabled = true;
                     btSave.Enabled = true;
                 }
                 else
                 {
-                    pass = false;
+//                    pass = false;
                     tbOldPassword.BackColor = SystemColors.Window;
                     tbNewPassword.Enabled = false;
                     btSave.Enabled = false;
                 }
+                pictureBoxLogIn.Visible = false;
             }
         }
         //сохранить новый пароль
