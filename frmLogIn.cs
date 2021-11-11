@@ -11,6 +11,8 @@ namespace TimeWorkTracking
 {
     public partial class frmLogIn : Form
     {
+        private bool pass=true;
+        private string adminPassword = Properties.Settings.Default.adminPass;
         public frmLogIn()
         {
             //подписка события внешних форм 
@@ -21,37 +23,112 @@ namespace TimeWorkTracking
 
 
         //выбор учетной записи
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void cbTypeAccount_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (cbTypeAccount.Text) 
             {
                 case "Администратор":
                     panelAdmin.Visible = true;
+                    panelAdmin.Dock = DockStyle.Fill;
                     lbInfo.Visible = false;
-                    gPanelPasswordChange.Enabled = chChangePassword.Checked;
+                    panelPasswordChange.Enabled = chChangePassword.Checked;
+                    //                   pass = false;
+                    checkBasePassword();                                //проверить пароль
                     break;
                 case "Пользователь":
                     panelAdmin.Visible = false;
                     lbInfo.Visible = true;
+                    lbInfo.Dock = DockStyle.Fill;
+                    pass = true;
                     break;
             }
-            CallBack_FrmLogIn_outEvent.callbackEventHandler(cbTypeAccount.Text, "", null);  //send a general notification
+            checkLoginAndSendEvent();                                   //проинформировать родителя
         }
-
+        //включить изменение пароля
         private void chChangePassword_CheckedChanged(object sender, EventArgs e)
         {
-            gPanelPasswordChange.Enabled = chChangePassword.Checked;
+            panelPasswordChange.Enabled = chChangePassword.Checked;
+            tbPassword.Enabled = !chChangePassword.Checked;
+
+            if (chChangePassword.Checked)                               //сбросим поле с рабочим паролем
+                tbPassword.Text = "";
+            
+            checkBasePassword();                                        //проверить пароль
+        }
+        //ввод рабочего пароля
+        private void tbPassword_TextChanged(object sender, EventArgs e)
+        {
+            checkBasePassword();                                        //проверить пароль
+        }
+        //ввод старого пароля при изменении 
+        private void tbOldPassword_TextChanged(object sender, EventArgs e)
+        {
+            checkBasePassword();                                        //проверить пароль
+        }
+        //проверим корректность введенного пароля
+        private void checkBasePassword()
+        {
+            if (!chChangePassword.Checked) 
+            {                                                           //работаем с главным паролем               
+                if (tbPassword.Text == adminPassword)                   //пароль из настроек и из текстбокса совпадают
+                {
+                    pass = true;
+                    tbPassword.BackColor = SystemColors.Control;
+                }
+                else
+                {
+                    pass = false;
+                    tbPassword.BackColor = SystemColors.Window;
+                }
+            }
+            else
+            {                                                           //работаем с изменением пароля
+                if (tbOldPassword.Text == adminPassword)                //пароль из настроек и из текстбокса совпадают
+                {
+                    pass = true;
+                    tbOldPassword.BackColor = SystemColors.Control;
+                    tbNewPassword.Enabled = true;
+                    btSave.Enabled = true;
+                }
+                else
+                {
+                    pass = false;
+                    tbOldPassword.BackColor = SystemColors.Window;
+                    tbNewPassword.Enabled = false;
+                    btSave.Enabled = false;
+                }
+            }
+        }
+        //сохранить новый пароль
+        private void btSave_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.adminPass = tbNewPassword.Text;
+            Properties.Settings.Default.Save();                         //сохраним новый пароль в настройках
+            adminPassword = tbNewPassword.Text;                         //сохраним его в глобальной переменной
+            chChangePassword.Checked = false;                           //вернемся на ввод главного пароля      
+        }
+
+        //проверим корректность данный и пошлем сообщение главному
+        private void checkLoginAndSendEvent()
+        {
+            string login = cbTypeAccount.Text;
+            if (!pass)                                                      
+                login = "Пользователь";                                         //если доступ не прошел проверку работаем в режиме регистратора
+            CallBack_FrmLogIn_outEvent.callbackEventHandler(login, "", null);   //send a general notification
         }
 
         //закрыть диалог по Enter
         private void frmLogIn_KeyDown(object sender, KeyEventArgs e)
         {
- 
-            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
-            {
-                if (sender.GetType().Name==this.Name)
-                    this.Close();
-            }
+            if (e.KeyCode == Keys.Escape)
+                this.Close();
+            else if (e.KeyCode == Keys.Enter && pass)   //если Enter и данные подтверждены                                                                                //
+                this.Close();
+        }
+        //при закрытии формы    
+        private void frmLogIn_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            checkLoginAndSendEvent();                   //проинформировать родителя
         }
 
         /*--------------------------------------------------------------------------------------------  
@@ -74,8 +151,6 @@ namespace TimeWorkTracking
             }
             */
         }
-
-
     }
 
     /*--------------------------------------------------------------------------------------------  
