@@ -337,6 +337,30 @@ namespace TimeWorkTracking
             frm.ShowDialog();
         }
 
+        //кнопка Бланк Учета температуры
+        private void tsbtFormHeatCheck_Click(object sender, EventArgs e)
+        {
+            frmReport frm = new frmReport { Owner = this };
+            CallBack_FrmMain_outEvent.callbackEventHandler("FormHeatCheck", "Бланк Учета температуры", null);  //send a general notification
+            frm.ShowDialog();
+        }
+        //кнопка Бланк Учета рабочего времени
+        private void tsbtFormTimeCheck_Click(object sender, EventArgs e)
+        {
+            frmReport frm = new frmReport { Owner = this };
+            CallBack_FrmMain_outEvent.callbackEventHandler("FormTimeCheck", "Бланк Учета рабочего времени", null);  //send a general notification
+            frm.ShowDialog();
+        }
+        //кнопка Итоговый отчет
+        private void tsbtReportTotal_Click(object sender, EventArgs e)
+        {
+            frmReport frm = new frmReport { Owner = this };
+            CallBack_FrmMain_outEvent.callbackEventHandler("ReportTotal", "Итоговый отчет", null);  //send a general notification
+            frm.ShowDialog();
+        }
+
+        //STATUS STRIP------------------------------------------------------------------- 
+
         //изменение специальных отметок
         private void cbSMarks_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -347,16 +371,14 @@ namespace TimeWorkTracking
         }
 
         //проверка дат в специальных отметках
-        private void checkDateSpecialMarks(object sender, EventArgs e)//DateTime dStart, DateTime tStart, DateTime dStop, DateTime tStop)
+        private void checkDateSpecialMarks(object sender, EventArgs e)
         {
             if ((cbSMarks.Text != "-" && cbSMarks.Text != "") && mainPanelRegistration.Enabled && !readType)
             {
                 if (DateTime.Compare(DateTime.Parse(smDStart.Value.ToString("yyyy-MM-dd ") + smTStart.Value.ToString("HH:mm ")),
                                      DateTime.Parse(smDStop.Value.ToString("yyyy-MM-dd ") + smTStop.Value.ToString("HH:mm "))) > 0)
                 {
-                                        MessageBox.Show("Дата/Время окончания периода должно быть боольше Даты/Времени начала периода","Ошибка установки диапазона дат",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
-                    //smDStop.Value = smDStart.Value;
-                    //smTStop.Value = smDStart.Value.AddHours(1);
+                                        MessageBox.Show("Дата/Время окончания периода должно быть больше Даты/Времени начала периода","Ошибка установки диапазона дат",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
                     btPanel.Enabled = false;
                 }
                 else
@@ -364,6 +386,22 @@ namespace TimeWorkTracking
             }
         }
 
+        //проверка базового времени
+        private void checkBaseTimeWork(object sender, EventArgs e)
+        {
+            if (!readType)
+            {
+                if (DateTime.Compare(DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")),
+                                     DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"))) > 0)
+                {
+                    MessageBox.Show("Время Входа должно быть меньше времени Выхода", "Ошибка установки времени", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    btPanel.Enabled = false;
+                }
+                else
+                    btPanel.Enabled = true;
+            }
+
+        }
         //изменение даты в календаре
         private void mcRegDate_DateChanged(object sender, DateRangeEventArgs e)
         {
@@ -844,6 +882,8 @@ namespace TimeWorkTracking
                     break;
             }
         }
+
+
     }
 
     /*--------------------------------------------------------------------------------------------  

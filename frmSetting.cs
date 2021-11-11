@@ -557,6 +557,16 @@ namespace TimeWorkTracking
             return "pass";
         }
 
+        //перед закрытием формы
+        private void frmSetting_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Properties.Settings.Default.importFilename = @tbPath.Text;
+            Properties.Settings.Default.importUserRange = @cbSheetUser.Text + "$" + tbRangeUser.Text;
+            Properties.Settings.Default.importPassRange = @cbSheetPass.Text + "$" + tbRangePass.Text;
+
+            Properties.Settings.Default.Save();
+        }
+
         /*--------------------------------------------------------------------------------------------  
         CALLBACK InPut (подписка на внешние сообщения)
         --------------------------------------------------------------------------------------------*/
@@ -576,15 +586,6 @@ namespace TimeWorkTracking
                 ((DataGridView)cntrl[0]).DataSource = param;
             }
             */
-        }
-
-        private void frmSetting_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Properties.Settings.Default.importFilename = @tbPath.Text;
-            Properties.Settings.Default.importUserRange = @cbSheetUser.Text + "$" + tbRangeUser.Text;
-            Properties.Settings.Default.importPassRange = @cbSheetPass.Text + "$" + tbRangePass.Text;
-
-            Properties.Settings.Default.Save();
         }
     }
     /*--------------------------------------------------------------------------------------------  

@@ -39,6 +39,12 @@ namespace TimeWorkTracking
             tbPasswordPASC.Text = Properties.Settings.Default.pacsPassword;
         }
 
+        //кнопка проверить соединение
+        private void btTestConnectionPacs_Click_1(object sender, EventArgs e)
+        {
+            CallBack_FrmDataBasePACS_outEvent.callbackEventHandler("", "", null);  //send a general notification
+        }
+
         /*--------------------------------------------------------------------------------------------  
         CALLBACK InPut (подписка на внешние сообщения)
         --------------------------------------------------------------------------------------------*/
@@ -60,10 +66,6 @@ namespace TimeWorkTracking
             */
         }
 
-        private void btTestConnectionPacs_Click_1(object sender, EventArgs e)
-        {
-            CallBack_FrmDataBasePACS_outEvent.callbackEventHandler("", "", null);  //send a general notification
-        }
     }
 
 
