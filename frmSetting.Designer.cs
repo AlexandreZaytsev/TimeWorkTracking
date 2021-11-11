@@ -131,6 +131,8 @@ namespace TimeWorkTracking
             this.tbRangePass.Name = "tbRangePass";
             this.tbRangePass.Size = new System.Drawing.Size(100, 21);
             this.tbRangePass.TabIndex = 37;
+            this.toolTipMsgSetting.SetToolTip(this.tbRangePass, "укажите диапазон НА ОДНУ СТРОЧКУ ВЫШЕ (в вармате Имя столбца : Номер строки (без " +
+        "использования абсрлютной адресации $))");
             // 
             // label5
             // 
@@ -164,6 +166,8 @@ namespace TimeWorkTracking
             this.tbRangeUser.Name = "tbRangeUser";
             this.tbRangeUser.Size = new System.Drawing.Size(100, 21);
             this.tbRangeUser.TabIndex = 33;
+            this.toolTipMsgSetting.SetToolTip(this.tbRangeUser, "укажите диапазон НА ОДНУ СТРОЧКУ ВЫШЕ (в вармате Имя столбца : Номер строки (без " +
+        "использования абсрлютной адресации $))");
             // 
             // label4
             // 

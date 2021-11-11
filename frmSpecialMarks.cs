@@ -195,34 +195,34 @@ namespace TimeWorkTracking
               "VALUES ( " +
                 "N'" + tbCodeDigital.Text.Trim() + "', " +
                 "N'" + tbCodeLetter.Text.Trim() + "', " +
-                "N'" + key + "', " +                                        //*наименование
-                "N'" + tbNote.Text.Trim() + "', " +
+                "N'" + key + "', " +                                            //*наименование
+                "N'" + tbNote.Text.Trim().Replace("'", "''") + "', " +          //экранировать одинарную кавычку задвоив ее
                 (chUse.Checked ? 1 : 0) +
                 ")";
             clMsSqlDatabase.RequestNonQuery(cs, sql, false);
  
             LoadList(clMsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));// order by extId desc"));
             lstwDataBaseSpecialMarks.extFindListByColValue(3, key);            //найти и выделить позицию
-            tbName_TextChanged(null, null);                                 //обновить поля и кнопки
+            tbName_TextChanged(null, null);                                     //обновить поля и кнопки
         }
         //кнопка обновить запись в БД
         private void btUpdate_Click(object sender, EventArgs e)
         {
-            string key = tbName.Text.Trim();                                //ключевое поле
-            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            string key = tbName.Text.Trim();                                    //ключевое поле
+            string cs = Properties.Settings.Default.twtConnectionSrting;        //connection string
             string sql =
               "UPDATE SpecialMarks Set " +
                 "digitalCode = N'" + tbCodeDigital.Text.Trim() + "', " +
                 "letterCode = N'" + tbCodeLetter.Text.Trim() + "', " +
-                "name = N'" + key + "', " +                                 //*наименование
-                "note = N'" + tbNote.Text.Trim() + "', " +
+                "name = N'" + key + "', " +                                     //*наименование
+                "note = N'" + tbNote.Text.Trim().Replace("'", "''") + "', " +   //экранировать одинарную кавычку задвоив ее
                 "uses = " + (chUse.Checked ? 1 : 0) + " " +
               "WHERE id = " + tbID.Text.Trim() + "";
             clMsSqlDatabase.RequestNonQuery(cs, sql, false);
 
             LoadList(clMsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));// order by extId desc"));
-            lstwDataBaseSpecialMarks.extFindListByColValue(3, key);            //найти и выделить позицию
-            tbName_TextChanged(null, null);                                 //обновить поля и кнопки
+            lstwDataBaseSpecialMarks.extFindListByColValue(3, key);             //найти и выделить позицию
+            tbName_TextChanged(null, null);                                     //обновить поля и кнопки
         }
 
         //наехали на кнопку Insert загасили id

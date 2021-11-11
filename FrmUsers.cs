@@ -226,8 +226,8 @@ namespace TimeWorkTracking
         //кнопка Добавить запись в БД
         private void btInsert_Click(object sender, EventArgs e)
         {
-            string key = DateTime.Now.ToString("yyyyMMddHHmmss");           //ключевое поле
-            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            string key = DateTime.Now.ToString("yyyyMMddHHmmss");               //ключевое поле
+            string cs = Properties.Settings.Default.twtConnectionSrting;        //connection string
             string sql =
               "INSERT INTO Users(" +
                 "extId, " +
@@ -242,10 +242,10 @@ namespace TimeWorkTracking
                 "workSchemeId, " +
                 "uses) " +
               "VALUES (" +
-                "N'" + key + "', " +                                         //*extid (из даты)
+                "N'" + key + "', " +                                            //*extid (из даты)
                 0 + ", " +
                 "N'" + tbName.Text.Trim() + "', " +
-                "N'" + tbNote.Text.Trim() + "', " +
+                "N'" + tbNote.Text.Trim().Replace("'", "''") + "', " +          //экранировать одинарную кавычку задвоив ее
                 ((DataRowView)cbDepartment.SelectedItem).Row["id"] + ", " +
                 ((DataRowView)cbPost.SelectedItem).Row["id"] + ", " +
                 "'" + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm") + "', " +
@@ -257,20 +257,20 @@ namespace TimeWorkTracking
             clMsSqlDatabase.RequestNonQuery(cs, sql, false);
 
             LoadList(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));// order by extId desc"));
-            lstwDataBaseUsers.extFindListByColValue(2, key);                   //найти и выделить позицию
-            tbName_TextChanged(null, null);                                 //обновить поля и кнопки
+            lstwDataBaseUsers.extFindListByColValue(2, key);                    //найти и выделить позицию
+            tbName_TextChanged(null, null);                                     //обновить поля и кнопки
         }
 
         //кнопка Обновить запись в БД
         private void btUpdate_Click(object sender, EventArgs e)
         {
-            string key = tbExtID.Text.Trim();                               //ключевое поле
-            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            string key = tbExtID.Text.Trim();                                   //ключевое поле
+            string cs = Properties.Settings.Default.twtConnectionSrting;        //connection string
             string sql =
               "UPDATE Users Set " +
                 "crmId = " + Convert.ToUInt64(tbCrmID.Text.Trim().PadLeft(18,'0')) + ", " +
                 "name = N'" + tbName.Text.Trim() + "', " +
-                "note = N'" + tbNote.Text.Trim() + "', " +
+                "note = N'" + tbNote.Text.Trim().Replace("'", "''") + "', " +   //экранировать одинарную кавычку задвоив ее
                 "departmentId = " + ((DataRowView)cbDepartment.SelectedItem).Row["id"] + ", " +
                 "postId = " + ((DataRowView)cbPost.SelectedItem).Row["id"] + ", " +
                 "timeStart = " + "'" + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm") + "', " +
@@ -278,12 +278,12 @@ namespace TimeWorkTracking
                 "noLunch = " + (chbLunch.Checked ? 1 : 0) + ", " +
                 "workSchemeId = " + ((DataRowView)cbSheme.SelectedItem).Row["id"] + ", " +
                 "uses = " + (chUse.Checked ? 1 : 0) + " " +
-              "WHERE extId = '" + key + "'";                                //*extid (из даты)
+              "WHERE extId = '" + key + "'";                                    //*extid (из даты)
             clMsSqlDatabase.RequestNonQuery(cs, sql, false);
 
             LoadList(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') order by fio"));// order by extId desc"));
             lstwDataBaseUsers.extFindListByColValue(2, key);                   //найти и выделить позицию
-            tbName_TextChanged(null, null);                                 //обновить поля и кнопки
+            tbName_TextChanged(null, null);                                     //обновить поля и кнопки
         }
 
         //наехали на кнопку Insert загасили id

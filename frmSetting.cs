@@ -467,7 +467,7 @@ namespace TimeWorkTracking
 //                                            DateTime.ParseExact(result.GetValue(14).ToString(), "dd MMMM HH:mm", CultureInfo.GetCultureInfo("ru-RU"))
                                             string specmarkTimeStart = specialMarksId == 1 ? "NULL" : "'" + Convert.ToDateTime(result.GetValue(14)).ToString("yyyyMMdd HH:mm") + "'";
                                             string specmarkTimeStop = specialMarksId == 1 ? "NULL" : "'" + Convert.ToDateTime(result.GetValue(15)).ToString("yyyyMMdd HH:mm") + "'";
-                                            string specmarkNote = result.GetValue(16) == DBNull.Value ? "NULL" : "N'" + Convert.ToString(result.GetValue(16)) + "'";
+                                            string specmarkNote = result.GetValue(16) == DBNull.Value ? "NULL" : "N'" + Convert.ToString(result.GetValue(16)).Replace("'","''") + "'";
                                             int totalHoursInWork = Convert.ToInt32(result.GetValue(17));
                                             int totalHoursOutsideWork = result.GetValue(18) == DBNull.Value ? 0 : Convert.ToInt32(result.GetValue(18));
 
@@ -547,7 +547,6 @@ namespace TimeWorkTracking
                         cnExcel.Close();
                     }
                     MessageBox.Show("Список проходов загружен в БД");
-                    toolStripProgressBarImport.Value = 0;
                 }
                 catch (Exception ex)
                 {
