@@ -26,16 +26,32 @@ namespace TimeWorkTracking
             switch (cbTypeAccount.Text) 
             {
                 case "Администратор":
+                    panelAdmin.Visible = true;
+                    lbInfo.Visible = false;
+                    gPanelPasswordChange.Enabled = chChangePassword.Checked;
                     break;
                 case "Пользователь":
+                    panelAdmin.Visible = false;
+                    lbInfo.Visible = true;
                     break;
             }
+            CallBack_FrmLogIn_outEvent.callbackEventHandler(cbTypeAccount.Text, "", null);  //send a general notification
         }
 
-        //перед закрытие формы отослать результаты родителю
-        private void frmLogIn_FormClosing(object sender, FormClosingEventArgs e)
+        private void chChangePassword_CheckedChanged(object sender, EventArgs e)
         {
-            CallBack_FrmLogIn_outEvent.callbackEventHandler(cbTypeAccount.Text, "", null);  //send a general notification
+            gPanelPasswordChange.Enabled = chChangePassword.Checked;
+        }
+
+        //закрыть диалог по Enter
+        private void frmLogIn_KeyDown(object sender, KeyEventArgs e)
+        {
+ 
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
+            {
+                if (sender.GetType().Name==this.Name)
+                    this.Close();
+            }
         }
 
         /*--------------------------------------------------------------------------------------------  
