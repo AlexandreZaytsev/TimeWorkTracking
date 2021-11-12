@@ -11,6 +11,11 @@ namespace TimeWorkTracking
     class clCalendar 
     {
         private readonly DataTable dtWorkCalendar;                    //производственный календаоь
+        public clCalendar()                                           //конструктор  
+        {
+            dtWorkCalendar = null;
+        }                                      
+
         public clCalendar(string cs, string sql)                      //конструктор
         {
             dtWorkCalendar = clMsSqlDatabase.TableRequest(cs, sql);
@@ -99,28 +104,31 @@ namespace TimeWorkTracking
         public KeyValuePair<int, DataRow> checkDay(DateTime dayInfo)
         {
             bool check = false;
-            for (int i = 0; i < dtWorkCalendar.Rows.Count; i++)                 //Display items in the ListView control
+            if (dtWorkCalendar != null) 
             {
-                DataRow drow = dtWorkCalendar.Rows[i];
-                if (                                                            //если день совпадает с днем из производственного кадендаря
-                    (drow.RowState != DataRowState.Deleted) &&                  //Only row that have not been deleted
-                    ((DateTime.Compare((DateTime)drow["dWork"], dayInfo.Date) == 0) ||
-                     (DateTime.Compare((DateTime)drow["dSource"], dayInfo.Date) == 0))
-                    )
+                for (int i = 0; i < dtWorkCalendar.Rows.Count; i++)                 //Display items in the ListView control
                 {
-                    check = true;
-                    if (DateTime.Compare((DateTime)drow["dWork"], (DateTime)drow["dSource"]) == 0)
-                        return new KeyValuePair<int, DataRow>(0, drow);         //это Праздничный день (без переносов)
-                    else
-                    {                                                           //перенесенная дата
-                        if (DateTime.Compare((DateTime)drow["dWork"], dayInfo.Date) == 0)
-                            return new KeyValuePair<int, DataRow>(1, drow);     //это Праздничный день (перенесенная дата)
+                    DataRow drow = dtWorkCalendar.Rows[i];
+                    if (                                                            //если день совпадает с днем из производственного кадендаря
+                        (drow.RowState != DataRowState.Deleted) &&                  //Only row that have not been deleted
+                        ((DateTime.Compare((DateTime)drow["dWork"], dayInfo.Date) == 0) ||
+                         (DateTime.Compare((DateTime)drow["dSource"], dayInfo.Date) == 0))
+                        )
+                    {
+                        check = true;
+                        if (DateTime.Compare((DateTime)drow["dWork"], (DateTime)drow["dSource"]) == 0)
+                            return new KeyValuePair<int, DataRow>(0, drow);         //это Праздничный день (без переносов)
                         else
-                        {                                                       //это реальная дата
-                            if (drow["dType"].ToString() == "Праздничный")
-                                return new KeyValuePair<int, DataRow>(2, drow); //это Выходной день (праздник попадает на выходной)
+                        {                                                           //перенесенная дата
+                            if (DateTime.Compare((DateTime)drow["dWork"], dayInfo.Date) == 0)
+                                return new KeyValuePair<int, DataRow>(1, drow);     //это Праздничный день (перенесенная дата)
                             else
-                                return new KeyValuePair<int, DataRow>(3, drow); //это Рабочий день (праздник не попадает на выходной)
+                            {                                                       //это реальная дата
+                                if (drow["dType"].ToString() == "Праздничный")
+                                    return new KeyValuePair<int, DataRow>(2, drow); //это Выходной день (праздник попадает на выходной)
+                                else
+                                    return new KeyValuePair<int, DataRow>(3, drow); //это Рабочий день (праздник не попадает на выходной)
+                            }
                         }
                     }
                 }

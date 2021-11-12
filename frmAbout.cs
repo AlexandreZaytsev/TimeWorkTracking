@@ -20,7 +20,7 @@ namespace TimeWorkTracking
             this.lbVersion.Text = String.Format("Версия {0}", AssemblyVersion);
             this.lbCopyright.Text = AssemblyCopyright;
             this.lbCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription + "\r\n"+Properties.Resources.about;
+            this.textBoxDescription.Text = AssemblyDescription + "\r\n\r\n"+Properties.Resources.about;
         }
 
         #region Методы доступа к атрибутам сборки

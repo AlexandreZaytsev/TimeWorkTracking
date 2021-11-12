@@ -46,8 +46,10 @@ namespace TimeWorkTracking
         private void frmMain_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+                                                                            //            webInfoDay.Visible = false;
             if (CheckConnects())                                            //проверить соединение с базами
             {
+                //                webInfoDay.Visible = true;
                 pCalendar = new clCalendar(cs, "Select * From twt_GetDateInfo('', '') order by dWork");
                 LoadBoldedDatesCalendar(pCalendar.getListWorkHoliday());    //Загрузить производственный календарь в массив непериодических выделенных дат
                 webInfoDay.DocumentText = pCalendar.getDateInfo(mcRegDate.SelectionStart);   //прочитать харектеристики дня по производственному календарю 
@@ -59,6 +61,11 @@ namespace TimeWorkTracking
                 InitializeListView();
                 LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
                 mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
+            }
+            else 
+            {
+                pCalendar = new clCalendar();
+                webInfoDay.DocumentText = pCalendar.getDateInfo(DateTime.Today);
             }
         }
 
@@ -97,6 +104,7 @@ namespace TimeWorkTracking
                 Order = SortOrder.Ascending
             };
             lstwDataBaseMain.ListViewItemSorter = _lvwItemComparer;
+
         }
         //Загрузить Data из DataSet в ListViewUser
         private void LoadListUser(DataTable dtable)

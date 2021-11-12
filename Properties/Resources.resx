@@ -155,8 +155,32 @@
     сброс административного пароля из командной строки
     TimeWorkTracking.exe -r 
   
-ps: (double-click)
- ric zaytsev@cad.ru github</value>
+Порядок работы:
+ авторизуйтесь под Администратором
+  - Перейдите в настройки БД SQL
+     Укажите существующий SQL сервер
+     Задайте имя базы данных (любое)
+     Проверьте соединение (кнопка)
+     Создайте базу данных (кнопка)
+    *при этом будут сформированы все таблицы 
+     их начальная инициализация и 
+     базовые UDF функции для работы
+   - При необходимости проведите импорт для справочников:
+      Сотрудники
+      Проходы
+   - Настройте/Дополните вручную справочники:
+      Сотрудники 
+      Специальные отметки
+      Производственный календарь
+  - Перейдите в настройки БД СКУД
+     Укажите существующий СКУД сервис ProxWay
+     Проверьте соединение (кнопка)
+
+ авторизуйтесь под Пользователем
+  - Подготовьте бланки прохода и учета температуры на неделю
+  - Выбирая сотрудника и дату - зафиксируйте впемя прохода
+    *при необходимости используйте данные СКУД Proxway
+  - Подготовьте итоговый отчет за месяц</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="calendar" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -274,6 +298,9 @@ ps: (double-click)
   </data>
   <data name="pass_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\pass.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="qr_code" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\qr_code.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="report" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\report.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
