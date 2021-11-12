@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Net.Mail;
 using System.Reflection;
 //using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,10 +16,10 @@ namespace TimeWorkTracking
         {
             InitializeComponent();
             this.Text = String.Format("О программе {0}", AssemblyTitle);
-            this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = String.Format("Версия {0}", AssemblyVersion);
-            this.labelCopyright.Text = AssemblyCopyright;
-            this.labelCompanyName.Text = AssemblyCompany;
+            this.lbProductName.Text = Application.ProductName;// AssemblyProduct;
+            this.lbVersion.Text = String.Format("Версия {0}", AssemblyVersion);
+            this.lbCopyright.Text = AssemblyCopyright;
+            this.lbCompanyName.Text = AssemblyCompany;
             this.textBoxDescription.Text = AssemblyDescription + "\r\n\r\n"+Properties.Resources.about;
         }
 
@@ -101,5 +102,17 @@ namespace TimeWorkTracking
             }
         }
         #endregion
+
+        //двойное нажатие на тексте
+        private void textBoxDescription_DoubleClick(object sender, EventArgs e)
+        {
+            string eMail = ((System.Windows.Forms.TextBoxBase)sender).SelectedText;
+            if (eMail.IndexOf('@') > 0) 
+            {
+                string subject = lbProductName.Text;
+                string body = "Hi";
+                System.Diagnostics.Process.Start("mailto:" + eMail + "? subject=" + subject + " & body = " + body +"");
+            }
+        }
     }
 }

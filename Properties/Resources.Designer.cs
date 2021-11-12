@@ -61,7 +61,8 @@ namespace TimeWorkTracking.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Клиент-серверное приложение фиксации рабочего времени сотрудников компании, с подготовкой бланков и выпуском отчетов за период 
+        ///   Ищет локализованную строку, похожую на Описание:
+        ///Клиент-серверное приложение фиксации рабочего времени сотрудников компании, с подготовкой бланков и выпуском отчетов за период 
         ///
         ///Минимальные системные требования
         /// Клиент: 
@@ -76,8 +77,7 @@ namespace TimeWorkTracking.Properties {
         ///
         ///Права доступа:
         /// для Пользователя
-        ///  - Регистрация времени входа/выхода
-        /// [остаток строки не уместился]&quot;;.
+        ///  - Регистрация времени вхо [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string about {
             get {
@@ -206,6 +206,16 @@ namespace TimeWorkTracking.Properties {
         internal static System.Drawing.Bitmap holiday_48 {
             get {
                 object obj = ResourceManager.GetObject("holiday_48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap info {
+            get {
+                object obj = ResourceManager.GetObject("info", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Русская Промышленная Компания")]
 [assembly: AssemblyProduct("TimeWorkTracking")]
-[assembly: AssemblyCopyright("zaytsev@cad.ru Copyright ©  2021")]
+[assembly: AssemblyCopyright("zaytsev@cad.ru Copyright ©  2021 MIT")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
