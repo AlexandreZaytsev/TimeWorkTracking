@@ -114,7 +114,7 @@ namespace TimeWorkTracking
                     break;
                 case "github":
                     System.Diagnostics.Process.Start(@"https://github.com/AlexandreZaytsev/TimeWorkTracking");
-                    break;
+                    break; 
                 default:
                     if (txt.IndexOf('@') > 0)
                     {
