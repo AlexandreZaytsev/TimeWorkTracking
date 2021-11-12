@@ -11,18 +11,30 @@ namespace TimeWorkTracking
 {
     public partial class frmLogIn : Form
     {
-        private bool pass=true;
+        private bool pass=true;                                         //регистрация одобрена
         private string adminPassword = Properties.Settings.Default.adminPass;
+        private int timerSec = 5;                                       //количество секунд до входа
         public frmLogIn()
         {
             //подписка события внешних форм 
             CallBack_FrmMain_outEvent.callbackEventHandler = new CallBack_FrmMain_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
             InitializeComponent();
-            cbTypeAccount.Text = "Пользователь";
+            //затащим все в одну панель    
+            this.panelAction.Controls.Add(this.panelUser);
+            this.panelAction.Controls.Add(this.panelAdmin);
+            this.panelAction.Controls.Add(this.panelPasswordChange);
+            panelUser.Dock = DockStyle.Fill;
+            panelAdmin.Dock = DockStyle.Top;
+            panelPasswordChange.Dock = DockStyle.Fill;
+            this.Width = 335;
+            this.Height = 222;
+            this.KeyPreview = false;                                    //обрабатывать нажатия на форме      
+
+//            cbTypeAccount.Text = "Пользователь";
             //tbNewPassword.PasswordChar = '\u25CF';
             chChangePassword.Visible = false;
+            cbTypeAccount.SelectedIndex = 0;
         }
-
 
         //выбор учетной записи
         private void cbTypeAccount_SelectedIndexChanged(object sender, EventArgs e)
@@ -30,22 +42,56 @@ namespace TimeWorkTracking
             switch (cbTypeAccount.Text) 
             {
                 case "Администратор":
+                    panelUser.Visible = false;
                     panelAdmin.Visible = true;
-                    panelAdmin.Dock = DockStyle.Fill;
-                    lbInfo.Visible = false;
+                    panelPasswordChange.Visible = false;
+
+                    timerLogIn.Stop();                                  //запустить таймер на вход для пользователя
+//                    panelAdmin.Visible = true;
+//                    panelAdmin.Dock = DockStyle.Fill;
+//                    lbInfo.Visible = false;
                     panelPasswordChange.Enabled = chChangePassword.Checked;
                     //                   pass = false;
                     checkBasePassword();                                //проверить пароль
                     break;
                 case "Пользователь":
+                    panelUser.Visible = true;
                     panelAdmin.Visible = false;
-                    lbInfo.Visible = true;
-                    lbInfo.Dock = DockStyle.Fill;
+                    panelPasswordChange.Visible = false;
+
+                    pictureBoxLogIn.Image = Properties.Resources.open_48;
+                    timerSec = 5;
+                    timerLogIn.Start();                                 //запустить таймер на вход для пользователя
+//                    panelAdmin.Visible = false;
+//                    lbInfo.Visible = true;
+//                    lbInfo.Dock = DockStyle.Fill;
                     pass = true;
                     break;
             }
+            lbInfo.Text = "";
             checkLoginAndSendEvent();                                   //проинформировать родителя
         }
+
+        //Вход Пользователя-----------------------------------------------------------------------------------
+
+        //события таймера
+        private void timerLogIn_Tick(object sender, EventArgs e)
+        {
+            if (timerSec >= 0)
+            {
+                lbInfo.Text = "до автоматического входа в систему осталось - " + timerSec.ToString().PadLeft(2, '0') + " сек.";
+                timerSec -= 1;
+            }
+            else
+            {
+                timerLogIn.Stop();
+                lbInfo.Text = "";
+                this.Close();
+            }
+        }
+
+        //Вход Администратора---------------------------------------------------------------------------------
+
         //включить изменение пароля
         private void chChangePassword_CheckedChanged(object sender, EventArgs e)
         {
@@ -86,7 +132,7 @@ namespace TimeWorkTracking
         //скрыть пароль при съезде с кнопки
         private void btSave_MouseLeave(object sender, EventArgs e)
         {
-            tbNewPassword.PasswordChar = Convert.ToChar("*");//'\u25CF';
+            tbNewPassword.PasswordChar = '*';//Convert.ToChar("*");//'\u25CF';
         }
 
 
@@ -163,6 +209,13 @@ namespace TimeWorkTracking
             else if (e.KeyCode == Keys.Enter && pass)   //если Enter и данные подтверждены                                                                                //
                 this.Close();
         }
+
+        //Кнопка Вход
+        private void btOk_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
         //при закрытии формы    
         private void frmLogIn_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -189,8 +242,6 @@ namespace TimeWorkTracking
             }
             */
         }
-
-
     }
 
     /*--------------------------------------------------------------------------------------------  
