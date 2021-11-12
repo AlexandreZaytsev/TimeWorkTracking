@@ -117,6 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="about" xml:space="preserve">
+    <value>Клиент-серверное приложение фиксации рабочего времени сотрудников компании, с подготовкой бланков и выпуском отчетов за период 
+
+Минимальные системные требования
+ Клиент: 
+  - Windows 8
+  - .NET Framework 3.5   	
+  - MS Office 2010 (для импорта/бланков/отчетов)
+ Сервер: 
+  - наличие в сети MSSQLServer/Standard/Express/2000
+ Сервис:
+  - наличие (не обязательно) доствупа с сервису
+    СКУД Proxway (https://proxway-ble.ru/)
+
+Права доступа:
+ для Пользователя
+  - Регистрация времени входа/выхода
+     Информация из бумажных носителей (Бланк учета)
+     Информация из СКУД Proxway (если используется)
+  - Настройка справочников:
+     Сотрудники 
+     Специальные отметки
+     Производственный календарь
+  - Выпуск бланков учета времени и температуры
+  - Подготовка отчета за период
+
+ для Администратора (дополнительно)
+  - Настройка соединения с сервером MSSQL2000 и выше
+  - Настройка соединения с сервисом СКУД Proxway
+  - Начальное заполнение (импорт) справочников:
+     Сотрудники 
+     Специальные отметки
+     Производственный календарь
+  *дополнительно
+    сброс административного пароля из командной строки
+    \\TimeWorkTracking.exe -r</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="calendar" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\calendar.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

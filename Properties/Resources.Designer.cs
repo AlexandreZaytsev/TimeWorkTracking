@@ -61,6 +61,31 @@ namespace TimeWorkTracking.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Клиент-серверное приложение фиксации рабочего времени сотрудников компании, с подготовкой бланков и выпуском отчетов за период 
+        ///
+        ///Минимальные системные требования
+        /// Клиент: 
+        ///  - Windows 8
+        ///  - .NET Framework 3.5   	
+        ///  - MS Office 2010 (для импорта/бланков/отчетов)
+        /// Сервер: 
+        ///  - наличие в сети MSSQLServer/Standard/Express/2000
+        /// Сервис:
+        ///  - наличие (не обязательно) доствупа с сервису
+        ///    СКУД Proxway (https://proxway-ble.ru/)
+        ///
+        ///Права доступа:
+        /// для Пользователя
+        ///  - Регистрация времени входа/выхода
+        /// [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string about {
+            get {
+                return ResourceManager.GetString("about", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap calendar {
