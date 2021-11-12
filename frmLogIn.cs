@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace TimeWorkTracking
@@ -19,15 +20,18 @@ namespace TimeWorkTracking
             //подписка события внешних форм 
             CallBack_FrmMain_outEvent.callbackEventHandler = new CallBack_FrmMain_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
             InitializeComponent();
-            //затащим все в одну панель    
-            this.panelAction.Controls.Add(this.panelUser);
-            this.panelAction.Controls.Add(this.panelAdmin);
-            this.panelAction.Controls.Add(this.panelPasswordChange);
+            //затащим все в одну панель (для редактирования дизайна - компануем панели здесь)    
+            //            this.panelAction.Controls.Add(this.panelUser);
+            //            this.panelAction.Controls.Add(this.panelAdmin);
+            //this.panelAction.Controls.Add(this.panelPasswordChange);
             panelUser.Dock = DockStyle.Fill;
             panelAdmin.Dock = DockStyle.Top;
-            panelPasswordChange.Dock = DockStyle.Fill;
-            this.Width = 335;
-            this.Height = 222;
+            panelPasswordChange.Left = 58;
+            panelPasswordChange.Top = 49;
+            // panelPasswordChange.Dock = DockStyle.Fill;
+            this.Width = 325;// 335;
+            this.Height = 175;// 185;
+
             this.KeyPreview = false;                                    //обрабатывать нажатия на форме      
 
 //            cbTypeAccount.Text = "Пользователь";
@@ -42,30 +46,22 @@ namespace TimeWorkTracking
             switch (cbTypeAccount.Text) 
             {
                 case "Администратор":
-                    panelUser.Visible = false;
-                    panelAdmin.Visible = true;
-                    panelPasswordChange.Visible = false;
-
-                    timerLogIn.Stop();                                  //запустить таймер на вход для пользователя
-//                    panelAdmin.Visible = true;
-//                    panelAdmin.Dock = DockStyle.Fill;
-//                    lbInfo.Visible = false;
-                    panelPasswordChange.Enabled = chChangePassword.Checked;
-                    //                   pass = false;
-                    checkBasePassword();                                //проверить пароль
+                    panelUser.Visible = false;                          //панель пользователя
+                    panelAdmin.Visible = true;                          //панель администратора
+                    panelPasswordChange.Visible = false;                //панель изменения пароля
+                    timerLogIn.Stop();                                  //остановить таймер на вход для пользователя
+                    checkBasePassword();                                //проверить пароль (доп управление админскими панелями)
                     break;
                 case "Пользователь":
-                    panelUser.Visible = true;
-                    panelAdmin.Visible = false;
-                    panelPasswordChange.Visible = false;
-
+                    panelUser.Visible = true;                           //панель пользователя
+                    panelAdmin.Visible = false;                         //панель администратора
+                    panelPasswordChange.Visible = false;                //панель изменения пароля
                     pictureBoxLogIn.Image = Properties.Resources.open_48;
                     timerSec = 5;
                     timerLogIn.Start();                                 //запустить таймер на вход для пользователя
-//                    panelAdmin.Visible = false;
-//                    lbInfo.Visible = true;
-//                    lbInfo.Dock = DockStyle.Fill;
-                    pass = true;
+                    btOk.Enabled = true;                                //кнопка входа
+                    btOk.Visible = true;
+                    pass = true;                                        //доступ разрешен в любом случае
                     break;
             }
             lbInfo.Text = "";
@@ -95,9 +91,6 @@ namespace TimeWorkTracking
         //включить изменение пароля
         private void chChangePassword_CheckedChanged(object sender, EventArgs e)
         {
-            panelPasswordChange.Enabled = chChangePassword.Checked;
-            tbPassword.Enabled = !chChangePassword.Checked;
-
             if (chChangePassword.Checked)                               //сбросим поле с рабочим паролем
                 tbPassword.Text = "";
             
@@ -118,11 +111,20 @@ namespace TimeWorkTracking
         //проверка вводимых симолов нового пароля
         private void tbNewPassword_KeyPress(object sender, KeyPressEventArgs e)
         {
+            //            var regex = new Regex(@"[^a-zA-Z0-9\s[\b]]");
+            //            var regex = new Regex(@"[a-zA-Z\d\b]");
+            var regex = new Regex(@"[^\w\b]");                          //все символы по текущей локализации + цифры + backspace
+            if (regex.IsMatch(e.KeyChar.ToString()))
+            {
+                e.Handled = true;
+            }
+/*
             char val = e.KeyChar;
             if (!Char.IsLetterOrDigit(val) && !Char.IsDigit(val) && val != 8 && (val <= 39 || val >= 46) && val != 47 && val != 61) //калькулятор
             {
                 e.Handled = true;
             }
+*/
         }
         //показать пароль при наезде на кнопку
         private void btSave_MouseHover(object sender, EventArgs e)
@@ -135,18 +137,22 @@ namespace TimeWorkTracking
             tbNewPassword.PasswordChar = '*';//Convert.ToChar("*");//'\u25CF';
         }
 
-
         //проверим корректность введенного пароля
         private void checkBasePassword()
         {
             if (!chChangePassword.Checked) 
-            {                                                           //работаем с главным паролем               
+            {                                                           //работаем с главным паролем
+                this.Text = "Авторизация";
+                panelAdmin.Visible = true;                              //панель администратора
+                panelPasswordChange.Visible = false;                    //панель изменения пароля
+                btOk.Visible = true;
                 if (tbPassword.Text == adminPassword)                   //пароль из настроек и из текстбокса совпадают
                 {
                     pass = true;
                     tbPassword.BackColor = SystemColors.Control;
                     pictureBoxLogIn.Image = Properties.Resources.open_48;
                     chChangePassword.Visible = true;
+                    btOk.Enabled = true;
                 }
                 else
                 {
@@ -154,28 +160,32 @@ namespace TimeWorkTracking
                     tbPassword.BackColor = SystemColors.Window;
                     pictureBoxLogIn.Image = Properties.Resources.closed_48;
                     chChangePassword.Visible = false;
+                    btOk.Enabled = false;
                 }
-                pictureBoxLogIn.Visible = true;
             }
             else
             {                                                           //работаем с изменением пароля
+                this.Text = "Изменение пароля администратора";
+                panelAdmin.Visible = false;                             //панель администратора
+                panelPasswordChange.Visible = true;                     //панель изменения пароля     
+                btOk.Visible = false;
+
                 pass = false;
                 chChangePassword.Visible = false;
                 if (tbOldPassword.Text == adminPassword)                //пароль из настроек и из текстбокса совпадают
                 {
-//                    pass = true;
+                    pictureBoxLogIn.Image = Properties.Resources.open_48;
                     tbOldPassword.BackColor = SystemColors.Control;
                     tbNewPassword.Enabled = true;
                     btSave.Enabled = true;
                 }
                 else
                 {
-//                    pass = false;
+                    pictureBoxLogIn.Image = Properties.Resources.closed_48;
                     tbOldPassword.BackColor = SystemColors.Window;
                     tbNewPassword.Enabled = false;
                     btSave.Enabled = false;
                 }
-                pictureBoxLogIn.Visible = false;
             }
         }
         //сохранить новый пароль

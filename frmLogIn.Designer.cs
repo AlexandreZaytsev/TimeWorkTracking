@@ -32,8 +32,6 @@ namespace TimeWorkTracking
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmLogIn));
             this.mainPanelLogIn = new System.Windows.Forms.Panel();
-            this.panelUser = new System.Windows.Forms.Panel();
-            this.lbInfo = new System.Windows.Forms.Label();
             this.panelPasswordChange = new System.Windows.Forms.Panel();
             this.btCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -42,11 +40,13 @@ namespace TimeWorkTracking
             this.label3 = new System.Windows.Forms.Label();
             this.tbOldPassword = new System.Windows.Forms.TextBox();
             this.panelAction = new System.Windows.Forms.Panel();
-            this.btOk = new System.Windows.Forms.Button();
+            this.panelUser = new System.Windows.Forms.Panel();
+            this.lbInfo = new System.Windows.Forms.Label();
             this.panelAdmin = new System.Windows.Forms.Panel();
             this.chChangePassword = new System.Windows.Forms.CheckBox();
             this.lbPassword = new System.Windows.Forms.Label();
             this.tbPassword = new System.Windows.Forms.TextBox();
+            this.btOk = new System.Windows.Forms.Button();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBoxLogIn = new System.Windows.Forms.PictureBox();
@@ -55,8 +55,9 @@ namespace TimeWorkTracking
             this.toolTipMsgLogIn = new System.Windows.Forms.ToolTip(this.components);
             this.timerLogIn = new System.Windows.Forms.Timer(this.components);
             this.mainPanelLogIn.SuspendLayout();
-            this.panelUser.SuspendLayout();
             this.panelPasswordChange.SuspendLayout();
+            this.panelAction.SuspendLayout();
+            this.panelUser.SuspendLayout();
             this.panelAdmin.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogIn)).BeginInit();
@@ -64,11 +65,9 @@ namespace TimeWorkTracking
             // 
             // mainPanelLogIn
             // 
-            this.mainPanelLogIn.Controls.Add(this.panelUser);
             this.mainPanelLogIn.Controls.Add(this.panelPasswordChange);
             this.mainPanelLogIn.Controls.Add(this.panelAction);
             this.mainPanelLogIn.Controls.Add(this.btOk);
-            this.mainPanelLogIn.Controls.Add(this.panelAdmin);
             this.mainPanelLogIn.Controls.Add(this.panel4);
             this.mainPanelLogIn.Controls.Add(this.panel2);
             this.mainPanelLogIn.Controls.Add(this.label2);
@@ -77,30 +76,8 @@ namespace TimeWorkTracking
             this.mainPanelLogIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mainPanelLogIn.Location = new System.Drawing.Point(0, 0);
             this.mainPanelLogIn.Name = "mainPanelLogIn";
-            this.mainPanelLogIn.Size = new System.Drawing.Size(625, 183);
+            this.mainPanelLogIn.Size = new System.Drawing.Size(658, 147);
             this.mainPanelLogIn.TabIndex = 0;
-            // 
-            // panelUser
-            // 
-            this.panelUser.Controls.Add(this.lbInfo);
-            this.panelUser.Location = new System.Drawing.Point(344, 10);
-            this.panelUser.Name = "panelUser";
-            this.panelUser.Size = new System.Drawing.Size(258, 26);
-            this.panelUser.TabIndex = 8;
-            // 
-            // lbInfo
-            // 
-            this.lbInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbInfo.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.lbInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lbInfo.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lbInfo.Location = new System.Drawing.Point(0, 0);
-            this.lbInfo.Name = "lbInfo";
-            this.lbInfo.Size = new System.Drawing.Size(258, 26);
-            this.lbInfo.TabIndex = 0;
-            this.lbInfo.Tag = "";
-            this.lbInfo.Text = "Добро пожаловать";
-            this.lbInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panelPasswordChange
             // 
@@ -110,9 +87,9 @@ namespace TimeWorkTracking
             this.panelPasswordChange.Controls.Add(this.btSave);
             this.panelPasswordChange.Controls.Add(this.label3);
             this.panelPasswordChange.Controls.Add(this.tbOldPassword);
-            this.panelPasswordChange.Location = new System.Drawing.Point(344, 90);
+            this.panelPasswordChange.Location = new System.Drawing.Point(320, 49);
             this.panelPasswordChange.Name = "panelPasswordChange";
-            this.panelPasswordChange.Size = new System.Drawing.Size(258, 92);
+            this.panelPasswordChange.Size = new System.Drawing.Size(256, 92);
             this.panelPasswordChange.TabIndex = 8;
             // 
             // btCancel
@@ -139,19 +116,19 @@ namespace TimeWorkTracking
             // tbNewPassword
             // 
             this.tbNewPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tbNewPassword.Location = new System.Drawing.Point(107, 35);
+            this.tbNewPassword.Location = new System.Drawing.Point(110, 35);
             this.tbNewPassword.Name = "tbNewPassword";
             this.tbNewPassword.PasswordChar = '*';
-            this.tbNewPassword.Size = new System.Drawing.Size(142, 24);
+            this.tbNewPassword.Size = new System.Drawing.Size(140, 24);
             this.tbNewPassword.TabIndex = 9;
             this.tbNewPassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbNewPassword_KeyPress);
             // 
             // btSave
             // 
             this.btSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btSave.Location = new System.Drawing.Point(107, 63);
+            this.btSave.Location = new System.Drawing.Point(110, 63);
             this.btSave.Name = "btSave";
-            this.btSave.Size = new System.Drawing.Size(141, 25);
+            this.btSave.Size = new System.Drawing.Size(140, 25);
             this.btSave.TabIndex = 7;
             this.btSave.Text = "Сохранить";
             this.btSave.UseVisualStyleBackColor = true;
@@ -172,46 +149,59 @@ namespace TimeWorkTracking
             // tbOldPassword
             // 
             this.tbOldPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tbOldPassword.Location = new System.Drawing.Point(107, 6);
+            this.tbOldPassword.Location = new System.Drawing.Point(110, 6);
             this.tbOldPassword.Name = "tbOldPassword";
             this.tbOldPassword.PasswordChar = '*';
-            this.tbOldPassword.Size = new System.Drawing.Size(142, 24);
+            this.tbOldPassword.Size = new System.Drawing.Size(140, 24);
             this.tbOldPassword.TabIndex = 6;
             this.tbOldPassword.TextChanged += new System.EventHandler(this.tbOldPassword_TextChanged);
             // 
             // panelAction
             // 
+            this.panelAction.Controls.Add(this.panelUser);
+            this.panelAction.Controls.Add(this.panelAdmin);
             this.panelAction.Location = new System.Drawing.Point(58, 49);
             this.panelAction.Name = "panelAction";
-            this.panelAction.Size = new System.Drawing.Size(256, 100);
+            this.panelAction.Size = new System.Drawing.Size(256, 59);
             this.panelAction.TabIndex = 31;
             // 
-            // btOk
+            // panelUser
             // 
-            this.btOk.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btOk.Location = new System.Drawing.Point(168, 153);
-            this.btOk.Name = "btOk";
-            this.btOk.Size = new System.Drawing.Size(143, 25);
-            this.btOk.TabIndex = 30;
-            this.btOk.Text = "Вход";
-            this.btOk.UseVisualStyleBackColor = true;
-            this.btOk.Click += new System.EventHandler(this.btOk_Click);
+            this.panelUser.Controls.Add(this.lbInfo);
+            this.panelUser.Location = new System.Drawing.Point(10, 9);
+            this.panelUser.Name = "panelUser";
+            this.panelUser.Size = new System.Drawing.Size(85, 26);
+            this.panelUser.TabIndex = 8;
+            // 
+            // lbInfo
+            // 
+            this.lbInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbInfo.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.lbInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lbInfo.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lbInfo.Location = new System.Drawing.Point(0, 0);
+            this.lbInfo.Name = "lbInfo";
+            this.lbInfo.Size = new System.Drawing.Size(85, 26);
+            this.lbInfo.TabIndex = 0;
+            this.lbInfo.Tag = "";
+            this.lbInfo.Text = "Добро пожаловать";
+            this.lbInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panelAdmin
             // 
             this.panelAdmin.Controls.Add(this.chChangePassword);
             this.panelAdmin.Controls.Add(this.lbPassword);
             this.panelAdmin.Controls.Add(this.tbPassword);
-            this.panelAdmin.Location = new System.Drawing.Point(344, 49);
+            this.panelAdmin.Location = new System.Drawing.Point(122, 9);
             this.panelAdmin.Name = "panelAdmin";
-            this.panelAdmin.Size = new System.Drawing.Size(258, 35);
+            this.panelAdmin.Size = new System.Drawing.Size(131, 35);
             this.panelAdmin.TabIndex = 7;
             // 
             // chChangePassword
             // 
             this.chChangePassword.AutoSize = true;
             this.chChangePassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.chChangePassword.Location = new System.Drawing.Point(235, 11);
+            this.chChangePassword.Location = new System.Drawing.Point(233, 11);
             this.chChangePassword.Name = "chChangePassword";
             this.chChangePassword.Size = new System.Drawing.Size(15, 14);
             this.chChangePassword.TabIndex = 6;
@@ -231,12 +221,23 @@ namespace TimeWorkTracking
             // 
             // tbPassword
             // 
-            this.tbPassword.Location = new System.Drawing.Point(107, 5);
+            this.tbPassword.Location = new System.Drawing.Point(110, 5);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '*';
-            this.tbPassword.Size = new System.Drawing.Size(125, 24);
+            this.tbPassword.Size = new System.Drawing.Size(140, 24);
             this.tbPassword.TabIndex = 4;
             this.tbPassword.TextChanged += new System.EventHandler(this.tbPassword_TextChanged);
+            // 
+            // btOk
+            // 
+            this.btOk.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btOk.Location = new System.Drawing.Point(168, 112);
+            this.btOk.Name = "btOk";
+            this.btOk.Size = new System.Drawing.Size(143, 29);
+            this.btOk.TabIndex = 30;
+            this.btOk.Text = "Вход";
+            this.btOk.UseVisualStyleBackColor = true;
+            this.btOk.Click += new System.EventHandler(this.btOk_Click);
             // 
             // panel4
             // 
@@ -254,16 +255,16 @@ namespace TimeWorkTracking
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(52, 183);
+            this.panel2.Size = new System.Drawing.Size(52, 147);
             this.panel2.TabIndex = 9;
             // 
             // pictureBoxLogIn
             // 
             this.pictureBoxLogIn.Image = global::TimeWorkTracking.Properties.Resources.closed_48;
-            this.pictureBoxLogIn.Location = new System.Drawing.Point(7, 5);
+            this.pictureBoxLogIn.Location = new System.Drawing.Point(6, 7);
             this.pictureBoxLogIn.Name = "pictureBoxLogIn";
-            this.pictureBoxLogIn.Size = new System.Drawing.Size(37, 37);
-            this.pictureBoxLogIn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxLogIn.Size = new System.Drawing.Size(40, 40);
+            this.pictureBoxLogIn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxLogIn.TabIndex = 9;
             this.pictureBoxLogIn.TabStop = false;
             // 
@@ -300,7 +301,7 @@ namespace TimeWorkTracking
             this.AcceptButton = this.btOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(625, 183);
+            this.ClientSize = new System.Drawing.Size(658, 147);
             this.Controls.Add(this.mainPanelLogIn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -310,9 +311,10 @@ namespace TimeWorkTracking
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmLogIn_FormClosing);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmLogIn_KeyDown);
             this.mainPanelLogIn.ResumeLayout(false);
-            this.panelUser.ResumeLayout(false);
             this.panelPasswordChange.ResumeLayout(false);
             this.panelPasswordChange.PerformLayout();
+            this.panelAction.ResumeLayout(false);
+            this.panelUser.ResumeLayout(false);
             this.panelAdmin.ResumeLayout(false);
             this.panelAdmin.PerformLayout();
             this.panel2.ResumeLayout(false);
