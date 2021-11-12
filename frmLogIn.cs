@@ -19,6 +19,8 @@ namespace TimeWorkTracking
             CallBack_FrmMain_outEvent.callbackEventHandler = new CallBack_FrmMain_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
             InitializeComponent();
             cbTypeAccount.Text = "Пользователь";
+            //tbNewPassword.PasswordChar = '\u25CF';
+            chChangePassword.Visible = false;
         }
 
 
@@ -84,7 +86,7 @@ namespace TimeWorkTracking
         //скрыть пароль при съезде с кнопки
         private void btSave_MouseLeave(object sender, EventArgs e)
         {
-            tbNewPassword.PasswordChar = Convert.ToChar("*");
+            tbNewPassword.PasswordChar = Convert.ToChar("*");//'\u25CF';
         }
 
 
@@ -98,18 +100,21 @@ namespace TimeWorkTracking
                     pass = true;
                     tbPassword.BackColor = SystemColors.Control;
                     pictureBoxLogIn.Image = Properties.Resources.open_48;
+                    chChangePassword.Visible = true;
                 }
                 else
                 {
                     pass = false;
                     tbPassword.BackColor = SystemColors.Window;
                     pictureBoxLogIn.Image = Properties.Resources.closed_48;
+                    chChangePassword.Visible = false;
                 }
                 pictureBoxLogIn.Visible = true;
             }
             else
             {                                                           //работаем с изменением пароля
                 pass = false;
+                chChangePassword.Visible = false;
                 if (tbOldPassword.Text == adminPassword)                //пароль из настроек и из текстбокса совпадают
                 {
 //                    pass = true;
@@ -133,6 +138,11 @@ namespace TimeWorkTracking
             Properties.Settings.Default.adminPass = tbNewPassword.Text;
             Properties.Settings.Default.Save();                         //сохраним новый пароль в настройках
             adminPassword = tbNewPassword.Text;                         //сохраним его в глобальной переменной
+            chChangePassword.Checked = false;                           //вернемся на ввод главного пароля      
+        }
+        //отказ от нового пароля
+        private void btCancel_Click(object sender, EventArgs e)
+        {
             chChangePassword.Checked = false;                           //вернемся на ввод главного пароля      
         }
 
@@ -179,6 +189,8 @@ namespace TimeWorkTracking
             }
             */
         }
+
+
     }
 
     /*--------------------------------------------------------------------------------------------  

@@ -600,6 +600,15 @@
         cJWw3xX9u6JfoPW7on9X9Ku1flf074p+tdbviv5d0a/S+r//+/8BPTxUq6Ub7iwAAAAASUVORK5CYII=
 </value>
   </data>
+  <data name="textBoxDescription.Text" xml:space="preserve">
+    <value> - Регистрация времени входв/выхода
+ - Настройка справочника Сотрудников 
+ - Настройка Специальных отметок
+ - Настройка Производственного календаря
+ - Выпуск бланков учета времени и температуры
+ - Подготовка отчета за период
+</value>
+  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAMDAAAAEAIACoJQAAFgAAACgAAAAwAAAAYAAAAAEAIAAAAAAAgCUAAAAAAAAAAAAAAAAAAAAA
