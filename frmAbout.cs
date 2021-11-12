@@ -20,7 +20,7 @@ namespace TimeWorkTracking
             this.lbVersion.Text = String.Format("Версия {0}", AssemblyVersion);
             this.lbCopyright.Text = AssemblyCopyright;
             this.lbCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription + "\r\n\r\n"+Properties.Resources.about;
+            this.textBoxDescription.Text = AssemblyDescription + "\r\n"+Properties.Resources.about;
         }
 
         #region Методы доступа к атрибутам сборки
@@ -106,12 +106,23 @@ namespace TimeWorkTracking
         //двойное нажатие на тексте
         private void textBoxDescription_DoubleClick(object sender, EventArgs e)
         {
-            string eMail = ((System.Windows.Forms.TextBoxBase)sender).SelectedText;
-            if (eMail.IndexOf('@') > 0) 
+            string txt = ((System.Windows.Forms.TextBoxBase)sender).SelectedText;
+            switch (txt.Trim()) 
             {
-                string subject = lbProductName.Text;
-                string body = "Hi";
-                System.Diagnostics.Process.Start("mailto:" + eMail + "? subject=" + subject + " & body = " + body +"");
+                case "ric":
+                    System.Diagnostics.Process.Start(@"https://cad.ru");
+                    break;
+                case "github":
+                    System.Diagnostics.Process.Start(@"https://github.com/AlexandreZaytsev/TimeWorkTracking");
+                    break;
+                default:
+                    if (txt.IndexOf('@') > 0)
+                    {
+                        string subject = lbProductName.Text;
+                        string body = "Hi";
+                        System.Diagnostics.Process.Start("mailto:" + txt + "? subject=" + subject + " & body = " + body + "");
+                    }
+                    break;
             }
         }
     }
