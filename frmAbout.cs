@@ -109,7 +109,7 @@ namespace TimeWorkTracking
             string txt = ((System.Windows.Forms.TextBoxBase)sender).SelectedText;
             switch (txt.Trim()) 
             {
-                case "ric":
+                case "ric": 
                     System.Diagnostics.Process.Start(@"https://cad.ru");
                     break;
                 case "github":
