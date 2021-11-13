@@ -12,11 +12,22 @@ namespace TimeWorkTracking
 {
     public partial class frmReport : Form
     {
+        private clCalendar pCalendar;                                       //класс производственный календаоь
+        private DataTable dtSpecialMarks;                                   //специальные отметки
         public frmReport()
         {
             //подписка события внешних форм 
             CallBack_FrmMain_outEvent.callbackEventHandler = new CallBack_FrmMain_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
             InitializeComponent();
+        }
+
+        private void frmReport_Load(object sender, EventArgs e)
+        {
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            if (CheckConnects())                                            //проверить соединение с базами
+            {
+                mcReport.SelectionStart = DateTime.Now;
+            }
         }
 
         //изменение даты календаря
@@ -48,18 +59,27 @@ namespace TimeWorkTracking
                     break;
             }
         }
+        //проверить соединение с базами
+        private bool CheckConnects()
+        {
+            //проверка соединения с SQL
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            bool conSQL = clMsSqlDatabase.CheckConnectWithConnectionStr(cs);
+            mainPanelReport.Enabled = conSQL;
+            return conSQL;
+        }
 
-            /*--------------------------------------------------------------------------------------------  
-            CALLBACK InPut (подписка на внешние сообщения)
-            --------------------------------------------------------------------------------------------*/
-            /// <summary>
-            /// Callbacks the reload.
-            /// входящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров
-            /// </summary>
-            /// <param name="controlName">имя CTRL</param>
-            /// <param name="controlParentName">имя родителя CNTRL</param>
-            /// <param name="param">параметры ключ-значение.</param>
-            private void CallbackReload(string typeForm, string nameForm, Dictionary<String, String> param)
+        /*--------------------------------------------------------------------------------------------  
+        CALLBACK InPut (подписка на внешние сообщения)
+        --------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// Callbacks the reload.
+        /// входящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров
+        // </summary>
+        /// <param name="controlName">имя CTRL</param>
+        /// <param name="controlParentName">имя родителя CNTRL</param>
+        /// <param name="param">параметры ключ-значение.</param>
+        private void CallbackReload(string typeForm, string nameForm, Dictionary<String, String> param)
         {
             this.Text = nameForm;
             this.AccessibleName = typeForm;
@@ -67,25 +87,27 @@ namespace TimeWorkTracking
             {
                 case "FormHeatCheck":
                     mcReport.MaxSelectionCount = 7;
-//..                    mcReport.SelectionRange.Start=DateTime.Today.ё.Month.
+    //..            mcReport.SelectionRange.Start=DateTime.Today.ё.Month.
                     break;
                 case "FormTimeCheck":
                     mcReport.MaxSelectionCount = 7;
                     break;
                 case "ReportTotal":
-//                    mcReport.SelectionRange.Start = DateTime.Today.FirstDayOfMonth();
-//                    mcReport.SelectionRange.Start = DateTime.Today.LastDayOfMonth();
-//                    mcReport.MaxSelectionCount = DateTime.Today.DaysInMonth();
+    //                mcReport.SelectionRange.Start = DateTime.Today.FirstDayOfMonth();
+    //                mcReport.SelectionRange.Start = DateTime.Today.LastDayOfMonth();
+    //                mcReport.MaxSelectionCount = DateTime.Today.DaysInMonth();
                     break;
             }
-            /*
-            if (param.Count() != 0)
-            {
-                Control[] cntrl = this.FilterControls(c => c.Name != null && c.Name.Equals(controlName) && c is DataGridView);
-                ((DataGridView)cntrl[0]).DataSource = param;
-            }
-            */
+                /*
+                if (param.Count() != 0)
+                {
+                    Control[] cntrl = this.FilterControls(c => c.Name != null && c.Name.Equals(controlName) && c is DataGridView);
+                    ((DataGridView)cntrl[0]).DataSource = param;
+                }
+                */
         }
+
+
     }
 
     public static class DateTimeDayOfMonthExtensions

@@ -274,6 +274,13 @@ namespace TimeWorkTracking
             bool conSQL = clMsSqlDatabase.CheckConnectWithConnectionStr(cs);
             this.tsbtDataBaseSQL.Image = conSQL ? Properties.Resources.ok : Properties.Resources.no;
             mainPanelRegistration.Enabled = conSQL && lstwDataBaseMain.Items.Count > 0;
+            tsbtGuideUsers.Enabled = conSQL;
+            tsbtGuideMarks.Enabled = conSQL;
+            tsbtGuideCalendar.Enabled = conSQL;
+            tsbtFormHeatCheck.Enabled = conSQL;
+            tsbtFormTimeCheck.Enabled = conSQL;
+            tsbtReportTotal.Enabled = conSQL;
+            toolSetting.Enabled = conSQL;
             return conSQL;
         }
 
@@ -753,71 +760,6 @@ namespace TimeWorkTracking
                     totalHoursOutsideWork +
                   ")";
 
-/*
-            if (btInsertUpdate.Text == "Добавить") 
-            {
-                sql =
-                  "INSERT INTO EventsPass(" +
-                    "author, " +                                    //имя учетной записи сеанса
-                    "passDate, " +                                  //*дата события (без времени)
-                    "passId, " +                                    //*внешний id пользователя
-                    "passTimeStart, " +                             //время первого входа (без даты)
-                    "passTimeStop, " +                              //время последнего выхода (без даты)
-                    "pacsTimeStart, " +                             //время первого входа по СКУД (без даты)
-                    "pacsTimeStop, " +                              //время последнего выхода по СКУД (без даты)
-                    "timeScheduleFact, " +                          //отработанное время (мин)
-                    "timeScheduleWithoutLunch, " +                  //отработанное время без обеда (мин)
-                    "timeScheduleLess, " +                          //время недоработки (мин)
-                    "timeScheduleOver, " +                          //время переработки (мин)
-                    "specmarkId, " +                                //->ссылка на специальные отметки
-                    "specmarkTimeStart, " +                         //датавремя начала действия специальных отметок
-                    "specmarkTimeStop, " +                          //датавремя окончания специальных отметок
-                    "specmarkNote, " +                              //комментарий к специальным отметкам
-                    "totalHoursInWork, " +                          //итог рабочего времени в графике (мин)
-                    "totalHoursOutsideWork) " +                     //итог рабочего времени вне графика (мин)
-                  "VALUES (" +
-                    "N'" + Environment.UserName.ToString() + "', " +                                         
-                    "'" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "', " +
-                    "'" + keyUser + "', " +
-                    "'" + vDateIn.ToString() + "', " +
-                    "'" + vDateOut.ToString() + "', " +
-                    (pacsTimeStart == "" ? "NULL" : "'" + pacsTimeStart + "'") +", " +
-                    (pacsTimeStop == "" ? "NULL" : "'" + pacsTimeStop + "'") + ", " +
-                    timeScheduleFact + ", " +
-                    timeScheduleWithoutLunch + ", " +
-                    timeScheduleLess + ", " +
-                    timeScheduleOver + ", " +
-                    specmarkId + ", " +
-                    (specmarkTimeStart == "" ? "NULL" : "'" + specmarkTimeStart + "'") + ", " +
-                    (specmarkTimeStop == "" ? "NULL" : "'" + specmarkTimeStop + "'") + ", " +
-                    "N'" + specmarkNote + "', " +
-                    totalHoursInWork + ", " +
-                    totalHoursOutsideWork +
-                  ")";
-            }
-            else 
-            {
-                sql =
-                  "UPDATE EventsPass Set " +
-                    "author = " + "N'" + Environment.UserName.ToString() + "', " +
-                    "passTimeStart = " + "'" + vDateIn.ToString() + "', " +
-                    "passTimeStop = " + "'" + vDateOut.ToString() + "', " +
-                    "pacsTimeStart = " + (pacsTimeStart == "" ? "NULL" : "'" + pacsTimeStart + "'") + ", " +
-                    "pacsTimeStop = " + (pacsTimeStop == "" ? "NULL" : "'" + pacsTimeStop + "'") + ", " +
-                    "timeScheduleFact = " + timeScheduleFact + ", " +
-                    "timeScheduleWithoutLunch = " + timeScheduleWithoutLunch + ", " +
-                    "timeScheduleLess = " + timeScheduleLess + ", " +
-                    "timeScheduleOver = " + timeScheduleOver + ", " +
-                    "specmarkId = " + specmarkId + ", " +
-                    "specmarkTimeStart = " + (specmarkTimeStart == "" ? "NULL" : "'" + specmarkTimeStart + "'") + ", " +
-                    "specmarkTimeStop = " + (specmarkTimeStop == "" ? "NULL" : "'" + specmarkTimeStop + "'") + ", " +
-                    "specmarkNote = " + "N'" + specmarkNote + "', " +
-                    "totalHoursInWork = " + totalHoursInWork + ", " +
-                    "totalHoursOutsideWork = " + totalHoursOutsideWork + " " +
-                  "WHERE passDate = '" + keyDate + "' " +                   //*дата прохода
-                    "and passId = '" + keyUser + "'";                       //*внешний id сотрудника
-            }
-*/
             clMsSqlDatabase.RequestNonQuery(cs, sql, false);
 
             LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + keyDate + "','') order by fio"));
