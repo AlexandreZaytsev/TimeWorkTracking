@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.OleDb;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -23,12 +24,46 @@ namespace TimeWorkTracking
 
         private void frmReport_Load(object sender, EventArgs e)
         {
+            if (!checkProvider()) this.Close();
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             if (CheckConnects())                                            //проверить соединение с базами
             {
                 mcReport.SelectionStart = DateTime.Now;
             }
         }
+
+        //проверить провайдеров для работы с Excel
+        private bool checkProvider()
+        {
+            //проверим наличие провайдера
+            OleDbEnumerator enumerator = new OleDbEnumerator();
+            DataTable table1 = enumerator.GetElements();
+            bool jetOleDb = false, aceOleDb = false, excel = false;
+            foreach (DataRow row in table1.Rows)
+            {
+                if (row["SOURCES_NAME"].ToString() == "Microsoft.Jet.OLEDB.4.0") jetOleDb = true;
+                if (row["SOURCES_NAME"].ToString() == "Microsoft.ACE.OLEDB.12.0") aceOleDb = true;
+            }
+
+            Type officeType = Type.GetTypeFromProgID("Excel.Application");
+            if (officeType != null)
+                excel = true;
+
+            if (!(aceOleDb && excel))
+            {
+                MessageBox.Show(
+                    "В системе отсутствует провайдер\r\n" +
+                    " - Microsoft.ACE.OLEDB.12.0\r\n\r\n" +
+                    "функционал Экспорт/Импорт/Отчеты\r\n - недоступен\r\n" +
+                    "установите пожалуйста MS Excel2010 или выше",
+                    "Ошибка окружения", MessageBoxButtons.OK, MessageBoxIcon.Exclamation
+                    );
+                return false;
+            }
+            else
+                return true;
+        }
+
 
         //изменение даты календаря
         private void mcReport_DateChanged(object sender, DateRangeEventArgs e)
