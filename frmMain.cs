@@ -35,12 +35,13 @@ namespace TimeWorkTracking
             InitializeComponent();
             lMsg.Visible = false;                                           //погасить сообщение о записи в БД
             cbDirect.SelectedIndex = 0;
-/*
-            smDStart.Value = DateTime.Now;
-            smTStart.Value = DateTime.Now;
-            smDStop.Value = DateTime.Now;
-            smTStop.Value = DateTime.Now.AddHours(1);
-*/
+            /*
+                        smDStart.Value = DateTime.Now;
+                        smTStart.Value = DateTime.Now;
+                        smDStop.Value = DateTime.Now;
+                        smTStop.Value = DateTime.Now.AddHours(1);
+            */
+            pCalendar = new clCalendar();
             btDelete.Visible = false;                                       //заблокировать кнопку DELETE 
         }
         private void frmMain_Load(object sender, EventArgs e)
@@ -50,7 +51,7 @@ namespace TimeWorkTracking
             if (CheckConnects())                                            //проверить соединение с базами
             {
                 //                webInfoDay.Visible = true;
-                pCalendar = new clCalendar(cs, "Select * From twt_GetDateInfo('', '') order by dWork");
+                pCalendar.uploadCalendar(cs, "Select * From twt_GetDateInfo('', '') order by dWork");
                 LoadBoldedDatesCalendar(pCalendar.getListWorkHoliday());    //Загрузить производственный календарь в массив непериодических выделенных дат
                 webInfoDay.DocumentText = pCalendar.getDateInfo(mcRegDate.SelectionStart);   //прочитать харектеристики дня по производственному календарю 
 
@@ -64,7 +65,6 @@ namespace TimeWorkTracking
             }
             else 
             {
-                pCalendar = new clCalendar();
                 webInfoDay.DocumentText = pCalendar.getDateInfo(DateTime.Today);
             }
         }

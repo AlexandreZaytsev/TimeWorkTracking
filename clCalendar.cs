@@ -10,13 +10,13 @@ namespace TimeWorkTracking
 {
     class clCalendar 
     {
-        private readonly DataTable dtWorkCalendar;                    //производственный календаоь
+        private DataTable dtWorkCalendar;                    //производственный календаоь
         public clCalendar()                                           //конструктор  
         {
             dtWorkCalendar = null;
         }                                      
 
-        public clCalendar(string cs, string sql)                      //конструктор
+        public void uploadCalendar(string cs, string sql)               //конструктор
         {
             dtWorkCalendar = clMsSqlDatabase.TableRequest(cs, sql);
         }
@@ -25,12 +25,15 @@ namespace TimeWorkTracking
         public List<DateTime> getListWorkHoliday()
         {
             List<DateTime> dateList = new List<DateTime>();
-            for (int i = 0; i < dtWorkCalendar.Rows.Count; i++)         //Display items in the ListView control
+            if (dtWorkCalendar != null)
             {
-                DataRow drow = dtWorkCalendar.Rows[i];
-                if (drow.RowState != DataRowState.Deleted)              //Only row that have not been deleted
+                for (int i = 0; i < dtWorkCalendar.Rows.Count; i++)         //Display items in the ListView control
                 {
-                    dateList.Add((DateTime)drow["dWork"]);
+                    DataRow drow = dtWorkCalendar.Rows[i];
+                    if (drow.RowState != DataRowState.Deleted)              //Only row that have not been deleted
+                    {
+                        dateList.Add((DateTime)drow["dWork"]);
+                    }
                 }
             }
             return dateList;
@@ -40,27 +43,30 @@ namespace TimeWorkTracking
         public int getLengthWorkHoliday(DateTime chDate)
         {
             int ret = 0;
-            for (int i = 0; i < dtWorkCalendar.Rows.Count; i++)         //Display items in the ListView control
+            if (dtWorkCalendar != null)
             {
-                DataRow drow = dtWorkCalendar.Rows[i];
-                if (drow.RowState != DataRowState.Deleted)              //Only row that have not been deleted
+                for (int i = 0; i < dtWorkCalendar.Rows.Count; i++)         //Display items in the ListView control
                 {
-                    if (
-                        (DateTime.Compare(chDate.Date, (DateTime)drow["dWork"]) == 0) ||
-                        (DateTime.Compare(chDate.Date, (DateTime)drow["dSource"]) == 0)
-                        )
+                    DataRow drow = dtWorkCalendar.Rows[i];
+                    if (drow.RowState != DataRowState.Deleted)              //Only row that have not been deleted
                     {
-                        switch (drow["dLength"].ToString()) 
+                        if (
+                            (DateTime.Compare(chDate.Date, (DateTime)drow["dWork"]) == 0) ||
+                            (DateTime.Compare(chDate.Date, (DateTime)drow["dSource"]) == 0)
+                            )
                         {
-                            case "Короткий":                            //меньше на час
-                                ret = -60;
-                                break;
-                            case "Длинный":                             //больше на час
-                                ret = 60;
-                                break;
-                            default:
-                                ret = 0;
-                                break;
+                            switch (drow["dLength"].ToString())
+                            {
+                                case "Короткий":                            //меньше на час
+                                    ret = -60;
+                                    break;
+                                case "Длинный":                             //больше на час
+                                    ret = 60;
+                                    break;
+                                default:
+                                    ret = 0;
+                                    break;
+                            }
                         }
                     }
                 }
@@ -72,14 +78,17 @@ namespace TimeWorkTracking
         public bool chechWorkHoliday(DateTime chDate)
         {
             bool ret = false;
-            for (int i = 0; i < dtWorkCalendar.Rows.Count; i++)         //Display items in the ListView control
+            if (dtWorkCalendar != null)
             {
-                DataRow drow = dtWorkCalendar.Rows[i];
-                if (drow.RowState != DataRowState.Deleted)              //Only row that have not been deleted
+                for (int i = 0; i < dtWorkCalendar.Rows.Count; i++)         //Display items in the ListView control
                 {
-                    if (DateTime.Compare(chDate.Date, (DateTime)drow["dWork"]) == 0 && drow["dType"].ToString()== "Праздничный") 
+                    DataRow drow = dtWorkCalendar.Rows[i];
+                    if (drow.RowState != DataRowState.Deleted)              //Only row that have not been deleted
                     {
-                        ret= true;
+                        if (DateTime.Compare(chDate.Date, (DateTime)drow["dWork"]) == 0 && drow["dType"].ToString() == "Праздничный")
+                        {
+                            ret = true;
+                        }
                     }
                 }
             }

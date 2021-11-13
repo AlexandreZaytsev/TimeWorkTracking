@@ -20,6 +20,7 @@ namespace TimeWorkTracking
             //подписка события внешних форм 
             CallBack_FrmMain_outEvent.callbackEventHandler = new CallBack_FrmMain_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
             InitializeComponent();
+
             //затащим все в одну панель (для редактирования дизайна - компануем панели здесь)    
             //            this.panelAction.Controls.Add(this.panelUser);
             //            this.panelAction.Controls.Add(this.panelAdmin);
@@ -64,7 +65,7 @@ namespace TimeWorkTracking
                     pass = true;                                        //доступ разрешен в любом случае
                     break;
             }
-            lbInfo.Text = "";
+//            lbInfo.Text = "";
             checkLoginAndSendEvent();                                   //проинформировать родителя
         }
 
