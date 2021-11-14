@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Windows.Forms;
 
@@ -266,12 +267,46 @@ namespace TimeWorkTracking
             mcRegDate.UpdateBoldedDates();
         }
 
+        //проверить доступ к сетевым ресурсам 
+        private bool CheckPing(string addrPing) 
+        {
+            Ping Pinger = new Ping();
+            int timeout = 4000;                 //4 сек 
+            PingOptions options = new PingOptions(64, true);
+            string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+            byte[] buffer = Encoding.ASCII.GetBytes(data);
+            try
+            {
+                PingReply reply = Pinger.Send(addrPing);//, timeout);//, buffer, options);
+                if (reply.Status == IPStatus.Success)
+                    return true;
+                else
+                    return false;
+            }
+            catch (PingException e)
+            {
+                return false;
+            }
+        }
         //проверить соединение с базами
         private bool CheckConnects()
         {
-            //проверка соединения с SQL
-            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            bool conSQL = clMsSqlDatabase.CheckConnectWithConnectionStr(cs);
+            string msg = "";
+            string hostSQL = Properties.Settings.Default.twtServerName;
+            string csSQL = Properties.Settings.Default.twtConnectionSrting;
+            bool pingSQL = csSQL != "" ? CheckPing(hostSQL) : false;
+            bool conSQL = false;
+            if (!pingSQL)
+                msg += "Cетевое имя сервера SQL\r\n  " + hostSQL + "- недоступно\r\n\r\n";
+            else
+                conSQL = clMsSqlDatabase.CheckConnectWithConnectionStr(csSQL);
+
+            string hostPACS = Properties.Settings.Default.pacsHost;
+            string csPACS = Properties.Settings.Default.pacsConnectionString;
+            bool pingPACS = csPACS != "" ? CheckPing(hostPACS) : false;
+            if (!pingPACS)
+                msg += "Cетевое имя сервиса СКУД\r\n  " + hostPACS + "- недоступно\r\n";
+
             this.tsbtDataBaseSQL.Image = conSQL ? Properties.Resources.ok : Properties.Resources.no;
             mainPanelRegistration.Enabled = conSQL && lstwDataBaseMain.Items.Count > 0;
             tsbtGuideUsers.Enabled = conSQL;
@@ -281,6 +316,9 @@ namespace TimeWorkTracking
             tsbtFormTimeCheck.Enabled = conSQL;
             tsbtReportTotal.Enabled = conSQL;
             toolSetting.Enabled = conSQL;
+
+            if (msg != "")
+                MessageBox.Show(msg+"\r\nавторизуйтесь под Администратором и\r\nнастройте соединения", "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return conSQL;
         }
 
