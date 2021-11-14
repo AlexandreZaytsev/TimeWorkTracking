@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace TimeWorkTracking
 {
@@ -110,7 +111,86 @@ namespace TimeWorkTracking
                 */
         }
 
+        //напечатать бланк температуры
+        private void btPrintTempBlank_Click(object sender, EventArgs e)
+        {
+            Excel.Worksheet worksheet;
+            //Объявляем приложение
+            Excel.Application app = new Excel.Application
+            {
+                //Отобразить Excel
+                Visible = true,
+                //Количество листов в рабочей книге
+                SheetsInNewWorkbook = 1//2
+            };
 
+            //Добавить рабочую книгу
+            Excel.Workbook workBook = app.Workbooks.Add(Type.Missing);
+            //Отключить отображение окон с сообщениями
+            app.DisplayAlerts = false;
+            //Получаем первый лист документа (счет начинается с 1)
+            worksheet = (Excel.Worksheet)app.Worksheets.get_Item(1);
+            //Название листа (вкладки снизу)
+            worksheet.Name = "Journal";
+            //RebuildSheet(workBook, "Journal", 3);                            // удалить все листы кроме текущего
+
+            app.DisplayAlerts = false;
+
+        }
+
+        /*--------------------------------------------------------------------------------------------------------------------------------------------
+        'пересоздать листы в книге
+        'Book - рабочая книга
+        'shName - имя листа
+        'Mode   - 0- очистить контент листа shName, 1-пересоздать лист shName, 2-удалить лист shName , 3-удалить листы кроме shName
+        */
+        //https://www.nookery.ru/c-work-c-excel/
+        //https://razilov-code.ru/2017/12/13/microsoft-office-interop-excel/
+        void RebuildSheet(Excel.Workbook Book, string shName, int mode) 
+        {
+            Excel.Worksheet worksheet;
+            switch (mode)
+            {
+                case 0:                      //очистить контент листа shName
+                    worksheet = (Excel.Worksheet)Book.Worksheets[shName];
+                    worksheet.Cells.ClearContents();
+                    worksheet.Visible = Excel.XlSheetVisibility.xlSheetHidden;  // True 'False ' True 'False
+                    break;
+                case 1:                      //пересоздать лист shName
+                    foreach (Excel.Worksheet sheet in Book.Sheets)
+                    {
+                        if (shName == sheet.Name)
+                        {
+                            sheet.Delete();
+                            break;
+                        }
+                    }
+                    worksheet = (Excel.Worksheet)Book.Sheets.Add(After: Book.Sheets[Book.Sheets.Count]);
+                    worksheet.Name = shName;
+                    worksheet.Visible = Excel.XlSheetVisibility.xlSheetHidden;  // True 'False ' True 'False
+                    break;
+                case 2:                      //удалить лист shName
+                    foreach (Excel.Worksheet sheet in Book.Sheets)
+                    {
+                        if (shName == sheet.Name)
+                        {
+                            sheet.Delete();
+                            break;
+                        }
+                    }
+                    break;
+                case 3:                      //удалить листы кроме shName
+                    foreach (Excel.Worksheet sheet in Book.Sheets)
+                    {
+                        if (shName != sheet.Name)
+                        {
+                            sheet.Delete();
+                            break;
+                        }
+                    }
+                    break;
+            }   
+        }
     }
 
     public static class DateTimeDayOfMonthExtensions
