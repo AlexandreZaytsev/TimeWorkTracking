@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="clCalendar.cs" />
+    <Compile Include="clSystemChecks.cs" />
     <Compile Include="frmCalendar.cs">
       <SubType>Form</SubType>
     </Compile>

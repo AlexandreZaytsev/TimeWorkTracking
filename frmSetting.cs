@@ -135,43 +135,12 @@ namespace TimeWorkTracking
 
         private void frmSetting_Load(object sender, EventArgs e)
         {
-            if (!checkProvider()) this.Close();
+            if (!clSystemChecks.checkProvider()) this.Close();
             checkFileImport(Properties.Settings.Default.importFilename);
 
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             mainPanelSetting.Enabled = clMsSqlDatabase.CheckConnectWithConnectionStr(cs);
         }   
-        //проверить провайдеров для работы с Excel
-        private bool checkProvider() 
-        {
-            //проверим наличие провайдера
-            OleDbEnumerator enumerator = new OleDbEnumerator();
-            DataTable table1 = enumerator.GetElements();
-            bool jetOleDb = false, aceOleDb = false, excel = false;
-            foreach (DataRow row in table1.Rows)
-            {
-                if (row["SOURCES_NAME"].ToString() == "Microsoft.Jet.OLEDB.4.0") jetOleDb = true;
-                if (row["SOURCES_NAME"].ToString() == "Microsoft.ACE.OLEDB.12.0") aceOleDb = true;
-            }
-
-            Type officeType = Type.GetTypeFromProgID("Excel.Application");
-            if (officeType != null)
-                excel = true;
-
-            if (!(aceOleDb && excel)) 
-            {
-                MessageBox.Show(
-                    "В системе отсутствует провайдер\r\n"+
-                    " - Microsoft.ACE.OLEDB.12.0\r\n\r\n" +
-                    "функционал Экспорт/Импорт/Отчеты\r\n - недоступен\r\n" +
-                    "установите пожалуйста MS Excel2010 или выше",
-                    "Ошибка окружения",MessageBoxButtons.OK,MessageBoxIcon.Exclamation
-                    );
-                return false;
-            }
-            else
-               return true;
-        }
 
         //диалог выбора имени файла
         private void btFileName_Click(object sender, EventArgs e)

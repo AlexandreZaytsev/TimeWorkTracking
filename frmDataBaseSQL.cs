@@ -51,7 +51,13 @@ namespace TimeWorkTracking
         //test Connrection TWT (TimeWorkTracking database )
         private void btTestConnectionTwt_Click(object sender, EventArgs e)
         {
-            TestFormConnectionTwt();        //проверить соединение по настройкам формы
+            if (!clSystemChecks.CheckPing(tbServerTWT.Text))
+            MessageBox.Show("Cетевое имя сервера SQL\r\n  " + 
+                            tbServerTWT.Text + 
+                            "- недоступно\r\n", 
+                            "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else
+                TestFormConnectionTwt();        //проверить соединение по настройкам формы
         }
 
         //полчить строку соединения по настройкам формы
@@ -144,10 +150,22 @@ namespace TimeWorkTracking
         //проверить соединение с базами
         private void CheckConnects()
         {
-            if (clMsSqlDatabase.CheckConnectWithConnectionStr(Properties.Settings.Default.twtConnectionSrting))
-                this.picStatusTWT.Image = Properties.Resources.ok;
-            else
+            if (!clSystemChecks.CheckPing(tbServerTWT.Text)) 
+            {
                 this.picStatusTWT.Image = Properties.Resources.no;
+                MessageBox.Show("Cетевое имя сервера SQL\r\n  " +
+                                tbServerTWT.Text +
+                                "- недоступно\r\n",
+                                "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else 
+            {
+                if (clMsSqlDatabase.CheckConnectWithConnectionStr(Properties.Settings.Default.twtConnectionSrting))
+                    this.picStatusTWT.Image = Properties.Resources.ok;
+                else
+                    this.picStatusTWT.Image = Properties.Resources.no;
+
+            }
         }
 
         /*--------------------------------------------------------------------------------------------  

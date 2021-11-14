@@ -14,13 +14,6 @@ namespace TimeWorkTracking
 {
     class clImportFromExel
     {
-
-        
-
- 
-
-
-
         public static void ImportFromExcel_()
         {
             using (OleDbConnection con = new OleDbConnection(ConfigurationManager.ConnectionStrings["ExcelCon"].ConnectionString))
