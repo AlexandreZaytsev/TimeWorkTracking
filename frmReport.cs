@@ -20,7 +20,7 @@ namespace TimeWorkTracking
         private DateTime firstDayRange;                 //первый день диапазона  
         private DateTime lastDayRange;                  //последний день диапазона
         private int lengthRange;                        //длина диапазона
-        bool updateCalendar = false;
+        bool updateCalendar = false;                    //отключение события календаря
 
         public frmReport()
         {
@@ -44,7 +44,7 @@ namespace TimeWorkTracking
         //изменение даты календаря
         private void mcReport_DateChanged(object sender, DateRangeEventArgs e)
         {
-            if (updateCalendar) 
+            if (updateCalendar)         //проверка чтобы не срабатывало два раза
             {
                 getRangeFromType();     //вычислить границы диапазона в зависимости от типа формы
                 updateRange();          //проверка использования диапазона дат по умолчанию
@@ -80,7 +80,7 @@ namespace TimeWorkTracking
             updateCalendar = true;
         }
 
-        //проверка использования диапазона дат по умолчанию
+        //проверка флага использования диапазона дат по умолчанию
         private void chRange_CheckedChanged(object sender, EventArgs e)
         {
             getRangeFromType();     //вычислить границы диапазона в зависимости от типа формы

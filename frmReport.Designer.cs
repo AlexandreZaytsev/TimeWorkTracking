@@ -76,7 +76,7 @@ namespace TimeWorkTracking
             this.chRange.Size = new System.Drawing.Size(154, 17);
             this.chRange.TabIndex = 31;
             this.chRange.Text = "дииапазон по умолчанию";
-            this.toolTipMsgReport.SetToolTip(this.chRange, "использовать фиксированный диапазон\r\nзаданный по умолчанию");
+            this.toolTipMsgReport.SetToolTip(this.chRange, "использовать  диапазон дат\r\n(фиксированной длины)\r\nзаданный по умолчанию");
             this.chRange.UseVisualStyleBackColor = true;
             this.chRange.CheckedChanged += new System.EventHandler(this.chRange_CheckedChanged);
             // 
