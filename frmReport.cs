@@ -48,7 +48,7 @@ namespace TimeWorkTracking
             {
                 getRangeFromType();     //вычислить границы диапазона в зависимости от типа формы
                 updateRange();          //проверка использования диапазона дат по умолчанию
-            }
+            } 
         }
         //вычислить границы диапазона в зависимости от типа формы
         private void getRangeFromType() 
