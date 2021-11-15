@@ -102,25 +102,47 @@ namespace TimeWorkTracking
         //напечатать бланк температуры
         private void btFormHeatPrint_Click(object sender, EventArgs e)
         {
-            Excel.Worksheet worksheet;
+            Excel.Application excelApp;
+            Excel.Workbook workBook;
+            Excel.Worksheet workSheet;
+            Excel.Range workRange;
+            
+
             //Объявляем приложение
-            Excel.Application app = new Excel.Application
+            excelApp = new Excel.Application
             {
                 Visible = true,                                             //Отобразить Excel
                 SheetsInNewWorkbook = 1                                     //Количество листов в рабочей книге    
             };
-
-            //Добавить рабочую книгу
-            Excel.Workbook workBook = app.Workbooks.Add(Type.Missing);
-            //Отключить отображение окон с сообщениями
-            app.DisplayAlerts = false;
-            //Получаем первый лист документа (счет начинается с 1)
-            worksheet = (Excel.Worksheet)app.Worksheets.get_Item(1);
-            //Название листа (вкладки снизу)
-            worksheet.Name = "Journal";
+            workBook = excelApp.Workbooks.Add(Type.Missing);                //Добавить рабочую книгу
+            excelApp.DisplayAlerts = false;                                 //Отключить отображение окон с сообщениями
+            workSheet = (Excel.Worksheet)excelApp.Worksheets.get_Item(1);   //Получаем первый лист документа (счет начинается с 1)
+            workSheet.Name = "Journal";                                     //Название листа (вкладки снизу)
             //RebuildSheet(workBook, "Journal", 3);                            // удалить все листы кроме текущего
 
-            app.DisplayAlerts = false;
+            Excel.Style style = workBook.Styles.Add("myStyle");
+            style.Font.Name = "Times New Roman";
+            style.Font.Size = 11;
+
+            workRange = workSheet.Cells;
+            workRange.Style = "myStyle";
+
+            ((Excel.Range)workSheet.Cells[1, 1]).EntireColumn.ColumnWidth = 2;
+            ((Excel.Range)workSheet.Cells[1, 14]).EntireColumn.ColumnWidth = 2;
+            workSheet.PageSetup.LeftMargin = excelApp.InchesToPoints(0.2);
+            workSheet.PageSetup.RightMargin = excelApp.InchesToPoints(0.2);
+            workSheet.PageSetup.TopMargin = excelApp.InchesToPoints(0.2);
+            workSheet.PageSetup.BottomMargin = excelApp.InchesToPoints(0.2);
+            workSheet.PageSetup.HeaderMargin = excelApp.InchesToPoints(0);
+            workSheet.PageSetup.FooterMargin = excelApp.InchesToPoints(0.2);
+            workSheet.PageSetup.Orientation = Excel.XlPageOrientation.xlLandscape;
+            workSheet.PageSetup.FirstPageNumber = (int)Excel.Constants.xlAutomatic; //номер первой страници
+            workSheet.PageSetup.Zoom = 83;
+            workSheet.PageSetup.CenterFooter = "&B Страница &P";
+
+
+
+            excelApp.DisplayAlerts = false;
         }
         //напечатать бланк проходов
         private void btFormTimePrint_Click(object sender, EventArgs e)
