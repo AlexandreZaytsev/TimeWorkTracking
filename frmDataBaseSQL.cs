@@ -153,10 +153,12 @@ namespace TimeWorkTracking
             if (!clSystemChecks.CheckPing(tbServerTWT.Text)) 
             {
                 this.picStatusTWT.Image = Properties.Resources.no;
+             /*
                 MessageBox.Show("Cетевое имя сервера SQL\r\n  " +
                                 tbServerTWT.Text +
                                 "- недоступно\r\n",
                                 "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            */
             }
             else 
             {

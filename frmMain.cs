@@ -297,8 +297,9 @@ namespace TimeWorkTracking
             tsbtReportTotal.Enabled = conSQL;
             toolSetting.Enabled = conSQL;
 
-            if (msg != "")
-                MessageBox.Show(msg+"\r\nавторизуйтесь под Администратором и\r\nнастройте соединения", "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+//            if (msg != "")
+//                MessageBox.Show(msg+"\r\nавторизуйтесь под Администратором и\r\nнастройте соединения", "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
             return conSQL;
         }
 
