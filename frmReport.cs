@@ -51,7 +51,7 @@ namespace TimeWorkTracking
                     break;
                 case "FormTimeCheck":
                     mcReport.MaxSelectionCount = 7;
-                    mcReport.SelectionEnd = dt.FirstDayOfWeek().AddDays(7);
+                    mcReport.SelectionEnd = (dt.FirstDayOfWeek()).AddDays(6);
                     mcReport.SelectionStart = dt.FirstDayOfWeek();
                     mcReport.Select();
                     break;
@@ -73,55 +73,17 @@ namespace TimeWorkTracking
             return conSQL;
         }
 
-        /*--------------------------------------------------------------------------------------------  
-        CALLBACK InPut (подписка на внешние сообщения)
-        --------------------------------------------------------------------------------------------*/
-        /// <summary>
-        /// Callbacks the reload.
-        /// входящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров
-        // </summary>
-        /// <param name="controlName">имя CTRL</param>
-        /// <param name="controlParentName">имя родителя CNTRL</param>
-        /// <param name="param">параметры ключ-значение.</param>
-        private void CallbackReload(string typeForm, string nameForm, Dictionary<String, String> param)
-        {
-            this.Text = nameForm;
-            this.AccessibleName = typeForm;
-            switch (typeForm) 
-            {
-                case "FormHeatCheck":
-                    mcReport.MaxSelectionCount = 7;
-    //..            mcReport.SelectionRange.Start=DateTime.Today.ё.Month.
-                    break;
-                case "FormTimeCheck":
-                    mcReport.MaxSelectionCount = 7;
-                    break;
-                case "ReportTotal":
-    //                mcReport.SelectionRange.Start = DateTime.Today.FirstDayOfMonth();
-    //                mcReport.SelectionRange.Start = DateTime.Today.LastDayOfMonth();
-    //                mcReport.MaxSelectionCount = DateTime.Today.DaysInMonth();
-                    break;
-            }
-                /*
-                if (param.Count() != 0)
-                {
-                    Control[] cntrl = this.FilterControls(c => c.Name != null && c.Name.Equals(controlName) && c is DataGridView);
-                    ((DataGridView)cntrl[0]).DataSource = param;
-                }
-                */
-        }
 
+        //--------------------------------------------------------------------------------------------------------------------------------------------
         //напечатать бланк температуры
-        private void btPrintTempBlank_Click(object sender, EventArgs e)
+        private void btFormHeatPrint_Click(object sender, EventArgs e)
         {
             Excel.Worksheet worksheet;
             //Объявляем приложение
             Excel.Application app = new Excel.Application
             {
-                //Отобразить Excel
-                Visible = true,
-                //Количество листов в рабочей книге
-                SheetsInNewWorkbook = 1//2
+                Visible = true,                                             //Отобразить Excel
+                SheetsInNewWorkbook = 1                                     //Количество листов в рабочей книге    
             };
 
             //Добавить рабочую книгу
@@ -135,8 +97,18 @@ namespace TimeWorkTracking
             //RebuildSheet(workBook, "Journal", 3);                            // удалить все листы кроме текущего
 
             app.DisplayAlerts = false;
+        }
+        //напечатать бланк проходов
+        private void btFormTimePrint_Click(object sender, EventArgs e)
+        {
 
         }
+        //напечатать итоговый отчет
+        private void btReportTotalPrint_Click(object sender, EventArgs e)
+        {
+
+        }
+        //--------------------------------------------------------------------------------------------------------------------------------------------
 
         /*--------------------------------------------------------------------------------------------------------------------------------------------
         'пересоздать листы в книге
@@ -191,6 +163,55 @@ namespace TimeWorkTracking
                     break;
             }   
         }
+
+    /*--------------------------------------------------------------------------------------------  
+    CALLBACK InPut (подписка на внешние сообщения)
+    --------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// Callbacks the reload.
+        /// входящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров
+        // </summary>
+        /// <param name="controlName">имя CTRL</param>
+        /// <param name="controlParentName">имя родителя CNTRL</param>
+        /// <param name="param">параметры ключ-значение.</param>
+        private void CallbackReload(string typeForm, string nameForm, Dictionary<String, String> param)
+        {
+            this.Text = nameForm;
+            this.AccessibleName = typeForm;
+            switch (typeForm)
+            {
+                case "FormHeatCheck":
+                    mcReport.MaxSelectionCount = 7;
+                    btFormTimePrint.Visible = false;
+                    btReportTotalPrint.Visible = false;
+
+                    //..            mcReport.SelectionRange.Start=DateTime.Today.ё.Month.
+                    break;
+                case "FormTimeCheck":
+                    btFormHeatPrint.Visible = false;
+                    btReportTotalPrint.Visible = false;
+
+                    mcReport.MaxSelectionCount = 7;
+                    break;
+                case "ReportTotal":
+                    btFormHeatPrint.Visible = false;
+                    btFormTimePrint.Visible = false;
+
+                    //                mcReport.SelectionRange.Start = DateTime.Today.FirstDayOfMonth();
+                    //                mcReport.SelectionRange.Start = DateTime.Today.LastDayOfMonth();
+                    //                mcReport.MaxSelectionCount = DateTime.Today.DaysInMonth();
+                    break;
+            }
+            /*
+            if (param.Count() != 0)
+            {
+                Control[] cntrl = this.FilterControls(c => c.Name != null && c.Name.Equals(controlName) && c is DataGridView);
+                ((DataGridView)cntrl[0]).DataSource = param;
+            }
+            */
+        }
+
+
     }
 
     public static class DateTimeDayOfMonthExtensions
@@ -211,10 +232,15 @@ namespace TimeWorkTracking
             return new DateTime(value.Year, value.Month, value.DaysInMonth());
         }
         //первый день недели
-        public static DateTime FirstDayOfWeek(this DateTime value)
+        public static DateTime FirstDayOfWeek(this DateTime value, DayOfWeek firstDayOfWeek = DayOfWeek.Monday)
         {
-            return value.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek -
-                                            (int)DateTime.Today.DayOfWeek);
+            int diff = (7 + (value.DayOfWeek - firstDayOfWeek)) % 7;
+            DateTime firstDay = value.AddDays(-1 * diff).Date;
+            return firstDay;
+
+//            return value.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek -
+//                                            (int)value.DayOfWeek);
+
         }
     }
 }
