@@ -14,8 +14,14 @@ namespace TimeWorkTracking
 {
     public partial class frmReport : Form
     {
-        private clCalendar pCalendar;                                       //класс производственный календаоь
-        private DataTable dtSpecialMarks;                                   //специальные отметки
+        private clCalendar pCalendar;                   //класс производственный календаоь
+        private DataTable dtSpecialMarks;               //специальные отметки
+
+        private DateTime firstDayRange;                 //первый день диапазона  
+        private DateTime lastDayRange;                  //последний день диапазона
+        private int lengthRange;                        //длина диапазона
+        bool updateCalendar = false;
+
         public frmReport()
         {
             //подписка события внешних форм 
@@ -27,42 +33,60 @@ namespace TimeWorkTracking
         {
             if (!clSystemChecks.checkProvider()) this.Close();
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            if (CheckConnects())                                            //проверить соединение с базами
+            if (CheckConnects())                                            //проверить соединение с базой данных SQL
             {
-                mcReport.SelectionStart = DateTime.Now;
+                getRangeFromType();     //вычислить границы диапазона в зависимости от типа формы
+                updateRange();          //проверка использования диапазона дат по умолчанию
+
             }
         }
-
 
         //изменение даты календаря
         private void mcReport_DateChanged(object sender, DateRangeEventArgs e)
         {
-            setRangeFromType();
+            if (updateCalendar) 
+            {
+                getRangeFromType();     //вычислить границы диапазона в зависимости от типа формы
+                updateRange();          //проверка использования диапазона дат по умолчанию
+            }
         }
-        //выделить диапазон в зависимости от типа формы
-        private void setRangeFromType() 
+        //вычислить границы диапазона в зависимости от типа формы
+        private void getRangeFromType() 
         {
             DateTime dt = mcReport.SelectionStart;
             switch (this.AccessibleName)
             {
                 case "FormHeatCheck":
-                    mcReport.MaxSelectionCount = 7;
-                    //..                    mcReport.SelectionRange.Start=DateTime.Today.ё.Month.
-                    break;
                 case "FormTimeCheck":
-                    mcReport.MaxSelectionCount = 7;
-                    mcReport.SelectionEnd = (dt.FirstDayOfWeek()).AddDays(6);
-                    mcReport.SelectionStart = dt.FirstDayOfWeek();
-                    mcReport.Select();
+                    firstDayRange = dt.FirstDayOfWeek();
+                    lastDayRange = firstDayRange.AddDays(6);
+                    lengthRange = 7;
                     break;
                 case "ReportTotal":
-                    mcReport.MaxSelectionCount = dt.DaysInMonth();
-                    mcReport.SelectionEnd = dt.LastDayOfMonth();
-                    mcReport.SelectionStart = dt.FirstDayOfMonth();
-                 //   mcReport.Select(); 
+                    firstDayRange = dt.FirstDayOfMonth();
+                    lastDayRange = dt.LastDayOfMonth();
+                    lengthRange = dt.DaysInMonth();
                     break;
             }
         }
+        //обновить диапазон в зависимости от текущей даты
+        private void updateRange()
+        {
+            mcReport.MaxSelectionCount = chRange.Checked ? lengthRange : 365;   //!!!Обязательно задать вначале (инача будет резать диапазон)
+            updateCalendar = false;
+            if (chRange.Checked) 
+                mcReport.SetSelectionRange(firstDayRange, lastDayRange);
+//            mcReport.Select();
+            updateCalendar = true;
+        }
+
+        //проверка использования диапазона дат по умолчанию
+        private void chRange_CheckedChanged(object sender, EventArgs e)
+        {
+            getRangeFromType();     //вычислить границы диапазона в зависимости от типа формы
+            updateRange();          //проверка использования диапазона дат по умолчанию
+        }
+
         //проверить соединение с базами
         private bool CheckConnects()
         {
@@ -184,31 +208,16 @@ namespace TimeWorkTracking
                     mcReport.MaxSelectionCount = 7;
                     btFormTimePrint.Visible = false;
                     btReportTotalPrint.Visible = false;
-
-                    //..            mcReport.SelectionRange.Start=DateTime.Today.ё.Month.
                     break;
                 case "FormTimeCheck":
                     btFormHeatPrint.Visible = false;
                     btReportTotalPrint.Visible = false;
-
-                    mcReport.MaxSelectionCount = 7;
                     break;
                 case "ReportTotal":
                     btFormHeatPrint.Visible = false;
                     btFormTimePrint.Visible = false;
-
-                    //                mcReport.SelectionRange.Start = DateTime.Today.FirstDayOfMonth();
-                    //                mcReport.SelectionRange.Start = DateTime.Today.LastDayOfMonth();
-                    //                mcReport.MaxSelectionCount = DateTime.Today.DaysInMonth();
                     break;
             }
-            /*
-            if (param.Count() != 0)
-            {
-                Control[] cntrl = this.FilterControls(c => c.Name != null && c.Name.Equals(controlName) && c is DataGridView);
-                ((DataGridView)cntrl[0]).DataSource = param;
-            }
-            */
         }
 
 
