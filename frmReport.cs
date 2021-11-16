@@ -162,61 +162,60 @@ namespace TimeWorkTracking
             ((Excel.Range)workSheet.Cells[4, colTable]).Value = "Журнал учета средней температуры сотрудников Русской Промышленной Компании";
             ((Excel.Range)workSheet.Cells[5, colTable]).Value = "Период: " + mcReport.SelectionStart.ToString("dd.MM.yyyy") + " - " + mcReport.SelectionEnd.ToString("dd.MM.yyyy");
 
+            //заголовок
             workRange = workSheet.Range[workSheet.Cells[rowTable, colTable], workSheet.Cells[rowTable, colTable + daysCount * 2+1]];
-            workRange.Interior.Color = ColorTranslator.ToOle(Color.LightGray);
-//            workRange.Interior.Color = 15395562;// '-4144960  ' - 5066062 '-6908266  ' - 11480942
-            workRange.Interior.TintAndShade = 0;// '0.2
+                workRange.Interior.Color = ColorTranslator.ToOle(Color.LightGray);
+//                workRange.Interior.Color = 15395562;// '-4144960  ' - 5066062 '-6908266  ' - 11480942
+                workRange.Interior.TintAndShade = 0;// '0.2
 
-            workRange = workSheet.Range[workSheet.Cells[rowTable, colTable], workSheet.Cells[rowTable + 1, colTable + daysCount * 2+1]];
-            //Границы
-            workRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-            workRange.VerticalAlignment = Excel.XlHAlign.xlHAlignCenter;
-            workRange.WrapText = true;
-            workRange.Borders[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-            workRange.Borders[Excel.XlBordersIndex.xlEdgeTop].LineStyle = Excel.XlLineStyle.xlContinuous;
-            workRange.Borders[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
-            workRange.Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-            workRange.Borders[Excel.XlBordersIndex.xlInsideVertical].LineStyle = Excel.XlLineStyle.xlContinuous;
-            workRange.Borders[Excel.XlBordersIndex.xlInsideHorizontal].LineStyle = Excel.XlLineStyle.xlContinuous;
-            workRange.Font.Bold = true;
+                workRange = workSheet.Range[workSheet.Cells[rowTable, colTable], workSheet.Cells[rowTable + 1, colTable + daysCount * 2+1]];
+                //Границы
+                workRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                workRange.VerticalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                workRange.WrapText = true;
+                workRange.Borders[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
+                workRange.Borders[Excel.XlBordersIndex.xlEdgeTop].LineStyle = Excel.XlLineStyle.xlContinuous;
+                workRange.Borders[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
+                workRange.Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
+                workRange.Borders[Excel.XlBordersIndex.xlInsideVertical].LineStyle = Excel.XlLineStyle.xlContinuous;
+                workRange.Borders[Excel.XlBordersIndex.xlInsideHorizontal].LineStyle = Excel.XlLineStyle.xlContinuous;
+                workRange.Font.Bold = true;
 
-            //Ширина
-            ((Excel.Range)workRange.Rows[1]).RowHeight = 28.5;
-            ((Excel.Range)workRange.Rows[2]).RowHeight = 25;//       'высота строки с рашифровкой
-            ((Excel.Range)workRange.Columns[1]).ColumnWidth = 3.5;
-            ((Excel.Range)workRange.Columns[2]).ColumnWidth = 38.5;
-            for(int i = 3; i <= daysCount*2+2; i++)
-            {
-                ((Excel.Range)workRange.Columns[i]).ColumnWidth = 11.5;
-            }
+                //Ширина
+                ((Excel.Range)workRange.Rows[1]).RowHeight = 28.5;
+                ((Excel.Range)workRange.Rows[2]).RowHeight = 25;//       'высота строки с рашифровкой
+                ((Excel.Range)workRange.Columns[1]).ColumnWidth = 3.5;
+                ((Excel.Range)workRange.Columns[2]).ColumnWidth = 38.5;
+                for(int i = 3; i <= daysCount*2+2; i++)
+                {
+                    ((Excel.Range)workRange.Columns[i]).ColumnWidth = 11.5;
+                }
 
-            //Заголовок (value2 реальное значение (работает быстрее) value-форматированное)
-            workRange.Cells[1, 1] = "№";
-            //            workSheet.Range["A1"].Value = "№";
-            //            workSheet.get_Range("A1").Value2 = "№";
-            workRange.Cells[1, 2] = "Фамилия Имя Отчество";
-            ((Excel.Range)workRange.Cells[1, 2]).Font.Bold = true;
+                //Заголовок (value2 реальное значение (работает быстрее) value-форматированное)
+                workRange.Cells[1, 1] = "№";
+                //            workSheet.Range["A1"].Value = "№";
+                //            workSheet.get_Range("A1").Value2 = "№";
+                workRange.Cells[1, 2] = "Фамилия Имя Отчество";
+                ((Excel.Range)workRange.Cells[1, 2]).Font.Bold = true;
 
-
-            int uCount = 0;
-            ((Excel.Range)workSheet.Range[workSheet.Cells[1, 2]]).Value2 = uCount + 1;
-            workRange = (Excel.Range)workSheet.Range[workSheet.Cells[2, 2]];
-            workRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-            workRange.IndentLevel = 1;
-            workRange.Font.Size = 12;
-            //           workRange.Value2 = CStr(Arr(uCount))   //ФИО сотрудника
+                int uCount = 0;
+                workRange.Cells[1, 2] = uCount + 1;
+                ((Excel.Range)workRange.Cells[1, 2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+                ((Excel.Range)workRange.Cells[1, 2]).IndentLevel = 1;
+                ((Excel.Range)workRange.Cells[1, 2]).Font.Size = 12;
+                //           workRange.Value2 = CStr(Arr(uCount))   //ФИО сотрудника
 
 
-            for (int i = 0; i <= daysCount * 2 - 2; i+=2) 
-            {
-                workSheet.Range[workSheet.Cells[1, 3+i], workSheet.Cells[1, 4+i]].Merge(Type.Missing);
-//            tDate = DateAdd("d", i / 2, vDate)
-//            .Cells(1, 3 + i).Value = WeekdayName(Weekday(tDate, 0)) & vbCrLf & FormatDateTime(tDate, 1)
-                workSheet.Range[workSheet.Cells[2, 3 + i], workSheet.Cells[2, 4 + i]].Merge(Type.Missing);
-            }
+                for (int i = 0; i <= daysCount * 2 - 2; i+=2) 
+                {
+                    workSheet.Range[workSheet.Cells[1, 3+i], workSheet.Cells[1, 4+i]].Merge(Type.Missing);
+//                  tDate = DateAdd("d", i / 2, vDate)
+//                  .Cells(1, 3 + i).Value = WeekdayName(Weekday(tDate, 0)) & vbCrLf & FormatDateTime(tDate, 1)
+                    workSheet.Range[workSheet.Cells[2, 3 + i], workSheet.Cells[2, 4 + i]].Merge(Type.Missing);
+                }
 
-//            Set rCaption = Range(.Cells(1, 1), .Cells(3, 12))
-//          Set rData = Range(.Cells(2, 1), .Cells(2, 12))
+            Excel.Range rCaption = workSheet.Range[workSheet.Cells[1, 1], workSheet.Cells[3, daysCount * 2+2]];
+            Excel.Range rData = workSheet.Range[workSheet.Cells[2, 1], workSheet.Cells[2, daysCount * 2 + 2]];
 
 
             excelApp.DisplayAlerts = false;
