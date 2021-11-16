@@ -171,9 +171,12 @@ namespace TimeWorkTracking
             ((Excel.Range)workSheet.Rows[6]).EntireRow.Hidden = true;
 
             //главная надпись
-            workRange = workSheet.Range[workSheet.Cells[4, colTable], workSheet.Cells[5, colTable + daysCount * 2 + 1]];
-                workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1, workRange.Columns.Count]].Merge(Type.Missing);
-                workSheet.Range[workRange.Cells[2, 1], workRange.Cells[2, workRange.Columns.Count]].Merge(Type.Missing);
+                workRange = workSheet.Range[workSheet.Cells[4, colTable], workSheet.Cells[5, colTable + daysCount * 2 + 1]];
+                ((Excel.Range)workRange.Rows[1]).Merge(Type.Missing);
+                ((Excel.Range)workRange.Rows[2]).Merge(Type.Missing);
+
+//            workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1, workRange.Columns.Count]].Merge(Type.Missing);
+//                workSheet.Range[workRange.Cells[2, 1], workRange.Cells[2, workRange.Columns.Count]].Merge(Type.Missing);
                 workRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
                 workRange.VerticalAlignment = Excel.XlHAlign.xlHAlignCenter;
                 workRange.Font.Bold = true;
@@ -242,14 +245,48 @@ namespace TimeWorkTracking
             Excel.Range rData = workSheet.Range[workSheet.Cells[2, 1], workSheet.Cells[2, daysCount * 2 + 2]];
 
 
+            tableResize(workBook, workSheet.Name, 9, 2, 17, 5);  //расширим таблицу спецификации строка 6, колонки 2-UBound(xlsArrForList, 2) + 2, количество UBound(xlsArrForList, 1)+1
+
+
             //Настройки Application вернуть обратно
-            excelApp.DisplayAlerts = false;                                 //Разрешить отображение окон с сообщениями
-            excelApp.ScreenUpdating = false;                                //Зазрешить перерисовку экрана    
+            excelApp.DisplayAlerts = true;                                 //Разрешить отображение окон с сообщениями
+            excelApp.ScreenUpdating = true;                                //Зазрешить перерисовку экрана    
             //            excelApp.Quit();
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
         }
-        //напечатать бланк проходов
-        private void btFormTimePrint_Click(object sender, EventArgs e)
+
+        /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        ' функция расширения таблицы EXCELL с сохранением форматирования
+        '   xlsDoc - документ Excel   (обязательно передавать документ, листа недостаточно)
+        '   shName - имя лист рабочей книги Excel
+        '   spRow - номер строки (расширяемая строка таблицы)
+        '   spColFirst - номер колонки (первая колонка таблицы)
+        '   spColLast - номер колонки (последняя колонка таблицы)
+        '   spCount - количество строк на которое будем расширяться
+        '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+        private void tableResize(Excel.Workbook xlsDoc, string shName, int spRow, int spColFirst, int spColLast, int spCount)
+        {
+            Excel.Worksheet wSheet = (Excel.Worksheet)xlsDoc.Sheets[shName];
+            if (spCount > 1) 
+            {
+                Excel.Range rng = (Excel.Range)((Excel.Range)((Excel.Range)wSheet.Cells[spRow + 1, spColFirst]).get_Resize(1).EntireRow).Insert(Excel.XlDirection.xlDown);
+                //              ((Excel.Range)wSheet.Cells[spRow + 1, spColFirst]).Resize[spCount - 1].EntireRow.Insert;
+ //               Excel.Range rng1 = ((Excel.Range)wSheet.Range[wSheet.Cells[spRow, spColFirst], wSheet.Cells[spRow, spColLast]]).Copy(wSheet.Range[wSheet.Cells[spRow + 1, spColFirst], wSheet.Cells[spRow + 1 + spCount - 2, spColLast]]);
+
+
+                Excel.Range from = wSheet.Range[wSheet.Cells[spRow, spColFirst], wSheet.Cells[spRow, spColLast]];
+                Excel.Range to = wSheet.Range[wSheet.Cells[spRow + 1, spColFirst], wSheet.Cells[spRow + 1 + spCount - 2, spColLast]];
+                from.Copy(to);
+
+                //    wSheet.Application.CutCopyMode = False
+                //     .Cells(spRow + 1, spColFirst).Resize(spCount - 1).EntireRow.Insert
+                //     .Range(.Cells(spRow, spColFirst), .Cells(spRow, spColLast)).Copy.Range(.Cells(spRow + 1, spColFirst), .Cells(spRow + 1 + spCount - 2, spColLast))
+
+
+            } 
+        }
+            //напечатать бланк проходов
+            private void btFormTimePrint_Click(object sender, EventArgs e)
         {
 
         }
