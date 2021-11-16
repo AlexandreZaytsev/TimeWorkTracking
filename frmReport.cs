@@ -32,6 +32,7 @@ namespace TimeWorkTracking
             //подписка события внешних форм 
             CallBack_FrmMain_outEvent.callbackEventHandler = new CallBack_FrmMain_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
             InitializeComponent();
+            pCalendar = new clCalendar();                                   //создать экземпляр класса Производственный календарь
         }
 
         private void frmReport_Load(object sender, EventArgs e)
@@ -42,6 +43,10 @@ namespace TimeWorkTracking
             {
                 getRangeFromType();     //вычислить границы диапазона в зависимости от типа формы
                 updateRange();          //проверка использования диапазона дат по умолчанию
+
+                pCalendar.uploadCalendar(cs, "Select * From twt_GetDateInfo('', '') order by dWork");   //прочитаем данные производственного календаря
+                LoadBoldedDatesCalendar(pCalendar.getListWorkHoliday());                                //Загрузить производственный календарь в массив непериодических выделенных дат
+
 
             }
         }
@@ -90,6 +95,17 @@ namespace TimeWorkTracking
         {
             getRangeFromType();     //вычислить границы диапазона в зависимости от типа формы
             updateRange();          //проверка использования диапазона дат по умолчанию
+        }
+
+        //Загрузить Производственный календарь Data из DataSet в Calendar
+        private void LoadBoldedDatesCalendar(List<DateTime> dList)
+        {
+            mcReport.RemoveAllBoldedDates();                           //Сбросить все непериодические даты
+            foreach (DateTime dt in dList)
+            {
+                mcReport.AddBoldedDate(dt);
+            }
+            mcReport.UpdateBoldedDates();
         }
 
         //проверить соединение с базами
@@ -199,10 +215,10 @@ namespace TimeWorkTracking
                 ((Excel.Range)workRange.Cells[1, 2]).Font.Bold = true;
 
                 int uCount = 0;
-                workRange.Cells[1, 2] = uCount + 1;
-                ((Excel.Range)workRange.Cells[1, 2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-                ((Excel.Range)workRange.Cells[1, 2]).IndentLevel = 1;
-                ((Excel.Range)workRange.Cells[1, 2]).Font.Size = 12;
+                workRange.Cells[2, 1] = uCount + 1;
+                ((Excel.Range)workRange.Cells[2, 2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+                ((Excel.Range)workRange.Cells[2, 2]).IndentLevel = 1;
+                ((Excel.Range)workRange.Cells[2, 2]).Font.Size = 12;
                 //           workRange.Value2 = CStr(Arr(uCount))   //ФИО сотрудника
 
 

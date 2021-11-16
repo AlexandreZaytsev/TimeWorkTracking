@@ -42,7 +42,7 @@ namespace TimeWorkTracking
                         smDStop.Value = DateTime.Now;
                         smTStop.Value = DateTime.Now.AddHours(1);
             */
-            pCalendar = new clCalendar();
+            pCalendar = new clCalendar();                                   //создать экземпляр класса Производственный календарь
             btDelete.Visible = false;                                       //заблокировать кнопку DELETE 
         }
         private void frmMain_Load(object sender, EventArgs e)
@@ -52,9 +52,9 @@ namespace TimeWorkTracking
             if (CheckConnects())                                            //проверить соединение с базами
             {
                 //                webInfoDay.Visible = true;
-                pCalendar.uploadCalendar(cs, "Select * From twt_GetDateInfo('', '') order by dWork");
-                LoadBoldedDatesCalendar(pCalendar.getListWorkHoliday());    //Загрузить производственный календарь в массив непериодических выделенных дат
-                webInfoDay.DocumentText = pCalendar.getDateInfo(mcRegDate.SelectionStart);   //прочитать харектеристики дня по производственному календарю 
+                pCalendar.uploadCalendar(cs, "Select * From twt_GetDateInfo('', '') order by dWork");   //прочитаем данные производственного календаря
+                LoadBoldedDatesCalendar(pCalendar.getListWorkHoliday());                                //Загрузить производственный календарь в массив непериодических выделенных дат
+                webInfoDay.DocumentText = pCalendar.getDateInfo(mcRegDate.SelectionStart);              //прочитать харектеристики дня по производственному календарю 
 
                 cbSMarks.DisplayMember = "Name";
                 cbSMarks.ValueMember = "id";
