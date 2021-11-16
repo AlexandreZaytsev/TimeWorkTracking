@@ -130,20 +130,24 @@ namespace TimeWorkTracking
                 SheetsInNewWorkbook = 1                                     //Количество листов в рабочей книге    
             };
             workBook = excelApp.Workbooks.Add(Type.Missing);                //Добавить рабочую книгу
-            excelApp.DisplayAlerts = false;                                 //Отключить отображение окон с сообщениями
+
+            //Настройки Application установить
+            excelApp.DisplayAlerts = false;                                 //Запретить отображение окон с сообщениями
+//            excelApp.ScreenUpdating = false;                                //Запретить перерисовку экрана    
+            excelApp.ActiveWindow.Zoom = 80;                                //Масштаб листа
+
+            //Переименовать лист
             workSheet = (Excel.Worksheet)excelApp.Worksheets.get_Item(1);   //Получаем первый лист документа (счет начинается с 1)
             workSheet.Name = "Journal";                                     //Название листа (вкладки снизу)
             //RebuildSheet(workBook, "Journal", 3);                         // удалить все листы кроме текущего
 
-            //оформление листа
+            //оформление листа и применение стиля
             Excel.Style style = workBook.Styles.Add("reportStyle");
             style.Font.Name = "Times New Roman";
             style.Font.Size = 11;
-
-//            workRange = workSheet.Cells;
-//            workRange.Style = "reportStyle";
             ((Excel.Range)workSheet.Cells).Style = "reportStyle";
 
+            //настройки печати
             ((Excel.Range)workSheet.Cells[1, 1]).EntireColumn.ColumnWidth = 2;
             ((Excel.Range)workSheet.Cells[1, 14]).EntireColumn.ColumnWidth = 2;
             workSheet.PageSetup.LeftMargin = excelApp.CentimetersToPoints(0.2);
@@ -157,34 +161,33 @@ namespace TimeWorkTracking
             workSheet.PageSetup.Zoom = 83;
             workSheet.PageSetup.CenterFooter = "&B Страница &P";
 
-            int rowTable = 8;
-            int colTable = 2;
+            //поехали
+            int rowTable = 8;                                                       //номер строки начала заголовка
+            int colTable = 2;                                                       //номер колонки начала зазоловка
             double daysCount= (mcReport.SelectionRange.End- mcReport.SelectionRange.Start).TotalDays+1;
 
-            ((Excel.Range)workSheet.Rows[2]).EntireRow.Hidden = true;
+            ((Excel.Range)workSheet.Rows[2]).EntireRow.Hidden = true;               //скрыть строку
             ((Excel.Range)workSheet.Rows[3]).EntireRow.Hidden = true;
             ((Excel.Range)workSheet.Rows[6]).EntireRow.Hidden = true;
 
-            workSheet.Range[workSheet.Cells[4, colTable], workSheet.Cells[4, colTable + daysCount*2+1]].Merge(Type.Missing);
-            workSheet.Range[workSheet.Cells[5, colTable], workSheet.Cells[5, colTable + daysCount*2+1]].Merge(Type.Missing);
+            //главная надпись
+            workRange = workSheet.Range[workSheet.Cells[4, colTable], workSheet.Cells[5, colTable + daysCount * 2 + 1]];
+                workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1, workRange.Columns.Count]].Merge(Type.Missing);
+                workSheet.Range[workRange.Cells[2, 1], workRange.Cells[2, workRange.Columns.Count]].Merge(Type.Missing);
+                workRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                workRange.VerticalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                workRange.Font.Bold = true;
+                workRange.Font.Name = "Times New Roman";
+                workRange.Font.Size = 14;
+                workRange.Cells[1,1] = "Журнал учета средней температуры сотрудников Русской Промышленной Компании";
+                workRange.Cells[2,1] = "Период: " + mcReport.SelectionStart.ToString("dd.MM.yyyy") + " - " + mcReport.SelectionEnd.ToString("dd.MM.yyyy");
 
-            workRange = workSheet.Range[workSheet.Cells[4, colTable], workSheet.Cells[5, colTable + daysCount*2+1]];
-            workRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-            workRange.VerticalAlignment = Excel.XlHAlign.xlHAlignCenter;
-            workRange.Font.Bold = true;
-            workRange.Font.Name = "Times New Roman";
-            workRange.Font.Size = 14;
-
-            ((Excel.Range)workSheet.Cells[4, colTable]).Value = "Журнал учета средней температуры сотрудников Русской Промышленной Компании";
-            ((Excel.Range)workSheet.Cells[5, colTable]).Value = "Период: " + mcReport.SelectionStart.ToString("dd.MM.yyyy") + " - " + mcReport.SelectionEnd.ToString("dd.MM.yyyy");
-
-            //заголовок
+            //Таблица заголовок и строка данных
             workRange = workSheet.Range[workSheet.Cells[rowTable, colTable], workSheet.Cells[rowTable, colTable + daysCount * 2+1]];
                 workRange.Interior.Color = ColorTranslator.ToOle(Color.LightGray);
-//                workRange.Interior.Color = 15395562;// '-4144960  ' - 5066062 '-6908266  ' - 11480942
                 workRange.Interior.TintAndShade = 0;// '0.2
-
-                workRange = workSheet.Range[workSheet.Cells[rowTable, colTable], workSheet.Cells[rowTable + 1, colTable + daysCount * 2+1]];
+                //Переопределим диапазон на строку данных и нарисуем рамки    
+                workRange = workSheet.Range[workRange.Offset[0, 0], workRange.Offset[1, 0]];
                 //Границы
                 workRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
                 workRange.VerticalAlignment = Excel.XlHAlign.xlHAlignCenter;
@@ -197,18 +200,23 @@ namespace TimeWorkTracking
                 workRange.Borders[Excel.XlBordersIndex.xlInsideHorizontal].LineStyle = Excel.XlLineStyle.xlContinuous;
                 workRange.Font.Bold = true;
 
-                //Ширина
-                ((Excel.Range)workRange.Rows[1]).RowHeight = 28.5;
-                ((Excel.Range)workRange.Rows[2]).RowHeight = 25;//       'высота строки с рашифровкой
-                ((Excel.Range)workRange.Columns[1]).ColumnWidth = 3.5;
-                ((Excel.Range)workRange.Columns[2]).ColumnWidth = 38.5;
+            //Ширина
+            ((Excel.Range)workRange.Rows[1]).RowHeight = 40;// 28.5;          //высота строки заголовка          
+                ((Excel.Range)workRange.Rows[2]).RowHeight = 25;            //высота строки данных
+                ((Excel.Range)workRange.Rows[2]).WrapText = true;
+
+                ((Excel.Range)workRange.Columns[1]).ColumnWidth = 3.5;      //ширина колонки с номером
+                ((Excel.Range)workRange.Columns[2]).ColumnWidth = 38.5;     //ширина колонки ФИО 
                 for(int i = 3; i <= daysCount*2+2; i++)
                 {
-                    ((Excel.Range)workRange.Columns[i]).ColumnWidth = 11.5;
-                }
+                    ((Excel.Range)workRange.Columns[i]).ColumnWidth = 8;// 10;// 11.5; //ширина колонок дней
+                    ((Excel.Range)workRange.Columns[i]).Font.Size = 10;     //
+                    ((Excel.Range)workRange.Columns[i]).Font.Bold = false;
+                    ((Excel.Range)workRange.Columns[i]).VerticalAlignment = Excel.XlVAlign.xlVAlignTop;
+            }
 
-                //Заголовок (value2 реальное значение (работает быстрее) value-форматированное)
-                workRange.Cells[1, 1] = "№";
+            //Заголовок (value2 реальное значение (работает быстрее) value-форматированное)
+            workRange.Cells[1, 1] = "№";
                 //            workSheet.Range["A1"].Value = "№";
                 //            workSheet.get_Range("A1").Value2 = "№";
                 workRange.Cells[1, 2] = "Фамилия Имя Отчество";
@@ -224,18 +232,20 @@ namespace TimeWorkTracking
 
                 for (int i = 0; i <= daysCount * 2 - 2; i+=2) 
                 {
-                    workSheet.Range[workSheet.Cells[1, 3+i], workSheet.Cells[1, 4+i]].Merge(Type.Missing);
-//                  tDate = DateAdd("d", i / 2, vDate)
-//                  .Cells(1, 3 + i).Value = WeekdayName(Weekday(tDate, 0)) & vbCrLf & FormatDateTime(tDate, 1)
-                    workSheet.Range[workSheet.Cells[2, 3 + i], workSheet.Cells[2, 4 + i]].Merge(Type.Missing);
+                    workSheet.Range[workRange.Cells[1, 3+i], workRange.Cells[1, 4+i]].Merge(Type.Missing);
+                    DateTime tDate = mcReport.SelectionStart.AddDays(i / 2);
+                    workRange.Cells[1, 3 + i] = tDate.ToString("dddd") + "\r\n" + tDate.ToString("dd.MM.yyyy") + "\r\n" + pCalendar.getDateDescription(tDate);
+                    workSheet.Range[workRange.Cells[2, 3 + i], workRange.Cells[2, 4 + i]].Merge(Type.Missing);
                 }
 
             Excel.Range rCaption = workSheet.Range[workSheet.Cells[1, 1], workSheet.Cells[3, daysCount * 2+2]];
             Excel.Range rData = workSheet.Range[workSheet.Cells[2, 1], workSheet.Cells[2, daysCount * 2 + 2]];
 
 
-            excelApp.DisplayAlerts = false;
-//            excelApp.Quit();
+            //Настройки Application вернуть обратно
+            excelApp.DisplayAlerts = false;                                 //Разрешить отображение окон с сообщениями
+            excelApp.ScreenUpdating = false;                                //Зазрешить перерисовку экрана    
+            //            excelApp.Quit();
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
         }
         //напечатать бланк проходов

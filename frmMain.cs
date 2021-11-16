@@ -54,7 +54,7 @@ namespace TimeWorkTracking
                 //                webInfoDay.Visible = true;
                 pCalendar.uploadCalendar(cs, "Select * From twt_GetDateInfo('', '') order by dWork");   //прочитаем данные производственного календаря
                 LoadBoldedDatesCalendar(pCalendar.getListWorkHoliday());                                //Загрузить производственный календарь в массив непериодических выделенных дат
-                webInfoDay.DocumentText = pCalendar.getDateInfo(mcRegDate.SelectionStart);              //прочитать харектеристики дня по производственному календарю 
+                webInfoDay.DocumentText = pCalendar.getDateInfoHTML(mcRegDate.SelectionStart);          //прочитать харектеристики дня по производственному календарю 
 
                 cbSMarks.DisplayMember = "Name";
                 cbSMarks.ValueMember = "id";
@@ -66,7 +66,7 @@ namespace TimeWorkTracking
             }
             else 
             {
-                webInfoDay.DocumentText = pCalendar.getDateInfo(DateTime.Today);
+                webInfoDay.DocumentText = pCalendar.getDateInfoHTML(DateTime.Today);
             }
         }
 
@@ -441,7 +441,7 @@ namespace TimeWorkTracking
         {
             int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
                 
-            webInfoDay.DocumentText = pCalendar.getDateInfo(e.Start);
+            webInfoDay.DocumentText = pCalendar.getDateInfoHTML(e.Start);
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
 
