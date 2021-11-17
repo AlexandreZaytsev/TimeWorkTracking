@@ -245,7 +245,7 @@ namespace TimeWorkTracking
             Excel.Range rData = workSheet.Range[workSheet.Cells[2, 1], workSheet.Cells[2, daysCount * 2 + 2]];
 
 
-            tableResize(workBook, workSheet.Name, 9, 2, 17, 5);  //расширим таблицу спецификации строка 6, колонки 2-UBound(xlsArrForList, 2) + 2, количество UBound(xlsArrForList, 1)+1
+            tableResize(workSheet, 9, 2, 17, 5);  //расширим таблицу спецификации строка 6, колонки 2-UBound(xlsArrForList, 2) + 2, количество UBound(xlsArrForList, 1)+1
 
 
             //Настройки Application вернуть обратно
@@ -257,33 +257,30 @@ namespace TimeWorkTracking
 
         /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         ' функция расширения таблицы EXCELL с сохранением форматирования
-        '   xlsDoc - документ Excel   (обязательно передавать документ, листа недостаточно)
-        '   shName - имя лист рабочей книги Excel
+        ' //  xlsDoc - документ Excel   (обязательно передавать документ, листа недостаточно)
+        ' //  shName - имя лист рабочей книги Excel
+        '   wShhet - лист книги
         '   spRow - номер строки (расширяемая строка таблицы)
         '   spColFirst - номер колонки (первая колонка таблицы)
         '   spColLast - номер колонки (последняя колонка таблицы)
         '   spCount - количество строк на которое будем расширяться
         '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-        private void tableResize(Excel.Workbook xlsDoc, string shName, int spRow, int spColFirst, int spColLast, int spCount)
+        private void tableResize(Excel.Worksheet wSheet, int spRow, int spColFirst, int spColLast, int spCount)
         {
-            Excel.Worksheet wSheet = (Excel.Worksheet)xlsDoc.Sheets[shName];
             if (spCount > 1) 
             {
-                Excel.Range rng = (Excel.Range)((Excel.Range)((Excel.Range)wSheet.Cells[spRow + 1, spColFirst]).get_Resize(1).EntireRow).Insert(Excel.XlDirection.xlDown);
-                //              ((Excel.Range)wSheet.Cells[spRow + 1, spColFirst]).Resize[spCount - 1].EntireRow.Insert;
- //               Excel.Range rng1 = ((Excel.Range)wSheet.Range[wSheet.Cells[spRow, spColFirst], wSheet.Cells[spRow, spColLast]]).Copy(wSheet.Range[wSheet.Cells[spRow + 1, spColFirst], wSheet.Cells[spRow + 1 + spCount - 2, spColLast]]);
+                ((Excel.Range)wSheet.Cells[spRow + 1, spColFirst]).Resize[spCount - 1].EntireRow.Insert(Excel.XlDirection.xlDown);
+                ((Excel.Range)wSheet.Range[wSheet.Cells[spRow, spColFirst], wSheet.Cells[spRow, spColLast]]).Copy(((Excel.Range)wSheet.Range[wSheet.Cells[spRow + 1, spColFirst], wSheet.Cells[spRow + 1 + spCount - 2, spColLast]]));
 
+                /*
+                Excel.Range rng4 = (Excel.Range)wSheet.Cells[spRow + 1, spColFirst];
+                rng4.Resize[spCount - 1].EntireRow.Insert(Excel.XlDirection.xlDown);
 
                 Excel.Range from = wSheet.Range[wSheet.Cells[spRow, spColFirst], wSheet.Cells[spRow, spColLast]];
                 Excel.Range to = wSheet.Range[wSheet.Cells[spRow + 1, spColFirst], wSheet.Cells[spRow + 1 + spCount - 2, spColLast]];
                 from.Copy(to);
-
-                //    wSheet.Application.CutCopyMode = False
-                //     .Cells(spRow + 1, spColFirst).Resize(spCount - 1).EntireRow.Insert
-                //     .Range(.Cells(spRow, spColFirst), .Cells(spRow, spColLast)).Copy.Range(.Cells(spRow + 1, spColFirst), .Cells(spRow + 1 + spCount - 2, spColLast))
-
-
-            } 
+                */
+            }
         }
             //напечатать бланк проходов
             private void btFormTimePrint_Click(object sender, EventArgs e)
