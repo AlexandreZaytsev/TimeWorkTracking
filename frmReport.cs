@@ -19,13 +19,17 @@ namespace TimeWorkTracking
 
         private DateTime firstDayRange;                 //первый день диапазона  
         private DateTime lastDayRange;                  //последний день диапазона
-        private int lengthRange;                        //длина диапазона
+        private int lengthRangeDays;                    //длина диапазона дат 
         bool updateCalendar = false;                    //отключение события календаря
 
         private Excel.Application excelApp;
         private Excel.Workbook workBook;
         private Excel.Worksheet workSheet;
         private Excel.Range workRange;
+        object mis = Type.Missing;
+
+        private string[,] captionData;                  //массив данных заголовка Excel
+        private string[,] tableData;                    //массив данных таблицы Excel
 
         public frmReport()
         {
@@ -44,9 +48,15 @@ namespace TimeWorkTracking
                 getRangeFromType();     //вычислить границы диапазона в зависимости от типа формы
                 updateRange();          //проверка использования диапазона дат по умолчанию
 
+                //производственный календарь
                 pCalendar.uploadCalendar(cs, "Select * From twt_GetDateInfo('', '') order by dWork");   //прочитаем данные производственного календаря
                 LoadBoldedDatesCalendar(pCalendar.getListWorkHoliday());                                //Загрузить производственный календарь в массив непериодических выделенных дат
 
+//                DataTable data = clMsSqlDatabase.TableRequest(cs, sql);
+                //массив данных заголовка
+
+ //               dtWorkCalendar = clMsSqlDatabase.TableRequest(cs, sql);
+                //массив данных таблицы
 
             }
         }
@@ -58,8 +68,15 @@ namespace TimeWorkTracking
             {
                 getRangeFromType();     //вычислить границы диапазона в зависимости от типа формы
                 updateRange();          //проверка использования диапазона дат по умолчанию
+//                uploadCaptionExel((int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1);
             } 
         }
+        //обновить длину диапазона при изменении
+        private void mcReport_DateSelected(object sender, DateRangeEventArgs e)
+        {
+//            uploadCaptionExel((int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1);
+        }
+
         //вычислить границы диапазона в зависимости от типа формы
         private void getRangeFromType() 
         {
@@ -70,19 +87,19 @@ namespace TimeWorkTracking
                 case "FormTimeCheck":
                     firstDayRange = dt.FirstDayOfWeek();
                     lastDayRange = firstDayRange.AddDays(6);
-                    lengthRange = 7;// 5;
+                    lengthRangeDays = 7;// 5;
                     break;
                 case "ReportTotal":
                     firstDayRange = dt.FirstDayOfMonth();
                     lastDayRange = dt.LastDayOfMonth();
-                    lengthRange = dt.DaysInMonth();
+                    lengthRangeDays = dt.DaysInMonth();
                     break;
             }
         }
         //обновить диапазон в зависимости от текущей даты
         private void updateRange()
         {
-            mcReport.MaxSelectionCount = chRange.Checked ? lengthRange : 365;   //!!!Обязательно задать вначале (инача будет резать диапазон)
+            mcReport.MaxSelectionCount = chRange.Checked ? lengthRangeDays : 365;   //!!!Обязательно задать вначале (инача будет резать диапазон)
             updateCalendar = false;
             if (chRange.Checked) 
                 mcReport.SetSelectionRange(firstDayRange, lastDayRange);
@@ -95,6 +112,25 @@ namespace TimeWorkTracking
         {
             getRangeFromType();     //вычислить границы диапазона в зависимости от типа формы
             updateRange();          //проверка использования диапазона дат по умолчанию
+        }
+
+        //Загрузить массив данных для заголовка Excel (с учетом объединенных ячеек - спользуем первое значение)
+        private int uploadCaptionExel(int lengthDays) 
+        {
+            DateTime tDate;
+            captionData = null;
+            captionData = new string[2, lengthDays*2 + 2];  //Создаём новый двумерный массив
+            captionData[0, 0] = "№";
+            captionData[0, 1] = "Фамилия Имя Отчество";
+            int j = 2;
+            for (int i = 0; i < lengthDays; i++)           //циклом перебираем даты в созданный двумерный массив
+            {
+                tDate = mcReport.SelectionStart.AddDays(i);
+                captionData[0, i + j] = tDate.ToString("dddd dd/MM");
+                captionData[1, i + j] = pCalendar.getDateDescription(tDate);
+                j += 1;
+            }
+            return captionData.GetUpperBound(1);
         }
 
         //Загрузить Производственный календарь Data из DataSet в Calendar
@@ -123,13 +159,15 @@ namespace TimeWorkTracking
         //напечатать бланк температуры
         private void btFormHeatPrint_Click(object sender, EventArgs e)
         {
+            int arrCount = uploadCaptionExel((int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1);
+
             //Объявляем приложение
             excelApp = new Excel.Application
             {
                 Visible = true,                                             //Отобразить Excel
                 SheetsInNewWorkbook = 1                                     //Количество листов в рабочей книге    
             };
-            workBook = excelApp.Workbooks.Add(Type.Missing);                //Добавить рабочую книгу
+            workBook = excelApp.Workbooks.Add(mis);                         //Добавить рабочую книгу
 
             //Настройки Application установить
             excelApp.DisplayAlerts = false;                                 //Запретить отображение окон с сообщениями
@@ -164,16 +202,16 @@ namespace TimeWorkTracking
             //поехали
             int rowTable = 8;                                                       //номер строки начала заголовка
             int colTable = 2;                                                       //номер колонки начала зазоловка
-            double daysCount= (mcReport.SelectionRange.End- mcReport.SelectionRange.Start).TotalDays+1;
+//            double daysCount= (mcReport.SelectionRange.End- mcReport.SelectionRange.Start).TotalDays+1;
 
             ((Excel.Range)workSheet.Rows[2]).EntireRow.Hidden = true;               //скрыть строку
             ((Excel.Range)workSheet.Rows[3]).EntireRow.Hidden = true;
             ((Excel.Range)workSheet.Rows[6]).EntireRow.Hidden = true;
 
             //главная надпись
-                workRange = workSheet.Range[workSheet.Cells[4, colTable], workSheet.Cells[5, colTable + daysCount * 2 + 1]];
-                ((Excel.Range)workRange.Rows[1]).Merge(Type.Missing);
-                ((Excel.Range)workRange.Rows[2]).Merge(Type.Missing);
+                workRange = workSheet.Range[workSheet.Cells[4, colTable], workSheet.Cells[5, colTable + captionData.GetUpperBound(1)]];
+                ((Excel.Range)workRange.Rows[1]).Merge(mis);
+                ((Excel.Range)workRange.Rows[2]).Merge(mis);
 
 //            workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1, workRange.Columns.Count]].Merge(Type.Missing);
 //                workSheet.Range[workRange.Cells[2, 1], workRange.Cells[2, workRange.Columns.Count]].Merge(Type.Missing);
@@ -186,7 +224,40 @@ namespace TimeWorkTracking
                 workRange.Cells[2,1] = "Период: " + mcReport.SelectionStart.ToString("dd.MM.yyyy") + " - " + mcReport.SelectionEnd.ToString("dd.MM.yyyy");
 
             //Таблица заголовок и строка данных
-            workRange = workSheet.Range[workSheet.Cells[rowTable, colTable], workSheet.Cells[rowTable, colTable + daysCount * 2+1]];
+
+            //условное форматирование диапазона 
+            ((Excel.Range)workSheet.Cells).FormatConditions.Delete();               //удалить все форматы с листа
+                Excel.Range leftCorner = workSheet.Range["B8:Q8"];
+                    Excel.FormatConditions fcs = leftCorner.FormatConditions;
+                    Excel.FormatCondition fc = (Excel.FormatCondition)fcs.Add(
+                        Type:Excel.XlFormatConditionType.xlExpression,
+                        mis, //Excel.XlFormatConditionOperator.xlEqual,
+                        Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";B9))",
+                        mis, mis, mis, mis, mis);
+
+                    fc.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
+                    fc.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
+//                    fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
+                    fc.Interior.TintAndShade = 0.599963377788629;
+                    fc.StopIfTrue = false;
+/*
+            ((Excel.Range)workSheet.Range["C8:Q8"]).FormatConditions[1]= cond;
+
+                    leftCorner.Copy();                                  //вставка черезбуфер обмена
+                    workSheet.Range["C8:Q8"].PasteSpecial(
+                        Paste: Excel.XlPasteType.xlPasteFormats, 
+                        Operation: Excel.XlPasteSpecialOperation.xlPasteSpecialOperationNone, 
+                        SkipBlanks: false, 
+                        Transpose: false);
+
+                    excelApp.CutCopyMode = Excel.XlCutCopyMode.xlCopy;//false;
+*/
+                //вставим данные в заголовок одним куском
+                ((Excel.Range)workSheet.Cells[rowTable, colTable]).Resize[captionData.GetUpperBound(0)+1, captionData.GetUpperBound(1)+1].Value = captionData;
+//             ((Excel.Range)workSheet.Cells[rowTable, colTable]).Resize[captionData.GetUpperBound(1), captionData.GetUpperBound(0)].Value = captionData;
+
+
+            workRange = workSheet.Range[workSheet.Cells[rowTable, colTable], workSheet.Cells[rowTable, colTable + arrCount * 2+1]];
                 workRange.Interior.Color = ColorTranslator.ToOle(Color.LightGray);
                 workRange.Interior.TintAndShade = 0;// '0.2
                 //Переопределим диапазон на строку данных и нарисуем рамки    
@@ -210,7 +281,7 @@ namespace TimeWorkTracking
 
                 ((Excel.Range)workRange.Columns[1]).ColumnWidth = 3.5;      //ширина колонки с номером
                 ((Excel.Range)workRange.Columns[2]).ColumnWidth = 38.5;     //ширина колонки ФИО 
-                for(int i = 3; i <= daysCount*2+2; i++)
+                for(int i = 3; i <= arrCount * 2+2; i++)
                 {
                     ((Excel.Range)workRange.Columns[i]).ColumnWidth = 8;// 10;// 11.5; //ширина колонок дней
                     ((Excel.Range)workRange.Columns[i]).Font.Size = 10;     //
@@ -233,7 +304,7 @@ namespace TimeWorkTracking
                 //           workRange.Value2 = CStr(Arr(uCount))   //ФИО сотрудника
 
 
-                for (int i = 0; i <= daysCount * 2 - 2; i+=2) 
+                for (int i = 0; i <= arrCount * 2 - 2; i+=2) 
                 {
                     workSheet.Range[workRange.Cells[1, 3+i], workRange.Cells[1, 4+i]].Merge(Type.Missing);
                     DateTime tDate = mcReport.SelectionStart.AddDays(i / 2);
@@ -241,8 +312,8 @@ namespace TimeWorkTracking
                     workSheet.Range[workRange.Cells[2, 3 + i], workRange.Cells[2, 4 + i]].Merge(Type.Missing);
                 }
 
-            Excel.Range rCaption = workSheet.Range[workSheet.Cells[1, 1], workSheet.Cells[3, daysCount * 2+2]];
-            Excel.Range rData = workSheet.Range[workSheet.Cells[2, 1], workSheet.Cells[2, daysCount * 2 + 2]];
+            Excel.Range rCaption = workSheet.Range[workSheet.Cells[1, 1], workSheet.Cells[3, arrCount * 2+2]];
+            Excel.Range rData = workSheet.Range[workSheet.Cells[2, 1], workSheet.Cells[2, arrCount * 2 + 2]];
 
 
             tableResize(workSheet, 9, 2, 17, 5);  //расширим таблицу спецификации строка 6, колонки 2-UBound(xlsArrForList, 2) + 2, количество UBound(xlsArrForList, 1)+1
@@ -378,7 +449,6 @@ namespace TimeWorkTracking
                     break;
             }
         }
-
 
     }
 
