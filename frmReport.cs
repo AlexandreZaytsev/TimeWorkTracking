@@ -200,30 +200,40 @@ namespace TimeWorkTracking
             workSheet.PageSetup.CenterFooter = "&B Страница &P";
 
             //поехали
-            int rowTable = 8;                                                       //номер строки начала заголовка
-            int colTable = 2;                                                       //номер колонки начала зазоловка
-//            double daysCount= (mcReport.SelectionRange.End- mcReport.SelectionRange.Start).TotalDays+1;
-
+            //диапазон для заголовка (главная надпись) (2 строки)
             ((Excel.Range)workSheet.Rows[2]).EntireRow.Hidden = true;               //скрыть строку
             ((Excel.Range)workSheet.Rows[3]).EntireRow.Hidden = true;
             ((Excel.Range)workSheet.Rows[6]).EntireRow.Hidden = true;
 
-            //главная надпись
-                workRange = workSheet.Range[workSheet.Cells[4, colTable], workSheet.Cells[5, colTable + captionData.GetUpperBound(1)]];
-                ((Excel.Range)workRange.Rows[1]).Merge(mis);
-                ((Excel.Range)workRange.Rows[2]).Merge(mis);
-
-//            workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1, workRange.Columns.Count]].Merge(Type.Missing);
-//                workSheet.Range[workRange.Cells[2, 1], workRange.Cells[2, workRange.Columns.Count]].Merge(Type.Missing);
+            workRange = workSheet.Range[workSheet.Cells[4, 2], workSheet.Cells[5, 2 + captionData.GetUpperBound(1)]];
+                workRange.Font.Name = "Times New Roman";
+                workRange.Font.Size = 11;
+                ((Excel.Range)workRange.Rows[1]).Merge(mis);                        //объединить строку диапазона
+                ((Excel.Range)workRange.Rows[2]).Merge(mis);                        //объединить строку диапазона
                 workRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
                 workRange.VerticalAlignment = Excel.XlHAlign.xlHAlignCenter;
                 workRange.Font.Bold = true;
                 workRange.Font.Name = "Times New Roman";
                 workRange.Font.Size = 14;
-                workRange.Cells[1,1] = "Журнал учета средней температуры сотрудников Русской Промышленной Компании";
-                workRange.Cells[2,1] = "Период: " + mcReport.SelectionStart.ToString("dd.MM.yyyy") + " - " + mcReport.SelectionEnd.ToString("dd.MM.yyyy");
+                workRange.Cells[1, 1] = "Журнал учета средней температуры сотрудников Русской Промышленной Компании";
+                workRange.Cells[2, 1] = "Период: " + mcReport.SelectionStart.ToString("dd.MM.yyyy") + " - " + mcReport.SelectionEnd.ToString("dd.MM.yyyy");
 
-            //Таблица заголовок и строка данных
+            //диапазон для шапки таблицы и первой строки данных
+            workRange = workSheet.Range[workSheet.Cells[8, 2], workSheet.Cells[10, 2 + captionData.GetUpperBound(1)+1]];    //+1 на строку данных
+                workRange.Font.Name = "Times New Roman";
+                workRange.Font.Size = 11;
+                workRange.Interior.TintAndShade = 0;// '0.2
+                workRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                workRange.VerticalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                workRange.WrapText = true;
+                workRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;                               //нарисуем все рамки
+                ((Excel.Range)workRange.Rows[1]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);   //заливка первой строки цветом
+                ((Excel.Range)workRange.Rows[1]).Font.Bold = true;                                          //первая строка шапки
+            //                ((Excel.Range)workRange.Rows[2]).Font.Bold = false;                           //вторая строка шапки
+                ((Excel.Range)workRange.Rows[2]).Font.Size = 9;                                             //вторая строка шапки
+                ((Excel.Range)workRange.Rows[3]).Font.Size = 11;                                            //вторая строка шапки
+                ((Excel.Range)workRange.Range[workSheet.Cells[2 , 1], workSheet.Cells[3, 2]]).Font.Bold = true;
+                ((Excel.Range)workRange.Cells[3, 2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
 
             //условное форматирование диапазона 
             ((Excel.Range)workSheet.Cells).FormatConditions.Delete();               //удалить все форматы с листа
@@ -253,12 +263,14 @@ namespace TimeWorkTracking
                     excelApp.CutCopyMode = Excel.XlCutCopyMode.xlCopy;//false;
 */
                 //вставим данные в заголовок одним куском
-                ((Excel.Range)workSheet.Cells[rowTable, colTable]).Resize[captionData.GetUpperBound(0)+1, captionData.GetUpperBound(1)+1].Value = captionData;
-//             ((Excel.Range)workSheet.Cells[rowTable, colTable]).Resize[captionData.GetUpperBound(1), captionData.GetUpperBound(0)].Value = captionData;
+ //               ((Excel.Range)workSheet.Cells[rowTable, colTable]).Resize[captionData.GetUpperBound(0)+1, captionData.GetUpperBound(1)+1].Value = captionData;
+                workRange.Resize[captionData.GetUpperBound(0) + 1, captionData.GetUpperBound(1) + 1].Value = captionData;
+
+            //             ((Excel.Range)workSheet.Cells[rowTable, colTable]).Resize[captionData.GetUpperBound(1), captionData.GetUpperBound(0)].Value = captionData;
 
 
-            workRange = workSheet.Range[workSheet.Cells[rowTable, colTable], workSheet.Cells[rowTable, colTable + arrCount * 2+1]];
-                workRange.Interior.Color = ColorTranslator.ToOle(Color.LightGray);
+            //        workRange = workSheet.Range[workSheet.Cells[rowTable, colTable], workSheet.Cells[rowTable, colTable + arrCount * 2+1]];
+            workRange.Interior.Color = ColorTranslator.ToOle(Color.LightGray);
                 workRange.Interior.TintAndShade = 0;// '0.2
                 //Переопределим диапазон на строку данных и нарисуем рамки    
                 workRange = workSheet.Range[workRange.Offset[0, 0], workRange.Offset[1, 0]];
