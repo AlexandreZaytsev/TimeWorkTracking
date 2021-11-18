@@ -33,6 +33,8 @@ namespace TimeWorkTracking
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmReport));
             this.mcReport = new System.Windows.Forms.MonthCalendar();
             this.mainPanelReport = new System.Windows.Forms.Panel();
+            this.statusStripReport = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabelInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.chRange = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.btFormHeatPrint = new System.Windows.Forms.Button();
@@ -41,13 +43,13 @@ namespace TimeWorkTracking
             this.btReportTotalPrint = new System.Windows.Forms.Button();
             this.toolTipMsgReport = new System.Windows.Forms.ToolTip(this.components);
             this.mainPanelReport.SuspendLayout();
+            this.statusStripReport.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // mcReport
             // 
             this.mcReport.Location = new System.Drawing.Point(0, 0);
-            this.mcReport.Margin = new System.Windows.Forms.Padding(7);
             this.mcReport.Name = "mcReport";
             this.mcReport.ShowWeekNumbers = true;
             this.mcReport.TabIndex = 0;
@@ -56,25 +58,49 @@ namespace TimeWorkTracking
             // 
             // mainPanelReport
             // 
+            this.mainPanelReport.Controls.Add(this.statusStripReport);
             this.mainPanelReport.Controls.Add(this.chRange);
             this.mainPanelReport.Controls.Add(this.flowLayoutPanel1);
             this.mainPanelReport.Controls.Add(this.mcReport);
             this.mainPanelReport.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanelReport.Location = new System.Drawing.Point(0, 0);
-            this.mainPanelReport.Margin = new System.Windows.Forms.Padding(2);
+            this.mainPanelReport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.mainPanelReport.Name = "mainPanelReport";
-            this.mainPanelReport.Size = new System.Drawing.Size(346, 164);
+            this.mainPanelReport.Size = new System.Drawing.Size(461, 230);
             this.mainPanelReport.TabIndex = 1;
+            // 
+            // statusStripReport
+            // 
+            this.statusStripReport.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStripReport.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabelInfo});
+            this.statusStripReport.Location = new System.Drawing.Point(0, 204);
+            this.statusStripReport.Name = "statusStripReport";
+            this.statusStripReport.Padding = new System.Windows.Forms.Padding(1, 0, 13, 0);
+            this.statusStripReport.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.statusStripReport.Size = new System.Drawing.Size(461, 26);
+            this.statusStripReport.SizingGrip = false;
+            this.statusStripReport.TabIndex = 32;
+            this.statusStripReport.Text = "statusStripSetting";
+            // 
+            // toolStripStatusLabelInfo
+            // 
+            this.toolStripStatusLabelInfo.Name = "toolStripStatusLabelInfo";
+            this.toolStripStatusLabelInfo.Size = new System.Drawing.Size(408, 20);
+            this.toolStripStatusLabelInfo.Spring = true;
+            this.toolStripStatusLabelInfo.Text = "Выберите диапазон";
+            this.toolStripStatusLabelInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // chRange
             // 
             this.chRange.AutoSize = true;
             this.chRange.Checked = true;
             this.chRange.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chRange.Location = new System.Drawing.Point(187, 142);
+            this.chRange.Location = new System.Drawing.Point(249, 175);
+            this.chRange.Margin = new System.Windows.Forms.Padding(4);
             this.chRange.Name = "chRange";
             this.chRange.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.chRange.Size = new System.Drawing.Size(154, 17);
+            this.chRange.Size = new System.Drawing.Size(199, 21);
             this.chRange.TabIndex = 31;
             this.chRange.Text = "дииапазон по умолчанию";
             this.toolTipMsgReport.SetToolTip(this.chRange, "использовать  диапазон дат\r\n(фиксированной длины)\r\nзаданный по умолчанию");
@@ -87,9 +113,10 @@ namespace TimeWorkTracking
             this.flowLayoutPanel1.Controls.Add(this.btFormTimePrint);
             this.flowLayoutPanel1.Controls.Add(this.btReportTotalPrint);
             this.flowLayoutPanel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(187, 0);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(249, 0);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(156, 136);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(208, 167);
             this.flowLayoutPanel1.TabIndex = 30;
             // 
             // btFormHeatPrint
@@ -97,10 +124,10 @@ namespace TimeWorkTracking
             this.btFormHeatPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btFormHeatPrint.ImageIndex = 0;
             this.btFormHeatPrint.ImageList = this.imgListButtonReport;
-            this.btFormHeatPrint.Location = new System.Drawing.Point(2, 2);
-            this.btFormHeatPrint.Margin = new System.Windows.Forms.Padding(2);
+            this.btFormHeatPrint.Location = new System.Drawing.Point(3, 2);
+            this.btFormHeatPrint.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btFormHeatPrint.Name = "btFormHeatPrint";
-            this.btFormHeatPrint.Size = new System.Drawing.Size(152, 29);
+            this.btFormHeatPrint.Size = new System.Drawing.Size(203, 36);
             this.btFormHeatPrint.TabIndex = 29;
             this.btFormHeatPrint.Text = "Бланк Температуры";
             this.btFormHeatPrint.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -134,10 +161,10 @@ namespace TimeWorkTracking
             this.btFormTimePrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btFormTimePrint.ImageIndex = 1;
             this.btFormTimePrint.ImageList = this.imgListButtonReport;
-            this.btFormTimePrint.Location = new System.Drawing.Point(2, 35);
-            this.btFormTimePrint.Margin = new System.Windows.Forms.Padding(2);
+            this.btFormTimePrint.Location = new System.Drawing.Point(3, 42);
+            this.btFormTimePrint.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btFormTimePrint.Name = "btFormTimePrint";
-            this.btFormTimePrint.Size = new System.Drawing.Size(152, 29);
+            this.btFormTimePrint.Size = new System.Drawing.Size(203, 36);
             this.btFormTimePrint.TabIndex = 30;
             this.btFormTimePrint.Text = "Бланк Проходов";
             this.btFormTimePrint.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -150,10 +177,10 @@ namespace TimeWorkTracking
             this.btReportTotalPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btReportTotalPrint.ImageIndex = 2;
             this.btReportTotalPrint.ImageList = this.imgListButtonReport;
-            this.btReportTotalPrint.Location = new System.Drawing.Point(2, 68);
-            this.btReportTotalPrint.Margin = new System.Windows.Forms.Padding(2);
+            this.btReportTotalPrint.Location = new System.Drawing.Point(3, 82);
+            this.btReportTotalPrint.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btReportTotalPrint.Name = "btReportTotalPrint";
-            this.btReportTotalPrint.Size = new System.Drawing.Size(152, 29);
+            this.btReportTotalPrint.Size = new System.Drawing.Size(203, 36);
             this.btReportTotalPrint.TabIndex = 31;
             this.btReportTotalPrint.Text = "Итоговый отчет";
             this.btReportTotalPrint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -163,18 +190,20 @@ namespace TimeWorkTracking
             // 
             // frmReport
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(346, 164);
+            this.ClientSize = new System.Drawing.Size(461, 230);
             this.Controls.Add(this.mainPanelReport);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "frmReport";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "frmReport";
             this.Load += new System.EventHandler(this.frmReport_Load);
             this.mainPanelReport.ResumeLayout(false);
             this.mainPanelReport.PerformLayout();
+            this.statusStripReport.ResumeLayout(false);
+            this.statusStripReport.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -191,5 +220,7 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ImageList imgListButtonReport;
         private System.Windows.Forms.ToolTip toolTipMsgReport;
         private System.Windows.Forms.CheckBox chRange;
+        private System.Windows.Forms.StatusStrip statusStripReport;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelInfo;
     }
 }
