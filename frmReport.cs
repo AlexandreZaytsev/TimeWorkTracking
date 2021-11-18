@@ -212,6 +212,7 @@ namespace TimeWorkTracking
             Cursor.Current = Cursors.WaitCursor;
             bool ret = false;
             int arrCount = uploadCaptionExcel((int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1);
+
             toolStripStatusLabelInfo.Text = "Подключение к Excel";
             //Объявляем приложение
             excelApp = new Excel.Application
@@ -244,7 +245,8 @@ namespace TimeWorkTracking
             ((Excel.Range)workSheet.Cells).Style = "reportStyle";
             ((Excel.Range)workSheet.Columns[1]).ColumnWidth = 2;
             ((Excel.Range)workSheet.Columns[1 +2 + captionData.GetUpperBound(1)]).EntireColumn.ColumnWidth = 2;
-            toolStripStatusLabelInfo.Text = "Настройка печати";
+
+            toolStripStatusLabelInfo.Text = "Настройка границ листа";
             //настройки печати
             double interval = excelApp.CentimetersToPoints(0.2);
             workSheet.PageSetup.LeftMargin = interval;
@@ -256,13 +258,15 @@ namespace TimeWorkTracking
             workSheet.PageSetup.FirstPageNumber = (int)Excel.Constants.xlAutomatic; //номер первой страници
             workSheet.PageSetup.CenterFooter = "&B Страница &P";
 
+            toolStripStatusLabelInfo.Text = "Настройка ориентации листа и ограничений";
             workSheet.PageSetup.Orientation = Excel.XlPageOrientation.xlLandscape;
             workSheet.PageSetup.Zoom = 83;// false;                                       // 83; //% от натуральной величины
-//            workSheet.PageSetup.FitToPagesWide = 1;                                 //не более чем на количество страниц в ширину           
-//            workSheet.PageSetup.FitToPagesTall = 1;                                 //не более чем на количество страниц в высоту    
+                                          //            workSheet.PageSetup.FitToPagesWide = 1;                                 //не более чем на количество страниц в ширину           
+                                          //            workSheet.PageSetup.FitToPagesTall = 1;                                 //не более чем на количество страниц в высоту    
 
-        //поехали
-        ((Excel.Range)workSheet.Rows[2]).EntireRow.Hidden = true;               //скрыть строку
+            //поехали
+            toolStripStatusLabelInfo.Text = "Скрыть лишние строки";
+            ((Excel.Range)workSheet.Rows[2]).EntireRow.Hidden = true;               //скрыть строку
             ((Excel.Range)workSheet.Rows[3]).EntireRow.Hidden = true;
             ((Excel.Range)workSheet.Rows[6]).EntireRow.Hidden = true;
 
