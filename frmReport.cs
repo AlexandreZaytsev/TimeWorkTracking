@@ -243,19 +243,22 @@ namespace TimeWorkTracking
             ((Excel.Range)workSheet.Cells).Style = "reportStyle";
             ((Excel.Range)workSheet.Columns[1]).ColumnWidth = 2;
             ((Excel.Range)workSheet.Columns[1 +2 + captionData.GetUpperBound(1)]).EntireColumn.ColumnWidth = 2;
+            toolStripStatusLabelInfo.Text = "Настройка печати";
             //настройки печати
-            workSheet.PageSetup.LeftMargin = excelApp.CentimetersToPoints(0.2);
-            workSheet.PageSetup.RightMargin = excelApp.CentimetersToPoints(0.2);
-            workSheet.PageSetup.TopMargin = excelApp.CentimetersToPoints(0.2);//.InchesToPoints(0.2);
-            workSheet.PageSetup.BottomMargin = excelApp.CentimetersToPoints(0.2);
+            double interval = excelApp.CentimetersToPoints(0.2);
+            workSheet.PageSetup.LeftMargin = interval;
+            workSheet.PageSetup.RightMargin = interval;
+            workSheet.PageSetup.TopMargin = interval;
+            workSheet.PageSetup.BottomMargin = interval;
             workSheet.PageSetup.HeaderMargin = 0;// excelApp.InchesToPoints(0);
-            workSheet.PageSetup.FooterMargin = excelApp.CentimetersToPoints(0.2);
+            workSheet.PageSetup.FooterMargin = interval;
+//            workSheet.PageSetup.FirstPageNumber = (int)Excel.Constants.xlAutomatic; //номер первой страници
+//            workSheet.PageSetup.CenterFooter = "&B Страница &P";
+
             workSheet.PageSetup.Orientation = Excel.XlPageOrientation.xlLandscape;
-            workSheet.PageSetup.FirstPageNumber = (int)Excel.Constants.xlAutomatic; //номер первой страници
             workSheet.PageSetup.Zoom = false;                                       // 83; //% от натуральной величины
             workSheet.PageSetup.FitToPagesWide = 1;                                 //не более чем на количество страниц в ширину           
             workSheet.PageSetup.FitToPagesTall = 1;                                 //не более чем на количество страниц в высоту    
-            workSheet.PageSetup.CenterFooter = "&B Страница &P";
 
             //поехали
             ((Excel.Range)workSheet.Rows[2]).EntireRow.Hidden = true;               //скрыть строку
