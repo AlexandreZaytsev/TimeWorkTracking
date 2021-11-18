@@ -276,6 +276,7 @@ namespace TimeWorkTracking
                 workRange.Cells[1, 1] = "Журнал учета средней температуры сотрудников Русской Промышленной Компании";
                 workRange.Cells[2, 1] = "Период: " + mcReport.SelectionStart.ToString("dd.MM.yyyy") + " - " + mcReport.SelectionEnd.ToString("dd.MM.yyyy");
 
+            toolStripStatusLabelInfo.Text = "Форматирование заголовка и строки данных";
             //диапазон для шапки таблицы и первой строки данных
             workRange = workSheet.Range[workSheet.Cells[8, 2], workSheet.Cells[10, 1 + captionData.GetUpperBound(1)+1]];    //+1 на строку данных
 //                ((Excel.Range)workRange.Rows).AutoFit();                                                    //автоувеличение строк в заголовке
@@ -303,6 +304,7 @@ namespace TimeWorkTracking
                 //строка данных значения по умолчанию
                 workRange.Rows[3]= "36,3\u00B0";
 
+                toolStripStatusLabelInfo.Text = "Формирование условного форматирования заголовка";
                 //условное форматирование диапазона 
                 Excel.FormatConditions fcs = ((Excel.Range)workRange.Rows[1]).EntireRow.FormatConditions;
                 Excel.FormatCondition fc = (Excel.FormatCondition)fcs.Add(
@@ -317,6 +319,7 @@ namespace TimeWorkTracking
                 fc.Interior.TintAndShade = 0.599963377788629;
                 fc.StopIfTrue = false;
 
+                toolStripStatusLabelInfo.Text = "Нстройка ширины колонок и объединения ячеек";
                 //настройка ширины колонок и объединение ячеек диапазона
                 ((Excel.Range)workRange.Columns[1]).ColumnWidth = 3.5;          //ширина колонки с номером
                 ((Excel.Range)workRange.Columns[2]).ColumnWidth = 38.5;         //ширина колонки ФИО 
@@ -334,6 +337,8 @@ namespace TimeWorkTracking
                     workSheet.Range[workRange.Cells[3, i + j], workRange.Cells[3, i + j + 1]].Merge(mis);
                     j += 1;
                 }
+
+                toolStripStatusLabelInfo.Text = "Вставка данных заголовка";
                 //вставим данные в заголовок одним куском
                 workRange.Resize[
                     captionData.GetUpperBound(0) + 1, 
@@ -342,7 +347,7 @@ namespace TimeWorkTracking
 
 //            string used = workRange.Address[false, false, Excel.XlReferenceStyle.xlA1, mis, mis];
 
-            toolStripStatusLabelInfo.Text = "Формирование таблицы данных";
+            toolStripStatusLabelInfo.Text = "Вставка данных таблицы";
             //расширим форматированную таблицу данных
             tableResize(
                 workSheet, 
