@@ -135,7 +135,7 @@ namespace TimeWorkTracking
                     }
                     break;
                 case "FormTimeCheck":
-                    captionData = new string[5, lengthDays * 2 + 2];  //Создаём новый двумерный массив
+                    captionData = new string[3, lengthDays * 2 + 2];  //Создаём новый двумерный массив
                     captionData[0, 0] = "№";
                     captionData[0, 1] = "Фамилия Имя Отчество";
                     for (int i = 0; i < lengthDays; i++)           //циклом перебираем даты в созданный двумерный массив
