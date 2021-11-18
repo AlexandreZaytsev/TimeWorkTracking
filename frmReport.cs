@@ -175,15 +175,19 @@ namespace TimeWorkTracking
                     break;
                 case "FormTimeCheck":
                     tableData = new string[usersData.Rows.Count * 2, lenDays * 2];   //Создаём новый двумерный массив
+                    j = 0;
                     for (int i = 0; i < usersData.Rows.Count; i++)     // Display items in the ListView control
                     {
                         DataRow drow = usersData.Rows[i];
                         if (drow.RowState != DataRowState.Deleted)  // Only row that have not been deleted
                         {
-                            tableData[i + j, 0] = (i + 1).ToString();
-                            tableData[i + j, 1] = drow["fio"].ToString();
-                            tableData[i + j, 2] = Convert.ToDateTime(drow["startTime"]).ToString("HH:mm"); 
-                            tableData[i + 1 + j, 3] = Convert.ToDateTime(drow["stopTime"]).ToString("HH:mm");
+                            tableData[i, 0] = (i + 1).ToString();
+                            tableData[i, 1] = drow["fio"].ToString();
+                            for(int ld=0; ld < lenDays; ld++) 
+                            {
+                                tableData[i, 2+ld+j] = Convert.ToDateTime(drow["startTime"]).ToString("HH:mm");
+                                tableData[i, 3+ld+j] = Convert.ToDateTime(drow["stopTime"]).ToString("HH:mm");
+                            }
                             j += 1;
                         }
                     }
