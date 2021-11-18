@@ -29,6 +29,7 @@ namespace TimeWorkTracking
         object mis = Type.Missing;
 
         private string[,] captionData;                  //массив данных заголовка Excel
+        DataTable usersData;                            //информация о пользователях               
         private string[,] tableData;                    //массив данных таблицы Excel
 
         public frmReport()
@@ -53,8 +54,7 @@ namespace TimeWorkTracking
                 LoadBoldedDatesCalendar(pCalendar.getListWorkHoliday());                                //Загрузить производственный календарь в массив непериодических выделенных дат
 
                 //Загрузить массив данных для таблицы Excel
-                uploadTableExcel(cs);
-
+                usersData = clMsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') where access=1 order by fio");
             }
         }
 
@@ -135,7 +135,7 @@ namespace TimeWorkTracking
                     }
                     break;
                 case "FormTimeCheck":
-                    captionData = new string[3, lengthDays * 2 + 2];  //Создаём новый двумерный массив
+                    captionData = new string[4, lengthDays * 2 + 2];  //Создаём новый двумерный массив
                     captionData[0, 0] = "№";
                     captionData[0, 1] = "Фамилия Имя Отчество";
                     for (int i = 0; i < lengthDays; i++)           //циклом перебираем даты в созданный двумерный массив
@@ -156,16 +156,16 @@ namespace TimeWorkTracking
         }
 
         //Загрузить массив данных для таблицы Excel (с учетом объединенных ячеек - спользуем первое значение)
-        private int uploadTableExcel(string cs)
+        private int uploadTableExcel(int lenDays)
         {
-            DataTable dtable = clMsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') where access=1 order by fio");
-            switch (this.AccessibleName)
+            int j = 2;
+             switch (this.AccessibleName)
             {
                 case "FormHeatCheck":
-                    tableData = new string[dtable.Rows.Count, 2];   //Создаём новый двумерный массив
-                    for (int i = 0; i < dtable.Rows.Count; i++)     // Display items in the ListView control
+                    tableData = new string[usersData.Rows.Count, 2];   //Создаём новый двумерный массив
+                    for (int i = 0; i < usersData.Rows.Count; i++)     // Display items in the ListView control
                     {
-                        DataRow drow = dtable.Rows[i];
+                        DataRow drow = usersData.Rows[i];
                         if (drow.RowState != DataRowState.Deleted)  // Only row that have not been deleted
                         {
                             tableData[i, 0] = (i + 1).ToString();
@@ -174,11 +174,24 @@ namespace TimeWorkTracking
                     }
                     break;
                 case "FormTimeCheck":
+                    tableData = new string[usersData.Rows.Count, lenDays*2-2];   //Создаём новый двумерный массив
+                    for (int i = 0; i < usersData.Rows.Count; i++)     // Display items in the ListView control
+                    {
+                        DataRow drow = usersData.Rows[i];
+                        if (drow.RowState != DataRowState.Deleted)  // Only row that have not been deleted
+                        {
+                            tableData[0, i + j] = (i + 1).ToString();
+                            tableData[1, i + j] = drow["fio"].ToString();
+                            tableData[2, i + j] = Convert.ToDateTime(drow["startTime"]).ToString("HH:mm"); 
+                            tableData[3, i + 1 + j] = Convert.ToDateTime(drow["stopTime"]).ToString("HH:mm");
+                            j += 1;
+                        }
+                    }
                     break;
                 case "ReportTotal":
                     break;
             }
-            return dtable.Rows.Count;
+            return usersData.Rows.Count;
         }
 
         //Загрузить Производственный календарь Data из DataSet в Calendar
@@ -225,6 +238,7 @@ namespace TimeWorkTracking
             Cursor.Current = Cursors.WaitCursor;
             bool ret = false;
             int arrCount = uploadCaptionExcel((int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1);
+            uploadTableExcel(arrCount);                                     //загрузить массив по данным сотрудников
 
             toolStripStatusLabelInfo.Text = "Подключение к Excel";
             //Объявляем приложение
@@ -423,6 +437,7 @@ namespace TimeWorkTracking
             Cursor.Current = Cursors.WaitCursor;
             bool ret = false;
             int arrCount = uploadCaptionExcel((int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1);
+            uploadTableExcel(arrCount);                                     //загрузить массив по данным сотрудников
 
             toolStripStatusLabelInfo.Text = "Подключение к Excel";
             //Объявляем приложение
