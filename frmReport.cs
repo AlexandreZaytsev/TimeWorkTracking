@@ -178,16 +178,19 @@ namespace TimeWorkTracking
             workSheet = (Excel.Worksheet)excelApp.Worksheets.get_Item(1);   //Получаем первый лист документа (счет начинается с 1)
             workSheet.Name = "Journal";                                     //Название листа (вкладки снизу)
             //RebuildSheet(workBook, "Journal", 3);                         // удалить все листы кроме текущего
+            ((Excel.Range)workSheet.Cells).FormatConditions.Delete();       //удалить все форматы с листа
 
             //оформление листа и применение стиля
             Excel.Style style = workBook.Styles.Add("reportStyle");
             style.Font.Name = "Times New Roman";
             style.Font.Size = 11;
+
+            //ширина колонок
             ((Excel.Range)workSheet.Cells).Style = "reportStyle";
+            ((Excel.Range)workSheet.Columns[1]).ColumnWidth = 2;
+            ((Excel.Range)workSheet.Columns[1 +2 + captionData.GetUpperBound(1)]).EntireColumn.ColumnWidth = 2;
 
             //настройки печати
-            ((Excel.Range)workSheet.Cells[1, 1]).EntireColumn.ColumnWidth = 2;
-            ((Excel.Range)workSheet.Cells[1, 14]).EntireColumn.ColumnWidth = 2;
             workSheet.PageSetup.LeftMargin = excelApp.CentimetersToPoints(0.2);
             workSheet.PageSetup.RightMargin = excelApp.CentimetersToPoints(0.2);
             workSheet.PageSetup.TopMargin = excelApp.CentimetersToPoints(0.2);//.InchesToPoints(0.2);
@@ -205,6 +208,7 @@ namespace TimeWorkTracking
             ((Excel.Range)workSheet.Rows[3]).EntireRow.Hidden = true;
             ((Excel.Range)workSheet.Rows[6]).EntireRow.Hidden = true;
 
+
             workRange = workSheet.Range[workSheet.Cells[4, 2], workSheet.Cells[5, 2 + captionData.GetUpperBound(1)]];
                 workRange.Font.Name = "Times New Roman";
                 workRange.Font.Size = 11;
@@ -219,7 +223,7 @@ namespace TimeWorkTracking
                 workRange.Cells[2, 1] = "Период: " + mcReport.SelectionStart.ToString("dd.MM.yyyy") + " - " + mcReport.SelectionEnd.ToString("dd.MM.yyyy");
 
             //диапазон для шапки таблицы и первой строки данных
-            workRange = workSheet.Range[workSheet.Cells[8, 2], workSheet.Cells[10, 2 + captionData.GetUpperBound(1)+1]];    //+1 на строку данных
+            workRange = workSheet.Range[workSheet.Cells[8, 2], workSheet.Cells[10, 1 + captionData.GetUpperBound(1)+1]];    //+1 на строку данных
                 workRange.Font.Name = "Times New Roman";
                 workRange.Font.Size = 11;
                 workRange.Interior.TintAndShade = 0;// '0.2
@@ -235,36 +239,37 @@ namespace TimeWorkTracking
                 ((Excel.Range)workRange.Range[workSheet.Cells[2 , 1], workSheet.Cells[3, 2]]).Font.Bold = true;
                 ((Excel.Range)workRange.Cells[3, 2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
 
-            //условное форматирование диапазона 
-            ((Excel.Range)workSheet.Cells).FormatConditions.Delete();               //удалить все форматы с листа
-                Excel.Range leftCorner = workSheet.Range["B8:Q8"];
-                    Excel.FormatConditions fcs = leftCorner.FormatConditions;
-                    Excel.FormatCondition fc = (Excel.FormatCondition)fcs.Add(
-                        Type:Excel.XlFormatConditionType.xlExpression,
-                        mis, //Excel.XlFormatConditionOperator.xlEqual,
-                        Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";B9))",
-                        mis, mis, mis, mis, mis);
+                //условное форматирование диапазона 
+                Excel.FormatConditions fcs = ((Excel.Range)workRange.Rows[1]).EntireRow.FormatConditions;
+                Excel.FormatCondition fc = (Excel.FormatCondition)fcs.Add(
+                    Type:Excel.XlFormatConditionType.xlExpression,
+                    mis, //Excel.XlFormatConditionOperator.xlEqual,
+                    Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";B9))",
+                    mis, mis, mis, mis, mis);
 
-                    fc.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
-                    fc.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
-//                    fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
-                    fc.Interior.TintAndShade = 0.599963377788629;
-                    fc.StopIfTrue = false;
-/*
-            ((Excel.Range)workSheet.Range["C8:Q8"]).FormatConditions[1]= cond;
+                fc.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
+                fc.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
+//              fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
+                fc.Interior.TintAndShade = 0.599963377788629;
+                fc.StopIfTrue = false;
 
-                    leftCorner.Copy();                                  //вставка черезбуфер обмена
-                    workSheet.Range["C8:Q8"].PasteSpecial(
-                        Paste: Excel.XlPasteType.xlPasteFormats, 
-                        Operation: Excel.XlPasteSpecialOperation.xlPasteSpecialOperationNone, 
-                        SkipBlanks: false, 
-                        Transpose: false);
+                //настройка ширины колонок и объединение ячеек диапазона
+                ((Excel.Range)workRange.Columns[1]).ColumnWidth = 3.5;          //ширина колонки с номером
+                ((Excel.Range)workRange.Columns[2]).ColumnWidth = 38.5;         //ширина колонки ФИО 
+                workSheet.Range[workRange.Cells[1, 1], workRange.Cells[2, 1]].Merge(mis);
+                workSheet.Range[workRange.Cells[1, 2], workRange.Cells[2, 2]].Merge(mis);
+                int j = 2;
+                for (int i = 1; i <= captionData.GetUpperBound(1); i++)
+                {
+                    workSheet.Range[workRange.Cells[1, i + j], workRange.Cells[1, i + j + 1]].Merge(mis);
+                    workSheet.Range[workRange.Cells[2, i + j], workRange.Cells[2, i + j + 1]].Merge(mis);
+                    workSheet.Range[workRange.Cells[3, i + j], workRange.Cells[3, i + j + 1]].Merge(mis);
+                    j += 1;
+                }
 
-                    excelApp.CutCopyMode = Excel.XlCutCopyMode.xlCopy;//false;
-*/
-                //вставим данные в заголовок одним куском
- //               ((Excel.Range)workSheet.Cells[rowTable, colTable]).Resize[captionData.GetUpperBound(0)+1, captionData.GetUpperBound(1)+1].Value = captionData;
-                workRange.Resize[captionData.GetUpperBound(0) + 1, captionData.GetUpperBound(1) + 1].Value = captionData;
+
+            //вставим данные в заголовок одним куском
+            workRange.Resize[captionData.GetUpperBound(0) + 1, captionData.GetUpperBound(1) + 1].Value = captionData;
 
             //             ((Excel.Range)workSheet.Cells[rowTable, colTable]).Resize[captionData.GetUpperBound(1), captionData.GetUpperBound(0)].Value = captionData;
 
