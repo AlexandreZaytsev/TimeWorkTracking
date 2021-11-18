@@ -158,7 +158,7 @@ namespace TimeWorkTracking
         //Загрузить массив данных для таблицы Excel (с учетом объединенных ячеек - спользуем первое значение)
         private int uploadTableExcel(int lenDays)
         {
-            int j = 2;
+            int j = 0;
              switch (this.AccessibleName)
             {
                 case "FormHeatCheck":
@@ -174,16 +174,16 @@ namespace TimeWorkTracking
                     }
                     break;
                 case "FormTimeCheck":
-                    tableData = new string[usersData.Rows.Count, lenDays*2-2];   //Создаём новый двумерный массив
+                    tableData = new string[usersData.Rows.Count * 2, lenDays * 2];   //Создаём новый двумерный массив
                     for (int i = 0; i < usersData.Rows.Count; i++)     // Display items in the ListView control
                     {
                         DataRow drow = usersData.Rows[i];
                         if (drow.RowState != DataRowState.Deleted)  // Only row that have not been deleted
                         {
-                            tableData[0, i + j] = (i + 1).ToString();
-                            tableData[1, i + j] = drow["fio"].ToString();
-                            tableData[2, i + j] = Convert.ToDateTime(drow["startTime"]).ToString("HH:mm"); 
-                            tableData[3, i + 1 + j] = Convert.ToDateTime(drow["stopTime"]).ToString("HH:mm");
+                            tableData[i + j, 0] = (i + 1).ToString();
+                            tableData[i + j, 1] = drow["fio"].ToString();
+                            tableData[i + j, 2] = Convert.ToDateTime(drow["startTime"]).ToString("HH:mm"); 
+                            tableData[i + 1 + j, 3] = Convert.ToDateTime(drow["stopTime"]).ToString("HH:mm");
                             j += 1;
                         }
                     }
