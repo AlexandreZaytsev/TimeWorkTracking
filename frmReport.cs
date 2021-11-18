@@ -226,6 +226,7 @@ namespace TimeWorkTracking
             excelApp.DisplayAlerts = false;                                 //Запретить отображение окон с сообщениями
             excelApp.ScreenUpdating = false;                                //Запретить перерисовку экрана    
             excelApp.ActiveWindow.Zoom = 80;                                //Масштаб листа
+            excelApp.ActiveWindow.View = Excel.XlWindowView.xlPageBreakPreview;
 
             //Переименовать лист
             workSheet = (Excel.Worksheet)excelApp.Worksheets.get_Item(1);   //Получаем первый лист документа (счет начинается с 1)
@@ -252,22 +253,22 @@ namespace TimeWorkTracking
             workSheet.PageSetup.BottomMargin = interval;
             workSheet.PageSetup.HeaderMargin = 0;// excelApp.InchesToPoints(0);
             workSheet.PageSetup.FooterMargin = interval;
-//            workSheet.PageSetup.FirstPageNumber = (int)Excel.Constants.xlAutomatic; //номер первой страници
-//            workSheet.PageSetup.CenterFooter = "&B Страница &P";
+            workSheet.PageSetup.FirstPageNumber = (int)Excel.Constants.xlAutomatic; //номер первой страници
+            workSheet.PageSetup.CenterFooter = "&B Страница &P";
 
             workSheet.PageSetup.Orientation = Excel.XlPageOrientation.xlLandscape;
-            workSheet.PageSetup.Zoom = false;                                       // 83; //% от натуральной величины
-            workSheet.PageSetup.FitToPagesWide = 1;                                 //не более чем на количество страниц в ширину           
-            workSheet.PageSetup.FitToPagesTall = 1;                                 //не более чем на количество страниц в высоту    
+            workSheet.PageSetup.Zoom = 83;// false;                                       // 83; //% от натуральной величины
+//            workSheet.PageSetup.FitToPagesWide = 1;                                 //не более чем на количество страниц в ширину           
+//            workSheet.PageSetup.FitToPagesTall = 1;                                 //не более чем на количество страниц в высоту    
 
-            //поехали
-            ((Excel.Range)workSheet.Rows[2]).EntireRow.Hidden = true;               //скрыть строку
+        //поехали
+        ((Excel.Range)workSheet.Rows[2]).EntireRow.Hidden = true;               //скрыть строку
             ((Excel.Range)workSheet.Rows[3]).EntireRow.Hidden = true;
             ((Excel.Range)workSheet.Rows[6]).EntireRow.Hidden = true;
 
             toolStripStatusLabelInfo.Text = "Формирование заголовка";
             //диапазон для заголовка (главная надпись) (2 строки)
-            workRange = workSheet.Range[workSheet.Cells[4, 2], workSheet.Cells[5, 2 + captionData.GetUpperBound(1)]];
+            workRange = workSheet.Range[workSheet.Cells[4, 2-1], workSheet.Cells[5, 2 + captionData.GetUpperBound(1)+1]];
                 workRange.Font.Name = "Times New Roman";
                 workRange.Font.Size = 11;
                 ((Excel.Range)workRange.Rows[1]).Merge(mis);                        //объединить строку диапазона
@@ -304,7 +305,7 @@ namespace TimeWorkTracking
                 ((Excel.Range)workRange.Cells[3, 2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
 //Свойства в диапазоне через workSheet 
                 ((Excel.Range)workSheet.Range[workRange.Cells[3, 3], workRange.Cells[3, workRange.Columns.Count]]).Font.Color = ColorTranslator.ToOle(Color.LightGray);
-                ((Excel.Range)workSheet.Range[workRange.Cells[3, 3], workRange.Cells[3, workRange.Columns.Count]]).Font.Size=18;
+                ((Excel.Range)workSheet.Range[workRange.Cells[3, 3], workRange.Cells[3, workRange.Columns.Count]]).Font.Size=16;
                 //строка данных значения по умолчанию
                 workRange.Rows[3]= "36,3\u00B0";
 
