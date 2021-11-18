@@ -209,6 +209,7 @@ namespace TimeWorkTracking
         }
         private bool FormHeatPrint()
         {
+            Cursor.Current = Cursors.WaitCursor;
             bool ret = false;
             int arrCount = uploadCaptionExcel((int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1);
             toolStripStatusLabelInfo.Text = "Подключение к Excel";
@@ -374,6 +375,8 @@ namespace TimeWorkTracking
             excelApp.Visible = true;
             //            excelApp.Quit();
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
+
+            Cursor.Current = Cursors.Default;
             ret = true;
 
             return ret;
