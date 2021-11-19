@@ -389,19 +389,16 @@ namespace TimeWorkTracking
 
             toolStripStatusLabelInfo.Text = "Вставка данных таблицы";
             //расширим форматированную таблицу данных
-            tableResize(
+            Excel.Range fullTable = tableResize(
                 workSheet,
                 (Excel.Range)workRange.Rows[3],//(Excel.Range)workSheet.Cells[workRange.Row + workRange.Rows.Count - 1, workRange.Column],
                 tableData.GetUpperBound(0) + 1
-                );// ;
-            //диапазон для таблицы
-            workRange = workSheet.Range[
-                workSheet.Cells[workRange.Row + workRange.Rows.Count - 1, workRange.Column], 
-                workSheet.Cells[workRange.Row + workRange.Rows.Count - 1+captionData.GetUpperBound(0), workRange.Column + workRange.Columns.Count - 1]
-                ];
+                );
+            //       fullTable.Value = tableData; 
+            //подрежем таблицу до двух колонок (т.к. в пришедших данных их только две)
             //вставим данные в таблицу одним куском
-                workRange.Resize[
-                    tableData.GetUpperBound(0) + 1, 
+            fullTable.Resize[
+                    tableData.GetUpperBound(0) + 1,
                     tableData.GetUpperBound(1) + 1
                     ].Value = tableData;
 
@@ -445,7 +442,7 @@ namespace TimeWorkTracking
             //Объявляем приложение
             excelApp = new Excel.Application
             {
-                Visible = true,// false,                                            //Отобразить Excel
+                Visible = false,                                            //Отобразить Excel
                 SheetsInNewWorkbook = 1                                     //Количество листов в рабочей книге    
             };
             workBook = excelApp.Workbooks.Add(mis);                         //Добавить рабочую книгу
@@ -453,7 +450,7 @@ namespace TimeWorkTracking
             toolStripStatusLabelInfo.Text = "Создание рабочей книги";
             //Настройки Application установить
             excelApp.DisplayAlerts = false;                                 //Запретить отображение окон с сообщениями
-            excelApp.ScreenUpdating = true;// false;                                //Запретить перерисовку экрана    
+            excelApp.ScreenUpdating = false;                                //Запретить перерисовку экрана    
             excelApp.ActiveWindow.Zoom = 80;                                //Масштаб листа
             excelApp.ActiveWindow.View = Excel.XlWindowView.xlPageBreakPreview;
 
@@ -480,11 +477,17 @@ namespace TimeWorkTracking
             workSheet.PageSetup.LeftMargin = interval;
             workSheet.PageSetup.RightMargin = interval;
             workSheet.PageSetup.TopMargin = interval;
-            workSheet.PageSetup.BottomMargin = interval;
+            workSheet.PageSetup.BottomMargin = excelApp.CentimetersToPoints(1.2); ;
             workSheet.PageSetup.HeaderMargin = 0;// excelApp.InchesToPoints(0);
             workSheet.PageSetup.FooterMargin = interval;
+            workSheet.PageSetup.PrintTitleRows = "$1:$11";                                      //печать заголовков на каждой странице
+            workSheet.PageSetup.PrintTitleColumns = "";
             workSheet.PageSetup.FirstPageNumber = (int)Excel.Constants.xlAutomatic; //номер первой страници
-            workSheet.PageSetup.CenterFooter = "&B Страница &P";
+//            workSheet.PageSetup.CenterFooter = "Страница  &P из &N";
+            workSheet.PageSetup.LeftFooter = "&B Секретно&B";
+            workSheet.PageSetup.CenterFooter = "&D";
+            workSheet.PageSetup.RightFooter = "Страница &P из &N";
+
 
             toolStripStatusLabelInfo.Text = "Настройка ориентации листа и ограничений";
             workSheet.PageSetup.Orientation = Excel.XlPageOrientation.xlLandscape;
@@ -529,12 +532,12 @@ namespace TimeWorkTracking
             //уточнение       
                 ((Excel.Range)workRange.Rows[1]).Font.Bold = true;                                          //первая строка шапки
                 ((Excel.Range)workRange.Rows[2]).Font.Size = 9;                                             //вторая строка шапки
-                                                                                                        //Свойства в диапазоне через workSheet        
+                                                                                                            //Свойства в диапазоне через workSheet        
                 ((Excel.Range)workSheet.Range[workRange.Cells[2, 3], workRange.Cells[2, workRange.Columns.Count]]).VerticalAlignment = Excel.XlVAlign.xlVAlignTop;
 
-                ((Excel.Range)workRange.Rows[3]).Font.Size = 11;                                            //третья строка шапки (строка данных)
-                ((Excel.Range)workRange.Range[workSheet.Cells[2, 1], workSheet.Cells[3, 2]]).Font.Bold = true;
-                ((Excel.Range)workRange.Cells[3, 2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+                ((Excel.Range)workRange.Rows[5]).Font.Size = 11;                                            //пятая строка шапки (строка данных)
+                ((Excel.Range)workRange.Range[workSheet.Cells[5, 1], workSheet.Cells[6, 2]]).Font.Bold = true;
+                ((Excel.Range)workRange.Cells[5, 2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
             //Свойства в диапазоне через workSheet 
                 ((Excel.Range)workSheet.Range[workRange.Cells[5, 3], workRange.Cells[5, workRange.Columns.Count]]).Font.Color = ColorTranslator.ToOle(Color.LightGray);
                 ((Excel.Range)workSheet.Range[workRange.Cells[5, 3], workRange.Cells[5, workRange.Columns.Count]]).Font.Size = 16;
@@ -565,8 +568,8 @@ namespace TimeWorkTracking
                 ((Excel.Range)workRange.Rows[6]).RowHeight = 20;                //объединение столбцов
                 workSheet.Range[workRange.Cells[1, 1], workRange.Cells[4, 1]].Merge(mis);
                 workSheet.Range[workRange.Cells[1, 2], workRange.Cells[4, 2]].Merge(mis);
-                workSheet.Range[workRange.Cells[5, 1], workRange.Cells[6, 1]].Merge(mis);
-            workSheet.Range[workRange.Cells[5, 2], workRange.Cells[6, 2]].Merge(mis);
+//                workSheet.Range[workRange.Cells[5, 1], workRange.Cells[6, 1]].Merge(mis);
+//                workSheet.Range[workRange.Cells[5, 2], workRange.Cells[6, 2]].Merge(mis);
 
                 int j = 2;
                 for (int i = 1; i <= captionData.GetUpperBound(1) / 2; i++)
@@ -591,23 +594,28 @@ namespace TimeWorkTracking
 
             toolStripStatusLabelInfo.Text = "Вставка данных таблицы";
             //расширим форматированную таблицу данных
-            tableResize(
+            Excel.Range fullTable = tableResize(
                 workSheet,
-                null,
+                workSheet.Range[
+                    workSheet.Cells[workRange.Row + workRange.Rows.Count - 1 - 1, workRange.Column],
+                    workSheet.Cells[workRange.Row + workRange.Rows.Count - 1 , workRange.Column + workRange.Columns.Count - 1]],
                 tableData.GetUpperBound(0) + 1
                 );
-            //диапазон для таблицы
-            workRange = workSheet.Range[
-                workSheet.Cells[workRange.Row + workRange.Rows.Count - 1 - 1, workRange.Column],
-                workSheet.Cells[workRange.Row + workRange.Rows.Count - 1 - 1 + captionData.GetUpperBound(0), workRange.Column + workRange.Columns.Count - 1]
-                ];
-            //вставим данные в таблицу одним куском
-            workRange.Resize[
-                tableData.GetUpperBound(0) + 1,
-                tableData.GetUpperBound(1) + 1
-                ].Value = tableData;
+            fullTable.Value = tableData;
 
-            toolStripStatusLabelInfo.Text = "Файл подготовлен";
+            toolStripStatusLabelInfo.Text = "Дополнительное форматирование";
+            j = 0;
+            for (int i = 1; i <= fullTable.Rows.Count / 2; i++)
+            {
+                ((Excel.Range)fullTable.Rows[i+j]).RowHeight = 20;                //высота строки данных
+                ((Excel.Range)fullTable.Rows[i+j+1]).RowHeight = 20;              //объединение столбцов
+                workSheet.Range[fullTable.Cells[i + j, 1], fullTable.Cells[i + j + 1, 1]].Merge(mis);
+                workSheet.Range[fullTable.Cells[i + j, 2], fullTable.Cells[i + j + 1, 2]].Merge(mis);
+
+                j += 1;
+            }
+
+                toolStripStatusLabelInfo.Text = "Файл подготовлен";
             //Настройки Application вернуть обратно
             excelApp.DisplayAlerts = true;                                 //Разрешить отображение окон с сообщениями
             excelApp.ScreenUpdating = true;                                //Зазрешить перерисовку экрана    
@@ -634,29 +642,23 @@ namespace TimeWorkTracking
         '   srcRange - диапазон с данными (range) (расширяемая строка таблицы)
         '   spCount - количество строк на которое будем расширяться
         '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-        private void tableResize(Excel.Worksheet wSheet, Excel.Range srcRange, int spCount)
+        private Excel.Range tableResize(Excel.Worksheet wSheet, Excel.Range srcRange, int spCount)
         {
             if (spCount > 1) 
             {
-                /*
-                ((Excel.Range)wSheet.Cells[spRow + 1, spColFirst]).Resize[spCount - 1].EntireRow.Insert(Excel.XlDirection.xlDown);
-                ((Excel.Range)wSheet.Range[wSheet.Cells[spRow, spColFirst], wSheet.Cells[spRow, spColLast]]).Copy(((Excel.Range)wSheet.Range[wSheet.Cells[spRow + 1, spColFirst], wSheet.Cells[spRow + 1 + spCount - 2, spColLast]]));
-                */
-                
-                //расширим диапазон с нижеследующей строки
-   //             Excel.Range srcFirstCell = (Excel.Range)wSheet.Cells[srcRange.Row, srcRange.Column];
-   //             srcFirstCell.Offset[srcRange.Rows.Count, 0].Resize[spCount - 1].EntireRow.Insert(Excel.XlDirection.xlDown);
-
-                //скопируем, в координатах листа, пришедщий диапазон в новый
+                //скопируем, в координатах листа, сохраняя форматирование пришедщий диапазон в новый
                 Excel.Range from = wSheet.Range[
                     wSheet.Cells[srcRange.Row, srcRange.Column], 
                     wSheet.Cells[srcRange.Row + srcRange.Rows.Count - 1, srcRange.Column + srcRange.Columns.Count - 1]];
                 Excel.Range to = wSheet.Range[
-                    ((Excel.Range)wSheet.Cells[srcRange.Row, srcRange.Column]).Offset[srcRange.Rows.Count, 0],
-                    ((Excel.Range)wSheet.Cells[srcRange.Row + srcRange.Rows.Count - 1, srcRange.Column + srcRange.Columns.Count - 1]).Offset[spCount-1, 0]];
-                from.Copy(to);
-                
+                    wSheet.Cells[srcRange.Row, srcRange.Column],
+                    ((Excel.Range)wSheet.Cells[srcRange.Row + srcRange.Rows.Count - 1, srcRange.Column + srcRange.Columns.Count - 1]).Offset[spCount- srcRange.Rows.Count, 0]];
+                //строки каждая по одной без объединения иначе copy не сработает
+                srcRange.Copy(to);
+
+                return to;
             }
+            return srcRange;
         }
 
         //--------------------------------------------------------------------------------------------------------------------------------------------
