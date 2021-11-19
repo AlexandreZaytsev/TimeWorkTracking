@@ -248,7 +248,7 @@ namespace TimeWorkTracking
             //Объявляем приложение
             excelApp = new Excel.Application
             {
-                Visible = false,                                            //Отобразить Excel
+                Visible = true,// false,                                            //Отобразить Excel
                 SheetsInNewWorkbook = 1                                     //Количество листов в рабочей книге    
             };
             workBook = excelApp.Workbooks.Add(mis);                         //Добавить рабочую книгу
@@ -256,7 +256,7 @@ namespace TimeWorkTracking
             toolStripStatusLabelInfo.Text = "Создание рабочей книги";
             //Настройки Application установить
             excelApp.DisplayAlerts = false;                                 //Запретить отображение окон с сообщениями
-            excelApp.ScreenUpdating = false;                                //Запретить перерисовку экрана    
+            excelApp.ScreenUpdating = true;// false;                                //Запретить перерисовку экрана    
             excelApp.ActiveWindow.Zoom = 80;                                //Масштаб листа
             excelApp.ActiveWindow.View = Excel.XlWindowView.xlPageBreakPreview;
 
@@ -286,8 +286,13 @@ namespace TimeWorkTracking
             workSheet.PageSetup.BottomMargin = interval;
             workSheet.PageSetup.HeaderMargin = 0;// excelApp.InchesToPoints(0);
             workSheet.PageSetup.FooterMargin = interval;
+            workSheet.PageSetup.PrintTitleRows = "$1:$7";                                      //печать заголовков на каждой странице
+            workSheet.PageSetup.PrintTitleColumns = "";
             workSheet.PageSetup.FirstPageNumber = (int)Excel.Constants.xlAutomatic; //номер первой страници
-            workSheet.PageSetup.CenterFooter = "&B Страница &P";
+//            workSheet.PageSetup.CenterFooter = "&B Страница &P";
+            workSheet.PageSetup.LeftFooter = "&B Секретно&B";
+            workSheet.PageSetup.CenterFooter = "&D";
+            workSheet.PageSetup.RightFooter = "Страница &P из &N";
 
             toolStripStatusLabelInfo.Text = "Настройка ориентации листа и ограничений";
             workSheet.PageSetup.Orientation = Excel.XlPageOrientation.xlLandscape;
