@@ -174,19 +174,19 @@ namespace TimeWorkTracking
                     }
                     break;
                 case "FormTimeCheck":
-                    tableData = new string[usersData.Rows.Count * 2, lenDays * 2];   //Создаём новый двумерный массив
+                    tableData = new string[usersData.Rows.Count*2, lenDays+1];   //Создаём новый двумерный массив
                     j = 0;
                     for (int i = 0; i < usersData.Rows.Count; i++)     // Display items in the ListView control
                     {
                         DataRow drow = usersData.Rows[i];
                         if (drow.RowState != DataRowState.Deleted)  // Only row that have not been deleted
                         {
-                            tableData[i, 0] = (i + 1).ToString();
-                            tableData[i, 1] = drow["fio"].ToString();
-                            for(int ld=0; ld < lenDays; ld++) 
+                            tableData[i + j, 0] = (i + 1).ToString();
+                            tableData[i + j, 1] = drow["fio"].ToString();
+                            for(int col=0; col < lenDays-1; col+=2) 
                             {
-                                tableData[i, 2+ld+j] = Convert.ToDateTime(drow["startTime"]).ToString("HH:mm");
-                                tableData[i, 3+ld+j] = Convert.ToDateTime(drow["stopTime"]).ToString("HH:mm");
+                                tableData[i + j, 2 + col] = Convert.ToDateTime(drow["startTime"]).ToString("HH:mm");
+                                tableData[i + j, 3 + col] = Convert.ToDateTime(drow["stopTime"]).ToString("HH:mm");
                             }
                             j += 1;
                         }
@@ -328,7 +328,7 @@ namespace TimeWorkTracking
                 workRange.WrapText = true;
                 workRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;                               //нарисуем все рамки
                 ((Excel.Range)workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1,2]]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);   //заливка первой строки цветом
-                ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, workRange.Columns.Count]]).Interior.Color = ColorTranslator.ToOle(Color.LightGreen);
+                ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, workRange.Columns.Count]]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);//.LightGreen);
             //уточнение       
                 ((Excel.Range)workRange.Rows[1]).Font.Bold = true;                                          //первая строка шапки
                 ((Excel.Range)workRange.Rows[2]).Font.Size = 9;                                             //вторая строка шапки
@@ -349,7 +349,7 @@ namespace TimeWorkTracking
                 Excel.FormatConditions fcs = ((Excel.Range)workRange.Rows[1]).EntireRow.FormatConditions;
                 Excel.FormatCondition fc = (Excel.FormatCondition)fcs.Add(
                     Type:Excel.XlFormatConditionType.xlExpression,
-                    mis, //Excel.XlFormatConditionOperator.xlEqual,
+                    mis, //Excel.XlFormatConditionOperator.xlNotEqual,//.xlEqual,
                     Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A9))",
                     mis, mis, mis, mis, mis);
 
@@ -602,8 +602,8 @@ namespace TimeWorkTracking
                 );
             //диапазон для таблицы
             workRange = workSheet.Range[
-                workSheet.Cells[workRange.Row + workRange.Rows.Count - 1, workRange.Column],
-                workSheet.Cells[workRange.Row + workRange.Rows.Count - 1 + captionData.GetUpperBound(0), workRange.Column + workRange.Columns.Count - 1]
+                workSheet.Cells[workRange.Row + workRange.Rows.Count - 1 - 1, workRange.Column],
+                workSheet.Cells[workRange.Row + workRange.Rows.Count - 1 - 1 + captionData.GetUpperBound(0), workRange.Column + workRange.Columns.Count - 1]
                 ];
             //вставим данные в таблицу одним куском
             workRange.Resize[
