@@ -644,17 +644,19 @@ namespace TimeWorkTracking
         {
             if (spCount > 1) 
             {
+                /*
                 ((Excel.Range)wSheet.Cells[spRow + 1, spColFirst]).Resize[spCount - 1].EntireRow.Insert(Excel.XlDirection.xlDown);
                 ((Excel.Range)wSheet.Range[wSheet.Cells[spRow, spColFirst], wSheet.Cells[spRow, spColLast]]).Copy(((Excel.Range)wSheet.Range[wSheet.Cells[spRow + 1, spColFirst], wSheet.Cells[spRow + 1 + spCount - 2, spColLast]]));
+                */
 
-                /*
-                Excel.Range rng4 = (Excel.Range)wSheet.Cells[spRow + 1, spColFirst];
+                
+                Excel.Range rng4 = (Excel.Range)wSheet.Cells[spRow + 1, spColFirst]; 
                 rng4.Resize[spCount - 1].EntireRow.Insert(Excel.XlDirection.xlDown);
 
                 Excel.Range from = wSheet.Range[wSheet.Cells[spRow, spColFirst], wSheet.Cells[spRow, spColLast]];
                 Excel.Range to = wSheet.Range[wSheet.Cells[spRow + 1, spColFirst], wSheet.Cells[spRow + 1 + spCount - 2, spColLast]];
                 from.Copy(to);
-                */
+                
             }
         }
 
