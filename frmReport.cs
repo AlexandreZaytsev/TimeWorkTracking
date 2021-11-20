@@ -248,7 +248,7 @@ namespace TimeWorkTracking
             //Объявляем приложение
             excelApp = new Excel.Application
             {
-                Visible = true,// false,                                            //Отобразить Excel
+                Visible = false,                                            //Отобразить Excel
                 SheetsInNewWorkbook = 1                                     //Количество листов в рабочей книге    
             };
             workBook = excelApp.Workbooks.Add(mis);                         //Добавить рабочую книгу
@@ -256,7 +256,7 @@ namespace TimeWorkTracking
             toolStripStatusLabelInfo.Text = "Создание рабочей книги";
             //Настройки Application установить
             excelApp.DisplayAlerts = false;                                 //Запретить отображение окон с сообщениями
-            excelApp.ScreenUpdating = true;// false;                                //Запретить перерисовку экрана    
+            excelApp.ScreenUpdating = false;                                //Запретить перерисовку экрана    
             excelApp.ActiveWindow.Zoom = 80;                                //Масштаб листа
             excelApp.ActiveWindow.View = Excel.XlWindowView.xlPageBreakPreview;
 
@@ -369,7 +369,8 @@ namespace TimeWorkTracking
                 ((Excel.Range)workRange.Columns[1]).ColumnWidth = 3.5;          //ширина колонки с номером
                 ((Excel.Range)workRange.Columns[2]).ColumnWidth = 38.5;         //ширина колонки ФИО 
                 ((Excel.Range)workRange.Rows[1]).RowHeight = 28.5;              //высота первой строки 
-                //объединение столбцов
+//                ((Excel.Range)workRange.Rows[3]).RowHeight = 20;                //высота строки данных
+            //объединение столбцов
                 workSheet.Range[workRange.Cells[1, 1], workRange.Cells[2, 1]].Merge(mis);
                 workSheet.Range[workRange.Cells[1, 2], workRange.Cells[2, 2]].Merge(mis);
                 int j = 2;
@@ -406,6 +407,9 @@ namespace TimeWorkTracking
                     tableData.GetUpperBound(0) + 1,
                     tableData.GetUpperBound(1) + 1
                     ].Value = tableData;
+
+            toolStripStatusLabelInfo.Text = "Дополнительное форматирование";
+            fullTable.Rows.RowHeight = 20;  //восстановить высоту строк в диапазоне данных
 
             toolStripStatusLabelInfo.Text = "Файл подготовлен";
             //Настройки Application вернуть обратно
@@ -569,12 +573,12 @@ namespace TimeWorkTracking
                 ((Excel.Range)workRange.Columns[1]).ColumnWidth = 3.5;          //ширина колонки с номером
                 ((Excel.Range)workRange.Columns[2]).ColumnWidth = 38.5;         //ширина колонки ФИО 
                 ((Excel.Range)workRange.Rows[1]).RowHeight = 28.5;              //высота первой строки
-                ((Excel.Range)workRange.Rows[5]).RowHeight = 20;                //высота строки данных
-                ((Excel.Range)workRange.Rows[6]).RowHeight = 20;                //объединение столбцов
+//                ((Excel.Range)workRange.Rows[5]).RowHeight = 20;                //высота строки данных
+//                ((Excel.Range)workRange.Rows[6]).RowHeight = 20;                //высота строки данных
                 workSheet.Range[workRange.Cells[1, 1], workRange.Cells[4, 1]].Merge(mis);
                 workSheet.Range[workRange.Cells[1, 2], workRange.Cells[4, 2]].Merge(mis);
-//                workSheet.Range[workRange.Cells[5, 1], workRange.Cells[6, 1]].Merge(mis);
-//                workSheet.Range[workRange.Cells[5, 2], workRange.Cells[6, 2]].Merge(mis);
+                workSheet.Range[workRange.Cells[5, 1], workRange.Cells[6, 1]].Merge(mis);
+                workSheet.Range[workRange.Cells[5, 2], workRange.Cells[6, 2]].Merge(mis);
 
                 int j = 2;
                 for (int i = 1; i <= captionData.GetUpperBound(1) / 2; i++)
@@ -609,18 +613,9 @@ namespace TimeWorkTracking
             fullTable.Value = tableData;
 
             toolStripStatusLabelInfo.Text = "Дополнительное форматирование";
-            j = 0;
-            for (int i = 1; i <= fullTable.Rows.Count / 2; i++)
-            {
-                ((Excel.Range)fullTable.Rows[i+j]).RowHeight = 20;                //высота строки данных
-                ((Excel.Range)fullTable.Rows[i+j+1]).RowHeight = 20;              //объединение столбцов
-                workSheet.Range[fullTable.Cells[i + j, 1], fullTable.Cells[i + j + 1, 1]].Merge(mis);
-                workSheet.Range[fullTable.Cells[i + j, 2], fullTable.Cells[i + j + 1, 2]].Merge(mis);
+            fullTable.Rows.RowHeight = 20;  //восстановить высоту строк в диапазоне данных
 
-                j += 1;
-            }
-
-                toolStripStatusLabelInfo.Text = "Файл подготовлен";
+            toolStripStatusLabelInfo.Text = "Файл подготовлен";
             //Настройки Application вернуть обратно
             excelApp.DisplayAlerts = true;                                 //Разрешить отображение окон с сообщениями
             excelApp.ScreenUpdating = true;                                //Зазрешить перерисовку экрана    
@@ -658,8 +653,13 @@ namespace TimeWorkTracking
                 Excel.Range to = wSheet.Range[
                     wSheet.Cells[srcRange.Row, srcRange.Column],
                     ((Excel.Range)wSheet.Cells[srcRange.Row + srcRange.Rows.Count - 1, srcRange.Column + srcRange.Columns.Count - 1]).Offset[spCount- srcRange.Rows.Count, 0]];
-                //строки каждая по одной без объединения иначе copy не сработает
-                srcRange.Copy(to);
+
+                //для метода Copy
+                // строки каждая по одной без объединения иначе copy не сработает
+                //srcRange.Copy(to);  //не работает про объединенных строках, сбрасывает объединения в столбцах
+
+                //для метода AutoFill все ок но теряет высоту строк
+                srcRange.AutoFill(Destination: to, Type: Excel.XlAutoFillType.xlFillDefault);
 
                 return to;
             }
