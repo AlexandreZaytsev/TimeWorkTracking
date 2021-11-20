@@ -190,5 +190,17 @@ namespace TimeWorkTracking.Properties {
                 this["adminPass"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("АО Русская Промышленная Компания")]
+        public string companyName {
+            get {
+                return ((string)(this["companyName"]));
+            }
+            set {
+                this["companyName"] = value;
+            }
+        }
     }
 }

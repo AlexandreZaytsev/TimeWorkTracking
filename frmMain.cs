@@ -837,19 +837,21 @@ namespace TimeWorkTracking
         //проверить кто будет работать с программой
         private void CallbackLogIn(string typeLogIn, string controlParentName, Dictionary<String, String> param)
         {
+            string msg = "";
             switch (typeLogIn)
             {
                 case "Администратор":
                     userType = true;
                     toolSetting.Visible = true;
-                    this.Text = "Учет рабочего времени (Администратор)";
+                    msg = "Администратор";
                     break;
                 case "Пользователь":
                     userType = false;
                     toolSetting.Visible = false;
-                    this.Text = "Учет рабочего времени (Регистратор)";
+                    msg = "Регистратор";
                     break;
             }
+            this.Text = "Учет рабочего времени (" + msg + ") " + Properties.Settings.Default.companyName;
         }
 
 

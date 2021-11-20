@@ -44,5 +44,8 @@
     <Setting Name="adminPass" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="companyName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">АО Русская Промышленная Компания</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

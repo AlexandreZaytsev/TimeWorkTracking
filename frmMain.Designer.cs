@@ -172,14 +172,14 @@ namespace TimeWorkTracking
             this.toolSetting.ShowDropDownArrow = false;
             this.toolSetting.Size = new System.Drawing.Size(24, 24);
             this.toolSetting.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.toolSetting.ToolTipText = "Импорт Экспорт";
+            this.toolSetting.ToolTipText = "Настройка программы";
             this.toolSetting.Click += new System.EventHandler(this.toolSetting_Click);
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(328, 20);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(289, 20);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "    Справочники:";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;

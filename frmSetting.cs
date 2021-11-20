@@ -140,6 +140,7 @@ namespace TimeWorkTracking
 
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             mainPanelSetting.Enabled = clMsSqlDatabase.CheckConnectWithConnectionStr(cs);
+            tbCompanyName.Text = Properties.Settings.Default.companyName;   //наименование компании
         }   
 
         //диалог выбора имени файла
@@ -532,6 +533,7 @@ namespace TimeWorkTracking
             Properties.Settings.Default.importFilename = @tbPath.Text;
             Properties.Settings.Default.importUserRange = @cbSheetUser.Text + "$" + tbRangeUser.Text;
             Properties.Settings.Default.importPassRange = @cbSheetPass.Text + "$" + tbRangePass.Text;
+            Properties.Settings.Default.companyName = tbCompanyName.Text;
 
             Properties.Settings.Default.Save();
         }

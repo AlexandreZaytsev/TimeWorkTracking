@@ -226,16 +226,16 @@ namespace TimeWorkTracking
         {
             toolStripStatusLabelInfo.Text = "";
             FormHeatPrint();
-            MessageBox.Show(
+            string msg =
                 "Журнал учета средней температуры по компании создан" + "\r\n" +
                 " (см. новый файл Excel)" + "\r\n" + "\r\n" +
                 "перейдите на него для печати документа" + "\r\n" +
-                "после чего закройте БЕЗ сохранения",
-                "Подготовка документов",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-                );
+                "после чего закройте БЕЗ сохранения";
+//            MessageBox.Show(msg, "Подготовка документов", MessageBoxButtons.OK, MessageBoxIcon.Information);
             toolStripStatusLabelInfo.Text = "Выберите диапазон";
+            System.Threading.Thread.Sleep(1000);    //пауза 1 сек
+            this.Close();                           //закрыть форму
+
         }
         private bool FormHeatPrint()
         {
@@ -318,7 +318,7 @@ namespace TimeWorkTracking
                 workRange.Font.Bold = true;
                 workRange.Font.Name = "Times New Roman";
                 workRange.Font.Size = 14;
-                workRange.Cells[1, 1] = "Журнал учета средней температуры сотрудников Русской Промышленной Компании";
+                workRange.Cells[1, 1] = "Журнал учета средней температуры сотрудников " + Properties.Settings.Default.companyName;   //наименование компании
                 workRange.Cells[2, 1] = "Период: " + mcReport.SelectionStart.ToString("dd.MM.yyyy") + " - " + mcReport.SelectionEnd.ToString("dd.MM.yyyy");
 
             toolStripStatusLabelInfo.Text = "Форматирование заголовка и строки данных";
@@ -413,9 +413,10 @@ namespace TimeWorkTracking
 
             toolStripStatusLabelInfo.Text = "Файл подготовлен";
             //Настройки Application вернуть обратно
-            excelApp.DisplayAlerts = true;                                 //Разрешить отображение окон с сообщениями
-            excelApp.ScreenUpdating = true;                                //Зазрешить перерисовку экрана    
+            excelApp.DisplayAlerts = true;                                  //Разрешить отображение окон с сообщениями
+            excelApp.ScreenUpdating = true;                                 //Зазрешить перерисовку экрана    
             excelApp.Visible = true;
+//            excelApp.WindowState = Excel.XlWindowState.xlMinimized;         //Свернуть окно   
             //            excelApp.Quit();
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
 
@@ -429,16 +430,15 @@ namespace TimeWorkTracking
         {
             toolStripStatusLabelInfo.Text = "";
             FormTimePrint();
-            MessageBox.Show(
+            string msg =
                 "Журнал учета рабочего времени создан" + "\r\n" +
                 " (см. новый файл Excel)" + "\r\n" + "\r\n" +
                 "перейдите на него для печати документа" + "\r\n" +
-                "после чего закройте БЕЗ сохранения",
-                "Подготовка документов",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-                );
+                "после чего закройте БЕЗ сохранения";
+//            MessageBox.Show(msg, "Подготовка документов", MessageBoxButtons.OK, MessageBoxIcon.Information);
             toolStripStatusLabelInfo.Text = "Выберите диапазон";
+            System.Threading.Thread.Sleep(1000);    //пауза 1 сек
+            this.Close();                           //закрыть форму
         }
         private bool FormTimePrint()
         {
@@ -522,7 +522,7 @@ namespace TimeWorkTracking
                 workRange.Font.Bold = true;
                 workRange.Font.Name = "Times New Roman";
                 workRange.Font.Size = 14;
-                workRange.Cells[1, 1] = "Журнал учета рабочего времени сотрудников Русской Промышленной Компании";
+                workRange.Cells[1, 1] = "Журнал учета рабочего времени сотрудников " + Properties.Settings.Default.companyName;   //наименование компании
                 workRange.Cells[2, 1] = "Период: " + mcReport.SelectionStart.ToString("dd.MM.yyyy") + " - " + mcReport.SelectionEnd.ToString("dd.MM.yyyy");
 
             toolStripStatusLabelInfo.Text = "Форматирование заголовка и строки данных";
@@ -620,6 +620,7 @@ namespace TimeWorkTracking
             excelApp.DisplayAlerts = true;                                 //Разрешить отображение окон с сообщениями
             excelApp.ScreenUpdating = true;                                //Зазрешить перерисовку экрана    
             excelApp.Visible = true;
+            //            excelApp.WindowState = Excel.XlWindowState.xlMinimized;         //Свернуть окно 
             //            excelApp.Quit();
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
 

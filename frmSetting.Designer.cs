@@ -54,30 +54,34 @@ namespace TimeWorkTracking
             this.toolStripProgressBarImport = new System.Windows.Forms.ToolStripProgressBar();
             this.toolTipMsgSetting = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorkerSetting = new System.ComponentModel.BackgroundWorker();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.tbCompanyName = new System.Windows.Forms.TextBox();
             this.mainPanelSetting.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.statusStripSetting.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainPanelSetting
             // 
-            this.mainPanelSetting.Controls.Add(this.label2);
-            this.mainPanelSetting.Controls.Add(this.btFileName);
-            this.mainPanelSetting.Controls.Add(this.tbPath);
-            this.mainPanelSetting.Controls.Add(this.groupBox1);
+            this.mainPanelSetting.Controls.Add(this.groupBox3);
+            this.mainPanelSetting.Controls.Add(this.groupBox2);
             this.mainPanelSetting.Controls.Add(this.statusStripSetting);
             this.mainPanelSetting.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanelSetting.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mainPanelSetting.Location = new System.Drawing.Point(0, 0);
             this.mainPanelSetting.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.mainPanelSetting.Name = "mainPanelSetting";
-            this.mainPanelSetting.Size = new System.Drawing.Size(691, 174);
+            this.mainPanelSetting.Size = new System.Drawing.Size(710, 276);
             this.mainPanelSetting.TabIndex = 16;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(16, 11);
+            this.label2.Location = new System.Drawing.Point(17, 27);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(46, 18);
@@ -87,8 +91,8 @@ namespace TimeWorkTracking
             // btFileName
             // 
             this.btFileName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btFileName.Location = new System.Drawing.Point(641, 6);
-            this.btFileName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btFileName.Location = new System.Drawing.Point(642, 22);
+            this.btFileName.Margin = new System.Windows.Forms.Padding(4);
             this.btFileName.Name = "btFileName";
             this.btFileName.Size = new System.Drawing.Size(39, 28);
             this.btFileName.TabIndex = 28;
@@ -98,8 +102,8 @@ namespace TimeWorkTracking
             // 
             // tbPath
             // 
-            this.tbPath.Location = new System.Drawing.Point(73, 7);
-            this.tbPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbPath.Location = new System.Drawing.Point(74, 23);
+            this.tbPath.Margin = new System.Windows.Forms.Padding(4);
             this.tbPath.Name = "tbPath";
             this.tbPath.ReadOnly = true;
             this.tbPath.Size = new System.Drawing.Size(565, 24);
@@ -119,7 +123,7 @@ namespace TimeWorkTracking
             this.groupBox1.Controls.Add(this.btImportPass);
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.btImportUsers);
-            this.groupBox1.Location = new System.Drawing.Point(8, 41);
+            this.groupBox1.Location = new System.Drawing.Point(9, 57);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -131,7 +135,7 @@ namespace TimeWorkTracking
             // tbRangePass
             // 
             this.tbRangePass.Location = new System.Drawing.Point(408, 60);
-            this.tbRangePass.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbRangePass.Margin = new System.Windows.Forms.Padding(4);
             this.tbRangePass.Name = "tbRangePass";
             this.tbRangePass.Size = new System.Drawing.Size(132, 24);
             this.tbRangePass.TabIndex = 37;
@@ -162,7 +166,7 @@ namespace TimeWorkTracking
             // 
             this.cbSheetPass.FormattingEnabled = true;
             this.cbSheetPass.Location = new System.Drawing.Point(169, 60);
-            this.cbSheetPass.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbSheetPass.Margin = new System.Windows.Forms.Padding(4);
             this.cbSheetPass.Name = "cbSheetPass";
             this.cbSheetPass.Size = new System.Drawing.Size(136, 26);
             this.cbSheetPass.TabIndex = 34;
@@ -170,7 +174,7 @@ namespace TimeWorkTracking
             // tbRangeUser
             // 
             this.tbRangeUser.Location = new System.Drawing.Point(408, 23);
-            this.tbRangeUser.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbRangeUser.Margin = new System.Windows.Forms.Padding(4);
             this.tbRangeUser.Name = "tbRangeUser";
             this.tbRangeUser.Size = new System.Drawing.Size(132, 24);
             this.tbRangeUser.TabIndex = 33;
@@ -201,7 +205,7 @@ namespace TimeWorkTracking
             // 
             this.cbSheetUser.FormattingEnabled = true;
             this.cbSheetUser.Location = new System.Drawing.Point(169, 23);
-            this.cbSheetUser.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbSheetUser.Margin = new System.Windows.Forms.Padding(4);
             this.cbSheetUser.Name = "cbSheetUser";
             this.cbSheetUser.Size = new System.Drawing.Size(136, 26);
             this.cbSheetUser.TabIndex = 30;
@@ -278,11 +282,11 @@ namespace TimeWorkTracking
             this.statusStripSetting.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelInfo,
             this.toolStripProgressBarImport});
-            this.statusStripSetting.Location = new System.Drawing.Point(0, 144);
+            this.statusStripSetting.Location = new System.Drawing.Point(0, 246);
             this.statusStripSetting.Name = "statusStripSetting";
             this.statusStripSetting.Padding = new System.Windows.Forms.Padding(1, 0, 13, 0);
             this.statusStripSetting.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStripSetting.Size = new System.Drawing.Size(691, 30);
+            this.statusStripSetting.Size = new System.Drawing.Size(710, 30);
             this.statusStripSetting.SizingGrip = false;
             this.statusStripSetting.TabIndex = 25;
             this.statusStripSetting.Text = "statusStripSetting";
@@ -290,7 +294,7 @@ namespace TimeWorkTracking
             // toolStripStatusLabelInfo
             // 
             this.toolStripStatusLabelInfo.Name = "toolStripStatusLabelInfo";
-            this.toolStripStatusLabelInfo.Size = new System.Drawing.Size(276, 24);
+            this.toolStripStatusLabelInfo.Size = new System.Drawing.Size(334, 24);
             this.toolStripStatusLabelInfo.Spring = true;
             this.toolStripStatusLabelInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -299,11 +303,55 @@ namespace TimeWorkTracking
             this.toolStripProgressBarImport.Name = "toolStripProgressBarImport";
             this.toolStripProgressBarImport.Size = new System.Drawing.Size(360, 22);
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.label2);
+            this.groupBox2.Controls.Add(this.groupBox1);
+            this.groupBox2.Controls.Add(this.btFileName);
+            this.groupBox2.Controls.Add(this.tbPath);
+            this.groupBox2.Location = new System.Drawing.Point(9, 72);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(694, 166);
+            this.groupBox2.TabIndex = 30;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Импорт данных";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.tbCompanyName);
+            this.groupBox3.Controls.Add(this.label7);
+            this.groupBox3.Location = new System.Drawing.Point(9, 8);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(694, 58);
+            this.groupBox3.TabIndex = 31;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Общие настройки";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(16, 27);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(110, 18);
+            this.label7.TabIndex = 11;
+            this.label7.Text = "Имя компании";
+            // 
+            // tbCompanyName
+            // 
+            this.tbCompanyName.Location = new System.Drawing.Point(178, 24);
+            this.tbCompanyName.Margin = new System.Windows.Forms.Padding(4);
+            this.tbCompanyName.Name = "tbCompanyName";
+            this.tbCompanyName.Size = new System.Drawing.Size(503, 24);
+            this.tbCompanyName.TabIndex = 34;
+            this.toolTipMsgSetting.SetToolTip(this.tbCompanyName, "укажите диапазон НА ОДНУ СТРОЧКУ ВЫШЕ\r\nв формате -  Имя столбца : Номер строки\r\n(" +
+        "без использования абсрлютной адресации $))");
+            // 
             // frmSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(691, 174);
+            this.ClientSize = new System.Drawing.Size(710, 276);
             this.Controls.Add(this.mainPanelSetting);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -318,6 +366,10 @@ namespace TimeWorkTracking
             this.groupBox1.PerformLayout();
             this.statusStripSetting.ResumeLayout(false);
             this.statusStripSetting.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -347,5 +399,9 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ComboBox cbSheetUser;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelInfo;
         private System.ComponentModel.BackgroundWorker backgroundWorkerSetting;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.TextBox tbCompanyName;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.GroupBox groupBox2;
     }
 }
