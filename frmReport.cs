@@ -14,7 +14,7 @@ namespace TimeWorkTracking
 {
     public partial class frmReport : Form
     {
-        private clCalendar pCalendar;                   //класс производственный календаоь
+        private readonly clCalendar pCalendar;          //класс производственный календаоь
         private DataTable dtSpecialMarks;               //специальные отметки
 
         private DateTime firstDayRange;                 //первый день диапазона  
@@ -26,7 +26,7 @@ namespace TimeWorkTracking
         private Excel.Workbook workBook;
         private Excel.Worksheet workSheet;
         private Excel.Range workRange;
-        object mis = Type.Missing;
+        readonly object mis = Type.Missing;
 
         private string[,] captionData;                  //массив данных заголовка Excel
         DataTable usersData;                            //информация о пользователях               
@@ -55,6 +55,8 @@ namespace TimeWorkTracking
 
                 //Загрузить массив данных для таблицы Excel
                 usersData = clMsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') where access=1 order by fio");
+                //Загрузить массив специальных отметок для таблицы Excel
+                dtSpecialMarks = clMsSqlDatabase.TableRequest(cs, "select * from SpecialMarks where uses=1");
             }
         }
 
@@ -129,7 +131,7 @@ namespace TimeWorkTracking
                     for (int i = 0; i < lengthDays; i++)           //циклом перебираем даты в созданный двумерный массив
                     {
                         tDate = mcReport.SelectionStart.AddDays(i);
-                        captionData[0, i + j] = tDate.ToString("dd MM yyyy г.\r\ndddd");
+                        captionData[0, i + j] = tDate.ToString("dddd\r\ndd MMMM yyyy г.");
                         captionData[1, i + j] = pCalendar.getDateDescription(tDate);
                         j += 1;
                     }
@@ -141,7 +143,7 @@ namespace TimeWorkTracking
                     for (int i = 0; i < lengthDays; i++)           //циклом перебираем даты в созданный двумерный массив
                     {
                         tDate = mcReport.SelectionStart.AddDays(i);
-                        captionData[0, i + j] = tDate.ToString("dd MM yyyy г.\r\ndddd");
+                        captionData[0, i + j] = tDate.ToString("dddd\r\ndd MMMM yyyy г.");
                         captionData[1, i + j] = pCalendar.getDateDescription(tDate);
                         captionData[2, i + j] = "Пришел";
                         captionData[2, i + 1+j] = "Ушел";
@@ -158,7 +160,7 @@ namespace TimeWorkTracking
         //Загрузить массив данных для таблицы Excel (с учетом объединенных ячеек - спользуем первое значение)
         private int uploadTableExcel(int lenDays)
         {
-            int j = 0;
+            int j;// = 0;
              switch (this.AccessibleName)
             {
                 case "FormHeatCheck":
@@ -226,12 +228,14 @@ namespace TimeWorkTracking
         {
             toolStripStatusLabelInfo.Text = "";
             FormHeatPrint();
+/*
             string msg =
                 "Журнал учета средней температуры по компании создан" + "\r\n" +
                 " (см. новый файл Excel)" + "\r\n" + "\r\n" +
                 "перейдите на него для печати документа" + "\r\n" +
                 "после чего закройте БЕЗ сохранения";
-//            MessageBox.Show(msg, "Подготовка документов", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(msg, "Подготовка документов", MessageBoxButtons.OK, MessageBoxIcon.Information);
+*/
             toolStripStatusLabelInfo.Text = "Выберите диапазон";
             System.Threading.Thread.Sleep(1000);    //пауза 1 сек
             this.Close();                           //закрыть форму
@@ -240,7 +244,7 @@ namespace TimeWorkTracking
         private bool FormHeatPrint()
         {
             Cursor.Current = Cursors.WaitCursor;
-            bool ret = false;
+            bool ret;// = false;
             int arrCount = uploadCaptionExcel((int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1);
             uploadTableExcel(arrCount);                                     //загрузить массив по данным сотрудников
 
@@ -430,12 +434,14 @@ namespace TimeWorkTracking
         {
             toolStripStatusLabelInfo.Text = "";
             FormTimePrint();
+/*
             string msg =
                 "Журнал учета рабочего времени создан" + "\r\n" +
                 " (см. новый файл Excel)" + "\r\n" + "\r\n" +
                 "перейдите на него для печати документа" + "\r\n" +
                 "после чего закройте БЕЗ сохранения";
-//            MessageBox.Show(msg, "Подготовка документов", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(msg, "Подготовка документов", MessageBoxButtons.OK, MessageBoxIcon.Information);
+*/
             toolStripStatusLabelInfo.Text = "Выберите диапазон";
             System.Threading.Thread.Sleep(1000);    //пауза 1 сек
             this.Close();                           //закрыть форму
@@ -443,7 +449,7 @@ namespace TimeWorkTracking
         private bool FormTimePrint()
         {
             Cursor.Current = Cursors.WaitCursor;
-            bool ret = false;
+            bool ret;// = false;
             int arrCount = uploadCaptionExcel((int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1);
             uploadTableExcel(arrCount);                                     //загрузить массив по данным сотрудников
 
@@ -538,9 +544,11 @@ namespace TimeWorkTracking
                 workRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;                               //нарисуем все рамки
                 ((Excel.Range)workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1, 2]]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);   //заливка первой строки цветом
                 ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, workRange.Columns.Count]]).Interior.Color = ColorTranslator.ToOle(Color.LightGreen);
+                ((Excel.Range)workRange.Rows["3:4"]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);
             //уточнение       
                 ((Excel.Range)workRange.Rows[1]).Font.Bold = true;                                          //первая строка шапки
                 ((Excel.Range)workRange.Rows[2]).Font.Size = 9;                                             //вторая строка шапки
+                ((Excel.Range)workRange.Rows["3:4"]).Font.Bold = true;                                      //первая строка шапки
                                                                                                             //Свойства в диапазоне через workSheet        
                 ((Excel.Range)workSheet.Range[workRange.Cells[2, 3], workRange.Cells[2, workRange.Columns.Count]]).VerticalAlignment = Excel.XlVAlign.xlVAlignTop;
 
@@ -648,9 +656,11 @@ namespace TimeWorkTracking
             if (spCount > 1) 
             {
                 //скопируем, в координатах листа, сохраняя форматирование пришедщий диапазон в новый
+                /*
                 Excel.Range from = wSheet.Range[
                     wSheet.Cells[srcRange.Row, srcRange.Column], 
                     wSheet.Cells[srcRange.Row + srcRange.Rows.Count - 1, srcRange.Column + srcRange.Columns.Count - 1]];
+                */
                 Excel.Range to = wSheet.Range[
                     wSheet.Cells[srcRange.Row, srcRange.Column],
                     ((Excel.Range)wSheet.Cells[srcRange.Row + srcRange.Rows.Count - 1, srcRange.Column + srcRange.Columns.Count - 1]).Offset[spCount- srcRange.Rows.Count, 0]];
@@ -677,6 +687,7 @@ namespace TimeWorkTracking
         */
         //https://www.nookery.ru/c-work-c-excel/
         //https://razilov-code.ru/2017/12/13/microsoft-office-interop-excel/
+        /*
         void RebuildSheet(Excel.Workbook Book, string shName, int mode) 
         {
             Excel.Worksheet worksheet;
@@ -722,6 +733,7 @@ namespace TimeWorkTracking
                     break;
             }   
         }
+        */
 
     /*--------------------------------------------------------------------------------------------  
     CALLBACK InPut (подписка на внешние сообщения)

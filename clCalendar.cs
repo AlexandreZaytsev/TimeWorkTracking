@@ -155,38 +155,40 @@ namespace TimeWorkTracking
         //прочитать описание дня по производственному календарю 
         public string getDateDescription(DateTime dayInfo)
         {
+            string ret;// = "";
             KeyValuePair<int, DataRow> infoDate = checkDay(dayInfo.Date);
             switch (infoDate.Key)
             {
                 case 0:                         //это Праздничный день (без переносов)                 
-                    return infoDate.Value["dName"].ToString();
+                    ret = infoDate.Value["dName"].ToString();
                     break;
                 case 1:                         //это Праздничный день (перенесенная дата)
-                    return "Нерабочий день" +
+                    ret =  "Нерабочий день" +
                         "\r\n" + "Перенесено с даты " + ((DateTime)infoDate.Value["dSource"]).ToString("dd.MM.yyyy г.");// + 
 //                        "\r\n" + infoDate.Value["dName"].ToString();
                     break;
                 case 2:                         //это Выходной день (праздник попадает на выходной)
-                    return "Выходной день" +
+                    ret = "Выходной день" +
                         "\r\n" + "Перенесено на дату " + ((DateTime)infoDate.Value["dWork"]).ToString("dd.MM.yyyy г.");// + "\r\n" +
 //                        infoDate.Value["dName"].ToString();
                     break;
                 case 3:                         //это Рабочий день (праздник не попадает на выходной)
-                    return "Рабочий день" +
+                    ret = "Рабочий день" +
                         "\r\n" + "(" + infoDate.Value["dLength"].ToString().ToLower() + ")" +
                         "\r\n" + "Перенесено на дату " + ((DateTime)infoDate.Value["dWork"]).ToString("dd.MM.yyyy г.");// + "\r\n" +
 //                        infoDate.Value["dName"].ToString();
                     break;
                 case 4:                         //это просто Выходной день
                     return "Выходной день";
-                    break;
+//                    break;
                 case 5:                         //это просто Рабочий день
-                    return "Рабочий день";
+                    ret = "Рабочий день";
                     break;
                 default:
-                    return "";    
+                    ret = "";    
                     break;
             }
+            return ret;
         }
 
         //прочитать харектеристики дня по производственному календарю

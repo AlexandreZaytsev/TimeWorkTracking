@@ -21,7 +21,7 @@ namespace TimeWorkTracking
     public partial class frmMain : Form
     {
         clListViewItemComparer _lvwItemComparer;                            //объект сортировки по колонкам
-        private clCalendar pCalendar;                                       //класс производственный календаоь
+        private readonly clCalendar pCalendar;                              //класс производственный календаоь
         public bool userType;                                               //false - пользователь true - админ
         private bool readType;                                              //true - чтение из списка/БД false - запись в БД  
 
@@ -30,7 +30,8 @@ namespace TimeWorkTracking
             //подписка события внешних форм 
             CallBack_FrmDataBaseSQL_outEvent.callbackEventHandler = new CallBack_FrmDataBaseSQL_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
             CallBack_FrmDataBasePACS_outEvent.callbackEventHandler = new CallBack_FrmDataBasePACS_outEvent.callbackEvent(this.CallbackReload);  //subscribe (listen) to the general notification
-            CallBack_FrmSetting_outEvent.callbackEventHandler = new CallBack_FrmSetting_outEvent.callbackEvent(this.CallbackCheckListUsers);    //subscribe (listen) to the general notification
+            CallBack_FrmSetting_outEvent.callbackEventHandler = new CallBack_FrmSetting_outEvent.callbackEvent(this.CallbackSetting);           //subscribe (listen) to the general notification
+            CallBack_FrmImport_outEvent.callbackEventHandler = new CallBack_FrmImport_outEvent.callbackEvent(this.CallbackImport);
             CallBack_FrmLogIn_outEvent.callbackEventHandler = new CallBack_FrmLogIn_outEvent.callbackEvent(this.CallbackLogIn);                 //subscribe (listen) to the general notification
 
             InitializeComponent();
@@ -274,7 +275,7 @@ namespace TimeWorkTracking
             string msg = "";
             string hostSQL = Properties.Settings.Default.twtServerName;
             string csSQL = Properties.Settings.Default.twtConnectionSrting;
-            bool pingSQL = csSQL != "" ? clSystemChecks.CheckPing(hostSQL) : false;
+            bool pingSQL = csSQL != "" && clSystemChecks.CheckPing(hostSQL);
             bool conSQL = false;
             if (!pingSQL)
                 msg += "Cетевое имя сервера SQL\r\n  " + hostSQL + "- недоступно\r\n\r\n";
@@ -283,7 +284,7 @@ namespace TimeWorkTracking
 
             string hostPACS = Properties.Settings.Default.pacsHost;
             string csPACS = Properties.Settings.Default.pacsConnectionString;
-            bool pingPACS = csPACS != "" ? clSystemChecks.CheckPing(hostPACS) : false;
+            bool pingPACS = csPACS != "" && clSystemChecks.CheckPing(hostPACS);
             if (!pingPACS)
                 msg += "Cетевое имя сервиса СКУД\r\n  " + hostPACS + "- недоступно\r\n";
 
@@ -634,12 +635,12 @@ namespace TimeWorkTracking
             switch (wScheme)                                                 //Тариф    
             {
                 case 1:                                                     //Почасовой
-                    cMin = cMin - chLunch;                                  //Учитывая Обед
+                    cMin -= chLunch;                                        //Учитывая Обед
                     //! исключения сокращенный день только для полной занятости
                     cMin = cMin < 0 ? tempMin : cMin;                       //Если ушли в минус вернемся обратно
                     tempMin = cMin;                                         //Сохраним текущее время
                     //!!!!! Плюс потому что секретарь отмечает фактическое время ухода а человек уходит раньше на час за счет праздника
-                    cMin = cMin + extMin;                                   //Учтем Сокращенный Предпраздничный День
+                    cMin += extMin;                                   //Учтем Сокращенный Предпраздничный День
                     //!!!!! Поэтому этот ранний уход компенсируем добавляя час из сокращенного времени
                     cMin = cMin < 0 ? tempMin : cMin;                       //Если ушли в минус вернемся обратно
                     break;
@@ -805,6 +806,14 @@ namespace TimeWorkTracking
             lstwDataBaseMain.HideSelection = false;                         //оставить выделение строки при потере фокуса ListView
             lstwDataBaseMain.EnsureVisible(index);                          //показать в области видимости окна
         }
+        //обновить имя главного окна
+        private void reloadCaption() 
+        {
+            if (userType)
+                this.Text = "Учет рабочего времени (Администратор) " + Properties.Settings.Default.companyName;
+            else
+                this.Text = "Учет рабочего времени (Регистратор) " + Properties.Settings.Default.companyName;
+        }
 
         /*--------------------------------------------------------------------------------------------  
         CALLBACK InPut (подписка на внешние сообщения)
@@ -827,8 +836,13 @@ namespace TimeWorkTracking
             }
             */
         }
-        //обновить список юзеров в главном окне
-        private void CallbackCheckListUsers(string controlName, string controlParentName, Dictionary<String, String> param)
+        //обновить общие настройки 
+        private void CallbackSetting(string controlName, string controlParentName, Dictionary<String, String> param)
+        {
+            reloadCaption();                            //Обновить имя главного окна
+        }
+        //обновить настройки после импорта (список юзеров в главном окне)
+        private void CallbackImport(string controlName, string controlParentName, Dictionary<String, String> param)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
@@ -837,21 +851,18 @@ namespace TimeWorkTracking
         //проверить кто будет работать с программой
         private void CallbackLogIn(string typeLogIn, string controlParentName, Dictionary<String, String> param)
         {
-            string msg = "";
             switch (typeLogIn)
             {
                 case "Администратор":
                     userType = true;
                     toolSetting.Visible = true;
-                    msg = "Администратор";
                     break;
                 case "Пользователь":
                     userType = false;
                     toolSetting.Visible = false;
-                    msg = "Регистратор";
                     break;
             }
-            this.Text = "Учет рабочего времени (" + msg + ") " + Properties.Settings.Default.companyName;
+            reloadCaption();                            //Обновить имя главного окна
         }
 
 

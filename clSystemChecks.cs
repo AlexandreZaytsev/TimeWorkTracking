@@ -15,10 +15,10 @@ namespace TimeWorkTracking
         static public bool CheckPing(string addrPing)
         {
             Ping Pinger = new Ping();
-            int timeout = 4000;                 //4 сек 
-            PingOptions options = new PingOptions(64, true);
-            string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-            byte[] buffer = Encoding.ASCII.GetBytes(data);
+            //int timeout = 4000;                 //4 сек 
+            //PingOptions options = new PingOptions(64, true);
+            //string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+            //byte[] buffer = Encoding.ASCII.GetBytes(data);
             try
             {
                 PingReply reply = Pinger.Send(addrPing);//, timeout);//, buffer, options);
@@ -27,7 +27,7 @@ namespace TimeWorkTracking
                 else
                     return false;
             }
-            catch (PingException e)
+            catch (PingException)// e)
             {
                 return false;
             }
