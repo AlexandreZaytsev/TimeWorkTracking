@@ -803,9 +803,9 @@ namespace TimeWorkTracking
             //управление шрифтами и выравниванием
                 ((Excel.Range)workRange.Rows[1]).Font.Bold = true;              //первая строка шапки
                 ((Excel.Range)workRange.Cells[2, 2]).Font.Italic = true;
-                ((Excel.Range)workRange.Cells[3, 3]).Font.Bold = true;
+                ((Excel.Range)workRange.Cells[3, 2]).Font.Bold = true;
 
-                ((Excel.Range)workRange.Cells[2, 2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+                ((Excel.Range)workSheet.Range[workRange.Cells[2, 2], workRange.Cells[3, 2]]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
                 ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, 3 + daysCount-1]]).VerticalAlignment = Excel.XlVAlign.xlVAlignBottom;
                 ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, 3 + daysCount-1]]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
 
@@ -817,6 +817,21 @@ namespace TimeWorkTracking
                 ((Excel.Range)workSheet.Range[workRange.Cells[1, 3 + daysCount + 3], workRange.Cells[1, 3 + captionData.GetUpperBound(1) - 5]]).Interior.Color = ColorTranslator.ToOle(Color.LightBlue);
                 ((Excel.Range)workRange.Cells[1, 3 + captionData.GetUpperBound(1) - 2]).Interior.Color = ColorTranslator.ToOle(Color.LightGreen);
                 ((Excel.Range)workRange.Cells[2, 1]).Interior.Color = ColorTranslator.ToOle(Color.LightBlue);
+
+            toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
+            //условное форматирование диапазона 
+               Excel.FormatConditions fcs = ((Excel.Range)workRange.Rows[1]).EntireRow.FormatConditions;
+                Excel.FormatCondition fc = (Excel.FormatCondition)fcs.Add(
+                    Type: Excel.XlFormatConditionType.xlExpression,
+                    mis, //Excel.XlFormatConditionOperator.xlNotEqual,//.xlEqual,
+                    Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A8))",
+                    mis, mis, mis, mis, mis);
+
+                fc.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
+                fc.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
+            //              fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
+                fc.Interior.TintAndShade = 0.599963377788629;
+                fc.StopIfTrue = false;
 
             toolStripStatusLabelInfo.Text = "Вставка данных заголовка";
             //вставим данные в заголовок одним куском
