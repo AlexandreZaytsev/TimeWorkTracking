@@ -838,7 +838,7 @@ namespace TimeWorkTracking
             workRange.Resize[
                 captionData.GetUpperBound(0) + 1,
                 captionData.GetUpperBound(1) + 1
-                ].Value = captionData;
+                ].Value = captionData; 
 
             /*
                         ((Excel.Range)workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1, 2]]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);   //заливка первой строки цветом
