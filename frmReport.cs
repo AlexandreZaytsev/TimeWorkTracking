@@ -827,11 +827,11 @@ namespace TimeWorkTracking
                     Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A8))",
                     mis, mis, mis, mis, mis);
 
-                fc.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
-                fc.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
+                    fc.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
+                    fc.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
             //              fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
-                fc.Interior.TintAndShade = 0.599963377788629;
-                fc.StopIfTrue = false;
+                    fc.Interior.TintAndShade = 0.599963377788629;
+                    fc.StopIfTrue = false;
 
             toolStripStatusLabelInfo.Text = "Вставка данных заголовка";
             //вставим данные в заголовок одним куском
