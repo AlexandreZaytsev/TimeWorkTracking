@@ -443,7 +443,7 @@ namespace TimeWorkTracking
                     ].Value = tableData;
 
             toolStripStatusLabelInfo.Text = "Дополнительное форматирование";
-            fullTable.Rows.RowHeight = 20;  //восстановить высоту строк в диапазоне данных
+            fullTable.Rows.RowHeight = 22;  //восстановить высоту строк в диапазоне данных
 
             toolStripStatusLabelInfo.Text = "Файл подготовлен";
             //Настройки Application вернуть обратно
@@ -523,7 +523,7 @@ namespace TimeWorkTracking
             workSheet.PageSetup.LeftMargin = interval;
             workSheet.PageSetup.RightMargin = interval;
             workSheet.PageSetup.TopMargin = interval;
-            workSheet.PageSetup.BottomMargin = excelApp.CentimetersToPoints(1.2); ;
+            workSheet.PageSetup.BottomMargin = excelApp.CentimetersToPoints(1.7); ;
             workSheet.PageSetup.HeaderMargin = 0;// excelApp.InchesToPoints(0);
             workSheet.PageSetup.FooterMargin = interval;
             workSheet.PageSetup.PrintTitleRows = "$1:$11";                                      //печать заголовков на каждой странице
