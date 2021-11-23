@@ -401,6 +401,67 @@ namespace TimeWorkTracking
                         "\r\n END ";
                     sqlCommand.ExecuteNonQuery();
 
+                    //UDF заполняет календарь дат данными проходов (вспомогательная функция для тотального отчета)
+                    sqlCommand.CommandText = "Create function twt_uploadCalendar\r\n(\r\n@fromdate datetime, \r\n@todate datetime\r\n)" +
+                        "\r\n/*" +
+                        "\r\n возвращает таблицу календаря (колонки - даты) с данными проходов (id юзера для синхронизации + данные с разделителями" +
+                        "\r\n*/" +
+                        "\r\nReturns table as Return " +
+                        "\r\n( " +
+                        "\r\nSelect calendar.dt daysCalendar, " +
+                        "\r\n    pass.userId, " +
+                        "\r\n    pass.pivotStr							--!!! внимание ограничение на длину строки 50 символов (дальше Pivot не обрабатывает) " +
+                        "\r\n  From " +
+                        "\r\n    (Select * From getCalendar(@fromdate, @todate)) as calendar	--получить даты календаря " +
+                        "\r\n    left join " +
+                        "\r\n    (Select                                                        --дополнить их данными таблицы проходов " +
+                        "\r\n         e.pDate passDate,                                         --дата прохода " +
+                        "\r\n         u.usId userId,                                            --id фио " +
+                        "\r\n         '|' + CONVERT(varchar(10), e.timeScheduleWithoutLunch)    --время без обеда " +
+                        "\r\n         + '|' + CONVERT(varchar(10), e.timeScheduleLess)          --время недоработки " +
+                        "\r\n         + '|' + CONVERT(varchar(10), e.timeScheduleOver)          --время переработки " +
+                        "\r\n         + '|' + e.smName                                          --короткое имя спецотметки " +
+                        "\r\n         + '|' + CONVERT(varchar(10), e.timeScheduleOver)          --общее время в рамках рабочего дня " +
+                        "\r\n         + '|' + CONVERT(varchar(10), e.timeScheduleOver)          --общее время вне рамок рабочего дня " +
+                        "\r\n         + '|' pivotStr " +
+                        "\r\n       From " +
+                        "\r\n         (Select " +
+                        "\r\n             us.extId usId                                           --id фио " +
+                        "\r\n           From Users us " +
+                        "\r\n           Where " +
+                        "\r\n             us.uses = 1) as u " +
+                        "\r\n         left join " +
+                        "\r\n         (Select  " +
+                        "\r\n             ep.passDate pDate,										--дата прохода " +
+                        "\r\n             ep.passId usId,											--id фио " +
+                        "\r\n             ep.timeScheduleWithoutLunch,							--время без обеда " +
+                        "\r\n             ep.timeScheduleLess,									--время недоработки " +
+                        "\r\n             ep.timeScheduleOver,									--время переработки " +
+                        "\r\n             sm.letterCode smName,									--короткое имя спецотметки " +
+                        "\r\n             ep.totalHoursInWork,									--общее время в рамках рабочего дня " +
+                        "\r\n             ep.totalHoursOutsideWork								--общее время вне рамок рабочего дня " +
+                        "\r\n            From EventsPass ep, SpecialMarks sm " +
+                        "\r\n           Where sm.id=ep.specmarkId " +
+                        "\r\n                 and passDate between @fromdate and @todate) as e " +
+                        "\r\n         on u.usId = e.usId ) as pass " +
+                        "\r\n    on pass.passDate=calendar.dt " +
+                        "\r\n ) ";
+                    sqlCommand.ExecuteNonQuery();
+
+                    /*
+                             
+                             
+                           
+                               
+                      
+                      
+                      
+
+                     */
+
+
+
+
 
                     /*only >2005
 
