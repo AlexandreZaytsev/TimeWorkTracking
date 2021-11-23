@@ -289,7 +289,7 @@ namespace TimeWorkTracking
                         ")";
                     sqlCommand.ExecuteNonQuery();
 
-                    //UDF (пользовательски функции для ускорения процесса выборки)
+                    //UDF информация о дате календаря (пользовательски функции для ускорения процесса выборки)
                     sqlCommand.CommandText = "Create function twt_GetDateInfo\r\n(\r\n@Name varchar(20) = '', \r\n@Date varchar(4) = ''\r\n)" +
                         "\r\n/*" +
                         "\r\n возвращает информацию о дате" + 
@@ -315,6 +315,7 @@ namespace TimeWorkTracking
                         "\r\n)";
                     sqlCommand.ExecuteNonQuery();
 
+                    //UDF информация о сотрудниках (пользовательски функции для ускорения процесса выборки)
                     sqlCommand.CommandText = "Create function twt_GetUserInfo\r\n(\r\n@extUserID varchar(20) = ''\r\n)" +
                         "\r\n/*" +
                         "\r\n возвращает информацию о сотруднике по внешнему идентификатору" +
@@ -343,6 +344,7 @@ namespace TimeWorkTracking
                         "\r\n)";
                     sqlCommand.ExecuteNonQuery();
 
+                    //UDF информация о проходах на дату (пользовательски функции для ускорения процесса выборки)
                     sqlCommand.CommandText = "Create function twt_GetPassFormData\r\n(\r\n@bDate datetime, \r\n@extUserID varchar(20) = ''\r\n)" +
                         "\r\n/*" +
                         "\r\n возвращает данные для формы регистрации по запрашиваемой дате и активным пользователям" +
@@ -382,6 +384,23 @@ namespace TimeWorkTracking
                         "\r\n    Where passDate = @bDate) as e --cast('2021/01/02' as date)) as e " +
                         "\r\n  on u.ExtId = e.passId";
                     sqlCommand.ExecuteNonQuery();
+
+                    //UDF календарь дат (вспомогательная функция для тотального отчета)
+                    sqlCommand.CommandText = "Create function getCalendar\r\n(\r\n@fromdate datetime, \r\n@todate datetime\r\n)" +
+                        "\r\n/*" +
+                        "\r\n возвращает таблицу дат формата 112 от @fromdate до @todate" +
+                        "\r\n*/" +
+                        "\r\nReturns @tcaldate TABLE(dt nvarchar(30)) as " +
+                        "\r\n BEGIN " +
+                        "\r\n   INSERT INTO @tcaldate " +
+                        "\r\n     SELECT TOP(DATEDIFF(DAY, @fromdate, @todate) + 1) " +
+                        "\r\n       convert(nvarchar(30), DATEADD(DAY, ROW_NUMBER() OVER(ORDER BY a.object_id) - 1, @fromdate), 112) " +
+                        "\r\n       FROM sys.all_objects a " +
+                        "\r\n     CROSS JOIN sys.all_objects b; " +
+                        "\r\n   RETURN " +
+                        "\r\n END ";
+                    sqlCommand.ExecuteNonQuery();
+
 
                     /*only >2005
 
