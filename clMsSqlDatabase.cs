@@ -450,14 +450,144 @@ namespace TimeWorkTracking
 
                     /*
                              
-                             
-                           
-                               
-                      
-                      
-                      
+     ALTER PROCEDURE [dbo].[SP_twt_TotalReport]
+     (@fromdate NVARCHAR(100),       --Дата начала периода 
+	  @todate NVARCHAR(100))	       --Дата окончания периода   
+ 
+       создает таблицу календаря для динамического формирования столбцов временной таблицы отчета и pivot запроса
+	   загружает календарь событий (не более 500 дат)((id юзера для синхронизации + данные с разделителями)
+	   добавляет полученные данные к активным пользователям
+       возвращает таблицу для передачи клиенту C№
+      
+                    AS
+                    BEGIN
 
-                     */
+    --Обработчик ошибок
+    BEGIN TRY
+        SET NOCOUNT ON; --Отключаем вывод количества строк
+
+--таблица для формирования имен колонок(для расширененя вренной таблицы и динамического pivot)
+
+        DECLARE @daysRange TABLE(colName NVARCHAR(30), colId int identity(1, 1)); --табличная переменная(имя колонки и id колонки)
+
+        INSERT INTO @daysRange(colName)--заполним диапазоном дат
+SELECT top 500 convert(NVARCHAR(30), dt, 112) dt--вставим ограничение 500(2000 столбцов ограничение SQL)
+
+              FROM getCalendar(@fromdate, @todate);
+
+                    --столбцы pivot
+                    --заголовки колонок Pivot
+                    DECLARE @colNamesHeaderPivot NVARCHAR(MAX); --sql строка заголовков столбцов для pivot
+SELECT @colNamesHeaderPivot = ISNULL(@colNamesHeaderPivot + ', ', '')
+                + 'COALESCE('
+                + QUOTENAME(colName)
+                + ', NULL ) AS '--значение по умолчанию NULL для агрегатной функции MAX
+
+                                        +QUOTENAME(colName)
+
+          FROM @daysRange;
+
+                    --перечень колонок Pivot
+
+        DECLARE @colNamesPivot NVARCHAR(MAX); --sql строка столбцов для pivot
+
+        SELECT @colNamesPivot = ISNULL(@colNamesPivot + ', ', '')
+                                        + QUOTENAME(colName)--сформируем ее
+
+          FROM @daysRange;
+
+                    --временная таблица Report
+
+        DECLARE @max int,                                                               --переменная для цикла
+
+                @id int,                                                                --переменная для цикла
+
+                @Query NVARCHAR(MAX),   												--переменная для хранения строки запроса
+
+                @colName NVARCHAR(50)													--наименование заголовка столбца
+
+
+        SET @id = 1
+
+        SELECT @max = MAX(colId) FROM @daysRange
+
+        CREATE TABLE #twt_Report(userID NVARCHAR(30));									--создадим временную таблицу для отчета
+		WHILE(@id <= @max)--расширим ее нужным количеством столбцов
+BEGIN                                                                       --**возможно не самое красивое решение
+
+                SELECT @colName = colName FROM @daysRange WHERE colId = @id
+
+                SET @Query = 'ALTER TABLE #twt_Report ADD ' + QUOTENAME(@colName) + ' NVARCHAR(50);'
+
+                EXEC(@Query)
+
+                SET @id = @id + 1
+
+            END
+
+        --Формируем строку с запросом PIVOT и вставкой в таблицу Report
+
+        DECLARE @TableSRC NVARCHAR(100)--Таблица источник(Представление)
+        SET @TableSRC = '(select * from twt_uploadCalendar(''' + @fromdate + ''', ''' + @todate + ''')) pivotSrc';
+
+                    SET @Query = N'SELECT userId, ' + @colNamesHeaderPivot + ' 
+                         FROM(SELECT userId, daysCalendar, pivotStr' 
+                             + ' FROM ' + @TableSRC + ') AS SRC
+                       PIVOT(MAX(pivotStr)' +' FOR ' +  
+                                   'daysCalendar IN (' + @colNamesPivot + ')) AS PVT
+                       ORDER BY userId; '
+
+
+        INSERT INTO #twt_Report EXEC(@Query)											--вставим результаты запроса во временную таблицу Отчета
+
+
+        --то ради чего...
+		SELECT*
+
+          FROM
+            (SELECT
+
+                u.name fio,
+                p.name post,
+                u.extId extId
+
+              FROM Users u, UserDepartment d, UserPost p--, UserWorkScheme w
+             WHERE u.departmentId = d.Id
+
+                AND u.postId = p.id
+
+                AND u.uses = 1) as u
+
+        left join
+          (SELECT*
+             FROM #twt_Report 
+		  ) as r
+
+        on u.ExtId = r.userID
+
+
+        DROP TABLE #twt_Report;							--удалим временную таблицу отчета
+		                
+
+        SET NOCOUNT OFF; --Включаем обратно вывод количества строк
+
+    END TRY
+    BEGIN CATCH
+
+        --В случае ошибки, возвращаем номер и описание этой ошибки
+        SELECT ERROR_NUMBER() AS[Номер ошибки], 
+               ERROR_MESSAGE() AS[Описание ошибки]
+
+    END CATCH
+
+    END
+
+
+
+
+
+
+                    */
 
 
 
