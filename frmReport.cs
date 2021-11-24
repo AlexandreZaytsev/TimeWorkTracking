@@ -232,20 +232,21 @@ namespace TimeWorkTracking
                     tableData = new string[totalReportData.Rows.Count * 2, 2 + lenDays + 3 + dtSpecialMarks.Rows.Count - 1 + 2 + 1];   //Создаём новый двумерный массив
                     string[] splitValue = new string[5];                            //шесть параметров
                     j = 0;
-                    for (int i = 0; i < totalReportData.Rows.Count; i++)     // Display items in the ListView control
+                    for (int i = 0; i < totalReportData.Rows.Count; i++)            // Display items in the ListView control
                     {
                         DataRow drow = totalReportData.Rows[i];
-                        splitValue = drow[4].ToString().Substring(1, drow[4].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);   
-                        if (drow.RowState != DataRowState.Deleted)  // Only row that have not been deleted
+                        if (drow.RowState != DataRowState.Deleted)                  // Only row that have not been deleted
                         {
+                            splitValue = drow[4].ToString().Substring(1, drow[4].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
+
                             tableData[i + j, 0] = (i + 1).ToString();
-                            tableData[i + j, 1] = drow[0].ToString();       //фио
+                            tableData[i + j, 1] = drow[1].ToString();               //должность (первая строка)
+                            tableData[i + j + 1, 1] = drow[0].ToString();           //фио (вторая строка)
                             for (int col = 0; col < lenDays - 1; col += 2)
                             {
-                                tableData[i + j, 2 + col] = splitValue[3];
-                                tableData[i + j + 1, 2 + col] = splitValue[0];
+                                tableData[i + j, 2 + col] = splitValue[3];          //имя спец отметки (первая строка) 
+                                tableData[i + j + 1, 2 + col] = splitValue[0];      //количество отработанных часов без обеда (вторая строка)
                             }
-                            tableData[i + j + 1, 1] = drow[1].ToString();   //должность
                             j += 1;
                         }
                     }
