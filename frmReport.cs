@@ -237,15 +237,19 @@ namespace TimeWorkTracking
                         DataRow drow = totalReportData.Rows[i];
                         if (drow.RowState != DataRowState.Deleted)                  // Only row that have not been deleted
                         {
-                            splitValue = drow[4].ToString().Substring(1, drow[4].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
-
                             tableData[i + j, 0] = (i + 1).ToString();
                             tableData[i + j, 1] = drow[1].ToString();               //должность (первая строка)
                             tableData[i + j + 1, 1] = drow[0].ToString();           //фио (вторая строка)
-                            for (int col = 0; col < lenDays - 1; col += 2)
+
+                            //заполним диапазон ПО ДАТАМ КАЛЕНДАРЯ - сверху спец отметка снизу количество часов
+                            if (drow[4] != System.DBNull.Value) 
                             {
-                                tableData[i + j, 2 + col] = splitValue[3];          //имя спец отметки (первая строка) 
-                                tableData[i + j + 1, 2 + col] = splitValue[0];      //количество отработанных часов без обеда (вторая строка)
+                                splitValue = drow[4].ToString().Substring(1, drow[4].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
+                                for (int col = 0; col < lenDays - 1; col += 2)
+                                {
+                                    tableData[i + j, 2 + col] = splitValue[3];          //имя спец отметки (первая строка) 
+                                    tableData[i + j + 1, 2 + col] = splitValue[0];      //количество отработанных часов без обеда (вторая строка)
+                                }
                             }
                             j += 1;
                         }
