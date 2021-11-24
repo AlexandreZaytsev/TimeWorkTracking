@@ -31,6 +31,7 @@ namespace TimeWorkTracking
         private Excel.Range workRange;
         readonly object mis = Type.Missing;
 
+        private Dictionary<string, int> headerIndex;    //индесы колонок для отчета;
         private string[,] captionData;                  //массив данных заголовка Excel
         private string[,] tableData;                    //массив данных таблицы Excel
 
@@ -155,10 +156,11 @@ namespace TimeWorkTracking
                     }
                     break;
                 case "ReportTotal":
+                    headerIndex = new Dictionary<string, int>();    //подготовим словарь для хранения индексов колонок
                     captionData = new string[2, lengthDays + 2 + 3 + dtSpecialMarks.Rows.Count - 1 + 2 +1];  //Создаём новый двумерный массив
                     captionData[0, 0] = "№";
                     captionData[0, 0 + 1] = "Фамилия Имя Отчество";
-                    for (int i = 0; i < lengthDays; i++)           //циклом перебираем даты в созданный двумерный массив
+                    for (int i = 0; i < lengthDays; i++)            //циклом перебираем даты в созданный двумерный массив
                     {
                         tDate = mcReport.SelectionStart.AddDays(i);
                         captionData[0, i + 2] = 
@@ -166,21 +168,29 @@ namespace TimeWorkTracking
                             pCalendar.getDateDescription(tDate).PadLeft(7);
                     }
                     captionData[0, lengthDays + 1 + 1] = "недоработка".PadLeft(7);
+                    headerIndex.Add("less", lengthDays + 1 + 1);
                     captionData[0, lengthDays + 1 + 2] = "(Я)Итого отработано".PadLeft(7);
+                    headerIndex.Add("Я", lengthDays + 1 + 2);                                   //добавить значение словаря заголока      
                     captionData[0, lengthDays + 1 + 3] = "переработка".PadLeft(7);
-                    for (int i = 1; i < dtSpecialMarks.Rows.Count; i++)     // Display items in the ListView control
+                    headerIndex.Add("over", lengthDays + 1 + 3);
+
+                    for (int i = 1; i < dtSpecialMarks.Rows.Count; i++)                         //Цикл по массиву спец отметок
                     {
                         DataRow drow = dtSpecialMarks.Rows[i];
-                        if (drow.RowState != DataRowState.Deleted)  // Only row that have not been deleted
+                        if (drow.RowState != DataRowState.Deleted)                              //Only row that have not been deleted
                         {
+                            headerIndex.Add(drow["letterCode"].ToString(), lengthDays + 4 + i); //добавить значение словаря заголока
                             captionData[0, lengthDays + 4 + i] = 
                                 ("(" + drow["letterCode"].ToString() + ") " +
                                 drow["name"].ToString()).PadLeft(7);
                         }
                     }
                     captionData[0, lengthDays + 3 + dtSpecialMarks.Rows.Count + 1] = "Итого спец. отметок".PadLeft(7);
+                    headerIndex.Add("sum", lengthDays + 3 + dtSpecialMarks.Rows.Count + 1);
                     captionData[0, lengthDays + 3 + dtSpecialMarks.Rows.Count + 2] = "(из них вне графика)".PadLeft(7);
+                    headerIndex.Add("in", lengthDays + 3 + dtSpecialMarks.Rows.Count + 2);
                     captionData[0, lengthDays + 3 + dtSpecialMarks.Rows.Count + 3] = "Сумма фактически отработаного РАБОЧЕГО ВРЕМЕНИ + CЛУЖЕБНЫЕ ЗАДАНИЯ задания вне его";
+                    headerIndex.Add("out", lengthDays + 3 + dtSpecialMarks.Rows.Count + 3);
 
                     break;
             }
@@ -247,6 +257,34 @@ namespace TimeWorkTracking
                             tableData[i + j, 0] = (i + 1).ToString();
                             tableData[i + j, 1] = drow[1].ToString();               //должность (первая строка)
                             tableData[i + j + 1, 1] = drow[0].ToString();           //фио (вторая строка)
+                            specmarkSum = 0;
+                            for (int col = 0; col < lenDays - 1; col++)             //Цикл по колонкам календаря отчета
+                            {
+                                if (drow[4 + col] != System.DBNull.Value)           //Если данные для обработки есть
+                                {
+                                    splitValue = drow[4 + col].ToString().Substring(1, drow[4 + col].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
+                                    tableData[i + j + 1, headerIndex["less"]] = (Convert.ToDouble(splitValue[1]) / 60).ToString();  //недоработка
+                                    tableData[i + j + 1, headerIndex["over"]] = (Convert.ToDouble(splitValue[2]) / 60).ToString();  //недоработка
+
+                                    tableData[i + j, 2 + col] = splitValue[3];          //Спецотметка (короткое имя) (первая строка) 
+                                    tableData[i + j, headerIndex[splitValue[3]]] = splitValue[3];
+
+                                    specmarkSum = Convert.ToDouble(splitValue[0]) / 60;
+                                    tableData[i + j + 1, 2 + col] = specmarkSum.ToString();
+
+                                    specmarkSum += Convert.ToDouble(tableData[i + j + 1, headerIndex[splitValue[3]]]);
+                                    tableData[i + j + 1, headerIndex[splitValue[3]]] = specmarkSum.ToString();
+
+                                    tableData[i + j + 1, headerIndex["in"]] = (Convert.ToDouble(splitValue[4]) / 60).ToString();    //в дне
+                                    tableData[i + j + 1, headerIndex["out"]] = (Convert.ToDouble(splitValue[5]) / 60).ToString();   //вне дня
+                                }
+                            }
+
+
+
+
+
+
 
                             //заполним диапазон по строке по колонкам ДАТ КАЛЕНДАРЯ - сверху спец отметка снизу количество часов
                             timeScheduleWithoutLunch = 0;                             
@@ -257,57 +295,54 @@ namespace TimeWorkTracking
                             totalHoursOutsideWork = 0;
                             specmarkSum = 0;
 
-                            if (drow[4] != System.DBNull.Value) 
+                            if (drow[4] != System.DBNull.Value)                         //Если данные для обработки есть
                             {
-                                //РАБОТАЕМ С МАССИВОМ ДАННЫХ ДЛЯ ДНЯ (не со строкой)
-                                splitValue = drow[4].ToString().Substring(1, drow[4].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
-                                timeScheduleWithoutLunch = Convert.ToDouble(splitValue[0]) / 60;    
-                                timeScheduleLess = Convert.ToDouble(splitValue[1]) / 60;            
-                                timeScheduleOver = Convert.ToDouble(splitValue[2]) / 60;
-                                specmarkShortName = splitValue[3];
-                                totalHoursInWork = Convert.ToDouble(splitValue[4]) / 60;
-                                totalHoursOutsideWork = Convert.ToDouble(splitValue[5]) / 60;
+                                /*
+//РАБОТАЕМ С МАССИВОМ ДАННЫХ ДЛЯ ДНЯ (не со строкой)
+splitValue = drow[4].ToString().Substring(1, drow[4].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
+timeScheduleWithoutLunch = Convert.ToDouble(splitValue[0]) / 60;    
+timeScheduleLess = Convert.ToDouble(splitValue[1]) / 60;            
+timeScheduleOver = Convert.ToDouble(splitValue[2]) / 60;
+specmarkShortName = splitValue[3];
+totalHoursInWork = Convert.ToDouble(splitValue[4]) / 60;
+totalHoursOutsideWork = Convert.ToDouble(splitValue[5]) / 60;
 
-                                for (int col = 0; col < lenDays - 1; col += 2)
-                                {
-                                    tableData[i + j, 2 + col] = splitValue[3];          //"Я" или факт наличия спецотметки (короткое имя) (первая строка) 
-                                    tableData[i + j + 1, 2 + col] = timeScheduleWithoutLunch.ToString();      
-                                }
+tableData[i + j + 1, 2 + lenDays] = timeScheduleLess.ToString();
+tableData[i + j + 1, 2 + lenDays +2 ] = timeScheduleWithoutLunch.ToString();
 
-                                tableData[i + j + 1, 2 + lenDays] = timeScheduleLess.ToString();
-                                tableData[i + j + 1, 2 + lenDays +2 ] = timeScheduleWithoutLunch.ToString();  
 
-                                //цикл по спец отметкам с подсчетом итогов (накопительная часть в ячейках массива) из календарной части
-                                for (int smCount = 1; smCount < dtSpecialMarks.Rows.Count; smCount++)   //цикл по таблице спец отметок
-                                {
-                                    DataRow smRow = dtSpecialMarks.Rows[smCount];
-                                    specmarkSum = Convert.ToDouble(tableData[i + j + 1, 2 + lenDays + 1]);
-                                    if (smRow.RowState != DataRowState.Deleted)         // Only row that have not been deleted
-                                    {
-                                        string smShortNameTable = smRow["letterCode"].ToString();
-                                        for (int col = 0; col < lenDays - 1; col += 2)  //цикл по заполненным данным календаря 
-                                        {
-                                            if (specmarkShortName == smShortNameTable)  //если пришедшее имя совпадает с именем из таблицы    
-                                            {
-                                                switch (smShortNameTable)               //определение индекса в массиве для спец отметки
-                                                {
-                                                    case "Я":                           //"Я" отдельно стоящая позиция
+//цикл по спец отметкам с подсчетом итогов (накопительная часть в ячейках массива) из календарной части
+for (int smCount = 1; smCount < dtSpecialMarks.Rows.Count; smCount++)   //цикл по таблице спец отметок
+{
+    DataRow smRow = dtSpecialMarks.Rows[smCount];
+    specmarkSum = Convert.ToDouble(tableData[i + j + 1, 2 + lenDays + 1]);
+    if (smRow.RowState != DataRowState.Deleted)         // Only row that have not been deleted
+    {
+        string smShortNameTable = smRow["letterCode"].ToString();
+        for (int col = 0; col < lenDays - 1; col += 2)  //цикл по заполненным данным календаря 
+        {
+            if (specmarkShortName == smShortNameTable)  //если пришедшее имя совпадает с именем из таблицы    
+            {
+                switch (smShortNameTable)               //определение индекса в массиве для спец отметки
+                {
+                    case "Я":                           //"Я" отдельно стоящая позиция
 
-                                                       // tableData[i + j + 1, 2 + lenDays+1] = 
-                                                        break;
-                                                    default:
+                       // tableData[i + j + 1, 2 + lenDays+1] = 
+                        break;
+                    default:
 
-                                                        break;
-                                                }
+                        break;
+                }
 
-                                            }
-                                        }
+            }
+        }
 
 
 
-                                    }
-                                }
+}
 
+}
+                                */
 
                             }
                             //недоработка
