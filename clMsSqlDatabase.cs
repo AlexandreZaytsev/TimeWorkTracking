@@ -243,15 +243,14 @@ namespace TimeWorkTracking
                         "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220509', '20220509', 7, 2, 1) " +
                         "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220612', '20220612', 8, 2, 1) " +
                         "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20221104', '20221104', 9, 2, 1) ";
-
                     sqlCommand.ExecuteNonQuery();
 
                     //Пользователь (таблица использующая внешние данные)
                     sqlCommand.CommandText = "CREATE TABLE Users (" +
                         "id int PRIMARY KEY IDENTITY, " +
                         "cd datetime NOT NULL DEFAULT GETDATE(), " +
-                        "extId VARCHAR(20) NOT NULL UNIQUE, " +                                     //*внешний id для интеграции
-                        "crmId NUMERIC DEFAULT 0, " +                                               //внешний id для интеграции с crm
+                        "extId VARCHAR(20) NOT NULL UNIQUE, " +                                     //*внешний id для интеграции (основной id)
+                        "crmId NUMERIC DEFAULT 0, " +                                               //внешний id для интеграции с crm (дополнительны id)
                         "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
                         "note VARCHAR(1024) NULL, " +                                               //расшифровка
                         "departmentId int NOT NULL FOREIGN KEY REFERENCES UserDepartment(id), " +   //->ссылка на департамент
@@ -264,6 +263,20 @@ namespace TimeWorkTracking
                         ")";
                     sqlCommand.ExecuteNonQuery();
 
+                    //Внешние поставщики времени (СКУД и т.д.) (таблица использующая внешние данные)
+                    sqlCommand.CommandText = "CREATE TABLE TimeProvider (" +
+                        "id int PRIMARY KEY IDENTITY, " +
+                        "cd datetime NOT NULL DEFAULT GETDATE(), " +
+                        "passDate Datetime NOT NULL, " +                                            //*дата события (без времени) 
+                        "passId VARCHAR(20) NOT NULL FOREIGN KEY REFERENCES Users(extId), " +       //*->ссылка на внешний id пользователя
+                        "pacsName VARCHAR(150) NOT NULL, " +                                        //наименование провайдера (СКУД)
+                        "pacsUserId VARCHAR(20) NOT NULL, " +                                       //внутренний id пользователя провайдера (СКУД)
+                        "pacsTimeStart Datetime NULL, " +                                           //время первого входа по СКУД (без даты)
+                        "pacsTimeStop Datetime NULL " +                                             //время последнего выхода по СКУД (без даты)
+                        "UNIQUE(passDate, passId, pacsName, pacsUserId) " +                         //уникальность на уровне таблицы
+                        ")";
+                    sqlCommand.ExecuteNonQuery();
+
                     //Учет рабочего времени (таблица использующая внешние данные)
                     sqlCommand.CommandText = "CREATE TABLE EventsPass (" +
                         "id bigint PRIMARY KEY IDENTITY, " +
@@ -273,8 +286,6 @@ namespace TimeWorkTracking
                         "passId VARCHAR(20) NOT NULL FOREIGN KEY REFERENCES Users(extId), " +       //*->ссылка на внешний id пользователя
                         "passTimeStart Datetime NOT NULL, " +                                       //время первого входа (без даты)
                         "passTimeStop Datetime NOT NULL, " +                                        //время последнего выхода (без даты)
-                        "pacsTimeStart Datetime NULL, " +                                           //время первого входа по СКУД (без даты)
-                        "pacsTimeStop Datetime NULL, " +                                            //время последнего выхода по СКУД (без даты)
                         "timeScheduleFact int DEFAULT 0, " +                                        //отработанное время (мин)
                         "timeScheduleWithoutLunch int DEFAULT 0, " +                                //отработанное время без обеда (мин)
                         "timeScheduleLess int DEFAULT 0, " +                                        //время недоработки (мин)
@@ -284,7 +295,7 @@ namespace TimeWorkTracking
                         "specmarkTimeStop Datetime NULL, " +                                        //датавремя окончания специальных отметок
                         "specmarkNote VARCHAR(1024) NULL, " +                                       //комментарий к специальным отметкам
                         "totalHoursInWork int DEFAULT 0, " +                                        //итог рабочего времени в графике (мин)
-                        "totalHoursOutsideWork int DEFAULT 0" +                                     //итог рабочего времени вне графика (мин)
+                        "totalHoursOutsideWork int DEFAULT 0 " +                                    //итог рабочего времени вне графика (мин)
                         "UNIQUE(passDate, passId) " +                                               //уникальность на уровне таблицы
                         ")";
                     sqlCommand.ExecuteNonQuery();
@@ -449,13 +460,13 @@ namespace TimeWorkTracking
                     sqlCommand.ExecuteNonQuery();
 
                     //SP формирование итогового сводного отчета за период (вспомогательная процедура для тотального отчета)
-                    sqlCommand.CommandText = "Create PROCEDURE SP_twt_TotalReport\r\n(\r\n@fromdate NVARCHAR(100), \r\n@todate NVARCHAR(100)\r\n)" +
+                    sqlCommand.CommandText = "Create PROCEDURE twt_TotalReport\r\n(\r\n@fromdate NVARCHAR(100), \r\n@todate NVARCHAR(100)\r\n)" +
                         "\r\n/*" +
                         "\r\n создает таблицу календаря для динамического формирования столбцов временной таблицы отчета и pivot запроса" +
                         "\r\n загружает календарь событий (не более 500 дат)(id юзера для синхронизации + данные с разделителями)" +
                         "\r\n добавляет полученные данные к активным пользователям" +
                         "\r\n возвращает таблицу для передачи клиенту C#" +
-                        "\r\n/*" +
+                        "\r\n*/" +
                         "\r\nAS BEGIN " +
                         "\r\n   BEGIN TRY                                                       --Обработчик ошибок" +
                         "\r\n       SET NOCOUNT ON;                                             --Отключаем вывод количества строк" +
@@ -529,324 +540,9 @@ namespace TimeWorkTracking
                         "\r\n               ERROR_MESSAGE() AS[Описание ошибки] " +
                         "\r\n   END CATCH " +
                         "\r\nEND ";
-
                     sqlCommand.ExecuteNonQuery();
-                    /*
-                    */
-                    /*only >2005
-
- //СТРУКТУРА ДАННЫХ
-        //выпадающие списки
-                    //График работы (таблица для списка) Почасовой/Поминутный
-                    sqlCommand.CommandText = "CREATE TABLE UserWorkScheme (" +
-                        "id int PRIMARY KEY IDENTITY, " +
-                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
-                        "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
-                        ")";
-                    sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText = "INSERT INTO UserWorkScheme(name) VALUES " +
-                        "(N'Почасовой'), " +
-                        "(N'Поминутный')";
-                    sqlCommand.ExecuteNonQuery();
-
-                    //Тип даты производственного календаря (таблица для списка) Выходной/Сокращенный
-                    sqlCommand.CommandText = "CREATE TABLE CalendarDateType (" +
-                        "id int PRIMARY KEY IDENTITY, " +
-                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
-                        "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
-                        ")";
-                    sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText = "INSERT INTO CalendarDateType(name) VALUES " +
-                        "(N'Полный'), " +
-                        "(N'Сокращенный'), " +
-                        "(N'Удлиненный'), " +
-                        "(N'Праздничный'), " +
-                        "(N'Выходной')";
-                    sqlCommand.ExecuteNonQuery();
-
-                    //Наименование даты производственного календаря (таблица для списка) 
-                    sqlCommand.CommandText = "CREATE TABLE CalendarDateName (" +
-                        "id int PRIMARY KEY IDENTITY, " +
-                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
-                        "date Date NULL, " +                                                        //дата (год не учитываем)            
-                        "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
-                        ")";                                                        
-                    sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText = "INSERT INTO CalendarDateName(name, date) VALUES " +
-                        "(N'Новый год', '2000.01.01'), " +
-                        "(N'Новогодние каникулы', NULL), " +
-                        "(N'Рождество Христово', '2000.01.07'), " +
-                        "(N'День защитника Отечества', '2000.02.23'), " +
-                        "(N'Международный женский день', '2000.03.08'), " +
-                        "(N'Праздник весны и труда', '2000.05.01'), " +
-                        "(N'День Победы', '2000.05.09'), " +
-                        "(N'День России', '2000.06.12'), " +
-                        "(N'День народного единства', '2000.11.04'), " +
-                        "(N'Нерабочий день', NULL), " +
-                        "(N'Предпраздничный день', NULL)";                                                             //другое
-                    sqlCommand.ExecuteNonQuery();
-
-                    //Подразделение (таблица для списка)
-                    sqlCommand.CommandText = "CREATE TABLE UserDepartment (" +
-                        "id int PRIMARY KEY IDENTITY, " +
-                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
-                        "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
-                        ")";
-                    sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText = "INSERT INTO UserDepartment(name) VALUES " +
-                        "(N'Бухгалтерия'), " +
-                        "(N'Департамент закупок и договоров'), " +
-                        "(N'Департамент маркетинга'), " +
-                        "(N'Департамент обеспечения бизнеса'), " +
-                        "(N'Департамент продаж'), " +
-                        "(N'Департамент Тендерных и Конкурсных поставок'), " +
-                        "(N'Департамент технической поддержки'), " +
-                        "(N'Департамент ЧПУ'), " +
-                        "(N'Общее руководство'), " +
-                        "(N'Представительство Академия САПР и ГИС')";
-                    sqlCommand.ExecuteNonQuery();
-
-                    //Должность (таблица для списка)
-                    sqlCommand.CommandText = "CREATE TABLE UserPost (" +
-                        "id int PRIMARY KEY IDENTITY, " +
-                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
-                        "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
-                        ")";
-                    sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText = "INSERT INTO UserPost(name) VALUES " +
-                        "(N'Ассистент менеджера'), " +
-                        "(N'Бухгалтер'), " +
-                        "(N'Ведущий инженер'), " +
-                        "(N'Ведущий менеджер'), " +
-                        "(N'Главный Бухгалтер'), " +
-                        "(N'Дизайнер'), " +
-                        "(N'Инженер'), " +
-                        "(N'Курьер'), " +
-                        "(N'Логист'), " +
-                        "(N'Менеджер'), " +
-                        "(N'Руководитель'), " +
-                        "(N'Руководитель департамента'), " +
-                        "(N'Руководитель направления'), " +
-                        "(N'Руководитель учебного центра'), " +
-                        "(N'Секретарь'), " +
-                        "(N'Системный администратор'), " +
-                        "(N'Юрист'), " +
-                        "(N'Ведущий менеджер отдела продаж'), " +
-                        "(N'Заместитель генерального директора'), " +
-                        "(N'и.о. Руководителя')";
-                    sqlCommand.ExecuteNonQuery();
-
-                    //Специальные отметки (самостоятельная таблица)
-                    sqlCommand.CommandText = "CREATE TABLE SpecialMarks (" +
-                        "id int PRIMARY KEY IDENTITY, " +
-                        "digitalCode VARCHAR(4) NOT NULL, " +                                       //числовой код 
-                        "letterCode VARCHAR(4) NOT NULL, " +                                        //строковый код
-                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
-                        "note VARCHAR(1024) NULL, " +                                               //расшифровка
-                        "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
-                        ")";
-                    sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText = "INSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES " +
-                        "('01', N'Я', N'-', N'Продолжительность работы в дневное время', 1), " +
-                        "('02', N'Н', N'Ночные работы', N'Продолжительность работы в ночное время', 0), " +
-                        "('03', N'РВ', N'Работа в выходные', N'Продолжительность работы в выходные и нерабочие праздничные дни', 0), " +
-                        "('04', N'C', N'Сверхурочная работа', N'Продолжительность сверхурочной работы', 0), " +
-                        "('05', N'ВМ', N'Работа на вахте', N'Продолжительность работы вахтовым методом', 0), " +
-                        "('06', N'К', N'Служебная командировка', N'Служебная командировка', 0), " +
-
-                        "('09', N'ОТ', N'Отпуск', N'Ежегодный основной оплачиваемый отпуск', 1), " +
-                        "('10', N'ОД', N'дополнительный Отпуск', N'Ежегодный дополнительный оплачиваемый отпуск', 0), " +
-
-                        "('14', N'Р', N'Отпуск по беременности и родам', N'Отпуск по беременности и родам (в связи с усыновлением новорожденного ребенка)', 0), " +
-                        "('15', N'ОЖ', N'Отпуск по уходу за ребенком', N'Отпуск по уходу за ребенком до достижения им возраста трех лет', 0), " +
-                        "('16', N'ДО', N'Отгул', N'Отпуск без сохранения заработной платы, предоставленный работнику по разрешению работодателя', 1), " +
-
-                        "('19', N'Б', N'Больничный с оплатой', N'Временная нетрудоспособность (кроме случаев, предусмотренных кодом «Т») с назначением пособия согласно законодательству', 1), " +
-                        "('20', N'Т', N'Больничный без оплаты', N'Временная нетрудоспособность без назначения пособия в случаях, предусмотренных законодательством', 1), " +
-
-                        "('24', N'ПР', N'Прогул', N'Прогулы (отсутствие на рабочем месте без уважительных причин в течение времени, установленного законодательством)', 0), " +
-                        "('29', N'ЗБ', N'Забастовка', N'Забастовка (при условиях и в порядке, предусмотренных законом)', 1), " +
-                        "('30', N'НН', N'Неявка', N'Неявки по невыясненным причинам (до выяснения обстоятельств)', 0), " +
-
-                        "('00', 'СЗ', N'Служебное задание', '' , 1), " +
-                        "('00', 'РД', N'Работа из дома', '', 0), " +
-                        "('00', 'ОД', N'Общественное дело', '', 1), " +
-                        "('00', 'ЛД', N'Личные дела', '', 1), " +
-                        "('00', 'УД', N'Удаленка', '', 1)";
-                    sqlCommand.ExecuteNonQuery();
-
-                    //таблицы
-                    //Производственный Календарь (таблица использующая внешние данные)
-                    sqlCommand.CommandText = "CREATE TABLE Calendars (" +
-                        "id int PRIMARY KEY IDENTITY, " +
-                        "originalDate Date NOT NULL , " +                                           //оригинальная дата
-                        "transferDate Date NOT NULL UNIQUE, " +                                     //*реальная дата (перенос)
-                        "dateNameId int NOT NULL FOREIGN KEY REFERENCES CalendarDateName(id), " +   //->ссылка на наименование даты (наименование даты и т.д.)
-                        "dateTypeId int NOT NULL FOREIGN KEY REFERENCES CalendarDateType(id), " +   //->ссылка на тип даты (тип дня сокращенный, полный и т.д.)
-                        "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
-                        ")";
-                    sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText = "INSERT INTO Calendars(originalDate, transferDate, dateNameId, dateTypeId, uses) VALUES " +
-                        "('2021-01-01', '2021-01-01', 1, 1, 1), " +
-                        "('2021-01-02', '2021-11-05', 2, 1, 1), " +
-                        "('2021-01-03', '2021-12-31', 2, 1, 1), " +
-                        "('2021-01-04', '2021-01-04', 2, 1, 1), " +
-                        "('2021-01-05', '2021-01-05', 2, 1, 1), " +
-                        "('2021-01-06', '2021-01-06', 2, 1, 1), " +
-                        "('2021-01-07', '2021-01-07', 3, 1, 1), " +
-                        "('2021-01-08', '2021-01-08', 2, 1, 1), " +
-                        "('2021-02-20', '2021-02-22', 10, 1, 1), " +
-                        "('2021-02-23', '2021-02-23', 4, 1, 1), " +
-                        "('2021-03-08', '2021-03-08', 5, 1, 1), " +
-                        "('2021-05-01', '2021-05-01', 6, 1, 1), " +
-                        "('2021-05-09', '2021-05-09', 7, 1, 1), " +
-                        "('2021-06-12', '2021-06-12', 8, 1, 1), " +
-                        "('2021-11-04', '2021-11-04', 9, 1, 1)";
-                    sqlCommand.ExecuteNonQuery();
-
-                    //Пользователь (таблица использующая внешние данные)
-                    sqlCommand.CommandText = "CREATE TABLE Users (" +
-                        "id int PRIMARY KEY IDENTITY, " +
-                        "extId VARCHAR(20) NOT NULL UNIQUE, " +                                     //*внешний id для интеграции
-                        "crmId NUMERIC DEFAULT 0, " +                                               //внешний id для интеграции с crm
-                        "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
-                        "note VARCHAR(1024) NULL, " +                                               //расшифровка
-                        "departmentId int NOT NULL FOREIGN KEY REFERENCES UserDepartment(id), " +   //->ссылка на департамент
-                        "postId int NOT NULL FOREIGN KEY REFERENCES UserPost(id), " +               //->ссылка на должность
-                        "timeStart time NULL, " +                                                   //время начала работы по графику (без даты)    
-                        "timeStop time NULL, " +                                                    //время окончания работы по графику (без даты)
-                        "noLunch bit DEFAULT 1, " +                                                 //флаг признака обеда
-                        "workSchemeId int NOT NULL FOREIGN KEY REFERENCES UserWorkScheme(id), " +   //->ссылка на схему работы
-                        "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
-                        ")";
-                    sqlCommand.ExecuteNonQuery();
-
-                    //Учет рабочего времени (таблица использующая внешние данные)
-                    sqlCommand.CommandText = "CREATE TABLE EventsPass (" +
-                        "id bigint PRIMARY KEY IDENTITY, " +
-                        "author VARCHAR(150) NOT NULL, " +                                          //имя учетной записи сеанса
-                        "passDate Date NOT NULL, " +                                                //*дата события (без времени) 
-                        "passId VARCHAR(20) NOT NULL FOREIGN KEY REFERENCES Users(extId), " +       //*->ссылка на внешний id пользователя
-                        "passTimeStart time NOT NULL, " +                                           //время первого входа (без даты)
-                        "passTimeStop time NOT NULL, " +                                            //время последнего выхода (без даты)
-                        "infoLunchId bit DEFAULT 1, " +                                             //флаг признака обеда
-                        "infoWorkSchemeId int NULL FOREIGN KEY REFERENCES UserWorkScheme(id), " +   //->ссылка на схему работы
-                        "timeScheduleFact int DEFAULT 0, " +                                        //отработанное время (мин)
-                        "timeScheduleWithoutLunch int DEFAULT 0, " +                                //отработанное время без обеда (мин)
-                        "timeScheduleLess int DEFAULT 0, " +                                        //время недоработки (мин)
-                        "timeScheduleOver int DEFAULT 0, " +                                        //время переработки (мин)
-                        "specmarkId int NOT NULL FOREIGN KEY REFERENCES SpecialMarks(id), " +       //->ссылка на специальные отметки
-                        "specmarkTimeStart Datetime NULL, " +                                       //датавремя начала действия специальных отметок
-                        "specmarkTimeStop Datetime NULL, " +                                        //датавремя окончания специальных отметок
-                        "specmarkNote VARCHAR(1024) NULL, " +                                       //комментарий к специальным отметкам
-                        "totalHoursInWork int DEFAULT 0, " +                                        //итог рабочего времени в графике (мин)
-                        "totalHoursOutsideWork int DEFAULT 0" +                                     //итог рабочего времени вне графика (мин)
-                        "UNIQUE(passDate, passId) " +                                               //уникальность на уровне таблицы
-                        ")";
-                    sqlCommand.ExecuteNonQuery();
-
-                    //UDF (пользовательски функции для ускорения процесса выборки)
-                    sqlCommand.CommandText = "Create function twt_GetDateInfo\r\n(\r\n@Name varchar(20) = '', \r\n@Date varchar(4) = ''\r\n)" +
-                        "\r\n" +
-                        "\r\n-- возвращает информацию о дате" + 
-                        "\r\n--   по части (like) наименования" +
-                        "\r\n--   или по дате без года (4 символа в формате MMDD) с ведущими нулями" +
-                        "\r\n
-                    " +
-                        "\r\nReturns table as Return " +
-                        "\r\n(" +
-                        "\r\nSelect " +
-                        "\r\n  c.id id, " +
-                        "\r\n  c.transferDate dWork, " +                                            //рабочая дата (перенос или исходная)
-                        "\r\n  c.originalDate dSource, " +                                          //исходная дата
-                        "\r\n  n.name dName, " +                                                    //наименование дня
-                        "\r\n  t.name dType, " +                                                    //тип дня (полный/сокращенный)
-                        "\r\n  c.uses access " +                                                    //флаг доступа для использования
-                        "\r\nFrom Calendars c, CalendarDateName n, CalendarDateType t " +
-                        "\r\nWhere c.dateNameId = n.id " +
-                        "\r\n  and c.dateTypeId = t.id " +
-                        "\r\n  and (len(n.name)>0 and n.name like('%' + @Name + '%')) " +
-                        "\r\n  or (not c.originalDate IS NULL and right(CONVERT(varchar(8), c.originalDate, 112),4) = @Date) " +
-                        "\r\n)";
-                    sqlCommand.ExecuteNonQuery();
-
-                    sqlCommand.CommandText = "Create function twt_GetUserInfo\r\n(\r\n@extUserID varchar(20) = ''\r\n)" +
-                        "\r\n--" +
-                        "\r\n-- возвращает информацию о сотруднике по внешнему идентификатору" +
-                        "\r\n--   по части (like) наименования" +
-                        "\r\n--" +
-                        "\r\nReturns table as Return " +
-                        "\r\n(" +
-                        "\r\nSelect " +
-                        "\r\n  u.id id, " +
-                        "\r\n  u.extId extId, " +                                                   //внешний id для интеграции с СКУД                                                 
-                        "\r\n  u.crmId crmId, " +                                                   //внешний id для интеграции с CRM                                                 
-                        "\r\n  u.name fio, " +                                                      //ФИО           
-                        "\r\n  u.note note, " +                                                     //комментарий           
-                        "\r\n  d.name department, " +                                               //департамент пользователя
-                        "\r\n  p.name post, " +                                                     //должность пользователя
-                        "\r\n  u.timeStart startTime, " +                                           //время начала работы по графику (без даты)
-                        "\r\n  u.timeStop stopTime, " +                                             //время окончания работы по графику (без даты)
-                        "\r\n  u.noLunch noLunch, " +                                               //флаг признака обеда   
-                        "\r\n  w.name work, " +                                                     //схема работы
-                        "\r\n  u.uses access " +                                                    //флаг доступа для использования
-                        "\r\nFrom Users u, UserDepartment d, UserPost p, UserWorkScheme w " +
-                        "\r\nWhere u.departmentId = d.Id AND " +
-                        "\r\n  u.postId = p.id and " +
-                        "\r\n  u.workSchemeId = w.Id and " +
-                        "\r\n  u.extId like('%' + @extUserID + '%') " +
-                        "\r\n)";
-                    sqlCommand.ExecuteNonQuery();
-
-                    sqlCommand.CommandText = "Create function twt_GetPassFormData\r\n(\r\n@bDate datetime, \r\n@extUserID varchar(20) = ''\r\n)" +
-                        "\r\n--" +
-                        "\r\n-- возвращает данные для формы регистрации по запрашиваемой дате и активным пользователям" +
-                        "\r\n--   - если пользователь есть в истории проходов - время из истории (таблица EventsPass)" +
-                        "\r\n--   - если пользователя нет в истории проходов - время из рабочего графика (таблица Users)" +
-                        "\r\n--" +
-                        "\r\nReturns table as Return " +
-                        "\r\nSelect " +
-                        "\r\n  e.passDate " +
-                        "\r\n  , Case When e.passDate is null Then 0 Else 1 END used " +
-                        "\r\n  , u.extId " +
-                        "\r\n  , u.name fio " +
-                        "\r\n  , u.timeStart gtStart " +
-                        "\r\n  , u.timeStop gtStop " +
-                        "\r\n  , u.noLunch " +
-                        "\r\n  , u.workSchemeId " +
-                        "\r\n  , e.specmarkId " +
-                        "\r\n  , e.specmarkNote " +
-                        "\r\n  , e.specmarkTimeStart stSatrt " +
-                        "\r\n  , e.specmarkTimeStop stStop " +
-                        "\r\n  , e.passTimeStart ptSart " +
-                        "\r\n  , e.passTimeStop ptStop " +
-                        "\r\n  , e.timeScheduleFact " +
-                        "\r\n  , e.timeScheduleLess " +
-                        "\r\n  , e.timeScheduleOver " +
-                        "\r\n  , e.timeScheduleWithoutLunch " +
-                        "\r\n  , e.totalHoursInWork " +
-                        "\r\n  , e.totalHoursOutsideWork " +
-                        "\r\nFrom " +
-                        "\r\n  (Select * " +
-                        "\r\n     From Users " +
-                        "\r\n    Where extId like('%' + @extUserID + '%') " +
-                        "\r\n          and uses = 1) as u " +
-                        "\r\n  left join " +
-                        "\r\n  (Select * " +
-                        "\r\n     From EventsPass " +
-                        "\r\n    Where passDate = @bDate) as e --cast('2021/01/02' as date)) as e " +
-                        "\r\n  on u.ExtId = e.passId";
-                    sqlCommand.ExecuteNonQuery();
-
-
-
-
-                    */
-
-
                 }
             }
-
         }
 
         //проверить что соединение есть в принципе на базе master
