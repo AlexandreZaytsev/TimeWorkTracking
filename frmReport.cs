@@ -15,7 +15,10 @@ namespace TimeWorkTracking
     public partial class frmReport : Form
     {
         private readonly clCalendar pCalendar;          //класс производственный календаоь
+
         private DataTable dtSpecialMarks;               //специальные отметки
+        private DataTable usersData;                    //информация о пользователях               
+        private DataTable totalReportData;              //сводные данные о проходах за период               
 
         private DateTime firstDayRange;                 //первый день диапазона  
         private DateTime lastDayRange;                  //последний день диапазона
@@ -29,7 +32,6 @@ namespace TimeWorkTracking
         readonly object mis = Type.Missing;
 
         private string[,] captionData;                  //массив данных заголовка Excel
-        DataTable usersData;                            //информация о пользователях               
         private string[,] tableData;                    //массив данных таблицы Excel
 
         public frmReport()
@@ -37,7 +39,7 @@ namespace TimeWorkTracking
             //подписка события внешних форм 
             CallBack_FrmMain_outEvent.callbackEventHandler = new CallBack_FrmMain_outEvent.callbackEvent(this.CallbackReload);    //subscribe (listen) to the general notification
             InitializeComponent();
-            pCalendar = new clCalendar();                                   //создать экземпляр класса Производственный календарь
+            pCalendar = new clCalendar();               //создать экземпляр класса Производственный календарь
         }
 
         private void frmReport_Load(object sender, EventArgs e)
@@ -223,6 +225,9 @@ namespace TimeWorkTracking
                     }
                     break;
                 case "ReportTotal":
+                    string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+                    //Загрузить массив сводных данных для отчета
+                    totalReportData = clMsSqlDatabase.TableRequest(cs, "EXEC twt_TotalReport '" + mcReport.SelectionStart.ToString("yyyyMMdd") + "','" + mcReport.SelectionEnd.ToString("yyyyMMdd") + "'");
                     break;
             }
             return usersData.Rows.Count;
@@ -697,7 +702,7 @@ namespace TimeWorkTracking
             bool ret;// = false;
             int daysCount = (int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1;
             int arrCount = uploadCaptionExcel(daysCount);
-     //       uploadTableExcel(arrCount);                                     //загрузить массив по данным сотрудников
+            uploadTableExcel(arrCount);                                     //загрузить массив по данным сотрудников
 
             toolStripStatusLabelInfo.Text = "Подключение к Excel";
             //Объявляем приложение
