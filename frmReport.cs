@@ -226,8 +226,26 @@ namespace TimeWorkTracking
                     break;
                 case "ReportTotal":
                     string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-                    //Загрузить массив сводных данных для отчета
+                    //Загрузить массив сводных данных для тотального
                     totalReportData = clMsSqlDatabase.TableRequest(cs, "EXEC twt_TotalReport '" + mcReport.SelectionStart.ToString("yyyyMMdd") + "','" + mcReport.SelectionEnd.ToString("yyyyMMdd") + "'");
+
+                    tableData = new string[totalReportData.Rows.Count * 2, lenDays + 2 + 3 + totalReportData.Rows.Count - 1 + 2 + 1];   //Создаём новый двумерный массив
+                    j = 0;
+                    for (int i = 0; i < totalReportData.Rows.Count; i++)     // Display items in the ListView control
+                    {
+                        DataRow drow = totalReportData.Rows[i];
+                        if (drow.RowState != DataRowState.Deleted)  // Only row that have not been deleted
+                        {
+                            tableData[i + j, 0] = (i + 1).ToString();
+                            tableData[i + j, 1] = drow["fio"].ToString();
+                            for (int col = 0; col < lenDays - 1; col += 2)
+                            {
+                                tableData[i + j, 2 + col] = Convert.ToDateTime(drow["startTime"]).ToString("HH:mm");
+                                tableData[i + j, 3 + col] = Convert.ToDateTime(drow["stopTime"]).ToString("HH:mm");
+                            }
+                            j += 1;
+                        }
+                    }
                     break;
             }
             return usersData.Rows.Count;
