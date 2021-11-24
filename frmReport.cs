@@ -386,9 +386,11 @@ namespace TimeWorkTracking
             //заливка цветом
                 ((Excel.Range)workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1,2]]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);   //заливка первой строки цветом
                 ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, workRange.Columns.Count]]).Interior.Color = ColorTranslator.ToOle(Color.LightGreen);
-                ((Excel.Range)workSheet.Range[workRange.Cells[3, 3], workRange.Cells[3, workRange.Columns.Count]]).Font.Color = ColorTranslator.ToOle(Color.LightGray);
-            //строка данных значения по умолчанию
-                workRange.Rows[3]= "36,3\u00B0";
+            ((Excel.Range)workSheet.Range[workRange.Cells[3, 3], workRange.Cells[3, workRange.Columns.Count]]).Font.Color = ColorTranslator.ToOle(Color.Gainsboro);//.WhiteSmoke);//.LightGray);
+                                                                                                                                                                        //строка данных значения по умолчанию
+            workRange.Rows[3]= "36,3\u00B0";
+//            workRange.Cells[3, 3] = "36,3\u00B0";
+
 
             toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
                 //условное форматирование диапазона 
@@ -523,7 +525,7 @@ namespace TimeWorkTracking
             workSheet.PageSetup.LeftMargin = interval;
             workSheet.PageSetup.RightMargin = interval;
             workSheet.PageSetup.TopMargin = interval;
-            workSheet.PageSetup.BottomMargin = excelApp.CentimetersToPoints(1.7); ;
+            workSheet.PageSetup.BottomMargin = excelApp.CentimetersToPoints(1.3); 
             workSheet.PageSetup.HeaderMargin = 0;// excelApp.InchesToPoints(0);
             workSheet.PageSetup.FooterMargin = interval;
             workSheet.PageSetup.PrintTitleRows = "$1:$11";                                      //печать заголовков на каждой странице
@@ -597,9 +599,9 @@ namespace TimeWorkTracking
                 ((Excel.Range)workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1, 2]]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);   //заливка первой строки цветом
                 ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, workRange.Columns.Count]]).Interior.Color = ColorTranslator.ToOle(Color.LightGreen);
                 ((Excel.Range)workRange.Rows["3:4"]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);
-                ((Excel.Range)workSheet.Range[workRange.Cells[5, 3], workRange.Cells[5, workRange.Columns.Count]]).Font.Color = ColorTranslator.ToOle(Color.LightGray);
-            //строка данных значения по умолчанию
-                workRange.Rows[5] = "00:00";
+            ((Excel.Range)workSheet.Range[workRange.Cells[5, 3], workRange.Cells[5, workRange.Columns.Count]]).Font.Color = ColorTranslator.ToOle(Color.Gainsboro);//.WhiteSmoke);//.LightGray);
+                                                                                                                                                                   //строка данных значения по умолчанию
+            workRange.Rows[5] = "00:00";
 
                 toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
             //условное форматирование диапазона 
