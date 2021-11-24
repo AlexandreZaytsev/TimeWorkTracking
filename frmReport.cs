@@ -228,11 +228,18 @@ namespace TimeWorkTracking
                     string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
                     //Загрузить массив сводных данных для тотального
                     totalReportData = clMsSqlDatabase.TableRequest(cs, "EXEC twt_TotalReport '" + mcReport.SelectionStart.ToString("yyyyMMdd") + "','" + mcReport.SelectionEnd.ToString("yyyyMMdd") + "'");
-
                     tableData = new string[totalReportData.Rows.Count * 2, 2 + lenDays + 3 + dtSpecialMarks.Rows.Count - 1 + 2 + 1];   //Создаём новый двумерный массив
-                    string[] splitValue = new string[5];                            //шесть параметров
+                    string[] splitValue = new string[5];                            //шесть параметров упакованных в день
+                    double timeScheduleWithoutLunch;                                //фактическое время без обеда
+                    double timeScheduleLess;                                        //время недоработки    
+                    double timeScheduleOver;                                        //время переработки
+                    string specmarkShortName;                                       //короткое имя спец отметок
+                    double totalHoursInWork;                                        //часов в рамках рабочего дня
+                    double totalHoursOutsideWork;                                   //часов за рамками рабочего дня    
+                    double specmarkSum;                                             //переменная для подсчета суммы спец отметок    
+
                     j = 0;
-                    for (int i = 0; i < totalReportData.Rows.Count; i++)            // Display items in the ListView control
+                    for (int i = 0; i < totalReportData.Rows.Count; i++)            //Цикл по строкам отчета
                     {
                         DataRow drow = totalReportData.Rows[i];
                         if (drow.RowState != DataRowState.Deleted)                  // Only row that have not been deleted
@@ -241,16 +248,127 @@ namespace TimeWorkTracking
                             tableData[i + j, 1] = drow[1].ToString();               //должность (первая строка)
                             tableData[i + j + 1, 1] = drow[0].ToString();           //фио (вторая строка)
 
-                            //заполним диапазон ПО ДАТАМ КАЛЕНДАРЯ - сверху спец отметка снизу количество часов
+                            //заполним диапазон по строке по колонкам ДАТ КАЛЕНДАРЯ - сверху спец отметка снизу количество часов
+                            timeScheduleWithoutLunch = 0;                             
+                            timeScheduleLess = 0;                                       
+                            timeScheduleOver = 0;                                     
+                            specmarkShortName = "";                                   
+                            totalHoursInWork = 0;                                     
+                            totalHoursOutsideWork = 0;
+                            specmarkSum = 0;
+
                             if (drow[4] != System.DBNull.Value) 
                             {
+                                //РАБОТАЕМ С МАССИВОМ ДАННЫХ ДЛЯ ДНЯ (не со строкой)
                                 splitValue = drow[4].ToString().Substring(1, drow[4].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
+                                timeScheduleWithoutLunch = Convert.ToDouble(splitValue[0]) / 60;    
+                                timeScheduleLess = Convert.ToDouble(splitValue[1]) / 60;            
+                                timeScheduleOver = Convert.ToDouble(splitValue[2]) / 60;
+                                specmarkShortName = splitValue[3];
+                                totalHoursInWork = Convert.ToDouble(splitValue[4]) / 60;
+                                totalHoursOutsideWork = Convert.ToDouble(splitValue[5]) / 60;
+
                                 for (int col = 0; col < lenDays - 1; col += 2)
                                 {
-                                    tableData[i + j, 2 + col] = splitValue[3];          //имя спец отметки (первая строка) 
-                                    tableData[i + j + 1, 2 + col] = splitValue[0];      //количество отработанных часов без обеда (вторая строка)
+                                    tableData[i + j, 2 + col] = splitValue[3];          //"Я" или факт наличия спецотметки (короткое имя) (первая строка) 
+                                    tableData[i + j + 1, 2 + col] = timeScheduleWithoutLunch.ToString();      
                                 }
+
+                                tableData[i + j + 1, 2 + lenDays] = timeScheduleLess.ToString();
+                                tableData[i + j + 1, 2 + lenDays +2 ] = timeScheduleWithoutLunch.ToString();  
+
+                                //цикл по спец отметкам с подсчетом итогов (накопительная часть в ячейках массива) из календарной части
+                                for (int smCount = 1; smCount < dtSpecialMarks.Rows.Count; smCount++)   //цикл по таблице спец отметок
+                                {
+                                    DataRow smRow = dtSpecialMarks.Rows[smCount];
+                                    specmarkSum = Convert.ToDouble(tableData[i + j + 1, 2 + lenDays + 1]);
+                                    if (smRow.RowState != DataRowState.Deleted)         // Only row that have not been deleted
+                                    {
+                                        string smShortNameTable = smRow["letterCode"].ToString();
+                                        for (int col = 0; col < lenDays - 1; col += 2)  //цикл по заполненным данным календаря 
+                                        {
+                                            if (specmarkShortName == smShortNameTable)  //если пришедшее имя совпадает с именем из таблицы    
+                                            {
+                                                switch (smShortNameTable)               //определение индекса в массиве для спец отметки
+                                                {
+                                                    case "Я":                           //"Я" отдельно стоящая позиция
+
+                                                       // tableData[i + j + 1, 2 + lenDays+1] = 
+                                                        break;
+                                                    default:
+
+                                                        break;
+                                                }
+
+                                            }
+                                        }
+
+
+
+                                    }
+                                }
+
+
                             }
+                            //недоработка
+
+                            //накопительная часть/развертка по специальным отметкам "Я" и т.д.
+                            /*
+                            
+                                              iHdr = GetIndexFromYeaderPartName(CStr(dtArr(k - 1, 2 + 1 + i - 1)), hdrArr)                  ' найти номер колонки спецотметки на листе отчета в заголовке
+                                              dtArr(k - 1, iHdr) = dtArr(k - 1, 2 + 1 + i - 1)                                              ' проставить сокращенное имя спецотметки
+                                              Select Case dtArr(k - 1, iHdr)
+                                                Case "Я"
+                                                  'основное время
+                                                  dtArr(k, iHdr) = GetEmptyValue(dtArr(k, iHdr)) + CDbl(.DataBodyRange.Cells(j, 10 + 1)) / 60 ' !!!! данные из области РАБОЧЕГО времени
+                                                  'вспомогательное время
+                                                  prTime = GetEmptyValue(dtArr(k, iHdr - 1)) + CDbl(.DataBodyRange.Cells(j, 11 + 1)) / 60     ' данные о недоработке РАБОЧЕГО времени
+                                                  afTime = GetEmptyValue(dtArr(k, iHdr + 1)) + CDbl(.DataBodyRange.Cells(j, 12 + 1)) / 60     ' данные о переработке РАБОЧЕГО времени
+                                                  'коррекция на +/-
+                                                  prCur = afTime - prTime
+                                                  If prCur < 0 Then
+                                                    prTime = Abs(prCur)
+                                                    afTime = 0
+                                                  Else
+                                                    prTime = 0
+                                                    afTime = Abs(prCur)
+                                                  End If
+                                                  dtArr(k, iHdr - 1) = prTime
+                                                  dtArr(k, iHdr + 1) = afTime
+                                                Case "УД"
+                                                  dtArr(k, 2 + 1 + i - 1) = 0   'сбросить рабочее время - требование АВТ
+                                               '   dtArr(k, iHdr - 1) = 0
+                                                  dtArr(k, iHdr) = 0            'сбросить время в спец отметках
+                                               '   dtArr(k, iHdr + 1) = 0
+                                                Case Else
+                                                  dtArr(k, iHdr) = GetEmptyValue(dtArr(k, iHdr)) + CDbl(.DataBodyRange.Cells(j, 17 + 1)) / 60 ' !!!! данные из области специальных отметок
+                                              End Select
+
+                            'итоги накопительная часть по итогам специальных отметок (всего)
+                                               iHdr = 2 + dayCount + 3 + spCount + 1                                                        ' найти номер колонки спецотметки на листе
+                                               dtArr(k, iHdr) = GetEmptyValue(dtArr(k, iHdr)) + CDbl(.DataBodyRange.Cells(j, 17 + 1)) / 60
+                            'накопительная часть по итогам специальных отметок (вне графика)
+                                               iHdr = 2 + dayCount + 3 + spCount + 2                                                        ' найти номер колонки спецотметки на листе
+                                               dtArr(k, iHdr) = GetEmptyValue(dtArr(k, iHdr)) + CDbl(.DataBodyRange.Cells(j, 18 + 1)) / 60
+                            '-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                            'накопительная часть по итогам + служебные задания
+                                               iHdr = 2 + dayCount + 3 + spCount + 3
+
+                                               Select Case CStr(dtArr(k - 1, 2 + 1 + i - 1))
+                                                 Case "Я"                                                                                   ' !!!! данные из области РАБОЧЕГО времени
+                                                   dtArr(k, iHdr) = GetEmptyValue(dtArr(k, iHdr)) + CDbl(.DataBodyRange.Cells(j, 10 + 1)) / 60
+                                               Case "СЗ"                                                                                    ' !!!! данные из области РАБОЧЕГО времени + превышение из спец отметок
+                                                   dtArr(k, iHdr) = GetEmptyValue(dtArr(k, iHdr)) + CDbl(.DataBodyRange.Cells(j, 10 + 1)) / 60 + CDbl(.DataBodyRange.Cells(j, 18 + 1)) / 60
+                                               End Select
+
+                                              Exit For
+
+
+
+
+                            */
+
+
                             j += 1;
                         }
                     }
