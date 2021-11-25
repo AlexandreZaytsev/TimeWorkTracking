@@ -236,9 +236,33 @@ namespace TimeWorkTracking
                     break;
                 case "ReportTotal":
                     string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+
+                    var a = new string[3];
+                    var b = new double[3];
+                 //   var qb = new[,];// [3, 2];
+                    //        var ab = new[]{a,b};
+                    var MC1 = new[,] {
+                        { 'A', 'B', 'C', 'D' },
+                        { '1', '2', '3', '4' },
+                        };
+                    object[] arr = new object[6];// Создаем и инициализируем object array
+                    arr[0] = 1.859;
+                    arr[1] = 7;
+                    arr[2] = 'g';
+                    arr[3] = "hello";
+                    arr[4] = null;// это не отобразиться на выходе
+                    arr[5] = new object();// выведет System.Object
+                                          //    var MC = new[,] {
+                                          //        new [3],
+                                          //       new [3],
+                                          //       };
+
+
                     //Загрузить массив сводных данных для тотального
                     totalReportData = clMsSqlDatabase.TableRequest(cs, "EXEC twt_TotalReport '" + mcReport.SelectionStart.ToString("yyyyMMdd") + "','" + mcReport.SelectionEnd.ToString("yyyyMMdd") + "'");
-                    tableData = new string[totalReportData.Rows.Count * 2, 2 + lenDays + 3 + dtSpecialMarks.Rows.Count - 1 + 2 + 1];   //Создаём новый двумерный массив
+                                        tableData = new string[totalReportData.Rows.Count * 2, 2 + lenDays + 3 + dtSpecialMarks.Rows.Count - 1 + 2 + 1];   //Создаём новый двумерный массив
+                    //var tableData = new[,];//[totalReportData.Rows.Count * 2, 2 + lenDays + 3 + dtSpecialMarks.Rows.Count - 1 + 2 + 1];
+
                     string[] splitValue = new string[5];                            //шесть параметров упакованных в день
                     double timeScheduleWithoutLunch;                                //фактическое время без обеда
                     double timeScheduleLess;                                        //время недоработки    
@@ -260,23 +284,23 @@ namespace TimeWorkTracking
                             specmarkSum = 0;
                             for (int col = 0; col < lenDays - 1; col++)             //Цикл по колонкам календаря отчета
                             {
-                                if (drow[4 + col] != System.DBNull.Value)           //Если данные для обработки есть
+                                if (drow[4 + col] != System.DBNull.Value)           //Если данные для обработки на дату есть 
                                 {
                                     splitValue = drow[4 + col].ToString().Substring(1, drow[4 + col].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
-                                    tableData[i + j + 1, headerIndex["less"]] = (Convert.ToDouble(splitValue[1]) / 60).ToString();  //недоработка
-                                    tableData[i + j + 1, headerIndex["over"]] = (Convert.ToDouble(splitValue[2]) / 60).ToString();  //недоработка
+                                    tableData[i + j + 1, headerIndex["less"]] = (Convert.ToDouble(splitValue[1]) / 60).ToString(CultureInfo.CurrentCulture);  //недоработка
+                                    tableData[i + j + 1, headerIndex["over"]] = (Convert.ToDouble(splitValue[2]) / 60).ToString(CultureInfo.CurrentCulture);  //недоработка
 
                                     tableData[i + j, 2 + col] = splitValue[3];          //Спецотметка (короткое имя) (первая строка) 
                                     tableData[i + j, headerIndex[splitValue[3]]] = splitValue[3];
 
                                     specmarkSum = Convert.ToDouble(splitValue[0]) / 60;
-                                    tableData[i + j + 1, 2 + col] = specmarkSum.ToString();
+                                    tableData[i + j + 1, 2 + col] = specmarkSum.ToString(); ;
 
                                     specmarkSum += Convert.ToDouble(tableData[i + j + 1, headerIndex[splitValue[3]]]);
-                                    tableData[i + j + 1, headerIndex[splitValue[3]]] = specmarkSum.ToString();
+                                    tableData[i + j + 1, headerIndex[splitValue[3]]] = specmarkSum.ToString().Replace(",",".");
 
-                                    tableData[i + j + 1, headerIndex["in"]] = (Convert.ToDouble(splitValue[4]) / 60).ToString();    //в дне
-                                    tableData[i + j + 1, headerIndex["out"]] = (Convert.ToDouble(splitValue[5]) / 60).ToString();   //вне дня
+                                    tableData[i + j + 1, headerIndex["in"]] = (Convert.ToDouble(splitValue[4]) / 60).ToString(CultureInfo.CurrentCulture);    //в дне
+                                    tableData[i + j + 1, headerIndex["out"]] = (Convert.ToDouble(splitValue[5]) / 60).ToString(CultureInfo.CurrentCulture);   //вне дня
                                 }
                             }
 
@@ -295,56 +319,6 @@ namespace TimeWorkTracking
                             totalHoursOutsideWork = 0;
                             specmarkSum = 0;
 
-                            if (drow[4] != System.DBNull.Value)                         //Если данные для обработки есть
-                            {
-                                /*
-//РАБОТАЕМ С МАССИВОМ ДАННЫХ ДЛЯ ДНЯ (не со строкой)
-splitValue = drow[4].ToString().Substring(1, drow[4].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
-timeScheduleWithoutLunch = Convert.ToDouble(splitValue[0]) / 60;    
-timeScheduleLess = Convert.ToDouble(splitValue[1]) / 60;            
-timeScheduleOver = Convert.ToDouble(splitValue[2]) / 60;
-specmarkShortName = splitValue[3];
-totalHoursInWork = Convert.ToDouble(splitValue[4]) / 60;
-totalHoursOutsideWork = Convert.ToDouble(splitValue[5]) / 60;
-
-tableData[i + j + 1, 2 + lenDays] = timeScheduleLess.ToString();
-tableData[i + j + 1, 2 + lenDays +2 ] = timeScheduleWithoutLunch.ToString();
-
-
-//цикл по спец отметкам с подсчетом итогов (накопительная часть в ячейках массива) из календарной части
-for (int smCount = 1; smCount < dtSpecialMarks.Rows.Count; smCount++)   //цикл по таблице спец отметок
-{
-    DataRow smRow = dtSpecialMarks.Rows[smCount];
-    specmarkSum = Convert.ToDouble(tableData[i + j + 1, 2 + lenDays + 1]);
-    if (smRow.RowState != DataRowState.Deleted)         // Only row that have not been deleted
-    {
-        string smShortNameTable = smRow["letterCode"].ToString();
-        for (int col = 0; col < lenDays - 1; col += 2)  //цикл по заполненным данным календаря 
-        {
-            if (specmarkShortName == smShortNameTable)  //если пришедшее имя совпадает с именем из таблицы    
-            {
-                switch (smShortNameTable)               //определение индекса в массиве для спец отметки
-                {
-                    case "Я":                           //"Я" отдельно стоящая позиция
-
-                       // tableData[i + j + 1, 2 + lenDays+1] = 
-                        break;
-                    default:
-
-                        break;
-                }
-
-            }
-        }
-
-
-
-}
-
-}
-                                */
-
-                            }
                             //недоработка
 
                             //накопительная часть/развертка по специальным отметкам "Я" и т.д.
@@ -572,8 +546,9 @@ for (int smCount = 1; smCount < dtSpecialMarks.Rows.Count; smCount++)   //цик
                 ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, workRange.Columns.Count]]).Interior.Color = ColorTranslator.ToOle(Color.LightGreen);
             ((Excel.Range)workSheet.Range[workRange.Cells[3, 3], workRange.Cells[3, workRange.Columns.Count]]).Font.Color = ColorTranslator.ToOle(Color.Gainsboro);//.WhiteSmoke);//.LightGray);
                                                                                                                                                                         //строка данных значения по умолчанию
-            workRange.Rows[3]= "36,3\u00B0";
-//            workRange.Cells[3, 3] = "36,3\u00B0";
+            //workRange.Rows[3]= "36,3\u00B0";
+            workRange.Rows[3] = String.Format("{0}°", 36.3);
+            //            workRange.Cells[3, 3] = "36,3\u00B0";
 
 
             toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
@@ -904,6 +879,7 @@ for (int smCount = 1; smCount < dtSpecialMarks.Rows.Count; smCount++)   //цик
             workSheet.Name = "Report";                                      //Название листа (вкладки снизу)
             //RebuildSheet(workBook, "Journal", 3);                         // удалить все листы кроме текущего
             ((Excel.Range)workSheet.Cells).FormatConditions.Delete();       //удалить все форматы с листа
+            //((Excel.Range)workSheet.Cells).NumberFormat = "0;[Red]0";
 
             //оформление листа и применение стиля
             Excel.Style style = workBook.Styles.Add("reportStyle");
@@ -1004,6 +980,10 @@ for (int smCount = 1; smCount < dtSpecialMarks.Rows.Count; smCount++)   //цик
                 ((Excel.Range)workRange.Cells[1, 3 + captionData.GetUpperBound(1) - 2]).Interior.Color = ColorTranslator.ToOle(Color.LightGreen);
                 ((Excel.Range)workRange.Cells[2, 1]).Interior.Color = ColorTranslator.ToOle(Color.LightBlue);
 
+            //форматирование диапазона данных 
+                Excel.Range rFormat = workSheet.Range[workRange.Cells[3, 3], workRange.Cells[3, workRange.Columns.Count]];
+            ((Excel.Range)rFormat).NumberFormat = "0";// "##0,000";//  "0";                      //"0;[Red]0";
+
             toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
             //условное форматирование диапазона 
                Excel.FormatConditions fcs = ((Excel.Range)workRange.Rows[1]).EntireRow.FormatConditions;
@@ -1024,7 +1004,29 @@ for (int smCount = 1; smCount < dtSpecialMarks.Rows.Count; smCount++)   //цик
             workRange.Resize[
                 captionData.GetUpperBound(0) + 1,
                 captionData.GetUpperBound(1) + 1
-                ].Value = captionData; 
+                ].Value = captionData;
+
+            toolStripStatusLabelInfo.Text = "Вставка данных таблицы";
+            //расширим форматированную таблицу данных
+            Excel.Range fullTable = tableResize(
+                workSheet,
+                workSheet.Range[
+                    workSheet.Cells[workRange.Row + workRange.Rows.Count - 1 - 1, workRange.Column],
+                    workSheet.Cells[workRange.Row + workRange.Rows.Count - 1, workRange.Column + workRange.Columns.Count - 1]],
+                tableData.GetUpperBound(0) + 1
+                );
+            fullTable.Formula = tableData;
+
+            toolStripStatusLabelInfo.Text = "Дополнительное форматирование";
+            fullTable.Rows.RowHeight = 20;  //восстановить высоту строк в диапазоне данных
+
+         //   fullTable.NumberFormat = "General";
+          //  fullTable.Value = fullTable.Value;
+
+//            Excel.Range rFormat = (Excel.Range)workSheet.Cells[3, 2 + i];
+//               rFormat.NumberFormatLocal = "0;[Red]0";
+//            ((Excel.Range)fullTable).NumberFormat = "0";
+
 
             /*
                         ((Excel.Range)workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1, 2]]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);   //заливка первой строки цветом
