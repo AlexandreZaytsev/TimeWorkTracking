@@ -858,7 +858,7 @@ namespace TimeWorkTracking
             toolStripStatusLabelInfo.Text = "Создание рабочей книги";
             //Настройки Application установить
             excelApp.DisplayAlerts = false;                                 //Запретить отображение окон с сообщениями
-            excelApp.ScreenUpdating = true;// false;                                //Запретить перерисовку экрана    
+            excelApp.ScreenUpdating = false;                                //Запретить перерисовку экрана    
             excelApp.ActiveWindow.Zoom = 80;                                //Масштаб листа
             excelApp.ActiveWindow.View = Excel.XlWindowView.xlPageBreakPreview;
 
@@ -946,9 +946,9 @@ namespace TimeWorkTracking
                 ((Excel.Range)workSheet.Columns[colsChar]).ColumnWidth = 4;     //ширина колонок с датами 
                 colsChar =
                     NumberToLetters(((Excel.Range)workRange.Columns[3 + daysCount]).Column) + ":" +
-                    NumberToLetters(((Excel.Range)workRange.Columns[3 + daysCount + 1 +3 + dtSpecialMarks.Rows.Count + 2]).Column);
-                ((Excel.Range)workSheet.Columns[colsChar]).ColumnWidth = 6;     //ширина колонок спец отметл + дополнительные 
-                ((Excel.Range)workSheet.Columns[1 + 2 + captionData.GetUpperBound(1)-1]).ColumnWidth = 18;     //ширина колонок с датами 
+                    NumberToLetters(((Excel.Range)workRange.Columns[3 + daysCount + 1 +3 + dtSpecialMarks.Rows.Count]).Column);
+                ((Excel.Range)workSheet.Columns[colsChar]).ColumnWidth = 6;                                    //ширина колонок спец отметл + дополнительные 
+                ((Excel.Range)workSheet.Columns[1 + 2 + captionData.GetUpperBound(1)-1]).ColumnWidth = 18;     //ширина последнего столбца
 
             //управление шрифтами и выравниванием
                 ((Excel.Range)workRange.Rows[1]).Font.Bold = true;              //первая строка шапки
@@ -970,7 +970,7 @@ namespace TimeWorkTracking
 
             //форматирование диапазона данных 
                 Excel.Range rFormat = workSheet.Range[workRange.Cells[3, 3], workRange.Cells[3, workRange.Columns.Count]];
-                ((Excel.Range)rFormat).NumberFormat = "0";// "##0,000";//"0;[Red]0";        //готовим Excel к приему пищи
+            ((Excel.Range)rFormat).NumberFormat = "0";//"##0.0";// "0";// "##0,000";//"0;[Red]0";        //готовим Excel к приему пищи
 
             toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
             //условное форматирование диапазона 
@@ -1005,9 +1005,9 @@ namespace TimeWorkTracking
                 5. если передать строку с разделителем для c# (точка) - не ругается но все равно не воспринимает его как число
             */
 
-            excelApp.DecimalSeparator = ".";                                    //сообщаем Excel что к нему придут числа с точкой в виде разделителя
-            excelApp.UseSystemSeparators = false;                               //отключаем Excel использование системного разделителя (запятая по умолчанию)
-            //то что выше (две строки) можно отключить - не помогло для Excel 2010
+//            excelApp.DecimalSeparator = ".";                                    //сообщаем Excel что к нему придут числа с точкой в виде разделителя
+//            excelApp.UseSystemSeparators = false;                               //отключаем Excel использование системного разделителя (запятая по умолчанию)
+            //то что выше (две строки) нужно отключить если дальше используем замену точки на запятую - все равно не помогло для Excel 2010
 
             //расширим форматированную таблицу данных
             Excel.Range fullTable = tableResize(
@@ -1018,83 +1018,18 @@ namespace TimeWorkTracking
                 tableData.GetUpperBound(0) + 1
                 );
             fullTable.Formula = tableData;                                      //!!!десятичные числа с точкой (чтобы Excel не ругался на число записанное как строка)
+            toolStripStatusLabelInfo.Text = "Форматирование данных из строки в число";
             fullTable.Replace(".", ",");                                        //!!!меняем точку на запятую (чтобы Excel наконец то понял что ему передают число)(жуткий тормоз)
-            // fullTable.Calculate();                                           //перечитать данные листа
+                                                                                // fullTable.Calculate();                                           //перечитать данные листа
 
-            excelApp.UseSystemSeparators = true;                                //включаем Excel использование системного разделителя (запятая по умолчанию)
-            //то что выше (одна строка) можно отключить - не помогло для Excel 2010
+            //            excelApp.UseSystemSeparators = true;                                //включаем Excel использование системного разделителя (запятая по умолчанию)
+            //то что выше (одна строка) нужно отключить если дальше используем замену точки на запятую - все равно не помогло для Excel 2010
             /*
                 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
             */
 
             toolStripStatusLabelInfo.Text = "Дополнительное форматирование";
             fullTable.Rows.RowHeight = 20;  //восстановить высоту строк в диапазоне данных
-
-            /*
-                        ((Excel.Range)workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1, 2]]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);   //заливка первой строки цветом
-                            ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, workRange.Columns.Count]]).Interior.Color = ColorTranslator.ToOle(Color.LightGreen);
-                            ((Excel.Range)workRange.Rows["3:4"]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);
-                        //уточнение       
-                            ((Excel.Range)workRange.Rows[1]).Font.Bold = true;                                          //первая строка шапки
-                            ((Excel.Range)workRange.Rows[2]).Font.Size = 9;                                             //вторая строка шапки
-                            ((Excel.Range)workRange.Rows["3:4"]).Font.Bold = true;                                      //первая строка шапки
-                                                                                                                    //Свойства в диапазоне через workSheet        
-                            ((Excel.Range)workSheet.Range[workRange.Cells[2, 3], workRange.Cells[2, workRange.Columns.Count]]).VerticalAlignment = Excel.XlVAlign.xlVAlignTop;
-
-                            ((Excel.Range)workRange.Rows[5]).Font.Size = 11;                                            //пятая строка шапки (строка данных)
-                            ((Excel.Range)workRange.Range[workSheet.Cells[5, 1], workSheet.Cells[6, 2]]).Font.Bold = true;
-                            ((Excel.Range)workRange.Cells[5, 2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-                            //Свойства в диапазоне через workSheet 
-                            ((Excel.Range)workSheet.Range[workRange.Cells[5, 3], workRange.Cells[5, workRange.Columns.Count]]).Font.Color = ColorTranslator.ToOle(Color.LightGray);
-                            ((Excel.Range)workSheet.Range[workRange.Cells[5, 3], workRange.Cells[5, workRange.Columns.Count]]).Font.Size = 16;
-                        //строка данных значения по умолчанию
-                            workRange.Rows[5] = "00:00";
-
-                            toolStripStatusLabelInfo.Text = "Формирование условного форматирования заголовка";
-                        //условное форматирование диапазона 
-                            Excel.FormatConditions fcs = ((Excel.Range)workRange.Rows[1]).EntireRow.FormatConditions;
-                            Excel.FormatCondition fc = (Excel.FormatCondition)fcs.Add(
-                                Type: Excel.XlFormatConditionType.xlExpression,
-                                mis, //Excel.XlFormatConditionOperator.xlEqual,
-                                Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A9))",
-                                mis, mis, mis, mis, mis);
-
-                            fc.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
-                            fc.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
-                        //              fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
-                            fc.Interior.TintAndShade = 0.599963377788629;
-                            fc.StopIfTrue = false;
-
-                            toolStripStatusLabelInfo.Text = "Нстройка ширины колонок и объединения ячеек";
-                        //настройка ширины колонок и объединение ячеек диапазона
-                            ((Excel.Range)workRange.Columns[1]).ColumnWidth = 3.5;          //ширина колонки с номером
-                            ((Excel.Range)workRange.Columns[2]).ColumnWidth = 38.5;         //ширина колонки ФИО 
-                            ((Excel.Range)workRange.Rows[1]).RowHeight = 28.5;              //высота первой строки
-            //                ((Excel.Range)workRange.Rows[5]).RowHeight = 20;                //высота строки данных
-            //                ((Excel.Range)workRange.Rows[6]).RowHeight = 20;                //высота строки данных
-                            workSheet.Range[workRange.Cells[1, 1], workRange.Cells[4, 1]].Merge(mis);
-                            workSheet.Range[workRange.Cells[1, 2], workRange.Cells[4, 2]].Merge(mis);
-                            workSheet.Range[workRange.Cells[5, 1], workRange.Cells[6, 1]].Merge(mis);
-                            workSheet.Range[workRange.Cells[5, 2], workRange.Cells[6, 2]].Merge(mis);
-
-                            int j = 2;
-                            for (int i = 1; i <= captionData.GetUpperBound(1) / 2; i++)
-                            {
-                                //Свойства в диапазоне через workSheet 
-                                workSheet.Range[workRange.Cells[1, i + j], workRange.Cells[1, i + j + 1]].ColumnWidth = 11.56;// 8;
-                                workSheet.Range[workRange.Cells[1, i + j], workRange.Cells[1, i + j + 1]].Merge(mis);
-                                workSheet.Range[workRange.Cells[2, i + j], workRange.Cells[2, i + j + 1]].Merge(mis);
-                                workSheet.Range[workRange.Cells[4, i + j], workRange.Cells[4, i + j + 1]].Merge(mis);
-                                workSheet.Range[workRange.Cells[6, i + j], workRange.Cells[6, i + j + 1]].Merge(mis);
-                                j += 1;
-                            }
-            */
-
-
-
-
-
-
 
             toolStripStatusLabelInfo.Text = "Файл подготовлен";
             //Настройки Application вернуть обратно
