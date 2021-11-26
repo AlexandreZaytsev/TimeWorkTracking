@@ -264,22 +264,32 @@ namespace TimeWorkTracking
                             {
                                 if (drow[4 + col] != System.DBNull.Value)           //Если данные для обработки на дату есть 
                                 {
-                                    splitValue = drow[4 + col].ToString().Substring(1, drow[4 + col].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
-                                    tableData[i + j + 1, headerIndex["less"]] = (Convert.ToDouble(splitValue[1]) / 60).ToString("F8", CultureInfo.InvariantCulture);  //недоработка
-                                    tableData[i + j + 1, headerIndex["over"]] = (Convert.ToDouble(splitValue[2]) / 60).ToString("F8", CultureInfo.InvariantCulture);  //недоработка
+                                    //РАБОТАЕМ СО СТРОКАМИ - ОБЯЗАТЕЛЬНОЕ ФОРМАТИРОВАНИЕ В КУЛЬТУРЕ + 8 ДЕСЯТИЧНЫХ ЗНАКОВ (см. ниже проблемы вставки в EXCEL) 
 
-                                    tableData[i + j, 2 + col] = splitValue[3];          //Спецотметка (короткое имя) (первая строка) 
+                                    //распакуем пришедшие данные в массив
+                                    splitValue = drow[4 + col].ToString().Substring(1, drow[4 + col].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
+
+                                    //недоработка (вторая строка)
+                                    tableData[i + j + 1, headerIndex["less"]] = (Convert.ToDouble(splitValue[1]) / 60).ToString("F8", CultureInfo.InvariantCulture);
+                                    //переработка (вторая строка)
+                                    tableData[i + j + 1, headerIndex["over"]] = (Convert.ToDouble(splitValue[2]) / 60).ToString("F8", CultureInfo.InvariantCulture);
+
+                                    //Спецотметка (короткое имя) (первая строка)
+                                    tableData[i + j, 2 + col] = splitValue[3];           
                                     tableData[i + j, headerIndex[splitValue[3]]] = splitValue[3];
 
+                                    //Фактически отработанное время без обеда (вторая строка)
                                     specmarkSum = Convert.ToDouble(splitValue[0]) / 60;
                                     tableData[i + j + 1, 2 + col] = specmarkSum.ToString("F8", CultureInfo.InvariantCulture);
 
-//                                    specmarkSum += Convert.ToDouble(tableData[i + j + 1, headerIndex[splitValue[3]]]);
+//                                  //симмуруем итоги для каждой спецотметки
                                     if (tableData[i + j + 1, headerIndex[splitValue[3]]]!=null)
                                         specmarkSum += Double.Parse(tableData[i + j + 1, headerIndex[splitValue[3]]], CultureInfo.InvariantCulture);
                                     tableData[i + j + 1, headerIndex[splitValue[3]]] = specmarkSum.ToString("F8", CultureInfo.InvariantCulture);
 
+                                    //время отработанное в пределах рабочего дня
                                     tableData[i + j + 1, headerIndex["in"]] = (Convert.ToDouble(splitValue[4]) / 60).ToString("F8", CultureInfo.InvariantCulture);// CultureInfo.CurrentCulture);    //в дне
+                                    //время отработанное вне пределов рабочего дня
                                     tableData[i + j + 1, headerIndex["out"]] = (Convert.ToDouble(splitValue[5]) / 60).ToString("F8", CultureInfo.InvariantCulture);   //вне дня
                                 }
                             }
@@ -361,10 +371,6 @@ namespace TimeWorkTracking
                             j += 1;
                         }
                     }
-
-
-
-
                     break;
             }
             return usersData.Rows.Count;
@@ -390,7 +396,6 @@ namespace TimeWorkTracking
             mainPanelReport.Enabled = conSQL;
             return conSQL;
         }
-
 
         //--------------------------------------------------------------------------------------------------------------------------------------------
         //напечатать бланк температуры
