@@ -1027,18 +1027,8 @@ namespace TimeWorkTracking
                 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
             */
 
-
-
             toolStripStatusLabelInfo.Text = "Дополнительное форматирование";
             fullTable.Rows.RowHeight = 20;  //восстановить высоту строк в диапазоне данных
-
-         //   fullTable.NumberFormat = "General";
-          //  fullTable.Value = fullTable.Value;
-
-//            Excel.Range rFormat = (Excel.Range)workSheet.Cells[3, 2 + i];
-//               rFormat.NumberFormatLocal = "0;[Red]0";
-//            ((Excel.Range)fullTable).NumberFormat = "0";
-
 
             /*
                         ((Excel.Range)workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1, 2]]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);   //заливка первой строки цветом
