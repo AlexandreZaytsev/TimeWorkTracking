@@ -432,8 +432,8 @@ namespace TimeWorkTracking
                         "\r\n           + '|' + CONVERT(varchar(10), e.timeScheduleLess)        --время недоработки " +
                         "\r\n           + '|' + CONVERT(varchar(10), e.timeScheduleOver)        --время переработки " +
                         "\r\n           + '|' + e.smName                                        --короткое имя спецотметки " +
-                        "\r\n           + '|' + CONVERT(varchar(10), e.timeScheduleOver)        --общее время в рамках рабочего дня " +
-                        "\r\n           + '|' + CONVERT(varchar(10), e.timeScheduleOver)        --общее время вне рамок рабочего дня " +
+                        "\r\n           + '|' + CONVERT(varchar(10), e.totalHoursInWork)        --общее время в рамках рабочего дня " +
+                        "\r\n           + '|' + CONVERT(varchar(10), e.totalHoursOutsideWork)   --общее время вне рамок рабочего дня " +
                         "\r\n           + '|' pivotStr " +
                         "\r\n       From " +
                         "\r\n           (Select " +
