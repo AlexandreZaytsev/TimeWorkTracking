@@ -249,7 +249,8 @@ namespace TimeWorkTracking
                     double totalHoursInWork;                                        //часов в рамках рабочего дня
                     double totalHoursOutsideWork;                                   //часов за рамками рабочего дня    
                     double specmarkValue;                                           //переменная для хранения текущего значения спец отметки    
-                    double specmarkSum;                                             //переменная для подсчета суммы спец отметок    
+                    double specmarkSum;                                             //переменная для подсчета суммы спец отметок
+                    string formatName = "N8";// "F8";                               //формат строки для преобразований
 
                     j = 0;
                     for (int i = 0; i < totalReportData.Rows.Count; i++)            //Цикл по строкам отчета
@@ -296,23 +297,23 @@ namespace TimeWorkTracking
                                             timeScheduleLess = (timeScheduleOver - timeScheduleLess) < 0 ? Math.Abs(specmarkValue) : 0;
                                             timeScheduleOver = (timeScheduleOver - timeScheduleLess) < 0 ? 0 : Math.Abs(specmarkValue);
                                             //недоработка (вторая строка)
-                                            tableData[i + j + 1, headerIndex["less"]] = timeScheduleLess.ToString("F8", CultureInfo.InvariantCulture);
+                                            tableData[i + j + 1, headerIndex["less"]] = timeScheduleLess.ToString(formatName, CultureInfo.InvariantCulture);
                                             //переработка (вторая строка)
-                                            tableData[i + j + 1, headerIndex["over"]] = timeScheduleOver.ToString("F8", CultureInfo.InvariantCulture);
+                                            tableData[i + j + 1, headerIndex["over"]] = timeScheduleOver.ToString(formatName, CultureInfo.InvariantCulture);
                                             break;
                                     }
 
                                     //значение спецотметки в диапазоне дат
-                                    tableData[i + j + 1, 2 + col] = specmarkValue.ToString("F8", CultureInfo.InvariantCulture);
+                                    tableData[i + j + 1, 2 + col] = specmarkValue.ToString(formatName, CultureInfo.InvariantCulture);
                                     //суммы спецотметок в диапазоне спецотметок
                                     specmarkSum = tableData[i + j + 1, headerIndex[splitValue[3]]] == null ? 0 : Double.Parse(tableData[i + j + 1, headerIndex[splitValue[3]]], CultureInfo.InvariantCulture);
                                     specmarkSum = specmarkSum + specmarkValue;
-                                    tableData[i + j + 1, headerIndex[splitValue[3]]] = specmarkSum.ToString("F8", CultureInfo.InvariantCulture);
+                                    tableData[i + j + 1, headerIndex[splitValue[3]]] = specmarkSum.ToString(formatName, CultureInfo.InvariantCulture);
 
                                     //время отработанное в пределах рабочего дня
-                                    tableData[i + j + 1, headerIndex["in"]] = (Convert.ToDouble(splitValue[4]) / 60).ToString("F8", CultureInfo.InvariantCulture);//CurrentCulture);
+                                    tableData[i + j + 1, headerIndex["in"]] = (Convert.ToDouble(splitValue[4]) / 60).ToString(formatName, CultureInfo.InvariantCulture);//CurrentCulture);
                                     //время отработанное вне пределов рабочего дня
-                                    tableData[i + j + 1, headerIndex["out"]] = (Convert.ToDouble(splitValue[5]) / 60).ToString("F8", CultureInfo.InvariantCulture);
+                                    tableData[i + j + 1, headerIndex["out"]] = (Convert.ToDouble(splitValue[5]) / 60).ToString(formatName, CultureInfo.InvariantCulture);
 
 
                                     //Коррекция итогов 
