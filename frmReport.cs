@@ -248,6 +248,7 @@ namespace TimeWorkTracking
                     string specmarkShortName;                                       //короткое имя спец отметок
                     double totalHoursInWork;                                        //часов в рамках рабочего дня
                     double totalHoursOutsideWork;                                   //часов за рамками рабочего дня    
+                    double specmarkValue;                                           //переменная для хранения текущего значения спец отметки    
                     double specmarkSum;                                             //переменная для подсчета суммы спец отметок    
 
                     j = 0;
@@ -259,6 +260,7 @@ namespace TimeWorkTracking
                             tableData[i + j, 0] = (i + 1).ToString();
                             tableData[i + j, 1] = drow[1].ToString();               //должность (первая строка)
                             tableData[i + j + 1, 1] = drow[0].ToString();           //фио (вторая строка)
+                            specmarkValue = 0;
                             specmarkSum = 0;
                             for (int col = 0; col < lenDays - 1; col++)             //Цикл по колонкам календаря отчета
                             {
@@ -269,105 +271,60 @@ namespace TimeWorkTracking
                                     //распакуем пришедшие данные в массив
                                     splitValue = drow[4 + col].ToString().Substring(1, drow[4 + col].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
 
-                                    //недоработка (вторая строка)
-                                    tableData[i + j + 1, headerIndex["less"]] = (Convert.ToDouble(splitValue[1]) / 60).ToString("F8", CultureInfo.InvariantCulture);
-                                    //переработка (вторая строка)
-                                    tableData[i + j + 1, headerIndex["over"]] = (Convert.ToDouble(splitValue[2]) / 60).ToString("F8", CultureInfo.InvariantCulture);
-
                                     //Спецотметка (короткое имя) (первая строка)
-                                    tableData[i + j, 2 + col] = splitValue[3];           
-                                    tableData[i + j, headerIndex[splitValue[3]]] = splitValue[3];
+                                    tableData[i + j, 2 + col] = splitValue[3];                          //в диапазоне дат        
+                                    tableData[i + j, headerIndex[splitValue[3]]] = splitValue[3];       //в диапазоне спец отметок
 
-                                    //Фактически отработанное время без обеда (вторая строка)
-                                    specmarkSum = Convert.ToDouble(splitValue[0]) / 60;
-                                    tableData[i + j + 1, 2 + col] = specmarkSum.ToString("F8", CultureInfo.InvariantCulture);
+                                    //Текущее значение спецотметки
+                                    specmarkValue = (Convert.ToDouble(splitValue[0]) / 60);
+                                    //Корректировка значений спец отметок
+                                    switch (splitValue[3])
+                                    {
+                                        case "УД":
+                                            specmarkValue = 0;
+                                            break;
+                                    }
 
-//                                  //симмуруем итоги для каждой спецотметки
-                                    if (tableData[i + j + 1, headerIndex[splitValue[3]]]!=null)
-                                        specmarkSum += Double.Parse(tableData[i + j + 1, headerIndex[splitValue[3]]], CultureInfo.InvariantCulture);
-                                    tableData[i + j + 1, headerIndex[splitValue[3]]] = specmarkSum.ToString("F8", CultureInfo.InvariantCulture);
+                                    //Корректировка недоработки переработки для спецотметки "Я"
+                                    switch (splitValue[3])
+                                    {
+                                        case "Я":
+                                            //вспомогательное время
+                                            timeScheduleLess = (Convert.ToDouble(splitValue[1]) / 60);  //недоработка 
+                                            timeScheduleOver = (Convert.ToDouble(splitValue[2]) / 60);  //переработка 
+                                            //коррекция на +/-
+                                            timeScheduleLess = (timeScheduleOver - timeScheduleLess) < 0 ? Math.Abs(specmarkValue) : 0;
+                                            timeScheduleOver = (timeScheduleOver - timeScheduleLess) < 0 ? 0 : Math.Abs(specmarkValue);
+                                            //недоработка (вторая строка)
+                                            tableData[i + j + 1, headerIndex["less"]] = timeScheduleLess.ToString("F8", CultureInfo.InvariantCulture);
+                                            //переработка (вторая строка)
+                                            tableData[i + j + 1, headerIndex["over"]] = timeScheduleOver.ToString("F8", CultureInfo.InvariantCulture);
+                                            break;
+                                    }
+
+                                    //значение спецотметки в диапазоне дат
+                                    tableData[i + j + 1, 2 + col] = specmarkValue.ToString("F8", CultureInfo.InvariantCulture);
+                                    //суммы спецотметок в диапазоне спецотметок
+                                    if (tableData[i + j + 1, headerIndex[splitValue[3]]] != null)
+                                        specmarkValue += Double.Parse(tableData[i + j + 1, headerIndex[splitValue[3]]], CultureInfo.InvariantCulture);
+                                    else
+                                        tableData[i + j + 1, headerIndex[splitValue[3]]] = specmarkValue.ToString("F8", CultureInfo.InvariantCulture);
 
                                     //время отработанное в пределах рабочего дня
-                                    tableData[i + j + 1, headerIndex["in"]] = (Convert.ToDouble(splitValue[4]) / 60).ToString("F8", CultureInfo.InvariantCulture);// CultureInfo.CurrentCulture);    //в дне
+                                    tableData[i + j + 1, headerIndex["in"]] = (Convert.ToDouble(splitValue[4]) / 60).ToString("F8", CultureInfo.InvariantCulture);//CurrentCulture);
                                     //время отработанное вне пределов рабочего дня
-                                    tableData[i + j + 1, headerIndex["out"]] = (Convert.ToDouble(splitValue[5]) / 60).ToString("F8", CultureInfo.InvariantCulture);   //вне дня
+                                    tableData[i + j + 1, headerIndex["out"]] = (Convert.ToDouble(splitValue[5]) / 60).ToString("F8", CultureInfo.InvariantCulture);
+
+
+                                    //Коррекция итогов 
+                                    switch (splitValue[3])
+                                    {
+                                        case "СЗ":                                                      //добавим к итогам время отработанное вне пределов рабочего дня
+                                            tableData[i + j + 1, headerIndex[splitValue[3]]] += Double.Parse(tableData[i + j + 1, headerIndex["out"]], CultureInfo.InvariantCulture);
+                                            break;
+                                    }
                                 }
                             }
-
-
-
-
-
-
-
-                            //заполним диапазон по строке по колонкам ДАТ КАЛЕНДАРЯ - сверху спец отметка снизу количество часов
-                            timeScheduleWithoutLunch = 0;                             
-                            timeScheduleLess = 0;                                       
-                            timeScheduleOver = 0;                                     
-                            specmarkShortName = "";                                   
-                            totalHoursInWork = 0;                                     
-                            totalHoursOutsideWork = 0;
-                            specmarkSum = 0;
-
-                            //недоработка
-
-                            //накопительная часть/развертка по специальным отметкам "Я" и т.д.
-                            /*
-                            
-                                              iHdr = GetIndexFromYeaderPartName(CStr(dtArr(k - 1, 2 + 1 + i - 1)), hdrArr)                  ' найти номер колонки спецотметки на листе отчета в заголовке
-                                              dtArr(k - 1, iHdr) = dtArr(k - 1, 2 + 1 + i - 1)                                              ' проставить сокращенное имя спецотметки
-                                              Select Case dtArr(k - 1, iHdr)
-                                                Case "Я"
-                                                  'основное время
-                                                  dtArr(k, iHdr) = GetEmptyValue(dtArr(k, iHdr)) + CDbl(.DataBodyRange.Cells(j, 10 + 1)) / 60 ' !!!! данные из области РАБОЧЕГО времени
-                                                  'вспомогательное время
-                                                  prTime = GetEmptyValue(dtArr(k, iHdr - 1)) + CDbl(.DataBodyRange.Cells(j, 11 + 1)) / 60     ' данные о недоработке РАБОЧЕГО времени
-                                                  afTime = GetEmptyValue(dtArr(k, iHdr + 1)) + CDbl(.DataBodyRange.Cells(j, 12 + 1)) / 60     ' данные о переработке РАБОЧЕГО времени
-                                                  'коррекция на +/-
-                                                  prCur = afTime - prTime
-                                                  If prCur < 0 Then
-                                                    prTime = Abs(prCur)
-                                                    afTime = 0
-                                                  Else
-                                                    prTime = 0
-                                                    afTime = Abs(prCur)
-                                                  End If
-                                                  dtArr(k, iHdr - 1) = prTime
-                                                  dtArr(k, iHdr + 1) = afTime
-                                                Case "УД"
-                                                  dtArr(k, 2 + 1 + i - 1) = 0   'сбросить рабочее время - требование АВТ
-                                               '   dtArr(k, iHdr - 1) = 0
-                                                  dtArr(k, iHdr) = 0            'сбросить время в спец отметках
-                                               '   dtArr(k, iHdr + 1) = 0
-                                                Case Else
-                                                  dtArr(k, iHdr) = GetEmptyValue(dtArr(k, iHdr)) + CDbl(.DataBodyRange.Cells(j, 17 + 1)) / 60 ' !!!! данные из области специальных отметок
-                                              End Select
-
-                            'итоги накопительная часть по итогам специальных отметок (всего)
-                                               iHdr = 2 + dayCount + 3 + spCount + 1                                                        ' найти номер колонки спецотметки на листе
-                                               dtArr(k, iHdr) = GetEmptyValue(dtArr(k, iHdr)) + CDbl(.DataBodyRange.Cells(j, 17 + 1)) / 60
-                            'накопительная часть по итогам специальных отметок (вне графика)
-                                               iHdr = 2 + dayCount + 3 + spCount + 2                                                        ' найти номер колонки спецотметки на листе
-                                               dtArr(k, iHdr) = GetEmptyValue(dtArr(k, iHdr)) + CDbl(.DataBodyRange.Cells(j, 18 + 1)) / 60
-                            '-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                            'накопительная часть по итогам + служебные задания
-                                               iHdr = 2 + dayCount + 3 + spCount + 3
-
-                                               Select Case CStr(dtArr(k - 1, 2 + 1 + i - 1))
-                                                 Case "Я"                                                                                   ' !!!! данные из области РАБОЧЕГО времени
-                                                   dtArr(k, iHdr) = GetEmptyValue(dtArr(k, iHdr)) + CDbl(.DataBodyRange.Cells(j, 10 + 1)) / 60
-                                               Case "СЗ"                                                                                    ' !!!! данные из области РАБОЧЕГО времени + превышение из спец отметок
-                                                   dtArr(k, iHdr) = GetEmptyValue(dtArr(k, iHdr)) + CDbl(.DataBodyRange.Cells(j, 10 + 1)) / 60 + CDbl(.DataBodyRange.Cells(j, 18 + 1)) / 60
-                                               End Select
-
-                                              Exit For
-
-
-
-
-                            */
-
-
                             j += 1;
                         }
                     }
@@ -865,7 +822,7 @@ namespace TimeWorkTracking
             excelApp.DisplayAlerts = false;                                 //Запретить отображение окон с сообщениями
             excelApp.ScreenUpdating = false;                                //Запретить перерисовку экрана    
             excelApp.ActiveWindow.Zoom = 80;                                //Масштаб листа
-            excelApp.ActiveWindow.View = Excel.XlWindowView.xlPageBreakPreview;
+ //           excelApp.ActiveWindow.View = Excel.XlWindowView.xlPageBreakPreview;
 
             //Переименовать лист
             workSheet = (Excel.Worksheet)excelApp.Worksheets.get_Item(1);   //Получаем первый лист документа (счет начинается с 1)
@@ -939,7 +896,7 @@ namespace TimeWorkTracking
                 workRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
                 workRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
                 workRange.WrapText = true;
-                workRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;   //нарисуем все рамки
+//                workRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;   //нарисуем все рамки
 
             //настройка ширины колонок и высоты строк диапазона  
                 ((Excel.Range)workRange.Rows[1]).RowHeight=145;                 //высота строки шапки
@@ -956,6 +913,9 @@ namespace TimeWorkTracking
                 ((Excel.Range)workSheet.Columns[1 + 2 + captionData.GetUpperBound(1)-1]).ColumnWidth = 18;     //ширина последнего столбца
 
             //управление шрифтами и выравниванием
+                ((Excel.Range)workRange.Rows[2]).Font.Size = 11;
+                ((Excel.Range)workRange.Rows[3]).Font.Size = 11;
+
                 ((Excel.Range)workRange.Rows[1]).Font.Bold = true;              //первая строка шапки
                 ((Excel.Range)workRange.Cells[2, 2]).Font.Italic = true;
                 ((Excel.Range)workRange.Cells[3, 2]).Font.Bold = true;
@@ -975,7 +935,7 @@ namespace TimeWorkTracking
 
             //форматирование диапазона данных 
                 Excel.Range rFormat = workSheet.Range[workRange.Cells[3, 3], workRange.Cells[3, workRange.Columns.Count]];
-            ((Excel.Range)rFormat).NumberFormat = "0";//"##0.0";// "0";// "##0,000";//"0;[Red]0";        //готовим Excel к приему пищи
+            ((Excel.Range)rFormat).NumberFormat = "##0,0";// "0";// "##0,000";//"0;[Red]0";        //готовим Excel к приему пищи
 
             toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
             //условное форматирование диапазона 
