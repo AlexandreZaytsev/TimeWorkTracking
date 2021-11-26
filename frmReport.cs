@@ -305,10 +305,9 @@ namespace TimeWorkTracking
                                     //значение спецотметки в диапазоне дат
                                     tableData[i + j + 1, 2 + col] = specmarkValue.ToString("F8", CultureInfo.InvariantCulture);
                                     //суммы спецотметок в диапазоне спецотметок
-                                    if (tableData[i + j + 1, headerIndex[splitValue[3]]] != null)
-                                        specmarkValue += Double.Parse(tableData[i + j + 1, headerIndex[splitValue[3]]], CultureInfo.InvariantCulture);
-                                    else
-                                        tableData[i + j + 1, headerIndex[splitValue[3]]] = specmarkValue.ToString("F8", CultureInfo.InvariantCulture);
+                                    specmarkSum = tableData[i + j + 1, headerIndex[splitValue[3]]] == null ? 0 : Double.Parse(tableData[i + j + 1, headerIndex[splitValue[3]]], CultureInfo.InvariantCulture);
+                                    specmarkSum = specmarkSum + specmarkValue;
+                                    tableData[i + j + 1, headerIndex[splitValue[3]]] = specmarkSum.ToString("F8", CultureInfo.InvariantCulture);
 
                                     //время отработанное в пределах рабочего дня
                                     tableData[i + j + 1, headerIndex["in"]] = (Convert.ToDouble(splitValue[4]) / 60).ToString("F8", CultureInfo.InvariantCulture);//CurrentCulture);
