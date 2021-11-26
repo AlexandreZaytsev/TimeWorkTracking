@@ -236,28 +236,6 @@ namespace TimeWorkTracking
                     break;
                 case "ReportTotal":
                     string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-
-                    var a = new string[3];
-                    var b = new double[3];
-                 //   var qb = new[,];// [3, 2];
-                    //        var ab = new[]{a,b};
-                    var MC1 = new[,] {
-                        { 'A', 'B', 'C', 'D' },
-                        { '1', '2', '3', '4' },
-                        };
-                    object[] arr = new object[6];// Создаем и инициализируем object array
-                    arr[0] = 1.859;
-                    arr[1] = 7;
-                    arr[2] = 'g';
-                    arr[3] = "hello";
-                    arr[4] = null;// это не отобразиться на выходе
-                    arr[5] = new object();// выведет System.Object
-                                          //    var MC = new[,] {
-                                          //        new [3],
-                                          //       new [3],
-                                          //       };
-
-
                     //Загрузить массив сводных данных для тотального
                     totalReportData = clMsSqlDatabase.TableRequest(cs, "EXEC twt_TotalReport '" + mcReport.SelectionStart.ToString("yyyyMMdd") + "','" + mcReport.SelectionEnd.ToString("yyyyMMdd") + "'");
                                         tableData = new string[totalReportData.Rows.Count * 2, 2 + lenDays + 3 + dtSpecialMarks.Rows.Count - 1 + 2 + 1];   //Создаём новый двумерный массив
@@ -287,20 +265,22 @@ namespace TimeWorkTracking
                                 if (drow[4 + col] != System.DBNull.Value)           //Если данные для обработки на дату есть 
                                 {
                                     splitValue = drow[4 + col].ToString().Substring(1, drow[4 + col].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
-                                    tableData[i + j + 1, headerIndex["less"]] = (Convert.ToDouble(splitValue[1]) / 60).ToString(CultureInfo.CurrentCulture);  //недоработка
-                                    tableData[i + j + 1, headerIndex["over"]] = (Convert.ToDouble(splitValue[2]) / 60).ToString(CultureInfo.CurrentCulture);  //недоработка
+                                    tableData[i + j + 1, headerIndex["less"]] = (Convert.ToDouble(splitValue[1]) / 60).ToString("F8", CultureInfo.InvariantCulture);  //недоработка
+                                    tableData[i + j + 1, headerIndex["over"]] = (Convert.ToDouble(splitValue[2]) / 60).ToString("F8", CultureInfo.InvariantCulture);  //недоработка
 
                                     tableData[i + j, 2 + col] = splitValue[3];          //Спецотметка (короткое имя) (первая строка) 
                                     tableData[i + j, headerIndex[splitValue[3]]] = splitValue[3];
 
                                     specmarkSum = Convert.ToDouble(splitValue[0]) / 60;
-                                    tableData[i + j + 1, 2 + col] = specmarkSum.ToString(); ;
+                                    tableData[i + j + 1, 2 + col] = specmarkSum.ToString("F8", CultureInfo.InvariantCulture);
 
-                                    specmarkSum += Convert.ToDouble(tableData[i + j + 1, headerIndex[splitValue[3]]]);
-                                    tableData[i + j + 1, headerIndex[splitValue[3]]] = specmarkSum.ToString().Replace(",",".");
+//                                    specmarkSum += Convert.ToDouble(tableData[i + j + 1, headerIndex[splitValue[3]]]);
+                                    if (tableData[i + j + 1, headerIndex[splitValue[3]]]!=null)
+                                        specmarkSum += Double.Parse(tableData[i + j + 1, headerIndex[splitValue[3]]], CultureInfo.InvariantCulture);
+                                    tableData[i + j + 1, headerIndex[splitValue[3]]] = specmarkSum.ToString("F8", CultureInfo.InvariantCulture);
 
-                                    tableData[i + j + 1, headerIndex["in"]] = (Convert.ToDouble(splitValue[4]) / 60).ToString(CultureInfo.CurrentCulture);    //в дне
-                                    tableData[i + j + 1, headerIndex["out"]] = (Convert.ToDouble(splitValue[5]) / 60).ToString(CultureInfo.CurrentCulture);   //вне дня
+                                    tableData[i + j + 1, headerIndex["in"]] = (Convert.ToDouble(splitValue[4]) / 60).ToString("F8", CultureInfo.InvariantCulture);// CultureInfo.CurrentCulture);    //в дне
+                                    tableData[i + j + 1, headerIndex["out"]] = (Convert.ToDouble(splitValue[5]) / 60).ToString("F8", CultureInfo.InvariantCulture);   //вне дня
                                 }
                             }
 
@@ -381,6 +361,10 @@ namespace TimeWorkTracking
                             j += 1;
                         }
                     }
+
+
+
+
                     break;
             }
             return usersData.Rows.Count;
@@ -541,14 +525,18 @@ namespace TimeWorkTracking
                 ((Excel.Range)workRange.Range[workSheet.Cells[2, 1], workSheet.Cells[3, 2]]).Font.Bold = true;
                 ((Excel.Range)workSheet.Range[workRange.Cells[2, 3], workRange.Cells[2, workRange.Columns.Count]]).VerticalAlignment = Excel.XlVAlign.xlVAlignTop;
                 ((Excel.Range)workRange.Cells[3, 2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+                //температуру влево с отступом
+                ((Excel.Range)workSheet.Range[workRange.Cells[3, 3], workRange.Cells[3, workRange.Columns.Count]]).HorizontalAlignment= Excel.XlHAlign.xlHAlignLeft;
+                ((Excel.Range)workSheet.Range[workRange.Cells[3, 3], workRange.Cells[3, workRange.Columns.Count]]).IndentLevel = 2;
+
             //заливка цветом
-                ((Excel.Range)workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1,2]]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);   //заливка первой строки цветом
+            ((Excel.Range)workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1,2]]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);   //заливка первой строки цветом
                 ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, workRange.Columns.Count]]).Interior.Color = ColorTranslator.ToOle(Color.LightGreen);
             ((Excel.Range)workSheet.Range[workRange.Cells[3, 3], workRange.Cells[3, workRange.Columns.Count]]).Font.Color = ColorTranslator.ToOle(Color.Gainsboro);//.WhiteSmoke);//.LightGray);
                                                                                                                                                                         //строка данных значения по умолчанию
             //workRange.Rows[3]= "36,3\u00B0";
-            workRange.Rows[3] = String.Format("{0}°", 36.3);
-            //            workRange.Cells[3, 3] = "36,3\u00B0";
+            workRange.Rows[3] = String.Format("{0}°C", 36.3);
+            //workRange.Cells[3, 3] = "36,3\u00B0";
 
 
             toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
@@ -982,7 +970,7 @@ namespace TimeWorkTracking
 
             //форматирование диапазона данных 
                 Excel.Range rFormat = workSheet.Range[workRange.Cells[3, 3], workRange.Cells[3, workRange.Columns.Count]];
-            ((Excel.Range)rFormat).NumberFormat = "0";// "##0,000";//  "0";                      //"0;[Red]0";
+                ((Excel.Range)rFormat).NumberFormat = "0";// "##0,000";//"0;[Red]0";        //готовим Excel к приему пищи
 
             toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
             //условное форматирование диапазона 
@@ -1007,6 +995,20 @@ namespace TimeWorkTracking
                 ].Value = captionData;
 
             toolStripStatusLabelInfo.Text = "Вставка данных таблицы";
+            /*
+                ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+                !!!!ВАЖНО
+                1. область данных Excel предварительно отформатирована для приема числовых данных (формат ячейки - "0")
+                2. числа передаем как есть с разделителем c# - точкой. но числа передаем как строки - и дальше боремся с этим
+                3. если число данных целое - обязательно форматируем его на 8 десятичных знаков (чтобы был разделитель)
+                4. если передать строку с разделителем по умолчанию для системы (запятая) - на листе говорит что число записано в виде строки и не воспринимает его как число
+                5. если передать строку с разделителем для c# (точка) - не ругается но все равно не воспринимает его как число
+            */
+
+            excelApp.DecimalSeparator = ".";                                    //сообщаем Excel что к нему придут числа с точкой в виде разделителя
+            excelApp.UseSystemSeparators = false;                               //отключаем Excel использование системного разделителя (запятая по умолчанию)
+            //то что выше (две строки) можно отключить - не помогло для Excel 2010
+
             //расширим форматированную таблицу данных
             Excel.Range fullTable = tableResize(
                 workSheet,
@@ -1015,7 +1017,17 @@ namespace TimeWorkTracking
                     workSheet.Cells[workRange.Row + workRange.Rows.Count - 1, workRange.Column + workRange.Columns.Count - 1]],
                 tableData.GetUpperBound(0) + 1
                 );
-            fullTable.Formula = tableData;
+            fullTable.Formula = tableData;                                      //!!!десятичные числа с точкой (чтобы Excel не ругался на число записанное как строка)
+            fullTable.Replace(".", ",");                                        //!!!меняем точку на запятую (чтобы Excel наконец то понял что ему передают число)(жуткий тормоз)
+            // fullTable.Calculate();                                           //перечитать данные листа
+
+            excelApp.UseSystemSeparators = true;                                //включаем Excel использование системного разделителя (запятая по умолчанию)
+            //то что выше (одна строка) можно отключить - не помогло для Excel 2010
+            /*
+                ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+            */
+
+
 
             toolStripStatusLabelInfo.Text = "Дополнительное форматирование";
             fullTable.Rows.RowHeight = 20;  //восстановить высоту строк в диапазоне данных
@@ -1098,6 +1110,7 @@ namespace TimeWorkTracking
             //Настройки Application вернуть обратно
             excelApp.DisplayAlerts = true;                                 //Разрешить отображение окон с сообщениями
             excelApp.ScreenUpdating = true;                                //Зазрешить перерисовку экрана    
+
             excelApp.Visible = true;
             //            excelApp.WindowState = Excel.XlWindowState.xlMinimized;         //Свернуть окно 
             //            excelApp.Quit();
