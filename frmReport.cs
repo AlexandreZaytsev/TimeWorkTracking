@@ -341,16 +341,17 @@ namespace TimeWorkTracking
                                     tmpValue = tableData[i + j + 1, headerIndex["total"]] == null ? 0 : Double.Parse(tableData[i + j + 1, headerIndex["total"]], CultureInfo.InvariantCulture);
                                     switch (specmarkName)
                                     {
-                                        case "Я":                                                       //добавим к итогам итоговое время
+                                        case "Я":       //добавим к итогам итоговое время
                                             tmpValue = tmpValue + specmarkValue;
                                             break;
-                                        case "СЗ":                                                      //добавим к итогам итоговое время + превышение из спец отметок
-                                            tmpValue = tmpValue + specmarkValue + Double.Parse(tableData[i + j + 1, headerIndex["ext"]], CultureInfo.InvariantCulture);
+                                        case "СЗ":      //добавим к итогам итоговое время + время отработанное вне пределов рабочего дня
+                                            tmpValue = tmpValue + specmarkValue + (Convert.ToDouble(splitValue[5]) / 60);
                                             break;
                                     }
                                     tableData[i + j + 1, headerIndex["total"]] = tmpValue.ToString(formatName, CultureInfo.InvariantCulture);
-                                    tableData[i + j, headerIndex["total"]] = ((int)tmpValue).ToString() + " час. " +
-                                                                             (Math.Round((tmpValue - (int)tmpValue) * 60)).ToString() + " мин.";
+                                    if ((int)tmpValue !=0)
+                                        tableData[i + j, headerIndex["total"]] = ((int)tmpValue).ToString() + " час " +
+                                                                                 (Math.Round((tmpValue - (int)tmpValue) * 60)).ToString() + " мин";
                                 }
                             }
                             j += 1;
