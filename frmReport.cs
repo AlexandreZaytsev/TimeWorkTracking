@@ -188,9 +188,9 @@ namespace TimeWorkTracking
                     captionData[0, lengthDays + 3 + dtSpecialMarks.Rows.Count + 1] = "Итого спец. отметок".PadLeft(7);
                     headerIndex.Add("sum", lengthDays + 3 + dtSpecialMarks.Rows.Count + 1);
                     captionData[0, lengthDays + 3 + dtSpecialMarks.Rows.Count + 2] = "(из них вне графика)".PadLeft(7);
-                    headerIndex.Add("in", lengthDays + 3 + dtSpecialMarks.Rows.Count + 2);
+                    headerIndex.Add("ext", lengthDays + 3 + dtSpecialMarks.Rows.Count + 2);
                     captionData[0, lengthDays + 3 + dtSpecialMarks.Rows.Count + 3] = "Сумма фактически отработаного РАБОЧЕГО ВРЕМЕНИ + CЛУЖЕБНЫЕ ЗАДАНИЯ задания вне его";
-                    headerIndex.Add("out", lengthDays + 3 + dtSpecialMarks.Rows.Count + 3);
+                    headerIndex.Add("total", lengthDays + 3 + dtSpecialMarks.Rows.Count + 3);
 
                     break;
             }
@@ -271,12 +271,10 @@ namespace TimeWorkTracking
 
                                     //распакуем пришедшие данные в массив
                                     splitValue = drow[4 + col].ToString().Substring(1, drow[4 + col].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
-                                //    if (i + j + 1 == 11)
-                                //        stop = 1;
-                                    //Спецотметка (короткое имя) (первая строка)
-                                    tableData[i + j, 2 + col] = splitValue[3];                          //в диапазоне дат        
-                                    tableData[i + j, headerIndex[splitValue[3]]] = splitValue[3];       //в диапазоне спец отметок
 
+                                    //ИМЯ И ЗНАЧЕНИЕ СПЕЦОТМЕТКИ В ДАТЕ
+                                    //Спецотметка (короткое имя) (первая строка)
+                                    tableData[i + j, 2 + col] = splitValue[3];                                   
                                     //Текущее значение спецотметки
                                     specmarkValue = (Convert.ToDouble(splitValue[0]) / 60);
                                     //Корректировка значений спец отметок
@@ -286,17 +284,22 @@ namespace TimeWorkTracking
                                             specmarkValue = 0;
                                             break;
                                     }
+                                    //Спецотметка (значение) (вторая строка)
+                                    tableData[i + j + 1, 2 + col] = specmarkValue.ToString(formatName, CultureInfo.InvariantCulture);
 
                                     //Корректировка недоработки переработки для спецотметки "Я"
                                     switch (splitValue[3])
                                     {
                                         case "Я":
                                             //вспомогательное время
-                                            timeScheduleLess = (Convert.ToDouble(splitValue[1]) / 60);  //недоработка 
-                                            timeScheduleOver = (Convert.ToDouble(splitValue[2]) / 60);  //переработка 
+                                            specmarkSum = tableData[i + j + 1, headerIndex["less"]] == null ? 0 : Double.Parse(tableData[i + j + 1, headerIndex["less"]], CultureInfo.InvariantCulture);
+                                            timeScheduleLess = specmarkSum +(Convert.ToDouble(splitValue[1]) / 60);  //недоработка 
+                                            specmarkSum = tableData[i + j + 1, headerIndex["over"]] == null ? 0 : Double.Parse(tableData[i + j + 1, headerIndex["over"]], CultureInfo.InvariantCulture);
+                                            timeScheduleOver = specmarkSum + (Convert.ToDouble(splitValue[2]) / 60);  //переработка 
+
                                             //коррекция на +/-
-                                            timeScheduleLess = (timeScheduleOver - timeScheduleLess) < 0 ? Math.Abs(specmarkValue) : 0;
-                                            timeScheduleOver = (timeScheduleOver - timeScheduleLess) < 0 ? 0 : Math.Abs(specmarkValue);
+                                            timeScheduleLess = (timeScheduleOver - timeScheduleLess) < 0 ? Math.Abs(timeScheduleOver - timeScheduleLess) : 0;
+                                            timeScheduleOver = (timeScheduleOver - timeScheduleLess) < 0 ? 0 : Math.Abs(timeScheduleOver - timeScheduleLess);
                                             //недоработка (вторая строка)
                                             tableData[i + j + 1, headerIndex["less"]] = timeScheduleLess.ToString(formatName, CultureInfo.InvariantCulture);
                                             //переработка (вторая строка)
@@ -304,17 +307,34 @@ namespace TimeWorkTracking
                                             break;
                                     }
 
-                                    //значение спецотметки в диапазоне дат
-                                    tableData[i + j + 1, 2 + col] = specmarkValue.ToString(formatName, CultureInfo.InvariantCulture);
-                                    //суммы спецотметок в диапазоне спецотметок
+                                    //ИМЯ И ЗНАЧЕНИЕ СПЕЦОТМЕТКИ В НАКОПИТЕЛЬНОЙ ЧАСТИ
+                                    //Спецотметка (короткое имя) (первая строка)
+                                    tableData[i + j, headerIndex[splitValue[3]]] = splitValue[3];
+                                    //Спецотметка (значение) (вторая строка)
                                     specmarkSum = tableData[i + j + 1, headerIndex[splitValue[3]]] == null ? 0 : Double.Parse(tableData[i + j + 1, headerIndex[splitValue[3]]], CultureInfo.InvariantCulture);
-                                    specmarkSum = specmarkSum + specmarkValue;
+                                    switch (splitValue[3])
+                                        {
+                                            case "Я":                   //+ значение итого без обеда/60
+                                                specmarkSum = specmarkSum + specmarkValue;
+                                                break;
+                                            case "УД":
+                                                specmarkSum = 0;
+                                                break;
+                                            default:                    //+ значение итого в пределах рабочего дня/60 
+                                                specmarkSum = specmarkSum + (Convert.ToDouble(splitValue[4]) / 60);
+                                            break;
+                                        }
                                     tableData[i + j + 1, headerIndex[splitValue[3]]] = specmarkSum.ToString(formatName, CultureInfo.InvariantCulture);
 
                                     //время отработанное в пределах рабочего дня
-                                    tableData[i + j + 1, headerIndex["in"]] = (Convert.ToDouble(splitValue[4]) / 60).ToString(formatName, CultureInfo.InvariantCulture);//CurrentCulture);
+                                    specmarkSum = tableData[i + j + 1, headerIndex["sum"]] == null ? 0 : Double.Parse(tableData[i + j + 1, headerIndex["sum"]], CultureInfo.InvariantCulture);
+                                    specmarkSum = specmarkSum + Convert.ToDouble(splitValue[4]) / 60;
+                                    tableData[i + j + 1, headerIndex["sum"]] = specmarkSum.ToString(formatName, CultureInfo.InvariantCulture);//CurrentCulture);
+
                                     //время отработанное вне пределов рабочего дня
-                                    tableData[i + j + 1, headerIndex["out"]] = (Convert.ToDouble(splitValue[5]) / 60).ToString(formatName, CultureInfo.InvariantCulture);
+                                    specmarkSum = tableData[i + j + 1, headerIndex["ext"]] == null ? 0 : Double.Parse(tableData[i + j + 1, headerIndex["ext"]], CultureInfo.InvariantCulture);
+                                    specmarkSum = specmarkSum + Convert.ToDouble(splitValue[5]) / 60;
+                                    tableData[i + j + 1, headerIndex["ext"]] = specmarkSum.ToString(formatName, CultureInfo.InvariantCulture);
 
 
                                     //Коррекция итогов 
@@ -322,7 +342,7 @@ namespace TimeWorkTracking
                                     {
                                         case "СЗ":                                                      //добавим к итогам время отработанное вне пределов рабочего дня
                                             specmarkSum = tableData[i + j + 1, headerIndex[splitValue[3]]] == null ? 0 : Double.Parse(tableData[i + j + 1, headerIndex[splitValue[3]]], CultureInfo.InvariantCulture);
-                                            specmarkSum = specmarkSum + Double.Parse(tableData[i + j + 1, headerIndex["out"]], CultureInfo.InvariantCulture);
+                                   //         specmarkSum = specmarkSum + Double.Parse(tableData[i + j + 1, headerIndex["total"]], CultureInfo.InvariantCulture);
                                             tableData[i + j + 1, headerIndex[splitValue[3]]] = specmarkSum.ToString(formatName, CultureInfo.InvariantCulture);
                                             break;
                                     }
