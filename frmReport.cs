@@ -836,7 +836,7 @@ namespace TimeWorkTracking
             Cursor.Current = Cursors.WaitCursor;
             bool ret;// = false;
             int daysCount = (int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1;
-            int arrCount = uploadCaptionExcel(daysCount);
+            int arrCount = uploadCaptionExcel(daysCount);                   
             uploadTableExcel(daysCount);                                     //загрузить массив по данным сотрудников
 
             toolStripStatusLabelInfo.Text = "Подключение к Excel";
@@ -917,6 +917,19 @@ namespace TimeWorkTracking
                 workRange.Cells[1, 1] = "Отчет учета рабочего времени сотрудников " + Properties.Settings.Default.companyName;   //наименование компании
                 workRange.Cells[2, 1] = "Период: " + mcReport.SelectionStart.ToString("dd.MM.yyyy") + " - " + mcReport.SelectionEnd.ToString("dd.MM.yyyy");
 
+            //умная таблица
+            Excel.ListObject tbSmartReport = workSheet.ListObjects.AddEx(
+                SourceType: Excel.XlListObjectSourceType.xlSrcRange,
+                Source: workSheet.Range[
+                               workSheet.Cells[8, 2],
+                               workSheet.Cells[8 + tableData.GetUpperBound(0) + 1, 1 + captionData.GetUpperBound(1) + 1]],
+                XlListObjectHasHeaders: Excel.XlYesNoGuess.xlYes);
+            tbSmartReport.Name = "ReportData";
+            tbSmartReport.TableStyle = "TableStyleMedium20";
+            tbSmartReport.ShowTotals = true;
+
+
+
             toolStripStatusLabelInfo.Text = "Создание шапки таблицы и строки данных";
             //диапазон для шапки таблицы и первой строки данных
             workRange = workSheet.Range[workSheet.Cells[8, 2], workSheet.Cells[8 + captionData.GetUpperBound(0) + 1, 1 + captionData.GetUpperBound(1) + 1]];    //+1 на строку данных
@@ -970,7 +983,7 @@ namespace TimeWorkTracking
 
             toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
             //условное форматирование диапазона 
-               Excel.FormatConditions fcs = ((Excel.Range)workRange.Rows[1]).EntireRow.FormatConditions;
+                Excel.FormatConditions fcs = ((Excel.Range)workRange.Rows[1]).EntireRow.FormatConditions;
                 Excel.FormatCondition fc = (Excel.FormatCondition)fcs.Add(
                     Type: Excel.XlFormatConditionType.xlExpression,
                     mis, //Excel.XlFormatConditionOperator.xlNotEqual,//.xlEqual,
@@ -1013,7 +1026,8 @@ namespace TimeWorkTracking
                     workSheet.Cells[workRange.Row + workRange.Rows.Count - 1, workRange.Column + workRange.Columns.Count - 1]],
                 tableData.GetUpperBound(0) + 1
                 );
-            fullTable.Formula = tableData;                                      //!!!десятичные числа с точкой (чтобы Excel не ругался на число записанное как строка)
+           // fullTable.Formula = tableData;                                      //!!!десятичные числа с точкой (чтобы Excel не ругался на число записанное как строка)
+            tbSmartReport.DataBodyRange.Value = tableData;
             toolStripStatusLabelInfo.Text = "Форматирование данных из строки в число";
             fullTable.Replace(".", ",");                                        //!!!меняем точку на запятую (чтобы Excel наконец то понял что ему передают число)(жуткий тормоз)
                                                                                 // fullTable.Calculate();                                           //перечитать данные листа
@@ -1087,6 +1101,7 @@ namespace TimeWorkTracking
                 result = null;
             return result;
         }
+
         /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         ' функция расширения таблицы EXCELL с сохранением форматирования
         ' //  xlsDoc - документ Excel   (обязательно передавать документ, листа недостаточно)
