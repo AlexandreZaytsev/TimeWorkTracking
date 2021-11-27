@@ -238,7 +238,7 @@ namespace TimeWorkTracking
                     string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
                     //Загрузить массив сводных данных для тотального
                     totalReportData = clMsSqlDatabase.TableRequest(cs, "EXEC twt_TotalReport '" + mcReport.SelectionStart.ToString("yyyyMMdd") + "','" + mcReport.SelectionEnd.ToString("yyyyMMdd") + "'");
-                                        tableData = new string[totalReportData.Rows.Count * 2, 2 + lenDays + 3 + dtSpecialMarks.Rows.Count - 1 + 2 + 1];   //Создаём новый двумерный массив
+                    tableData = new string[totalReportData.Rows.Count * 2, 2 + lenDays + 3 + dtSpecialMarks.Rows.Count - 1 + 2 + 1];   //Создаём новый двумерный массив
                     //var tableData = new[,];//[totalReportData.Rows.Count * 2, 2 + lenDays + 3 + dtSpecialMarks.Rows.Count - 1 + 2 + 1];
 
                     string[] splitValue = new string[5];                            //шесть параметров упакованных в день
@@ -962,7 +962,7 @@ namespace TimeWorkTracking
 
             //форматирование диапазона данных 
                 Excel.Range rFormat = workSheet.Range[workRange.Cells[3, 3], workRange.Cells[3, workRange.Columns.Count]];
-            ((Excel.Range)rFormat).NumberFormat = "##0,0";// "0";// "##0,000";//"0;[Red]0";        //готовим Excel к приему пищи
+                ((Excel.Range)rFormat).NumberFormat = "##0,0";// "0";// "##0,000";//"0;[Red]0";        //готовим Excel к приему пищи
 
             toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
             //условное форматирование диапазона 
@@ -1014,11 +1014,27 @@ namespace TimeWorkTracking
             fullTable.Replace(".", ",");                                        //!!!меняем точку на запятую (чтобы Excel наконец то понял что ему передают число)(жуткий тормоз)
                                                                                 // fullTable.Calculate();                                           //перечитать данные листа
 
-//            excelApp.UseSystemSeparators = true;                                //включаем Excel использование системного разделителя (запятая по умолчанию)
+            //            excelApp.UseSystemSeparators = true;                                //включаем Excel использование системного разделителя (запятая по умолчанию)
             //то что выше (одна строка) нужно отключить если дальше используем замену точки на запятую - все равно не помогло для Excel 2010
             /*
                 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
             */
+
+            //примечания
+            workRange = (Excel.Range)workSheet.Cells[fullTable.Row + fullTable.Rows.Count + 2, 2];
+            ((Excel.Range)workRange).Offset[0, 0].Value = "Примечания";
+            ((Excel.Range)workRange).Offset[1, 0].Value = "Результаты представлены в двух областях РАБОЧЕЕЕ ВРЕМЯ и СПЕЦИАЛЬНЫЕ ОТМЕТКИ";
+            ((Excel.Range)workRange).Offset[2, 0].Value = "  - РАБОЧЕЕ ВРЕМЯ ('Я') с учетом обедов, сокращенных дней, рабочего графика с разверткой по дням (без накопительной части)";
+            ((Excel.Range)workRange).Offset[3, 0].Value = "**  наличие сокращенных наименований СПЕЦИАЛЬНЫХ ОТМЕТОК (кроме 'Я') в области РАБОЧЕГО времени говорит ТОЛЬКО о их НАЛИЧИИ в течении дня (к указанному под ними времени они отношения не имеют)";
+            ((Excel.Range)workRange).Offset[4, 0].Value = "  - СПЕЦИАЛЬНЫЕ ОТМЕТКИ (кроме 'Я') фактическое время как есть с разверткой по типам отметок (с накопительной частью)";
+
+            ((Excel.Range)workRange).Offset[6, 0].Value = "ps";
+            ((Excel.Range)workRange).Offset[7, 0].Value = "ВАЖНО. Итоговые значения получаются ПО ФОРМУЛАМ!!!, не сложением того что вы видите в таблице отчета";
+            ((Excel.Range)workRange).Offset[8, 0].Value = "Например последняя колонка считается как сумма из области РАБОЧЕГО ВРЕМЕНИ указанного при регистрации + сумма превышения его по СПЕЦИАЛЬНОЙ ОТМЕТКЕ - СЛУЖЕБНОЕ ЗАДАНИЕ";
+
+
+
+
 
             toolStripStatusLabelInfo.Text = "Дополнительное форматирование";
             fullTable.Rows.RowHeight = 20;  //восстановить высоту строк в диапазоне данных
