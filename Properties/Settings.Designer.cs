@@ -202,5 +202,53 @@ namespace TimeWorkTracking.Properties {
                 this["companyName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int daysInWorkWeek {
+            get {
+                return ((int)(this["daysInWorkWeek"]));
+            }
+            set {
+                this["daysInWorkWeek"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public int hoursInFullWorkDay {
+            get {
+                return ((int)(this["hoursInFullWorkDay"]));
+            }
+            set {
+                this["hoursInFullWorkDay"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int hoursLunchBreakTime {
+            get {
+                return ((int)(this["hoursLunchBreakTime"]));
+            }
+            set {
+                this["hoursLunchBreakTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("7")]
+        public int hoursInShortWorkDay {
+            get {
+                return ((int)(this["hoursInShortWorkDay"]));
+            }
+            set {
+                this["hoursInShortWorkDay"] = value;
+            }
+        }
     }
 }

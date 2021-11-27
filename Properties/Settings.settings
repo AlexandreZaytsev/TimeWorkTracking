@@ -47,5 +47,17 @@
     <Setting Name="companyName" Type="System.String" Scope="User">
       <Value Profile="(Default)">АО Русская Промышленная Компания</Value>
     </Setting>
+    <Setting Name="daysInWorkWeek" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="hoursInFullWorkDay" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">8</Value>
+    </Setting>
+    <Setting Name="hoursLunchBreakTime" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="hoursInShortWorkDay" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">7</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
