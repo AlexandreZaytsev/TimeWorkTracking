@@ -58,10 +58,10 @@ namespace TimeWorkTracking
                             switch (drow["dLength"].ToString())
                             {
                                 case "Короткий":                            //меньше на час
-                                    ret = -60;
+                                    ret = 0 - Properties.Settings.Default.minutesChangingFullWorkDay;// - 60;
                                     break;
                                 case "Длинный":                             //больше на час
-                                    ret = 60;
+                                    ret = 0 + Properties.Settings.Default.minutesChangingFullWorkDay;// 60;
                                     break;
                                 default:
                                     ret = 0;

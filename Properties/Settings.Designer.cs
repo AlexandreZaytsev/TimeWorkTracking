@@ -229,25 +229,25 @@ namespace TimeWorkTracking.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int hoursLunchBreakTime {
+        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        public int minutesLunchBreakTime {
             get {
-                return ((int)(this["hoursLunchBreakTime"]));
+                return ((int)(this["minutesLunchBreakTime"]));
             }
             set {
-                this["hoursLunchBreakTime"] = value;
+                this["minutesLunchBreakTime"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("7")]
-        public int hoursInShortWorkDay {
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int minutesChangingFullWorkDay {
             get {
-                return ((int)(this["hoursInShortWorkDay"]));
+                return ((int)(this["minutesChangingFullWorkDay"]));
             }
             set {
-                this["hoursInShortWorkDay"] = value;
+                this["minutesChangingFullWorkDay"] = value;
             }
         }
     }

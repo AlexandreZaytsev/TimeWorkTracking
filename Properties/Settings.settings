@@ -53,11 +53,11 @@
     <Setting Name="hoursInFullWorkDay" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">8</Value>
     </Setting>
-    <Setting Name="hoursLunchBreakTime" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">1</Value>
+    <Setting Name="minutesLunchBreakTime" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">15</Value>
     </Setting>
-    <Setting Name="hoursInShortWorkDay" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">7</Value>
+    <Setting Name="minutesChangingFullWorkDay" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
     </Setting>
   </Settings>
 </SettingsFile>

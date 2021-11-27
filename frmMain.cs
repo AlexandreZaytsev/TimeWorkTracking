@@ -638,7 +638,7 @@ namespace TimeWorkTracking
             string pacsTimeStart = "";                                      //строка Дата Время прохода СКУД
             string pacsTimeStop = "";                                       //строка Дата Время выхода СКУД
 
-            int chLunch = lstwDataBaseMain.Items[index].SubItems[11].Text == "1" ? 0 : 60;  //0 мин не обедает 60 мин обедает
+            int chLunch = lstwDataBaseMain.Items[index].SubItems[11].Text == "1" ? 0 : Properties.Settings.Default.minutesLunchBreakTime;  //0 мин не обедает 60 мин обедает
             int wScheme = lstwDataBaseMain.Items[index].SubItems[12].Text == "1" ? 1 : 0;   //1 режим почасовой 0 режим поминутный
             double timeScheduleFact = (vDateOut - vDateIn).TotalMinutes;                           //Всего минут по факту 
 
@@ -674,7 +674,7 @@ namespace TimeWorkTracking
             }
             else
             {
-                double dMin = (8 * 60) + extMin;                            //Прочитать количество рабочих часов в дне по календарю
+                double dMin = (Properties.Settings.Default.hoursInFullWorkDay * 60) + extMin;  //Прочитать количество рабочих минут в дне по календарю
                 if (cMin < dMin)                                            //Недоработка
                     timeScheduleLess = dMin - cMin;
                 else

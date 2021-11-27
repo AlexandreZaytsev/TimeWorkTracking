@@ -141,6 +141,10 @@ namespace TimeWorkTracking
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             mainPanelSetting.Enabled = clMsSqlDatabase.CheckConnectWithConnectionStr(cs);
             tbCompanyName.Text = Properties.Settings.Default.companyName;   //наименование компании
+            nDaysInWorkWeek.Value = Properties.Settings.Default.daysInWorkWeek;
+            nHoursInFullWorkDay.Value = Properties.Settings.Default.hoursInFullWorkDay;
+            nMinutesChangingFullWorkDay.Value = Properties.Settings.Default.minutesChangingFullWorkDay;
+            nMinutesLunchBreakTime.Value = Properties.Settings.Default.minutesLunchBreakTime;
         }   
 
         //диалог выбора имени файла
@@ -538,6 +542,10 @@ namespace TimeWorkTracking
             Properties.Settings.Default.importUserRange = @cbSheetUser.Text + "$" + tbRangeUser.Text;
             Properties.Settings.Default.importPassRange = @cbSheetPass.Text + "$" + tbRangePass.Text;
             Properties.Settings.Default.companyName = tbCompanyName.Text.Trim();
+            Properties.Settings.Default.daysInWorkWeek = (int)nDaysInWorkWeek.Value;
+            Properties.Settings.Default.hoursInFullWorkDay = (int)nHoursInFullWorkDay.Value;
+            Properties.Settings.Default.minutesChangingFullWorkDay = (int)nMinutesChangingFullWorkDay.Value;
+            Properties.Settings.Default.minutesLunchBreakTime = (int)nMinutesLunchBreakTime.Value;
 
             Properties.Settings.Default.Save();
             CallBack_FrmSetting_outEvent.callbackEventHandler("", "", null);    //отправитьс ообщение главной форме что импрот произошел

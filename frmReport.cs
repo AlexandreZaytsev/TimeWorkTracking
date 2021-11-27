@@ -90,7 +90,7 @@ namespace TimeWorkTracking
                 case "FormTimeCheck":
                     firstDayRange = dt.FirstDayOfWeek();
                     lastDayRange = firstDayRange.AddDays(6);
-                    lengthRangeDays = 5;// 7;// 5;
+                    lengthRangeDays = Properties.Settings.Default.daysInWorkWeek;// 7;// 5;
                     break;
                 case "ReportTotal":
                     firstDayRange = dt.FirstDayOfMonth();
