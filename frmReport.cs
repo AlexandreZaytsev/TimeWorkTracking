@@ -251,7 +251,7 @@ namespace TimeWorkTracking
                     double specmarkValue;                                           //переменная для хранения текущего значения спец отметки    
                     double specmarkSum;                                             //переменная для подсчета суммы спец отметок
                     string formatName = "N8";// "F8";                               //формат строки для преобразований
-
+                   // int stop;
                     j = 0;
                     for (int i = 0; i < totalReportData.Rows.Count; i++)            //Цикл по строкам отчета
                     {
@@ -271,7 +271,8 @@ namespace TimeWorkTracking
 
                                     //распакуем пришедшие данные в массив
                                     splitValue = drow[4 + col].ToString().Substring(1, drow[4 + col].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
-
+                                //    if (i + j + 1 == 11)
+                                //        stop = 1;
                                     //Спецотметка (короткое имя) (первая строка)
                                     tableData[i + j, 2 + col] = splitValue[3];                          //в диапазоне дат        
                                     tableData[i + j, headerIndex[splitValue[3]]] = splitValue[3];       //в диапазоне спец отметок
@@ -320,7 +321,9 @@ namespace TimeWorkTracking
                                     switch (splitValue[3])
                                     {
                                         case "СЗ":                                                      //добавим к итогам время отработанное вне пределов рабочего дня
-                                            tableData[i + j + 1, headerIndex[splitValue[3]]] += Double.Parse(tableData[i + j + 1, headerIndex["out"]], CultureInfo.InvariantCulture);
+                                            specmarkSum = tableData[i + j + 1, headerIndex[splitValue[3]]] == null ? 0 : Double.Parse(tableData[i + j + 1, headerIndex[splitValue[3]]], CultureInfo.InvariantCulture);
+                                            specmarkSum = specmarkSum + Double.Parse(tableData[i + j + 1, headerIndex["out"]], CultureInfo.InvariantCulture);
+                                            tableData[i + j + 1, headerIndex[splitValue[3]]] = specmarkSum.ToString(formatName, CultureInfo.InvariantCulture);
                                             break;
                                     }
                                 }

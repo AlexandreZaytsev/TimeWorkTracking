@@ -141,7 +141,7 @@ namespace TimeWorkTracking
             0});
             this.nMinutesLunchBreakTime.Name = "nMinutesLunchBreakTime";
             this.nMinutesLunchBreakTime.Size = new System.Drawing.Size(51, 24);
-            this.nMinutesLunchBreakTime.TabIndex = 42;
+            this.nMinutesLunchBreakTime.TabIndex = 5;
             this.toolTipMsgSetting.SetToolTip(this.nMinutesLunchBreakTime, "Количество минут на обед");
             this.nMinutesLunchBreakTime.Value = new decimal(new int[] {
             15,
@@ -179,7 +179,7 @@ namespace TimeWorkTracking
             0});
             this.nMinutesChangingFullWorkDay.Name = "nMinutesChangingFullWorkDay";
             this.nMinutesChangingFullWorkDay.Size = new System.Drawing.Size(56, 24);
-            this.nMinutesChangingFullWorkDay.TabIndex = 40;
+            this.nMinutesChangingFullWorkDay.TabIndex = 4;
             this.toolTipMsgSetting.SetToolTip(this.nMinutesChangingFullWorkDay, "Количество минут сокращения и(или) увеличения полного рабочего дня");
             this.nMinutesChangingFullWorkDay.Value = new decimal(new int[] {
             1,
@@ -212,7 +212,7 @@ namespace TimeWorkTracking
             0});
             this.nHoursInFullWorkDay.Name = "nHoursInFullWorkDay";
             this.nHoursInFullWorkDay.Size = new System.Drawing.Size(40, 24);
-            this.nHoursInFullWorkDay.TabIndex = 38;
+            this.nHoursInFullWorkDay.TabIndex = 3;
             this.toolTipMsgSetting.SetToolTip(this.nHoursInFullWorkDay, "Количество часов в полном рабочем дне");
             this.nHoursInFullWorkDay.Value = new decimal(new int[] {
             1,
@@ -245,7 +245,7 @@ namespace TimeWorkTracking
             0});
             this.nDaysInWorkWeek.Name = "nDaysInWorkWeek";
             this.nDaysInWorkWeek.Size = new System.Drawing.Size(41, 24);
-            this.nDaysInWorkWeek.TabIndex = 35;
+            this.nDaysInWorkWeek.TabIndex = 2;
             this.toolTipMsgSetting.SetToolTip(this.nDaysInWorkWeek, "Количество дней в рабочей неделе");
             this.nDaysInWorkWeek.Value = new decimal(new int[] {
             1,
@@ -269,7 +269,7 @@ namespace TimeWorkTracking
             this.tbCompanyName.Margin = new System.Windows.Forms.Padding(4);
             this.tbCompanyName.Name = "tbCompanyName";
             this.tbCompanyName.Size = new System.Drawing.Size(544, 24);
-            this.tbCompanyName.TabIndex = 34;
+            this.tbCompanyName.TabIndex = 1;
             this.toolTipMsgSetting.SetToolTip(this.tbCompanyName, "укажите диапазон НА ОДНУ СТРОЧКУ ВЫШЕ\r\nв формате -  Имя столбца : Номер строки\r\n(" +
         "без использования абсрлютной адресации $))");
             // 
@@ -335,7 +335,7 @@ namespace TimeWorkTracking
             this.tbRangePass.Margin = new System.Windows.Forms.Padding(4);
             this.tbRangePass.Name = "tbRangePass";
             this.tbRangePass.Size = new System.Drawing.Size(132, 24);
-            this.tbRangePass.TabIndex = 37;
+            this.tbRangePass.TabIndex = 12;
             this.toolTipMsgSetting.SetToolTip(this.tbRangePass, "укажите диапазон НА ОДНУ СТРОЧКУ ВЫШЕ\r\nв формате -  Имя столбца : Номер строки\r\n(" +
         "без использования абсрлютной адресации $))\r\n");
             // 
@@ -366,7 +366,7 @@ namespace TimeWorkTracking
             this.cbSheetPass.Margin = new System.Windows.Forms.Padding(4);
             this.cbSheetPass.Name = "cbSheetPass";
             this.cbSheetPass.Size = new System.Drawing.Size(136, 26);
-            this.cbSheetPass.TabIndex = 34;
+            this.cbSheetPass.TabIndex = 11;
             // 
             // tbRangeUser
             // 
@@ -374,7 +374,7 @@ namespace TimeWorkTracking
             this.tbRangeUser.Margin = new System.Windows.Forms.Padding(4);
             this.tbRangeUser.Name = "tbRangeUser";
             this.tbRangeUser.Size = new System.Drawing.Size(132, 24);
-            this.tbRangeUser.TabIndex = 33;
+            this.tbRangeUser.TabIndex = 9;
             this.toolTipMsgSetting.SetToolTip(this.tbRangeUser, "укажите диапазон НА ОДНУ СТРОЧКУ ВЫШЕ\r\nв формате -  Имя столбца : Номер строки\r\n(" +
         "без использования абсрлютной адресации $))");
             // 
@@ -405,7 +405,7 @@ namespace TimeWorkTracking
             this.cbSheetUser.Margin = new System.Windows.Forms.Padding(4);
             this.cbSheetUser.Name = "cbSheetUser";
             this.cbSheetUser.Size = new System.Drawing.Size(136, 26);
-            this.cbSheetUser.TabIndex = 30;
+            this.cbSheetUser.TabIndex = 8;
             // 
             // label1
             // 
@@ -425,7 +425,7 @@ namespace TimeWorkTracking
             this.btImportPass.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btImportPass.Name = "btImportPass";
             this.btImportPass.Size = new System.Drawing.Size(112, 32);
-            this.btImportPass.TabIndex = 26;
+            this.btImportPass.TabIndex = 13;
             this.btImportPass.Text = "Импорт";
             this.btImportPass.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btImportPass.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -466,7 +466,7 @@ namespace TimeWorkTracking
             this.btImportUsers.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btImportUsers.Name = "btImportUsers";
             this.btImportUsers.Size = new System.Drawing.Size(112, 32);
-            this.btImportUsers.TabIndex = 24;
+            this.btImportUsers.TabIndex = 10;
             this.btImportUsers.Text = "Импорт";
             this.btImportUsers.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btImportUsers.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -480,7 +480,7 @@ namespace TimeWorkTracking
             this.btFileName.Margin = new System.Windows.Forms.Padding(4);
             this.btFileName.Name = "btFileName";
             this.btFileName.Size = new System.Drawing.Size(39, 28);
-            this.btFileName.TabIndex = 28;
+            this.btFileName.TabIndex = 7;
             this.btFileName.Text = "...";
             this.btFileName.UseVisualStyleBackColor = true;
             this.btFileName.Click += new System.EventHandler(this.btFileName_Click);
@@ -492,7 +492,7 @@ namespace TimeWorkTracking
             this.tbPath.Name = "tbPath";
             this.tbPath.ReadOnly = true;
             this.tbPath.Size = new System.Drawing.Size(555, 24);
-            this.tbPath.TabIndex = 27;
+            this.tbPath.TabIndex = 6;
             // 
             // statusStripSetting
             // 

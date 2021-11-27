@@ -54,7 +54,7 @@
       <Value Profile="(Default)">8</Value>
     </Setting>
     <Setting Name="minutesLunchBreakTime" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">15</Value>
+      <Value Profile="(Default)">60</Value>
     </Setting>
     <Setting Name="minutesChangingFullWorkDay" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>

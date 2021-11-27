@@ -229,7 +229,7 @@ namespace TimeWorkTracking.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
         public int minutesLunchBreakTime {
             get {
                 return ((int)(this["minutesLunchBreakTime"]));
