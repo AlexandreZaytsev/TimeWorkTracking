@@ -343,13 +343,14 @@ namespace TimeWorkTracking
                                     {
                                         case "Я":                                                       //добавим к итогам итоговое время
                                             tmpValue = tmpValue + specmarkValue;
-                                            tableData[i + j + 1, headerIndex["total"]] = tmpValue.ToString(formatName, CultureInfo.InvariantCulture);
                                             break;
                                         case "СЗ":                                                      //добавим к итогам итоговое время + превышение из спец отметок
                                             tmpValue = tmpValue + specmarkValue + Double.Parse(tableData[i + j + 1, headerIndex["ext"]], CultureInfo.InvariantCulture);
-                                            tableData[i + j + 1, headerIndex["total"]] = tmpValue.ToString(formatName, CultureInfo.InvariantCulture);
                                             break;
                                     }
+                                    tableData[i + j + 1, headerIndex["total"]] = tmpValue.ToString(formatName, CultureInfo.InvariantCulture);
+                                    tableData[i + j, headerIndex["total"]] = ((int)tmpValue).ToString() + " час. " +
+                                                                             (Math.Round((tmpValue - (int)tmpValue) * 60)).ToString() + " мин.";
                                 }
                             }
                             j += 1;
