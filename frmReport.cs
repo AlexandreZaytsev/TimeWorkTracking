@@ -348,10 +348,12 @@ namespace TimeWorkTracking
                                             tmpValue = tmpValue + specmarkValue + (Convert.ToDouble(splitValue[5]) / 60);
                                             break;
                                     }
-                                    tableData[i + j + 1, headerIndex["total"]] = tmpValue.ToString(formatName, CultureInfo.InvariantCulture);
-                                    if ((int)tmpValue !=0)
+                                    if ((int)tmpValue != 0) 
+                                    {
+                                        tableData[i + j + 1, headerIndex["total"]] = tmpValue.ToString(formatName, CultureInfo.InvariantCulture);
                                         tableData[i + j, headerIndex["total"]] = ((int)tmpValue).ToString() + " час " +
-                                                                                 (Math.Round((tmpValue - (int)tmpValue) * 60)).ToString() + " мин";
+                                                                                     (Math.Round((tmpValue - (int)tmpValue) * 60)).ToString() + " мин";
+                                    }
                                 }
                             }
                             j += 1;
@@ -1022,17 +1024,25 @@ namespace TimeWorkTracking
                 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
             */
 
+            //формулы в итогах
+            //For i = 1 To 3 + spCount + 2
+            //    .ListColumns(2 + 1 + 1 + dayCount - 1 + i).TotalsCalculation = xlTotalsCalculationSum
+            //    .HeaderRowRange(2 + 1 + 1 + dayCount - 1 + i).ColumnWidth = 6
+            //Next
+            //.ListColumns(2 + 1 + 1 + dayCount - 1 + i).TotalsCalculation = xlTotalsCalculationNone
+
+
             //примечания
             workRange = (Excel.Range)workSheet.Cells[fullTable.Row + fullTable.Rows.Count + 2, 2];
             ((Excel.Range)workRange).Offset[0, 0].Value = "Примечания";
-            ((Excel.Range)workRange).Offset[1, 0].Value = "Результаты представлены в двух областях РАБОЧЕЕЕ ВРЕМЯ и СПЕЦИАЛЬНЫЕ ОТМЕТКИ";
-            ((Excel.Range)workRange).Offset[2, 0].Value = "  - РАБОЧЕЕ ВРЕМЯ ('Я') с учетом обедов, сокращенных дней, рабочего графика с разверткой по дням (без накопительной части)";
+            ((Excel.Range)workRange).Offset[1, 0].Value = "Результаты представлены в двух главных областях: - РАБОЧЕЕЕ ВРЕМЯ (данные на дату) и СПЕЦИАЛЬНЫЕ ОТМЕТКИ (накопительная часть)";
+            ((Excel.Range)workRange).Offset[2, 0].Value = "  - РАБОЧЕЕ ВРЕМЯ ('Я'): чистое время без обеда, учитывая сокращенные дни, рабочий график, - с разверткой по дням (без накопительной части)";
             ((Excel.Range)workRange).Offset[3, 0].Value = "**  наличие сокращенных наименований СПЕЦИАЛЬНЫХ ОТМЕТОК (кроме 'Я') в области РАБОЧЕГО времени говорит ТОЛЬКО о их НАЛИЧИИ в течении дня (к указанному под ними времени они отношения не имеют)";
-            ((Excel.Range)workRange).Offset[4, 0].Value = "  - СПЕЦИАЛЬНЫЕ ОТМЕТКИ (кроме 'Я') фактическое время как есть с разверткой по типам отметок (с накопительной частью)";
+            ((Excel.Range)workRange).Offset[4, 0].Value = "  - СПЕЦИАЛЬНЫЕ ОТМЕТКИ (кроме 'Я') фактическое время как есть (включая обед) с разверткой по типам отметок (с накопительной частью)";
 
             ((Excel.Range)workRange).Offset[6, 0].Value = "ps";
-            ((Excel.Range)workRange).Offset[7, 0].Value = "ВАЖНО. Итоговые значения получаются ПО ФОРМУЛАМ!!!, не сложением того что вы видите в таблице отчета";
-            ((Excel.Range)workRange).Offset[8, 0].Value = "Например последняя колонка считается как сумма из области РАБОЧЕГО ВРЕМЕНИ указанного при регистрации + сумма превышения его по СПЕЦИАЛЬНОЙ ОТМЕТКЕ - СЛУЖЕБНОЕ ЗАДАНИЕ";
+            ((Excel.Range)workRange).Offset[7, 0].Value = "ВАЖНО. Итоговые значения получаются ПО ВНУТРЕННИМ ФОРМУЛАМ!!!, не сложением того что вы видите в таблице отчета";
+            ((Excel.Range)workRange).Offset[8, 0].Value = "Например последняя колонка считается как сумма из области РАБОЧЕГО ВРЕМЕНИ в течении И вне рабочего дня с признаком - СЛУЖЕБНОЕ ЗАДАНИЕ";
 
 
 
