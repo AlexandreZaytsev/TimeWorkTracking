@@ -936,8 +936,8 @@ namespace TimeWorkTracking
             toolStripStatusLabelInfo.Text = "Форматирование заголовка smart таблицы";
             //управление шрифтами и выравниванием
                 tbSmartReport.HeaderRowRange.Font.Size = 11;
-                tbSmartReport.HeaderRowRange.Font.Name = "Calibri";// "Times New Roman";
-                tbSmartReport.HeaderRowRange.Font.Bold = true;
+//                tbSmartReport.HeaderRowRange.Font.Name = "Calibri";// "Times New Roman";
+//                tbSmartReport.HeaderRowRange.Font.Bold = true;
                 tbSmartReport.HeaderRowRange.Interior.TintAndShade = 0;// '0.2
                 tbSmartReport.HeaderRowRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
                 tbSmartReport.HeaderRowRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
@@ -960,20 +960,31 @@ namespace TimeWorkTracking
                 ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[colsChar]).ColumnWidth = 6;      //ширина колонок спец отметл + дополнительные 
                 tbSmartReport.ListColumns[tbSmartReport.ListColumns.Count].Range.ColumnWidth = 18;  //ширина последнего столбца
 
+            toolStripStatusLabelInfo.Text = "Форматирование области дпнных smart таблицы";
+            //управление шрифтами и выравниванием
+            tbSmartReport.DataBodyRange.NumberFormat = "0,0";
+                tbSmartReport.DataBodyRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                ((Excel.Range)tbSmartReport.DataBodyRange.Columns[2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft; //ширина колонок спец отметл + дополнительные
+
+            //колонки с третьей по предпоследнюю    
+            colsChar =
+                NumberToLetters(1 + tbSmartReport.HeaderRowRange.Column) + ":" +
+                NumberToLetters(1 + tbSmartReport.HeaderRowRange.Column + daysCount + 3 + dtSpecialMarks.Rows.Count);
+//            ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[colsChar]).VerticalAlignment = Excel.XlVAlign.xlVAlignBottom;  //ширина колонок спец отметл + дополнительные
 
 
-/*
-            ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[1]).VerticalAlignment = Excel.XlVAlign.xlVAlignBottom;
-            ((Excel.Range)tbSmartReport.DataBodyRange[1]).Font.Size = 11;
+            /*
+                        ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[1]).VerticalAlignment = Excel.XlVAlign.xlVAlignBottom;
+                        ((Excel.Range)tbSmartReport.DataBodyRange[1]).Font.Size = 11;
 
-            ((Excel.Range)workSheet.Range[workRange.Cells[2, 2], workRange.Cells[3, 2]]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-            ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, 3 + daysCount - 1]]).VerticalAlignment = Excel.XlVAlign.xlVAlignBottom;
-            ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, 3 + daysCount - 1]]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+                        ((Excel.Range)workSheet.Range[workRange.Cells[2, 2], workRange.Cells[3, 2]]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+                        ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, 3 + daysCount - 1]]).VerticalAlignment = Excel.XlVAlign.xlVAlignBottom;
+                        ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, 3 + daysCount - 1]]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
 
-            ((Excel.Range)workSheet.Range[workRange.Cells[1, 3 + daysCount], workRange.Cells[1, 3 + captionData.GetUpperBound(1) - 3]]).VerticalAlignment = Excel.XlVAlign.xlVAlignBottom;
-            ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, 3 + captionData.GetUpperBound(1) - 2]]).Orientation = 90;
+                        ((Excel.Range)workSheet.Range[workRange.Cells[1, 3 + daysCount], workRange.Cells[1, 3 + captionData.GetUpperBound(1) - 3]]).VerticalAlignment = Excel.XlVAlign.xlVAlignBottom;
+                        ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, 3 + captionData.GetUpperBound(1) - 2]]).Orientation = 90;
 
-            */
+                        */
             /*
                         //диапазон для шапки таблицы и первой строки данных
                         workRange = workSheet.Range[workSheet.Cells[8, 2], workSheet.Cells[8 + captionData.GetUpperBound(0) + 1, 1 + captionData.GetUpperBound(1) + 1]];    //+1 на строку данных
