@@ -165,7 +165,7 @@ namespace TimeWorkTracking
                     {
                         tDate = mcReport.SelectionStart.AddDays(i);
                         captionData[0, i + 2] =
-                            pad + tDate.ToString("dd.MM.yyyy dddd") + "\r\n" + 
+                            pad + tDate.ToString("dd.MM.yyyy dddd") + "\r\n\r\n" + 
                             pad + pCalendar.getDateDescription(tDate);
                     }
                     captionData[0, lengthDays + 1 + 1] = pad + "недоработка";
@@ -949,22 +949,60 @@ namespace TimeWorkTracking
                 ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[colsChar]).VerticalAlignment = Excel.XlVAlign.xlVAlignBottom;  //ширина колонок спец отметл + дополнительные
                 ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[colsChar]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;  //ширина колонок спец отметл + дополнительные
                 ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[colsChar]).Orientation = 90;      //ширина колонок спец отметл + дополнительные
+                //заливка цветом
+                colsChar =                                                      //колонки с датами
+                    NumberToLetters(1 + tbSmartReport.HeaderRowRange.Column) + ":" +
+                    NumberToLetters(1 + tbSmartReport.HeaderRowRange.Column + daysCount - 1);
+                ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[colsChar]).Interior.Color = ColorTranslator.ToOle(Color.LightBlue);  //ширина колонок спец отметл + дополнительные
+
+            toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
+
+                //условное форматирование диапазона дат
+                Excel.FormatConditions fcs = ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[colsChar]).EntireRow.FormatConditions;
+                Excel.FormatCondition fc = (Excel.FormatCondition)fcs.Add(
+                    Type: Excel.XlFormatConditionType.xlExpression,
+                    mis, //Excel.XlFormatConditionOperator.xlNotEqual,//.xlEqual,
+                    Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A8))",
+                    mis, mis, mis, mis, mis);
+                    fc.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
+                   fc.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
+                   //              fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
+                    fc.Interior.TintAndShade = 0.599963377788629;
+                    fc.StopIfTrue = false;
+
+                colsChar =                                                      //три итоговые колонки
+                    NumberToLetters(1 + tbSmartReport.HeaderRowRange.Column + daysCount) + ":" +
+                    NumberToLetters(1 + tbSmartReport.HeaderRowRange.Column + daysCount + 2);
+                ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[colsChar]).Interior.Color = ColorTranslator.ToOle(Color.LightGreen);  //ширина колонок спец отметл + дополнительные
+ //               ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[colsChar]).Interior.ThemeColor = ColorTranslator.ToOle(Color.DarkGray);  //ширина колонок спец отметл + дополнительные
+                ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[tbSmartReport.ListColumns.Count]).Interior.Color = ColorTranslator.ToOle(Color.LightGreen);
+ //               ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[tbSmartReport.ListColumns.Count]).Interior.ThemeColor = ColorTranslator.ToOle(Color.DarkGray);
+
+
+
             //управление размерами
                 tbSmartReport.HeaderRowRange.RowHeight = 150;                   //высота строки шапки
-                tbSmartReport.HeaderRowRange.ColumnWidth = 4;                   //ширина всех колонок
+                tbSmartReport.HeaderRowRange.ColumnWidth = 3.5;// 4;            //ширина всех колонок
                 tbSmartReport.ListColumns[1].Range.ColumnWidth = 3.5;           //ширина колонки с номером
                 tbSmartReport.ListColumns[2].Range.ColumnWidth = 38.5;          //ширина колонки ФИО 
                 colsChar =
-                    NumberToLetters(((Excel.Range)tbSmartReport.HeaderRowRange.Columns[3 + daysCount]).Column) + ":" +
+                    NumberToLetters(((Excel.Range)tbSmartReport.HeaderRowRange.Columns[3 + daysCount - 1]).Column) + ":" +
                     NumberToLetters(((Excel.Range)tbSmartReport.HeaderRowRange.Columns[3 + daysCount + 3 + dtSpecialMarks.Rows.Count]).Column);
                 ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[colsChar]).ColumnWidth = 6;      //ширина колонок спец отметл + дополнительные 
                 tbSmartReport.ListColumns[tbSmartReport.ListColumns.Count].Range.ColumnWidth = 18;  //ширина последнего столбца
 
-            toolStripStatusLabelInfo.Text = "Форматирование области дпнных smart таблицы";
+            toolStripStatusLabelInfo.Text = "Форматирование области данных smart таблицы";
             //управление шрифтами и выравниванием
-            tbSmartReport.DataBodyRange.NumberFormat = "0,0";
-                tbSmartReport.DataBodyRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                tbSmartReport.DataBodyRange.NumberFormat = "##0,0";//"0,0";                         //все цифровые данные с одним разрядом 
+                tbSmartReport.DataBodyRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;    //вся таблица по центру        
                 ((Excel.Range)tbSmartReport.DataBodyRange.Columns[2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft; //ширина колонок спец отметл + дополнительные
+                for (int i = 1; i< tbSmartReport.DataBodyRange.Rows.Count; i++)
+                {
+                    ((Excel.Range)tbSmartReport.DataBodyRange.Cells[i, 2]).Font.Italic = true;
+                    i = i + 1;
+                    ((Excel.Range)tbSmartReport.DataBodyRange.Cells[i, 3]).Font.Bold = true;
+                }
+
 
             //колонки с третьей по предпоследнюю    
             colsChar =
@@ -973,18 +1011,6 @@ namespace TimeWorkTracking
 //            ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[colsChar]).VerticalAlignment = Excel.XlVAlign.xlVAlignBottom;  //ширина колонок спец отметл + дополнительные
 
 
-            /*
-                        ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[1]).VerticalAlignment = Excel.XlVAlign.xlVAlignBottom;
-                        ((Excel.Range)tbSmartReport.DataBodyRange[1]).Font.Size = 11;
-
-                        ((Excel.Range)workSheet.Range[workRange.Cells[2, 2], workRange.Cells[3, 2]]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-                        ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, 3 + daysCount - 1]]).VerticalAlignment = Excel.XlVAlign.xlVAlignBottom;
-                        ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, 3 + daysCount - 1]]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-
-                        ((Excel.Range)workSheet.Range[workRange.Cells[1, 3 + daysCount], workRange.Cells[1, 3 + captionData.GetUpperBound(1) - 3]]).VerticalAlignment = Excel.XlVAlign.xlVAlignBottom;
-                        ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, 3 + captionData.GetUpperBound(1) - 2]]).Orientation = 90;
-
-                        */
             /*
                         //диапазон для шапки таблицы и первой строки данных
                         workRange = workSheet.Range[workSheet.Cells[8, 2], workSheet.Cells[8 + captionData.GetUpperBound(0) + 1, 1 + captionData.GetUpperBound(1) + 1]];    //+1 на строку данных
@@ -1032,24 +1058,7 @@ namespace TimeWorkTracking
                             ((Excel.Range)workRange.Cells[1, 3 + captionData.GetUpperBound(1) - 2]).Interior.Color = ColorTranslator.ToOle(Color.LightGreen);
                             ((Excel.Range)workRange.Cells[2, 1]).Interior.Color = ColorTranslator.ToOle(Color.LightBlue);
 
-                        //форматирование диапазона данных 
-                            Excel.Range rFormat = workSheet.Range[workRange.Cells[3, 3], workRange.Cells[3, workRange.Columns.Count]];
-                            ((Excel.Range)rFormat).NumberFormat = "##0,0";// "0";// "##0,000";//"0;[Red]0";        //готовим Excel к приему пищи
 
-                        toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
-                        //условное форматирование диапазона 
-                            Excel.FormatConditions fcs = ((Excel.Range)workRange.Rows[1]).EntireRow.FormatConditions;
-                            Excel.FormatCondition fc = (Excel.FormatCondition)fcs.Add(
-                                Type: Excel.XlFormatConditionType.xlExpression,
-                                mis, //Excel.XlFormatConditionOperator.xlNotEqual,//.xlEqual,
-                                Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A8))",
-                                mis, mis, mis, mis, mis);
-
-                                fc.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
-                                fc.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
-                        //              fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
-                                fc.Interior.TintAndShade = 0.599963377788629;
-                                fc.StopIfTrue = false;
             */
             toolStripStatusLabelInfo.Text = "Вставка данных заголовка";
                 string[] rowCaptionData = new string[captionData.GetUpperBound(1) + 1];
