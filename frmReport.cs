@@ -341,7 +341,7 @@ namespace TimeWorkTracking
 
 
                                     //Коррекция итогов 
-                                    tmpValue = tableData[i + j + 1, headerIndex["total"]] == null ? 0 : Double.Parse(tableData[i + j + 1, headerIndex["total"]], CultureInfo.InvariantCulture);
+                                    tmpValue = tableData[i + j, headerIndex["total"]] == null ? 0 : Double.Parse(tableData[i + j, headerIndex["total"]], CultureInfo.InvariantCulture);
                                     switch (specmarkName)
                                     {
                                         case "Я":       //добавим к итогам итоговое время
@@ -353,8 +353,8 @@ namespace TimeWorkTracking
                                     }
                                     if ((int)tmpValue != 0) 
                                     {
-                                        tableData[i + j + 1, headerIndex["total"]] = tmpValue.ToString(formatName, CultureInfo.InvariantCulture);
-                                        tableData[i + j, headerIndex["total"]] = ((int)tmpValue).ToString() + " час " +
+                                        tableData[i + j, headerIndex["total"]] = tmpValue.ToString(formatName, CultureInfo.InvariantCulture);
+                                        tableData[i + j + 1, headerIndex["total"]] = ((int)tmpValue).ToString() + " час " +
                                                                                      (Math.Round((tmpValue - (int)tmpValue) * 60)).ToString() + " мин";
                                     }
                                 }
@@ -855,7 +855,7 @@ namespace TimeWorkTracking
             toolStripStatusLabelInfo.Text = "Создание рабочей книги";
             //Настройки Application установить
             excelApp.DisplayAlerts = false;                                 //Запретить отображение окон с сообщениями
-    //        excelApp.ScreenUpdating = false;                                //Запретить перерисовку экрана    
+            excelApp.ScreenUpdating = false;                                //Запретить перерисовку экрана    
             excelApp.ActiveWindow.Zoom = 80;                                //Масштаб листа
  //           excelApp.ActiveWindow.View = Excel.XlWindowView.xlPageBreakPreview;
 
@@ -978,11 +978,9 @@ namespace TimeWorkTracking
                 ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[tbSmartReport.ListColumns.Count]).Interior.Color = ColorTranslator.ToOle(Color.LightGreen);
  //               ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[tbSmartReport.ListColumns.Count]).Interior.ThemeColor = ColorTranslator.ToOle(Color.DarkGray);
 
-
-
             //управление размерами
                 tbSmartReport.HeaderRowRange.RowHeight = 150;                   //высота строки шапки
-                tbSmartReport.HeaderRowRange.ColumnWidth = 3.5;// 4;            //ширина всех колонок
+            tbSmartReport.HeaderRowRange.ColumnWidth = 4;// 3.5;// 4;            //ширина всех колонок
                 tbSmartReport.ListColumns[1].Range.ColumnWidth = 3.5;           //ширина колонки с номером
                 tbSmartReport.ListColumns[2].Range.ColumnWidth = 38.5;          //ширина колонки ФИО 
                 colsChar =
@@ -996,12 +994,53 @@ namespace TimeWorkTracking
                 tbSmartReport.DataBodyRange.NumberFormat = "##0,0";//"0,0";                         //все цифровые данные с одним разрядом 
                 tbSmartReport.DataBodyRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;    //вся таблица по центру        
                 ((Excel.Range)tbSmartReport.DataBodyRange.Columns[2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft; //ширина колонок спец отметл + дополнительные
-                for (int i = 1; i< tbSmartReport.DataBodyRange.Rows.Count; i++)
+
+            //    ((Excel.Range)tbSmartReport.DataBodyRange.Range["1,3,5"]).Font.Size = 12;
+
+            /*
+                colsChar = "";
+                for (int i = 2; i < tbSmartReport.DataBodyRange.Rows.Count; i += 2) 
+                {
+                    colsChar = colsChar + $"{i}:{i}, ";
+                }
+
+                colsChar = colsChar.Remove(colsChar.Length - 1, 1);
+                Excel.Range w = workSheet.Range[colsChar.Remove(colsChar.Length - 1, 1)];
+                ((Excel.Range)workSheet.Range[colsChar.Remove(colsChar.Length - 1, 1)]).Font.Size = 12;
+                ((Excel.Range)tbSmartReport.DataBodyRange.Rows[colsChar.Remove(colsChar.Length - 1, 1)]).Font.Size = 12;
+                ((Excel.Range)tbSmartReport.Range[colsChar.Remove(colsChar.Length - 1, 1)]).Font.Size = 12;
+                ((Excel.Range)tbSmartReport.DataBodyRange.Range[colsChar.Remove(colsChar.Length - 1, 1)]).Font.Bold = true;
+            */
+            for (int i = 1; i< tbSmartReport.DataBodyRange.Rows.Count; i++)
                 {
                     ((Excel.Range)tbSmartReport.DataBodyRange.Cells[i, 2]).Font.Italic = true;
                     i = i + 1;
-                    ((Excel.Range)tbSmartReport.DataBodyRange.Cells[i, 3]).Font.Bold = true;
+                    ((Excel.Range)tbSmartReport.DataBodyRange.Rows[i]).Font.Size = 12;
+                    ((Excel.Range)tbSmartReport.DataBodyRange.Rows[i]).Font.Bold = true;
                 }
+
+            //            Range("I:I,F:H,L:T,AD:AE,AH:AM,AN:AS,AT:AW,BF:BI")
+//            Range("21:21,25:25,29:29").Font.Bold = True
+            //формулы итогов
+            for (int i = 3 + daysCount; i < tbSmartReport.ListColumns.Count; i++)
+                {
+                    tbSmartReport.ListColumns[i].TotalsCalculation = Excel.XlTotalsCalculation.xlTotalsCalculationSum;
+                }
+                tbSmartReport.ListColumns[tbSmartReport.ListColumns.Count].TotalsCalculation = Excel.XlTotalsCalculation.xlTotalsCalculationNone;
+
+
+            tbSmartReport.DataBodyRange.BorderAround2(LineStyle: Excel.XlBorderWeight.xlMedium);//   2.Borders[Excel.XlBordersIndex.xlEdgeTop].Weight = Excel.XlBorderWeight.xlMedium;
+            ((Excel.Range)tbSmartReport.DataBodyRange.Columns[1]).BorderAround2(LineStyle: Excel.XlBorderWeight.xlMedium);
+
+  //          tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlMedium;
+  //          ((Excel.Range)tbSmartReport.DataBodyRange.Columns[1]).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
+  //          ((Excel.Range)tbSmartReport.DataBodyRange.Columns[2]).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
+  //          ((Excel.Range)tbSmartReport.DataBodyRange.Columns[3]).Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlMedium;
+  //          tbSmartReport.DataBodyRange.Columns(2 + 1 + 1 + dayCount - 1 + 1).Borders(Excel.XlBordersIndex.xlEdgeLeft).Weight = Excel.XlBorderWeight.xlMedium;
+  //          tbSmartReport.DataBodyRange.Columns(2 + 1 + 1 + dayCount - 1 + 3).Borders(Excel.XlBordersIndex.xlEdgeRight).Weight = Excel.XlBorderWeight.xlMedium;
+  //          tbSmartReport.DataBodyRange.Columns(2 + 1 + 1 + dayCount - 1 + 3 + spCount + 1).Borders(Excel.XlBordersIndex.xlEdgeLeft).Weight = Excel.XlBorderWeight.xlMedium;
+  //          tbSmartReport.DataBodyRange.Columns(2 + 1 + 1 + dayCount - 1 + 3 + spCount + 2).Borders(Excel.XlBordersIndex.xlEdgeRight).Weight = Excel.XlBorderWeight.xlMedium;
+   //         tbSmartReport.DataBodyRange.Columns(2 + 1 + 1 + dayCount - 1 + 3 + spCount + 3).Borders(Excel.XlBordersIndex.xlEdgeRight).Weight = Excel.XlBorderWeight.xlMedium;
 
 
             //колонки с третьей по предпоследнюю    
