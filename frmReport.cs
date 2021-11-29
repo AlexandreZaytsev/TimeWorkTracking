@@ -160,7 +160,7 @@ namespace TimeWorkTracking
                     captionData = new string[1, lengthDays + 2 + 3 + dtSpecialMarks.Rows.Count - 1 + 2 +1];  //Создаём новый двумерный массив
                     captionData[0, 0] = "№";
                     captionData[0, 0 + 1] = "Фамилия Имя Отчество";
-                    string pad = new String(' ', 8);
+                    string pad = new String(' ', 7);
                     for (int i = 0; i < lengthDays; i++)            //циклом перебираем даты в созданный двумерный массив
                     {
                         tDate = mcReport.SelectionStart.AddDays(i);
@@ -935,9 +935,9 @@ namespace TimeWorkTracking
 
             toolStripStatusLabelInfo.Text = "Форматирование заголовка smart таблицы";
             //управление шрифтами и выравниванием
-                tbSmartReport.HeaderRowRange.Font.Size = 11;
+                tbSmartReport.HeaderRowRange.Font.Size = 10;
 //                tbSmartReport.HeaderRowRange.Font.Name = "Calibri";// "Times New Roman";
-//                tbSmartReport.HeaderRowRange.Font.Bold = true;
+                tbSmartReport.HeaderRowRange.Font.Bold = false;
                 tbSmartReport.HeaderRowRange.Interior.TintAndShade = 0;// '0.2
                 tbSmartReport.HeaderRowRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
                 tbSmartReport.HeaderRowRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
@@ -955,21 +955,6 @@ namespace TimeWorkTracking
                     NumberToLetters(1 + tbSmartReport.HeaderRowRange.Column + daysCount - 1);
                 ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[colsChar]).Interior.Color = ColorTranslator.ToOle(Color.LightBlue);  //ширина колонок спец отметл + дополнительные
 
-            toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
-
-                //условное форматирование диапазона дат
-                Excel.FormatConditions fcs = ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[colsChar]).EntireRow.FormatConditions;
-                Excel.FormatCondition fc = (Excel.FormatCondition)fcs.Add(
-                    Type: Excel.XlFormatConditionType.xlExpression,
-                    mis, //Excel.XlFormatConditionOperator.xlNotEqual,//.xlEqual,
-                    Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A8))",
-                    mis, mis, mis, mis, mis);
-                    fc.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
-                   fc.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
-                   //              fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
-                    fc.Interior.TintAndShade = 0.599963377788629;
-                    fc.StopIfTrue = false;
-
                 colsChar =                                                      //три итоговые колонки
                     NumberToLetters(1 + tbSmartReport.HeaderRowRange.Column + daysCount) + ":" +
                     NumberToLetters(1 + tbSmartReport.HeaderRowRange.Column + daysCount + 2);
@@ -979,7 +964,7 @@ namespace TimeWorkTracking
  //               ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[tbSmartReport.ListColumns.Count]).Interior.ThemeColor = ColorTranslator.ToOle(Color.DarkGray);
 
             //управление размерами
-                tbSmartReport.HeaderRowRange.RowHeight = 150;                   //высота строки шапки
+                tbSmartReport.HeaderRowRange.RowHeight = 154;                   //высота строки шапки
                 tbSmartReport.HeaderRowRange.ColumnWidth = 4;// 3.5;// 4;       //ширина всех колонок
                 tbSmartReport.ListColumns[1].Range.ColumnWidth = 3.5;           //ширина колонки с номером
                 tbSmartReport.ListColumns[2].Range.ColumnWidth = 38.5;          //ширина колонки ФИО 
@@ -995,9 +980,149 @@ namespace TimeWorkTracking
                 tbSmartReport.DataBodyRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;    //вся таблица по центру        
                 ((Excel.Range)tbSmartReport.DataBodyRange.Columns[2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft; //ширина колонок спец отметл + дополнительные
 
-            //    ((Excel.Range)tbSmartReport.DataBodyRange.Range["1,3,5"]).Font.Size = 12;
+
+            toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
+
+            //условное форматирование диапазона дат
+            Excel.FormatConditions fcs = ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[colsChar]).EntireRow.FormatConditions;
+            Excel.FormatCondition fcHeader = (Excel.FormatCondition)fcs.Add(Type: Excel.XlFormatConditionType.xlExpression, mis, Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A8))", mis, mis, mis, mis, mis);
+            fcHeader.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
+            fcHeader.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
+            //fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
+            fcHeader.Interior.TintAndShade = 0.599963377788629;
+            fcHeader.StopIfTrue = false;
+
+
+            //условное форматирование колонок данных
+            //            Excel.ColorScale cfColorScale = (Excel.ColorScale)(MySheet.get_Range("B15", "K34").FormatConditions.AddColorScale(3));
+            Excel.ColorScale cfColorScale;
+            cfColorScale = (Excel.ColorScale)((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["Я"] + 1]).EntireColumn.FormatConditions.AddColorScale(2);
+
+            cfColorScale.ColorScaleCriteria[1].Type = Excel.XlConditionValueTypes.xlConditionValueLowestValue;
+            cfColorScale.ColorScaleCriteria[1].FormatColor.Color = 10285055;// Color.FromArgb(min, 0, 0);
+            cfColorScale.ColorScaleCriteria[1].FormatColor.TintAndShade = 0;
+
+            cfColorScale.ColorScaleCriteria[2].Type = Excel.XlConditionValueTypes.xlConditionValueHighestValue;
+            cfColorScale.ColorScaleCriteria[2].FormatColor.Color = 8109667;// Color.FromArgb(min, 0, 0);
+            cfColorScale.ColorScaleCriteria[2].FormatColor.TintAndShade = 0;
+
+            Excel.Databar cfDatabar;
+            cfDatabar = (Excel.Databar)((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["less"] + 1]).EntireColumn.FormatConditions.AddDatabar();
 
             /*
+                    .FormatConditions.AddDatabar
+                    .FormatConditions(.FormatConditions.count).ShowValue = True
+                    .FormatConditions(.FormatConditions.count).SetFirstPriority
+                    With .FormatConditions(1)
+                      .MinPoint.Modify newtype:=xlConditionValueAutomaticMin
+                      .MaxPoint.Modify newtype:=xlConditionValueAutomaticMax
+                    End With
+                    With .FormatConditions(1).BarColor
+                      .Color = 5920255
+                      .TintAndShade = 0
+                    End With
+                    .FormatConditions(1).BarFillType = xlDataBarFillGradient 'xlDataBarFillSolid
+                    .FormatConditions(1).Direction = xlRTL ' xlContext  'ñïðàâà íàëåâî 'ïî êîíòåêñòó
+                    .FormatConditions(1).NegativeBarFormat.ColorType = xlDataBarColor
+                    .FormatConditions(1).BarBorder.Type = xlDataBarBorderSolid 'xlDataBarBorderNone
+
+                    .FormatConditions(1).AxisPosition = xlDataBarAxisAutomatic
+                    With .FormatConditions(1).AxisColor
+                      .Color = 0
+                      .TintAndShade = 0
+                    End With
+                    With .FormatConditions(1).NegativeBarFormat.Color
+                      .Color = 255
+                      .TintAndShade = 0
+                    End With
+                    .FormatConditions(1).NegativeBarFormat.BorderColorType = xlDataBarColor
+                    With .FormatConditions(1).BarBorder.Color
+                      .Color = 5920255
+                      .TintAndShade = 0
+                    End With
+                    With .FormatConditions(1).NegativeBarFormat.BorderColor
+                      .Color = 255
+                      .TintAndShade = 0
+                    End With
+                  End With
+
+            */
+
+
+
+
+
+
+
+
+
+
+            /*
+                        cfColorScale.ColorScaleCriteria[1].Type = Excel.XlConditionValueTypes.xlConditionValueLowestValue;
+                        cfColorScale.ColorScaleCriteria[1].FormatColor.Color = 0x000000FF;  // Red
+
+                        cfColorScale.ColorScaleCriteria[2].Type = Excel.XlConditionValueTypes.xlConditionValuePercentile;
+                        cfColorScale.ColorScaleCriteria[2].Value = 50;
+                        cfColorScale.ColorScaleCriteria[2].FormatColor.Color = 0x00FFCC00;  // yellow
+
+                        cfColorScale.ColorScaleCriteria[3].Type = Excel.XlConditionValueTypes.xlConditionValueHighestValue;
+                        cfColorScale.ColorScaleCriteria[3].FormatColor.Color = 0x0000FF00;  // green 
+            */
+
+            /*
+                        Excel.FormatConditions fcsBody = ((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["Я"] + 1]).EntireRow.FormatConditions;
+                        //   Excel.FormatConditions fcsBody = ((Excel.Range)tbSmartReport.DataBodyRange.Columns[2]).EntireColumn.FormatConditions;
+                        // Excel.FormatConditions fcsBody = ((Excel.Range)tbSmartReport.ListColumns[headerIndex["less"] + 1]).EntireColumn.FormatConditions;
+                        //Excel.FormatConditions fcsBody = (Excel.FormatConditions)((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["Я"] + 1]).EntireRow.FormatConditions.Add(Excel.XlFormatConditionType.xlColorScale, DateOperator: Excel.XlTimePeriods.xlToday);
+
+
+                        //    Excel.FormatConditions fcsBody1 = ((Excel.Range)tbSmartReport.ListColumns[headerIndex["less"] + 2]).EntireColumn.EntireRow
+                        //      Excel.ColorScale cfColorScale = (Excel.ColorScale)fcsBody.AddColorScale(2);
+                        fcsBody.AddColorScale(2);
+                     //   ((Excel.FormatCondition)fcsBody[1]).SetFirstPriority();
+                        ((Excel.ColorScale)fcsBody[1]).ColorScaleCriteria[1].Type = Excel.XlConditionValueTypes.xlConditionValueLowestValue;
+                        ((Excel.ColorScale)fcsBody[1]).ColorScaleCriteria[1].FormatColor.Color = 10285055;// Color.FromArgb(min, 0, 0);
+                        ((Excel.ColorScale)fcsBody[1]).ColorScaleCriteria[1].FormatColor.TintAndShade = 0;
+
+                        ((Excel.ColorScale)fcsBody[1]).ColorScaleCriteria[2].Type = Excel.XlConditionValueTypes.xlConditionValueHighestValue;
+                        ((Excel.ColorScale)fcsBody[1]).ColorScaleCriteria[2].FormatColor.Color = 8109667;// Color.FromArgb(min, 0, 0);
+                        ((Excel.ColorScale)fcsBody[1]).ColorScaleCriteria[2].FormatColor.TintAndShade = 0;
+            */
+            //  Excel.FormatCondition fcBody = (Excel.FormatCondition)fcsBody.Add(Type: Excel.XlFormatConditionType.xlExpression, mis, Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A8))", mis, mis, mis, mis, mis);
+
+            //            Excel.FormatCondition fcBody = (Excel.FormatCondition)workSheet.ListObjects["ReportData"];    
+            //          fcsBody[1].SetFirstPriority();
+
+
+            /*
+                        fcHeader.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
+                            fcHeader.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
+                            //fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
+                            fcHeader.Interior.TintAndShade = 0.599963377788629;
+                            fcHeader.StopIfTrue = false;
+            */
+
+            /*
+              With.DataBodyRange.Columns(2 + 1 + 1 + dayCount - 1 + 1 + 1)
+                          .FormatConditions.AddColorScale ColorScaleType:= 2
+                          .FormatConditions(.FormatConditions.count).SetFirstPriority
+
+                          .FormatConditions(1).ColorScaleCriteria(1).Type = xlConditionValueLowestValue
+                    With.FormatConditions(1).ColorScaleCriteria(1).FormatColor
+                      .Color = 10285055
+                      .TintAndShade = 0
+                    End With
+                    .FormatConditions(1).ColorScaleCriteria(2).Type = xlConditionValueHighestValue
+                    With.FormatConditions(1).ColorScaleCriteria(2).FormatColor
+                      .Color = 8109667
+                      .TintAndShade = 0
+                    End With
+                  End With
+            */
+
+
+            /*
+                //попытка ускориться - вместо цикла передать диапазон строк
                 colsChar = "";
                 for (int i = 2; i < tbSmartReport.DataBodyRange.Rows.Count; i += 2) 
                 {
@@ -1010,6 +1135,7 @@ namespace TimeWorkTracking
                 ((Excel.Range)tbSmartReport.DataBodyRange.Rows[colsChar.Remove(colsChar.Length - 1, 1)]).Font.Size = 12;
                 ((Excel.Range)tbSmartReport.Range[colsChar.Remove(colsChar.Length - 1, 1)]).Font.Size = 12;
                 ((Excel.Range)tbSmartReport.DataBodyRange.Range[colsChar.Remove(colsChar.Length - 1, 1)]).Font.Bold = true;
+                ((Excel.Range)tbSmartReport.DataBodyRange.Range["1,3,5"]).Font.Size = 12;
                 Range("I:I,F:H,L:T,AD:AE,AH:AM,AN:AS,AT:AW,BF:BI")
                 Range("21:21,25:25,29:29").Font.Bold = True
              */
@@ -1084,6 +1210,13 @@ namespace TimeWorkTracking
             ((Excel.Range)workRange).Offset[6, 0].Value = "ps";
             ((Excel.Range)workRange).Offset[7, 0].Value = "ВАЖНО. Итоговые значения получаются ПО ВНУТРЕННИМ ФОРМУЛАМ!!!, не сложением того что вы видите в таблице отчета";
             ((Excel.Range)workRange).Offset[8, 0].Value = "Например последняя колонка считается как сумма из области РАБОЧЕГО ВРЕМЕНИ в течении И вне рабочего дня с признаком - СЛУЖЕБНОЕ ЗАДАНИЕ";
+
+            //фиксация заголовка на странице
+            workSheet.Application.ActiveWindow.WindowState = Microsoft.Office.Interop.Excel.XlWindowState.xlMaximized;      //окно должно быть активно
+            workSheet.Application.ActiveWindow.FreezePanes = false;
+            workSheet.Application.ActiveWindow.SplitRow = tbSmartReport.HeaderRowRange.Row;
+            workSheet.Application.ActiveWindow.SplitColumn = 1;
+            workSheet.Application.ActiveWindow.FreezePanes = true;
 
             toolStripStatusLabelInfo.Text = "Файл подготовлен";
             //Настройки Application вернуть обратно
