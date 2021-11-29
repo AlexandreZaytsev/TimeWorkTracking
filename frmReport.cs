@@ -847,7 +847,7 @@ namespace TimeWorkTracking
             //Объявляем приложение
             excelApp = new Excel.Application
             {
-                Visible = true,//false,                                            //Отобразить Excel
+                Visible = false,                                            //Отобразить Excel
                 SheetsInNewWorkbook = 1                                     //Количество листов в рабочей книге    
             };
             workBook = excelApp.Workbooks.Add(mis);                         //Добавить рабочую книгу
@@ -1000,16 +1000,14 @@ namespace TimeWorkTracking
 
             //условное форматирование колонок данных
             Excel.ColorScale cfColorScale;
+            //Явка формат цветом
             cfColorScale = (Excel.ColorScale)tbSmartReport.ListColumns[headerIndex["Я"] + 1].DataBodyRange.FormatConditions.AddColorScale(2);
-
             cfColorScale.ColorScaleCriteria[1].Type = Excel.XlConditionValueTypes.xlConditionValueLowestValue;
             cfColorScale.ColorScaleCriteria[1].FormatColor.Color = 10285055;// Color.FromArgb(min, 0, 0);
-//            cfColorScale.ColorScaleCriteria[1].FormatColor.TintAndShade = 0;
-
             cfColorScale.ColorScaleCriteria[2].Type = Excel.XlConditionValueTypes.xlConditionValueHighestValue;
             cfColorScale.ColorScaleCriteria[2].FormatColor.Color = 8109667;// Color.FromArgb(min, 0, 0);
-//            cfColorScale.ColorScaleCriteria[2].FormatColor.TintAndShade = 0;
 
+            //Недоработка формат значением
             Excel.Databar cfDatabar;
             cfDatabar = (Excel.Databar)tbSmartReport.ListColumns[headerIndex["less"] + 1].DataBodyRange.FormatConditions.AddDatabar();
             cfDatabar.MinPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMin);
@@ -1018,9 +1016,8 @@ namespace TimeWorkTracking
             cfDatabar.Direction = (int)Excel.Constants.xlRTL;
             cfDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderNone;//.xlDataBarBorderSolid;
             ((Excel.FormatColor)cfDatabar.BarColor).Color = 5920255;
-            //            ((Excel.FormatColor)cfDatabar.BarBorder.Color).Color = 255;
-            //            ((Excel.FormatColor)cfDatabar.BarColor).TintAndShade = 0;
 
+            //Переработка формат значением
             cfDatabar = (Excel.Databar)tbSmartReport.ListColumns[headerIndex["over"] + 1].DataBodyRange.FormatConditions.AddDatabar();
             cfDatabar.MinPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMin);
             cfDatabar.MaxPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMax);
@@ -1029,77 +1026,23 @@ namespace TimeWorkTracking
             cfDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderNone;//.xlDataBarBorderSolid;
             ((Excel.FormatColor)cfDatabar.BarColor).Color = 15698432;
 
+            //Работа в рабочем граяике формат значением
+            cfDatabar = (Excel.Databar)tbSmartReport.ListColumns[headerIndex["sum"] + 1].DataBodyRange.FormatConditions.AddDatabar();
+            cfDatabar.MinPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMin);
+            cfDatabar.MaxPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMax);
+            cfDatabar.BarFillType = Excel.XlDataBarFillType.xlDataBarFillGradient;
+            cfDatabar.Direction = (int)Excel.Constants.xlContext;
+            cfDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderNone;//.xlDataBarBorderSolid;
+            ((Excel.FormatColor)cfDatabar.BarColor).Color = 8700771;
 
-
-
-
-
-
-
-
-            /*
-                        cfColorScale.ColorScaleCriteria[1].Type = Excel.XlConditionValueTypes.xlConditionValueLowestValue;
-                        cfColorScale.ColorScaleCriteria[1].FormatColor.Color = 0x000000FF;  // Red
-
-                        cfColorScale.ColorScaleCriteria[2].Type = Excel.XlConditionValueTypes.xlConditionValuePercentile;
-                        cfColorScale.ColorScaleCriteria[2].Value = 50;
-                        cfColorScale.ColorScaleCriteria[2].FormatColor.Color = 0x00FFCC00;  // yellow
-
-                        cfColorScale.ColorScaleCriteria[3].Type = Excel.XlConditionValueTypes.xlConditionValueHighestValue;
-                        cfColorScale.ColorScaleCriteria[3].FormatColor.Color = 0x0000FF00;  // green 
-            */
-
-            /*
-                        Excel.FormatConditions fcsBody = ((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["Я"] + 1]).EntireRow.FormatConditions;
-                        //   Excel.FormatConditions fcsBody = ((Excel.Range)tbSmartReport.DataBodyRange.Columns[2]).EntireColumn.FormatConditions;
-                        // Excel.FormatConditions fcsBody = ((Excel.Range)tbSmartReport.ListColumns[headerIndex["less"] + 1]).EntireColumn.FormatConditions;
-                        //Excel.FormatConditions fcsBody = (Excel.FormatConditions)((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["Я"] + 1]).EntireRow.FormatConditions.Add(Excel.XlFormatConditionType.xlColorScale, DateOperator: Excel.XlTimePeriods.xlToday);
-
-
-                        //    Excel.FormatConditions fcsBody1 = ((Excel.Range)tbSmartReport.ListColumns[headerIndex["less"] + 2]).EntireColumn.EntireRow
-                        //      Excel.ColorScale cfColorScale = (Excel.ColorScale)fcsBody.AddColorScale(2);
-                        fcsBody.AddColorScale(2);
-                     //   ((Excel.FormatCondition)fcsBody[1]).SetFirstPriority();
-                        ((Excel.ColorScale)fcsBody[1]).ColorScaleCriteria[1].Type = Excel.XlConditionValueTypes.xlConditionValueLowestValue;
-                        ((Excel.ColorScale)fcsBody[1]).ColorScaleCriteria[1].FormatColor.Color = 10285055;// Color.FromArgb(min, 0, 0);
-                        ((Excel.ColorScale)fcsBody[1]).ColorScaleCriteria[1].FormatColor.TintAndShade = 0;
-
-                        ((Excel.ColorScale)fcsBody[1]).ColorScaleCriteria[2].Type = Excel.XlConditionValueTypes.xlConditionValueHighestValue;
-                        ((Excel.ColorScale)fcsBody[1]).ColorScaleCriteria[2].FormatColor.Color = 8109667;// Color.FromArgb(min, 0, 0);
-                        ((Excel.ColorScale)fcsBody[1]).ColorScaleCriteria[2].FormatColor.TintAndShade = 0;
-            */
-            //  Excel.FormatCondition fcBody = (Excel.FormatCondition)fcsBody.Add(Type: Excel.XlFormatConditionType.xlExpression, mis, Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A8))", mis, mis, mis, mis, mis);
-
-            //            Excel.FormatCondition fcBody = (Excel.FormatCondition)workSheet.ListObjects["ReportData"];    
-            //          fcsBody[1].SetFirstPriority();
-
-
-            /*
-                        fcHeader.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
-                            fcHeader.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
-                            //fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
-                            fcHeader.Interior.TintAndShade = 0.599963377788629;
-                            fcHeader.StopIfTrue = false;
-            */
-
-            /*
-              With.DataBodyRange.Columns(2 + 1 + 1 + dayCount - 1 + 1 + 1)
-                          .FormatConditions.AddColorScale ColorScaleType:= 2
-                          .FormatConditions(.FormatConditions.count).SetFirstPriority
-
-                          .FormatConditions(1).ColorScaleCriteria(1).Type = xlConditionValueLowestValue
-                    With.FormatConditions(1).ColorScaleCriteria(1).FormatColor
-                      .Color = 10285055
-                      .TintAndShade = 0
-                    End With
-                    .FormatConditions(1).ColorScaleCriteria(2).Type = xlConditionValueHighestValue
-                    With.FormatConditions(1).ColorScaleCriteria(2).FormatColor
-                      .Color = 8109667
-                      .TintAndShade = 0
-                    End With
-                  End With
-            */
-
+            //Работа вне рабочем граяике формат значением
+            cfDatabar = (Excel.Databar)tbSmartReport.ListColumns[headerIndex["ext"] + 1].DataBodyRange.FormatConditions.AddDatabar();
+            cfDatabar.MinPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMin);
+            cfDatabar.MaxPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMax);
+            cfDatabar.BarFillType = Excel.XlDataBarFillType.xlDataBarFillGradient;
+            cfDatabar.Direction = (int)Excel.Constants.xlContext;
+            cfDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderNone;//.xlDataBarBorderSolid;
+            ((Excel.FormatColor)cfDatabar.BarColor).Color = 2668287;
 
             /*
                 //попытка ускориться - вместо цикла передать диапазон строк
