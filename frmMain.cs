@@ -870,10 +870,12 @@ namespace TimeWorkTracking
                 case "Администратор":
                     userType = true;
                     toolSetting.Visible = true;
+                    tsbtGuideMarks.Visible = true;
                     break;
                 case "Пользователь":
                     userType = false;
                     toolSetting.Visible = false;
+                    tsbtGuideMarks.Visible = false;
                     break;
             }
             reloadCaption();                            //Обновить имя главного окна

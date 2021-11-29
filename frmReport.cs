@@ -242,7 +242,7 @@ namespace TimeWorkTracking
                     tableData = new string[totalReportData.Rows.Count * 2, 2 + lenDays + 3 + dtSpecialMarks.Rows.Count - 1 + 2 + 1];   //Создаём новый двумерный массив
                     //var tableData = new[,];//[totalReportData.Rows.Count * 2, 2 + lenDays + 3 + dtSpecialMarks.Rows.Count - 1 + 2 + 1];
 
-                    string[] splitValue = new string[5];                            //шесть параметров упакованных в день
+                    //string[] splitValue = new string[5];                            //шесть параметров упакованных в день
                     double timeScheduleLess;                                        //время недоработки    
                     double timeScheduleOver;                                        //время переработки
                     string specmarkName;                                            //короткое имя спец отметки    
@@ -261,9 +261,9 @@ namespace TimeWorkTracking
 
                             tableData[i + j, 1] = drow[1].ToString();               //должность (первая строка)
                             tableData[i + j + 1, 1] = drow[0].ToString();           //фио (вторая строка)
-                            specmarkValue = 0;
-                            tmpValue = 0;
-                            specmarkName = "";
+                            //specmarkValue = 0;
+                            //tmpValue = 0;
+                            //specmarkName = "";
                             for (int col = 0; col < lenDays - 1; col++)             //Цикл по колонкам календаря отчета
                             {
                                 if (drow[4 + col] != System.DBNull.Value)           //Если данные для обработки на дату есть 
@@ -271,7 +271,7 @@ namespace TimeWorkTracking
                                     //РАБОТАЕМ СО СТРОКАМИ - ОБЯЗАТЕЛЬНОЕ ФОРМАТИРОВАНИЕ В КУЛЬТУРЕ + 8 ДЕСЯТИЧНЫХ ЗНАКОВ (см. ниже проблемы вставки в EXCEL) 
 
                                     //распакуем пришедшие данные в массив
-                                    splitValue = drow[4 + col].ToString().Substring(1, drow[4 + col].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
+                                    string[] splitValue = drow[4 + col].ToString().Substring(1, drow[4 + col].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
 
                                     //ИМЯ И ЗНАЧЕНИЕ СПЕЦОТМЕТКИ В ДАТЕ
                                     //Спецотметка (короткое имя) (первая строка)
@@ -318,25 +318,25 @@ namespace TimeWorkTracking
                                     switch (specmarkName)
                                         {
                                             case "Я":                   //+ значение итого без обеда/60
-                                                tmpValue = tmpValue + specmarkValue;
+                                                tmpValue += specmarkValue;
                                                 break;
                                             case "УД":
                                                 tmpValue = 0;
                                                 break;
                                             default:                    //+ значение итого в пределах рабочего дня/60 
-                                                tmpValue = tmpValue + (Convert.ToDouble(splitValue[4]) / 60);
+                                                tmpValue += (Convert.ToDouble(splitValue[4]) / 60);
                                             break;
                                         }
                                     tableData[i + j + 1, headerIndex[specmarkName]] = tmpValue.ToString(formatName, CultureInfo.InvariantCulture);
 
                                     //время отработанное в пределах рабочего дня
                                     tmpValue = tableData[i + j + 1, headerIndex["sum"]] == null ? 0 : Double.Parse(tableData[i + j + 1, headerIndex["sum"]], CultureInfo.InvariantCulture);
-                                    tmpValue = tmpValue + Convert.ToDouble(splitValue[4]) / 60;
+                                    tmpValue += Convert.ToDouble(splitValue[4]) / 60;
                                     tableData[i + j + 1, headerIndex["sum"]] = tmpValue.ToString(formatName, CultureInfo.InvariantCulture);//CurrentCulture);
 
                                     //время отработанное вне пределов рабочего дня
                                     tmpValue = tableData[i + j + 1, headerIndex["ext"]] == null ? 0 : Double.Parse(tableData[i + j + 1, headerIndex["ext"]], CultureInfo.InvariantCulture);
-                                    tmpValue = tmpValue + Convert.ToDouble(splitValue[5]) / 60;
+                                    tmpValue += Convert.ToDouble(splitValue[5]) / 60;
                                     tableData[i + j + 1, headerIndex["ext"]] = tmpValue.ToString(formatName, CultureInfo.InvariantCulture);
 
 
@@ -345,7 +345,7 @@ namespace TimeWorkTracking
                                     switch (specmarkName)
                                     {
                                         case "Я":       //добавим к итогам итоговое время
-                                            tmpValue = tmpValue + specmarkValue;
+                                            tmpValue += specmarkValue;
                                             break;
                                         case "СЗ":      //добавим к итогам итоговое время + время отработанное вне пределов рабочего дня
                                             tmpValue = tmpValue + specmarkValue + (Convert.ToDouble(splitValue[5]) / 60);
@@ -1017,7 +1017,7 @@ namespace TimeWorkTracking
                 for (int i = 1; i< tbSmartReport.DataBodyRange.Rows.Count; i++)
                     {
                         ((Excel.Range)tbSmartReport.DataBodyRange.Cells[i, 2]).Font.Italic = true;
-                        i = i + 1;
+                        i++;
                         ((Excel.Range)tbSmartReport.DataBodyRange.Rows[i]).Font.Size = 12;
                         ((Excel.Range)tbSmartReport.DataBodyRange.Rows[i]).Font.Bold = true;
                     }
@@ -1029,19 +1029,18 @@ namespace TimeWorkTracking
                     }
                 tbSmartReport.ListColumns[tbSmartReport.ListColumns.Count].TotalsCalculation = Excel.XlTotalsCalculation.xlTotalsCalculationNone;       //в последней колонке формулу не показывать
 
-                tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeTop].Weight = Excel.XlBorderWeight.xlMedium;                             //сверху
-                tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlMedium;                          //снизу
-
             //границы
-            ((Excel.Range)tbSmartReport.DataBodyRange.Columns[2]).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;      //фио слева
-            ((Excel.Range)tbSmartReport.DataBodyRange.Columns[2]).Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlMedium;     //фио справа
+            tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeTop].Weight = Excel.XlBorderWeight.xlMedium;              //сверху
+            tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlMedium;           //снизу
 
+            tbSmartReport.ListColumns[2].Range.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;      //фио слева    
+            tbSmartReport.ListColumns[2].Range.Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlMedium;     //фио справа
 
-            ((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["less"] + 1]).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
-            ((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["over"] + 1]).Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlMedium;
-            ((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["sum"] + 1 ]).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
-            ((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["ext"] + 1 ]).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
-            ((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["total"] + 1]).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
+            tbSmartReport.ListColumns[headerIndex["less"] + 1].Range.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
+            tbSmartReport.ListColumns[headerIndex["over"] + 1].Range.Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlMedium;
+            tbSmartReport.ListColumns[headerIndex["sum"] + 1 ].Range.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
+            tbSmartReport.ListColumns[headerIndex["ext"] + 1 ].Range.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
+            tbSmartReport.ListColumns[headerIndex["total"] + 1].Range.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
 
             toolStripStatusLabelInfo.Text = "Вставка данных заголовка";
                 string[] rowCaptionData = new string[captionData.GetUpperBound(1) + 1];
