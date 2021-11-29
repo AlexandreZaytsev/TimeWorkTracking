@@ -191,14 +191,14 @@ namespace TimeWorkTracking
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('17', N'ОЗ', N'Отпуск (от РФ) без сохранения з.п.', N'Отпуск без сохранения заработной платы при условиях, предусмотренных действующим законодательством Российской Федерации', 0) " +
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('18', N'ДБ', N'Дополнительный отпуск без сохранения з.п.', N'Ежегодный дополнительный отпуск без сохранения заработной платы', 0) " +
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('19', N'Б', N'Больничный с оплатой', N'Временная нетрудоспособность (кроме случаев, предусмотренных кодом «Т») с назначением пособия согласно законодательству', 1) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('20', N'Т', N'Больничный без оплаты', N'Временная нетрудоспособность без назначения пособия в случаях, предусмотренных законодательством', 1) " +
+                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('20', N'Т', N'Больничный без оплаты', N'Временная нетрудоспособность без назначения пособия в случаях, предусмотренных законодательством', 0) " +
 
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('24', N'ПР', N'Прогул', N'Прогулы (отсутствие на рабочем месте без уважительных причин в течение времени, установленного законодательством)', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('29', N'ЗБ', N'Забастовка', N'Забастовка (при условиях и в порядке, предусмотренных законом)', 1) " +
+                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('29', N'ЗБ', N'Забастовка', N'Забастовка (при условиях и в порядке, предусмотренных законом)', 0) " +
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('30', N'НН', N'Неявка', N'Неявки по невыясненным причинам (до выяснения обстоятельств)', 0) " +
 
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('00', 'СЗ', N'Служебное задание', '' , 1) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('00', 'РД', N'Работа из дома', '', 0) " +
+                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('00', 'РД', N'Работа из дома', '', 1) " +
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('00', 'ОД', N'Общественное дело', '', 1) " +
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('00', 'ЛД', N'Личные дела', '', 1) " +
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('00', 'УД', N'Удаленка', '', 1) ";
