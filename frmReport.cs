@@ -1004,11 +1004,11 @@ namespace TimeWorkTracking
 
             cfColorScale.ColorScaleCriteria[1].Type = Excel.XlConditionValueTypes.xlConditionValueLowestValue;
             cfColorScale.ColorScaleCriteria[1].FormatColor.Color = 10285055;// Color.FromArgb(min, 0, 0);
-            cfColorScale.ColorScaleCriteria[1].FormatColor.TintAndShade = 0;
+//            cfColorScale.ColorScaleCriteria[1].FormatColor.TintAndShade = 0;
 
             cfColorScale.ColorScaleCriteria[2].Type = Excel.XlConditionValueTypes.xlConditionValueHighestValue;
             cfColorScale.ColorScaleCriteria[2].FormatColor.Color = 8109667;// Color.FromArgb(min, 0, 0);
-            cfColorScale.ColorScaleCriteria[2].FormatColor.TintAndShade = 0;
+//            cfColorScale.ColorScaleCriteria[2].FormatColor.TintAndShade = 0;
 
             Excel.Databar cfDatabar;
             cfDatabar = (Excel.Databar)tbSmartReport.ListColumns[headerIndex["less"] + 1].DataBodyRange.FormatConditions.AddDatabar();
@@ -1016,48 +1016,18 @@ namespace TimeWorkTracking
             cfDatabar.MaxPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMax);
             cfDatabar.BarFillType = Excel.XlDataBarFillType.xlDataBarFillGradient;
             cfDatabar.Direction = (int)Excel.Constants.xlRTL;
-            cfDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderSolid;
+            cfDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderNone;//.xlDataBarBorderSolid;
             ((Excel.FormatColor)cfDatabar.BarColor).Color = 5920255;
-            ((Excel.FormatColor)cfDatabar.BarColor).TintAndShade = 0;
-            /*
-                    .FormatConditions.AddDatabar
-                    .FormatConditions(.FormatConditions.count).ShowValue = True
-                    .FormatConditions(.FormatConditions.count).SetFirstPriority
-                    With .FormatConditions(1)
-                      .MinPoint.Modify newtype:=xlConditionValueAutomaticMin
-                      .MaxPoint.Modify newtype:=xlConditionValueAutomaticMax
-                    End With
-                    With .FormatConditions(1).BarColor
-                      .Color = 5920255
-                      .TintAndShade = 0
-                    End With
-                    .FormatConditions(1).BarFillType = xlDataBarFillGradient 'xlDataBarFillSolid
-                    .FormatConditions(1).Direction = xlRTL ' xlContext  'ñïðàâà íàëåâî 'ïî êîíòåêñòó
-                    .FormatConditions(1).NegativeBarFormat.ColorType = xlDataBarColor
-                    .FormatConditions(1).BarBorder.Type = xlDataBarBorderSolid 'xlDataBarBorderNone
+            //            ((Excel.FormatColor)cfDatabar.BarBorder.Color).Color = 255;
+            //            ((Excel.FormatColor)cfDatabar.BarColor).TintAndShade = 0;
 
-                    .FormatConditions(1).AxisPosition = xlDataBarAxisAutomatic
-                    With .FormatConditions(1).AxisColor
-                      .Color = 0
-                      .TintAndShade = 0
-                    End With
-                    With .FormatConditions(1).NegativeBarFormat.Color
-                      .Color = 255
-                      .TintAndShade = 0
-                    End With
-                    .FormatConditions(1).NegativeBarFormat.BorderColorType = xlDataBarColor
-                    With .FormatConditions(1).BarBorder.Color
-                      .Color = 5920255
-                      .TintAndShade = 0
-                    End With
-                    With .FormatConditions(1).NegativeBarFormat.BorderColor
-                      .Color = 255
-                      .TintAndShade = 0
-                    End With
-                  End With
-
-            */
-
+            cfDatabar = (Excel.Databar)tbSmartReport.ListColumns[headerIndex["over"] + 1].DataBodyRange.FormatConditions.AddDatabar();
+            cfDatabar.MinPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMin);
+            cfDatabar.MaxPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMax);
+            cfDatabar.BarFillType = Excel.XlDataBarFillType.xlDataBarFillGradient;
+            cfDatabar.Direction = (int)Excel.Constants.xlContext;
+            cfDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderNone;//.xlDataBarBorderSolid;
+            ((Excel.FormatColor)cfDatabar.BarColor).Color = 15698432;
 
 
 
