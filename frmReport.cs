@@ -1068,7 +1068,7 @@ namespace TimeWorkTracking
                         ((Excel.Range)tbSmartReport.DataBodyRange.Cells[i, 2]).Font.Italic = true;
                         i++;
                         ((Excel.Range)tbSmartReport.DataBodyRange.Rows[i]).Font.Size = 12;
-                        ((Excel.Range)tbSmartReport.DataBodyRange.Rows[i]).Font.Bold = true;
+                        //((Excel.Range)tbSmartReport.DataBodyRange.Rows[i]).Font.Bold = true;
                     }
 
             //формулы итогов
@@ -1079,17 +1079,20 @@ namespace TimeWorkTracking
                 tbSmartReport.ListColumns[tbSmartReport.ListColumns.Count].TotalsCalculation = Excel.XlTotalsCalculation.xlTotalsCalculationNone;       //в последней колонке формулу не показывать
 
             //границы
-            tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeTop].Weight = Excel.XlBorderWeight.xlMedium;              //сверху
-            tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlMedium;           //снизу
+            Excel.XlBorderWeight brdWeight = Excel.XlBorderWeight.xlThin;//.xlThick;//.xlMedium;
+            tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeTop].Weight = brdWeight;             //сверху
+            tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = brdWeight;          //снизу
+            tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = brdWeight;            //снизу
+            tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = brdWeight;           //снизу
 
-            tbSmartReport.ListColumns[2].Range.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;      //фио слева    
-            tbSmartReport.ListColumns[2].Range.Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlMedium;     //фио справа
+            tbSmartReport.ListColumns[2].Range.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = brdWeight;     //фио слева    
+            tbSmartReport.ListColumns[2].Range.Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = brdWeight;    //фио справа
 
-            tbSmartReport.ListColumns[headerIndex["less"] + 1].Range.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
-            tbSmartReport.ListColumns[headerIndex["over"] + 1].Range.Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlMedium;
-            tbSmartReport.ListColumns[headerIndex["sum"] + 1 ].Range.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
-            tbSmartReport.ListColumns[headerIndex["ext"] + 1 ].Range.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
-            tbSmartReport.ListColumns[headerIndex["total"] + 1].Range.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
+            tbSmartReport.ListColumns[headerIndex["less"] + 1].Range.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = brdWeight;
+            tbSmartReport.ListColumns[headerIndex["over"] + 1].Range.Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = brdWeight;
+            tbSmartReport.ListColumns[headerIndex["sum"] + 1 ].Range.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = brdWeight;
+            tbSmartReport.ListColumns[headerIndex["ext"] + 1 ].Range.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = brdWeight;
+            tbSmartReport.ListColumns[headerIndex["total"] + 1].Range.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = brdWeight;
 
             toolStripStatusLabelInfo.Text = "Вставка данных заголовка";
                 string[] rowCaptionData = new string[captionData.GetUpperBound(1) + 1];
