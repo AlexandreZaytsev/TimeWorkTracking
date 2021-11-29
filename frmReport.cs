@@ -984,8 +984,13 @@ namespace TimeWorkTracking
             toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
 
             //условное форматирование диапазона дат
+           // colsChar =
+           //     NumberToLetters(((Excel.Range)tbSmartReport.HeaderRowRange.Columns[3]).Column) + ":" +
+           //     NumberToLetters(((Excel.Range)tbSmartReport.HeaderRowRange.Columns[3 + daysCount - 1]).Column);
             Excel.FormatConditions fcs = ((Excel.Range)tbSmartReport.HeaderRowRange.Columns[colsChar]).EntireRow.FormatConditions;
+            //Excel.FormatConditions fcs = ((Excel.Range)tbSmartReport.HeaderRowRange[tbSmartReport.HeaderRowRange.Cells[0, 3], tbSmartReport.HeaderRowRange.Cells[0, 3 + daysCount - 1]]).FormatConditions;
             Excel.FormatCondition fcHeader = (Excel.FormatCondition)fcs.Add(Type: Excel.XlFormatConditionType.xlExpression, mis, Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A8))", mis, mis, mis, mis, mis);
+            //workRange.Cells[2, 3], workRange.Cells[2, workRange.Columns.Count]]
             fcHeader.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
             fcHeader.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
             //fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
@@ -994,9 +999,8 @@ namespace TimeWorkTracking
 
 
             //условное форматирование колонок данных
-            //            Excel.ColorScale cfColorScale = (Excel.ColorScale)(MySheet.get_Range("B15", "K34").FormatConditions.AddColorScale(3));
             Excel.ColorScale cfColorScale;
-            cfColorScale = (Excel.ColorScale)((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["Я"] + 1]).EntireColumn.FormatConditions.AddColorScale(2);
+            cfColorScale = (Excel.ColorScale)tbSmartReport.ListColumns[headerIndex["Я"] + 1].DataBodyRange.FormatConditions.AddColorScale(2);
 
             cfColorScale.ColorScaleCriteria[1].Type = Excel.XlConditionValueTypes.xlConditionValueLowestValue;
             cfColorScale.ColorScaleCriteria[1].FormatColor.Color = 10285055;// Color.FromArgb(min, 0, 0);
@@ -1007,8 +1011,14 @@ namespace TimeWorkTracking
             cfColorScale.ColorScaleCriteria[2].FormatColor.TintAndShade = 0;
 
             Excel.Databar cfDatabar;
-            cfDatabar = (Excel.Databar)((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["less"] + 1]).EntireColumn.FormatConditions.AddDatabar();
-
+            cfDatabar = (Excel.Databar)tbSmartReport.ListColumns[headerIndex["less"] + 1].DataBodyRange.FormatConditions.AddDatabar();
+            cfDatabar.MinPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMin);
+            cfDatabar.MaxPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMax);
+            cfDatabar.BarFillType = Excel.XlDataBarFillType.xlDataBarFillGradient;
+            cfDatabar.Direction = (int)Excel.Constants.xlRTL;
+            cfDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderSolid;
+            ((Excel.FormatColor)cfDatabar.BarColor).Color = 5920255;
+            ((Excel.FormatColor)cfDatabar.BarColor).TintAndShade = 0;
             /*
                     .FormatConditions.AddDatabar
                     .FormatConditions(.FormatConditions.count).ShowValue = True
