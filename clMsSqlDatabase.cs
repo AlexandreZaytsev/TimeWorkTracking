@@ -170,6 +170,7 @@ namespace TimeWorkTracking
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
+                    //http://www.consultant.ru/document/cons_doc_LAW_47274/05305f7475e7ec92c38eb6e6e6b4ff56c94cd475/
                     sqlCommand.CommandText =
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('01', N'Я', N'-', N'Продолжительность работы в дневное время', 1) " +
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('02', N'Н', N'Ночные работы', N'Продолжительность работы в ночное время', 0) " +
@@ -177,14 +178,18 @@ namespace TimeWorkTracking
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('04', N'C', N'Сверхурочная работа', N'Продолжительность сверхурочной работы', 0) " +
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('05', N'ВМ', N'Работа на вахте', N'Продолжительность работы вахтовым методом', 0) " +
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('06', N'К', N'Служебная командировка', N'Служебная командировка', 0) " +
-
+                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('07', N'ПК', N'Повышение квалификации с отрывом от работы', N'Повышение квалификации с отрывом от работы', 0) " +
+                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('08', N'ПМ', N'Повышение квалификации с отрывом от работы в другой местности', N'Повышение квалификации с отрывом от работы в другой местности', 0) " +
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('09', N'ОТ', N'Отпуск', N'Ежегодный основной оплачиваемый отпуск', 1) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('10', N'ОД', N'дополнительный Отпуск', N'Ежегодный дополнительный оплачиваемый отпуск', 0) " +
-
+                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('10', N'ОД', N'Дополнительный отпуск с сохранением з.п.', N'Ежегодный дополнительный оплачиваемый отпуск', 0) " +
+                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('11', N'У', N'Отпуск на учебу с сохранением средней з.п.', N'Дополнительный отпуск в связи с обучением с сохранением среднего заработка работникам, совмещающим работу с обучением', 0) " +
+                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('12', N'УВ', N'Отпуск на учебу с частичным сохранением з.п.', N'Сокращенная продолжительность рабочего времени для обучающихся без отрыва от производства с частичным сохранением заработной платы ', 0) " +
+                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('13', N'УД', N'Отпуск на учебу без сохранения з.п.', N'Дополнительный отпуск в связи с обучением без сохранения заработной платыДополнительный отпуск в связи с обучением с сохранением среднего заработка работникам, совмещающим работу с обучением', 0) " +
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('14', N'Р', N'Отпуск по беременности и родам', N'Отпуск по беременности и родам (в связи с усыновлением новорожденного ребенка)', 0) " +
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('15', N'ОЖ', N'Отпуск по уходу за ребенком', N'Отпуск по уходу за ребенком до достижения им возраста трех лет', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('16', N'ДО', N'Отгул', N'Отпуск без сохранения заработной платы, предоставленный работнику по разрешению работодателя', 1) " +
-
+                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('16', N'ДО', N'Отпуск (от работодателя) без сохранения з.п.', N'Отпуск без сохранения заработной платы, предоставленный работнику по разрешению работодателя', 0) " +
+                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('17', N'ОЗ', N'Отпуск (от РФ) без сохранения з.п.', N'Отпуск без сохранения заработной платы при условиях, предусмотренных действующим законодательством Российской Федерации', 0) " +
+                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('18', N'ДБ', N'Дополнительный отпуск без сохранения з.п.', N'Ежегодный дополнительный отпуск без сохранения заработной платы', 0) " +
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('19', N'Б', N'Больничный с оплатой', N'Временная нетрудоспособность (кроме случаев, предусмотренных кодом «Т») с назначением пособия согласно законодательству', 1) " +
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('20', N'Т', N'Больничный без оплаты', N'Временная нетрудоспособность без назначения пособия в случаях, предусмотренных законодательством', 1) " +
 
