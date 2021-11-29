@@ -171,6 +171,8 @@ namespace TimeWorkTracking
                         ")";
                     sqlCommand.ExecuteNonQuery();
                     //http://www.consultant.ru/document/cons_doc_LAW_47274/05305f7475e7ec92c38eb6e6e6b4ff56c94cd475/
+            //        object[,] guide = new object[30, 5];
+            //        guide = { { 0} { '01', N'Я', N'-', N'Продолжительность работы в дневное время', 1} };
                     sqlCommand.CommandText =
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('01', N'Я', N'-', N'Продолжительность работы в дневное время', 1) " +
                         "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('02', N'Н', N'Ночные работы', N'Продолжительность работы в ночное время', 0) " +
