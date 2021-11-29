@@ -1082,8 +1082,8 @@ namespace TimeWorkTracking
             Excel.XlBorderWeight brdWeight = Excel.XlBorderWeight.xlThin;//.xlThick;//.xlMedium;
             tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeTop].Weight = brdWeight;             //сверху
             tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = brdWeight;          //снизу
-            tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = brdWeight;            //снизу
-            tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = brdWeight;           //снизу
+            tbSmartReport.ListColumns[1].Range.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = brdWeight;     //слева
+            tbSmartReport.ListColumns[headerIndex["total"] + 1].Range.Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = brdWeight;
 
             tbSmartReport.ListColumns[2].Range.Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = brdWeight;     //фио слева    
             tbSmartReport.ListColumns[2].Range.Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = brdWeight;    //фио справа

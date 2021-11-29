@@ -59,7 +59,8 @@ namespace TimeWorkTracking
 
                 cbSMarks.DisplayMember = "Name";
                 cbSMarks.ValueMember = "id";
-                cbSMarks.DataSource = clMsSqlDatabase.TableRequest(cs, "Select id, name From SpecialMarks where uses=1");
+//                cbSMarks.DataSource = clMsSqlDatabase.TableRequest(cs, "Select id, name From SpecialMarks where uses=1");
+                cbSMarks.DataSource = clMsSqlDatabase.TableRequest(cs, "Select id, name From SpecialMarks");      //здесь показываем все отметки из справочника отметок  
 
                 InitializeListView();
                 LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
