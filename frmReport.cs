@@ -1029,18 +1029,18 @@ namespace TimeWorkTracking
                 tbSmartReport.ListColumns[tbSmartReport.ListColumns.Count].TotalsCalculation = Excel.XlTotalsCalculation.xlTotalsCalculationNone;
 
 
-            tbSmartReport.DataBodyRange.BorderAround2(LineStyle: Excel.XlBorderWeight.xlMedium);//   2.Borders[Excel.XlBordersIndex.xlEdgeTop].Weight = Excel.XlBorderWeight.xlMedium;
-            ((Excel.Range)tbSmartReport.DataBodyRange.Columns[1]).BorderAround2(LineStyle: Excel.XlBorderWeight.xlMedium);
+            tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeTop].Weight = Excel.XlBorderWeight.xlMedium;                                                 //сверху
+            tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlMedium;                                              //снизу
 
-  //          tbSmartReport.DataBodyRange.Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlMedium;
-  //          ((Excel.Range)tbSmartReport.DataBodyRange.Columns[1]).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
-  //          ((Excel.Range)tbSmartReport.DataBodyRange.Columns[2]).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
-  //          ((Excel.Range)tbSmartReport.DataBodyRange.Columns[3]).Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlMedium;
-  //          tbSmartReport.DataBodyRange.Columns(2 + 1 + 1 + dayCount - 1 + 1).Borders(Excel.XlBordersIndex.xlEdgeLeft).Weight = Excel.XlBorderWeight.xlMedium;
-  //          tbSmartReport.DataBodyRange.Columns(2 + 1 + 1 + dayCount - 1 + 3).Borders(Excel.XlBordersIndex.xlEdgeRight).Weight = Excel.XlBorderWeight.xlMedium;
-  //          tbSmartReport.DataBodyRange.Columns(2 + 1 + 1 + dayCount - 1 + 3 + spCount + 1).Borders(Excel.XlBordersIndex.xlEdgeLeft).Weight = Excel.XlBorderWeight.xlMedium;
-  //          tbSmartReport.DataBodyRange.Columns(2 + 1 + 1 + dayCount - 1 + 3 + spCount + 2).Borders(Excel.XlBordersIndex.xlEdgeRight).Weight = Excel.XlBorderWeight.xlMedium;
-   //         tbSmartReport.DataBodyRange.Columns(2 + 1 + 1 + dayCount - 1 + 3 + spCount + 3).Borders(Excel.XlBordersIndex.xlEdgeRight).Weight = Excel.XlBorderWeight.xlMedium;
+            ((Excel.Range)tbSmartReport.DataBodyRange.Columns[2]).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;                      //фио слева
+            ((Excel.Range)tbSmartReport.DataBodyRange.Columns[2]).Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlMedium;                     //фио справа
+
+
+            ((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["less"] + 1]).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
+            ((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["over"] + 1]).Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlMedium;
+            ((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["sum"] + 1 ]).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
+            ((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["ext"] + 1 ]).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
+            ((Excel.Range)tbSmartReport.DataBodyRange.Columns[headerIndex["total"] + 1]).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlMedium;
 
 
             //колонки с третьей по предпоследнюю    
@@ -1139,7 +1139,7 @@ namespace TimeWorkTracking
 
 
             //примечания
-            workRange = (Excel.Range)workSheet.Cells[tbSmartReport.DataBodyRange.Count + 2, 2];
+            workRange = (Excel.Range)workSheet.Cells[tbSmartReport.DataBodyRange.Rows.Count + 2, 2];
             ((Excel.Range)workRange).Offset[0, 0].Value = "Примечания";
             ((Excel.Range)workRange).Offset[1, 0].Value = "Результаты представлены в двух главных областях: - РАБОЧЕЕЕ ВРЕМЯ (данные на дату) и СПЕЦИАЛЬНЫЕ ОТМЕТКИ (накопительная часть)";
             ((Excel.Range)workRange).Offset[2, 0].Value = "  - РАБОЧЕЕ ВРЕМЯ ('Я'): чистое время без обеда, учитывая сокращенные дни, рабочий график, - с разверткой по дням (без накопительной части)";
