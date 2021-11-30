@@ -347,7 +347,7 @@ namespace TimeWorkTracking
                                         case "Я":       //добавим к итогам итоговое время
                                             tmpValue += specmarkValue;
                                             break;
-                                        case "СЗ":      //добавим к итогам итоговое время + время отработанное вне пределов рабочего дня
+                                        case "К":// "СЗ":      //добавим к итогам итоговое время + время отработанное вне пределов рабочего дня
                                             tmpValue = tmpValue + specmarkValue + (Convert.ToDouble(splitValue[5]) / 60);
                                             break;
                                     }
