@@ -176,6 +176,7 @@ namespace TimeWorkTracking
         {
             bool ret = false;
             StringBuilder errorMessages = new StringBuilder();
+            /*
             var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString)
             {
                 //     var databaseName = sqlConnectionStringBuilder.InitialCatalog;
@@ -214,13 +215,15 @@ namespace TimeWorkTracking
                 }
                 return ret;
             }
+            */
+            return true;
         }
 
         //проверить соединение отдельно по соединению (на базе master) и по имени базы в списке баз
         //выдать расшифровку ошибок
         public static string GetPACSConnection(string connectionString)
         {
-            
+            /*
             if (ConnectExists(connectionString))
             {
                 if (DatabaseExists(connectionString))
@@ -230,6 +233,8 @@ namespace TimeWorkTracking
             }
             else
                 return "-9";            //соединение установить не удалось
+*/
+            return "";
         }
         //проверить соединение сразу по строке подключения
         //без выдачи ошибок
