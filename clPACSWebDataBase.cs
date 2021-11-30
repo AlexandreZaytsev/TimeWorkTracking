@@ -171,7 +171,66 @@ namespace TimeWorkTracking
 */
         }
 
+        //проверить что соединение есть в принципе на базе master
+        private static bool ConnectExists(string connectionString)
+        {
+            bool ret = false;
+            StringBuilder errorMessages = new StringBuilder();
+            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString)
+            {
+                //     var databaseName = sqlConnectionStringBuilder.InitialCatalog;
+                InitialCatalog = "master"
+            };
+            using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
+            {
+                try
+                {
+                    sqlConnection.Open();
+                    ret = true;
+                }
+                catch (SqlException ex)
+                {
+                    //https://docs.microsoft.com/ru-ru/sql/relational-databases/errors-events/database-engine-events-and-errors?view=sql-server-ver15#errors-4000-to-4999
+                    for (int i = 0; i < ex.Errors.Count; i++)
+                    {
+                        errorMessages.Append("Index #" + i + "\n" +
+                            "Message: " + ex.Errors[i].Message + "\n" +
+                            "Number: " + ex.Errors[i].Number + "\n" +
+                            "LineNumber: " + ex.Errors[i].LineNumber + "\n" +
+                            "Source: " + ex.Errors[i].Source + "\n" +
+                            "Procedure: " + ex.Errors[i].Procedure + "\n");
+                    }
+                    MessageBox.Show(errorMessages.ToString(),
+                                   "Подключение к Базе Данных",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Exclamation);
+                }
+                finally
+                {
+                    if (sqlConnection != null)
+                    {
+                        sqlConnection.Close();                         //Close the connection
+                    }
+                }
+                return ret;
+            }
+        }
 
+        //проверить соединение отдельно по соединению (на базе master) и по имени базы в списке баз
+        //выдать расшифровку ошибок
+        public static string GetPACSConnection(string connectionString)
+        {
+            
+            if (ConnectExists(connectionString))
+            {
+                if (DatabaseExists(connectionString))
+                    return connectionString;
+                else
+                    return "-1";        //база данных не существует
+            }
+            else
+                return "-9";            //соединение установить не удалось
+        }
         //проверить соединение сразу по строке подключения
         //без выдачи ошибок
         public static bool CheckConnectWithConnectionWeb(string connectionString)
