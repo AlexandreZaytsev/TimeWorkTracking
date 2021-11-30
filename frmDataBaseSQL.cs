@@ -92,6 +92,7 @@ namespace TimeWorkTracking
                     statusDB = "";
                     picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.no;
                     btCreateDBTwt.Visible = true;
+                    btTestConnectionTwt.Visible = false;
                     Messages.Append("База данных с именем:" + "\n" +
                                                 "'" + tbDatabaseTWT.Text + "'" + "\n" +
                                                 "не существует на сервере");
@@ -100,6 +101,7 @@ namespace TimeWorkTracking
                     statusDB = "";
                     picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.no;
                     btCreateDBTwt.Visible = false;
+                    btTestConnectionTwt.Visible = true;
                     string msg = cbAutentificationTWT.Text == "SQL Server Autentification" ? $"\tИмя пользователя: { tbUserNameTWT.Text}" + "\n" + $"\tПароль: {tbPasswordTWT.Text}" + "\n" : "";
                     Messages.Append("Соединение:" + "\n" +
                                 $"\tСервер: {tbServerTWT.Text}" + "\n" +
@@ -110,6 +112,7 @@ namespace TimeWorkTracking
                 default:        //все чики-пуки
                     picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.ok;
                     btCreateDBTwt.Visible = false;
+                    btTestConnectionTwt.Visible = true;
                     Messages.Append("Соединение установлено");
                     ret = true;
                     break;

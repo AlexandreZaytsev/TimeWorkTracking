@@ -349,6 +349,7 @@ namespace TimeWorkTracking
                         sqlConnection.Close();
                     }
                 }
+                CallBack_FrmSetting_outEvent.callbackEventHandler("", "", null);    //отправитьс ообщение главной форме что импрот произошел
                 System.Threading.Thread.Sleep(1000);    //пауза 1 сек чтобы главная форма успела обновить список юзеров
                 MessageBox.Show("Список сотрудников загружен в БД");
             }
@@ -440,12 +441,19 @@ namespace TimeWorkTracking
                                         string sp = result.GetString(13).Trim();
                                         switch (sp)
                                         {
+                                            case "-":
+                                                sp = "Работа в дневное время";
+                                                break;
                                             case "Больничный":
                                                 sp = "Больничный (оплачиваемый)";
                                                 break;
                                             case "Отгул":
                                                 sp = "(Отгул) Дополнительный ежегодный отпуск (оплачиваемый)";
                                                 break;
+                                            case "Отпуск":
+                                                sp = "Отпуск ежегодный (оплачиваемый)";
+                                                break;
+                                            case "Общественное дело":
                                             case "Служебное задание":
                                                 sp = "Служебная командировка";
                                                 break;
@@ -458,7 +466,7 @@ namespace TimeWorkTracking
                                         sqlCommand.CommandText = "SELECT rating FROM SpecialMarks Where id=" + specialMarksId;        
                                         int specialMarksRating = (int)sqlCommand.ExecuteScalar();           //прочитать рейтинг
                                         specialMarksRating++;                                               //поднять рейтинг                        
-                                        sqlCommand.CommandText = "UPDATE SpecialMarks Set rating = " + specialMarksRating + "  Where id=" + specialMarksId;
+                                        sqlCommand.CommandText = "UPDATE SpecialMarks Set rating = " + specialMarksRating + ", uses = 1 Where id=" + specialMarksId;
                                         sqlCommand.ExecuteNonQuery();                                       //обновить рейтинг
 
                                         string specmarkTimeStart = specialMarksId == 1 ? "NULL" : "'" + Convert.ToDateTime(result.GetValue(14)).ToString("yyyyMMdd HH:mm") + "'";

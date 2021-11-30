@@ -513,9 +513,9 @@ namespace TimeWorkTracking
             // 
             this.cbSMarks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbSMarks.FormattingEnabled = true;
-            this.cbSMarks.Location = new System.Drawing.Point(104, 5);
+            this.cbSMarks.Location = new System.Drawing.Point(101, 5);
             this.cbSMarks.Name = "cbSMarks";
-            this.cbSMarks.Size = new System.Drawing.Size(270, 26);
+            this.cbSMarks.Size = new System.Drawing.Size(273, 26);
             this.cbSMarks.TabIndex = 19;
             this.cbSMarks.SelectedIndexChanged += new System.EventHandler(this.cbSMarks_SelectedIndexChanged);
             // 
@@ -525,7 +525,7 @@ namespace TimeWorkTracking
             this.label11.Location = new System.Drawing.Point(4, 8);
             this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(97, 18);
+            this.label11.Size = new System.Drawing.Size(88, 18);
             this.label11.TabIndex = 18;
             this.label11.Text = "Отметка";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -550,7 +550,7 @@ namespace TimeWorkTracking
             this.lbSmarkStop.Location = new System.Drawing.Point(4, 68);
             this.lbSmarkStop.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbSmarkStop.Name = "lbSmarkStop";
-            this.lbSmarkStop.Size = new System.Drawing.Size(97, 18);
+            this.lbSmarkStop.Size = new System.Drawing.Size(88, 18);
             this.lbSmarkStop.TabIndex = 16;
             this.lbSmarkStop.Text = "Период до";
             this.lbSmarkStop.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -561,10 +561,10 @@ namespace TimeWorkTracking
             this.smDStop.CustomFormat = "ddMMMM.yyyy";
             this.smDStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.smDStop.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.smDStop.Location = new System.Drawing.Point(105, 64);
+            this.smDStop.Location = new System.Drawing.Point(101, 64);
             this.smDStop.Margin = new System.Windows.Forms.Padding(2);
             this.smDStop.Name = "smDStop";
-            this.smDStop.Size = new System.Drawing.Size(195, 26);
+            this.smDStop.Size = new System.Drawing.Size(199, 26);
             this.smDStop.TabIndex = 15;
             this.smDStop.ValueChanged += new System.EventHandler(this.checkDateSpecialMarks);
             // 
@@ -588,7 +588,7 @@ namespace TimeWorkTracking
             this.lbSmarkStart.Location = new System.Drawing.Point(4, 38);
             this.lbSmarkStart.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbSmarkStart.Name = "lbSmarkStart";
-            this.lbSmarkStart.Size = new System.Drawing.Size(97, 18);
+            this.lbSmarkStart.Size = new System.Drawing.Size(88, 18);
             this.lbSmarkStart.TabIndex = 13;
             this.lbSmarkStart.Text = "Период от";
             this.lbSmarkStart.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -599,10 +599,10 @@ namespace TimeWorkTracking
             this.smDStart.CustomFormat = "ddMMMM.yyyy";
             this.smDStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.smDStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.smDStart.Location = new System.Drawing.Point(105, 34);
+            this.smDStart.Location = new System.Drawing.Point(101, 34);
             this.smDStart.Margin = new System.Windows.Forms.Padding(2);
             this.smDStart.Name = "smDStart";
-            this.smDStart.Size = new System.Drawing.Size(195, 26);
+            this.smDStart.Size = new System.Drawing.Size(199, 26);
             this.smDStart.TabIndex = 0;
             this.smDStart.ValueChanged += new System.EventHandler(this.checkDateSpecialMarks);
             // 
@@ -643,7 +643,7 @@ namespace TimeWorkTracking
             // tbPacsIn
             // 
             this.tbPacsIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tbPacsIn.Location = new System.Drawing.Point(102, 3);
+            this.tbPacsIn.Location = new System.Drawing.Point(101, 3);
             this.tbPacsIn.Name = "tbPacsIn";
             this.tbPacsIn.Size = new System.Drawing.Size(64, 29);
             this.tbPacsIn.TabIndex = 2;

@@ -83,7 +83,7 @@ namespace TimeWorkTracking
                     sql = "\r\nINSERT INTO CalendarLengthDay(name) VALUES ";
                     sqlCommand.CommandText = 
                         sql + "(N'Короткий') " +
-                        sql + "VALUES (N'Полный') " +
+                        sql + "(N'Полный') " +
                         "\r\nINSERT INTO CalendarLengthDay(name) VALUES (N'Длинный')";
                     sqlCommand.ExecuteNonQuery();
 
@@ -170,8 +170,8 @@ namespace TimeWorkTracking
                     sqlCommand.CommandText = "CREATE TABLE SpecialMarks (" +
                         "id int PRIMARY KEY IDENTITY, " +
                         "cd datetime NOT NULL DEFAULT GETDATE(), " +
-                        "digitalCode VARCHAR(4) NOT NULL, " +                                       //числовой код 
-                        "letterCode VARCHAR(4) NOT NULL, " +                                        //строковый код
+                        "digitalCode VARCHAR(4) NOT NULL UNIQUE, " +                                //*числовой код 
+                        "letterCode VARCHAR(4) NOT NULL UNIQUE, " +                                 //*строковый код
                         "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
                         "note VARCHAR(1024) NULL, " +                                               //расшифровка
                         "rating int DEFAULT 0, " +                                                  //рейтинг для сортировки    
@@ -182,8 +182,8 @@ namespace TimeWorkTracking
                     sql = "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, rating, uses) VALUES ";
                     sqlCommand.CommandText =
                         //Продолжительность работы
-                        sql + "('01', N'Я',  N'-', N'Продолжительность работы в дневное время', 0, 1) " +
-                        sql + "('02', N'Н',  N'Ночные работы', N'Продолжительность работы в ночное время', 0, 0) " +
+                        sql + "('01', N'Я',  N'Работа в дневное время', N'Продолжительность работы в дневное время', 0, 1) " +
+                        sql + "('02', N'Н',  N'Работа в ночное время', N'Продолжительность работы в ночное время', 0, 0) " +
                         sql + "('03', N'РВ', N'Работа в выходные', N'Продолжительность работы в выходные и нерабочие праздничные дни', 0, 0) " +
                         sql + "('04', N'C',  N'Сверхурочная работа', N'Продолжительность сверхурочной работы', 0, 0) " +
                         sql + "('05', N'ВМ', N'Работа на вахте', N'Продолжительность работы вахтовым методом', 0, 0) " +
@@ -230,9 +230,9 @@ namespace TimeWorkTracking
                         //местные кодировки
                        // sql + "('00', 'СЗ', N'Служебное задание', '', 0, 1) " +
                         sql + "('100', 'РД', N'Работа из дома', '', 0, 1) " +
-                        sql + "('101', 'ОД', N'Общественное дело', '', 0, 1) " +
+                       // sql + "('101', 'ОД', N'Общественное дело', '', 0, 1) " +
                         sql + "('102', 'ЛД', N'Личные дела', '', 0, 1) " +
-                        sql + "('103', 'УД', N'Удаленка', '', 0, 1) ";
+                        sql + "('103', 'УДЛ', N'Удаленка', '', 0, 1) ";
                     sqlCommand.ExecuteNonQuery();
 
                     //таблицы

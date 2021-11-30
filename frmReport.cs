@@ -282,7 +282,7 @@ namespace TimeWorkTracking
                                     //Корректировка значений спец отметок
                                     switch (specmarkName)
                                     {
-                                        case "УД":
+                                        case "УДЛ":
                                             specmarkValue = 0;
                                             break;
                                     }
@@ -320,7 +320,7 @@ namespace TimeWorkTracking
                                             case "Я":                   //+ значение итого без обеда/60
                                                 tmpValue += specmarkValue;
                                                 break;
-                                            case "УД":
+                                            case "УДЛ":
                                                 tmpValue = 0;
                                                 break;
                                             default:                    //+ значение итого в пределах рабочего дня/60 

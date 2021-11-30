@@ -60,7 +60,8 @@ namespace TimeWorkTracking
                 cbSMarks.DisplayMember = "Name";
                 cbSMarks.ValueMember = "id";
 //                cbSMarks.DataSource = clMsSqlDatabase.TableRequest(cs, "Select id, name From SpecialMarks where uses=1");
-                cbSMarks.DataSource = clMsSqlDatabase.TableRequest(cs, "Select id, name From SpecialMarks order by uses desc, name , digitalCode");      //здесь показываем все отметки из справочника отметок  
+                cbSMarks.DataSource = clMsSqlDatabase.TableRequest(cs, "Select id, name From SpecialMarks where uses=1 order by rating desc, name , digitalCode");      //здесь показываем все отметки из справочника отметок  
+                cbSMarks.SelectedValue = 1;                                 //встать на первый элемент   
 
                 InitializeListView();
                 LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
@@ -202,7 +203,21 @@ namespace TimeWorkTracking
                     udAfterH.Value = dt;
                     udAfterM.Value = dt;
 
-                    cbSMarks.Text = "-";                                                    //тип специальной отметки
+                    cbSMarks.SelectedValue = 1;//cbSMarks.Text = "-";                       //тип специальной отметки
+                    /*
+                    https://stackoverflow.com/questions/59825268/get-index-from-combobox-based-on-valuemember
+                      Получение индекса по значению → set SelectdIndex
+                    var value = 1;  //это работа в дневное время (id порядковое из бд)
+                    var item = cbSMarks.Items.Cast<Object>().Where(x => cbSMarks.extGetItemValue(x).Equals(value)).FirstOrDefault();
+                    var index = cbSMarks.Items.IndexOf(item);
+                    cbSMarks.SelectedIndex = index;
+
+                      Получение элемента по значению → задать SelectedItem
+                    var value = 3;
+                    var item = cbSMarks.Items.Cast<Object>().Where(x => cbSMarks.extGetItemValue(x).Equals(value)).FirstOrDefault();
+                    cbSMarks.SelectedItem = item;                     
+                     */
+
 
                     //дата время начала специальной отметки
                     dt = DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH:mm"));
@@ -401,18 +416,18 @@ namespace TimeWorkTracking
         //изменение специальных отметок
         private void cbSMarks_SelectedIndexChanged(object sender, EventArgs e)
         {
-            smDStart.Enabled = cbSMarks.Text != "-";
-            smTStart.Enabled = cbSMarks.Text != "-";
-            smDStop.Enabled = cbSMarks.Text != "-";
-            smTStop.Enabled = cbSMarks.Text != "-";
+            smDStart.Enabled = (int)cbSMarks.SelectedValue != 1;//   cbSMarks.Text != "-";
+            smTStart.Enabled = (int)cbSMarks.SelectedValue != 1;//   cbSMarks.Text != "-";
+            smDStop.Enabled = (int)cbSMarks.SelectedValue != 1;//   cbSMarks.Text != "-";
+            smTStop.Enabled = (int)cbSMarks.SelectedValue != 1;//   cbSMarks.Text != "-";
         }
-
         //проверка дат в специальных отметках
         private void checkDateSpecialMarks(object sender, EventArgs e)
         {
-            if ((cbSMarks.Text != "-" && cbSMarks.Text != "") && mainPanelRegistration.Enabled && !readType)
-            {
-                if (DateTime.Compare(DateTime.Parse(smDStart.Value.ToString("yyyy-MM-dd ") + smTStart.Value.ToString("HH:mm ")),
+//            if ((cbSMarks.Text != "-" && cbSMarks.Text != "") && mainPanelRegistration.Enabled && !readType)
+            if (((int)cbSMarks.SelectedValue != 1 && cbSMarks.Text != "") && mainPanelRegistration.Enabled && !readType)
+                {
+                    if (DateTime.Compare(DateTime.Parse(smDStart.Value.ToString("yyyy-MM-dd ") + smTStart.Value.ToString("HH:mm ")),
                                      DateTime.Parse(smDStop.Value.ToString("yyyy-MM-dd ") + smTStop.Value.ToString("HH:mm "))) > 0)
                 {
                                         MessageBox.Show("Дата/Время окончания периода должно быть больше Даты/Времени начала периода","Ошибка установки диапазона дат",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
@@ -484,123 +499,126 @@ namespace TimeWorkTracking
             string timeOut;
             int spCount;
 
-            switch (cbSMarks.Text) 
+            if (cbSMarks.Text == "") //спец отметок нет - возможно смотрим историю (и спецотметка отключена в настоящий момент)
             {
-                case "":                                                        //спец отметок нет - возможно смотрим историю (и спецотметка отключена в настоящий момент)
-                    MessageBox.Show(
-                        "Специальная отметка не указана" + "\r\n" +
-                        "  возможно Вы пытаетесь перезаписать старые данные" + "\r\n" +
-                        "  крайне не рекомендуем этим заниматься" + "\r\n\r\n" +
-                        "операция будет отменена" + "\r\n",
-                        "Попытка вмешательства в историю",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning
-                        );
-                    break;
-                case "-":                                                       //спец отметка Явка
-                    vDate = mcRegDate.SelectionStart;                           //дата из формы + время их формы
-                    vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //Время прихода
-                    vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
-                    WriteRecord(
-                        vDate, 
-                        vDateIn, 
-                        vDateOut, 
-                        (int)((DataRowView)cbSMarks.SelectedItem).Row["id"], 
-                        "-", 
-                        "-", 
-                        tbNote.Text.Trim());//добавить/обновить запись прохода
-                    break;
-
-                default:                                                            //спец отметки есть
-                    vSpDateIn = smDStart.Value.ToString("yyyy-MM-dd") + " " + smTStart.Value.ToString("HH:mm"); //строка Дата начала спец. отметок
-                    vSpDateOut = smDStop.Value.ToString("yyyy-MM-dd") + " " + smTStop.Value.ToString("HH:mm");  //строка Дата окончания спец. отметок
-                    spCount = (DateTime.Parse(vSpDateOut) - DateTime.Parse(vSpDateIn)).Days;                    //количество дней в спецотметках
-
-                    if (spCount == 0)                                           //спец отметки в пределах дня    
-                    {
-                        vDate = DateTime.Parse(vSpDateIn);                      //дата из начала спец отметок + время их формы
+                MessageBox.Show(
+                    "Специальная отметка не указана" + "\r\n" +
+                    "  возможно Вы пытаетесь перезаписать старые данные" + "\r\n" +
+                    "  крайне не рекомендуем этим заниматься" + "\r\n\r\n" +
+                    "операция будет отменена" + "\r\n",
+                    "Попытка вмешательства в историю",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                    );
+            }
+            else 
+            { 
+                switch ((int)cbSMarks.SelectedValue) 
+                {
+                    case 1:                                                         //спец отметка Явка
+                        vDate = mcRegDate.SelectionStart;                           //дата из формы + время их формы
                         vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //Время прихода
                         vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
+                        WriteRecord(
+                            vDate, 
+                            vDateIn, 
+                            vDateOut, 
+                            (int)((DataRowView)cbSMarks.SelectedItem).Row["id"], 
+                            "-", 
+                            "-", 
+                            tbNote.Text.Trim());//добавить/обновить запись прохода
+                        break;
 
-                        //обработка исключений
-                        response = DialogResult.Yes;
-                        if (DateTime.Compare(mcRegDate.SelectionStart.Date, DateTime.Parse(vSpDateIn).Date) != 0)    //дата регистрации и дата начала спец отметок              
-                        {
-                            response = MessageBox.Show(
-                                "Обратите внимание на даты" + "\r\n" +
-                                "  " + mcRegDate.SelectionStart.ToString("dd.MM.yyyy") + " - текущая дата Регистрации" + "\r\n" +
-                                "  " + DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - дата начала Специальных отметок" + "\r\n" +
-                                "не совпадают" + "\r\n" +
-                                " *данные будут записаны на Дату начала Специальных отметок" + "\r\n\r\n" +
-                                "Продолжить?" + "\r\n",
-                                "Изменение даты регистрации",
-                                MessageBoxButtons.YesNo,
-                                MessageBoxIcon.Information,
-                                MessageBoxDefaultButton.Button2,
-                                MessageBoxOptions.DefaultDesktopOnly
-                                );
-                        }
-                        if (response == DialogResult.Yes)
-                            WriteRecord(
-                                vDate,
-                                vDateIn,
-                                vDateOut,
-                                (int)((DataRowView)cbSMarks.SelectedItem).Row["id"],
-                                vSpDateIn,
-                                vSpDateOut,
-                                tbNote.Text.Trim());//добавить/обновить запись прохода
-                    }
-                    else                                                        //спец отметки более одного дня
-                    {
-                        timeIn = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[3].Text;      //Время начала работы по графику
-                        timeOut = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[4].Text;     //Время окончания работы по графику
+                    default:                                                            //спец отметки есть
+                        vSpDateIn = smDStart.Value.ToString("yyyy-MM-dd") + " " + smTStart.Value.ToString("HH:mm"); //строка Дата начала спец. отметок
+                        vSpDateOut = smDStop.Value.ToString("yyyy-MM-dd") + " " + smTStop.Value.ToString("HH:mm");  //строка Дата окончания спец. отметок
+                        spCount = (DateTime.Parse(vSpDateOut) - DateTime.Parse(vSpDateIn)).Days;                    //количество дней в спецотметках
 
-                        //обработка исключений
-                        msg = "";
-                        response = DialogResult.Yes;
-                        if (DateTime.Compare(mcRegDate.SelectionStart.Date, DateTime.Parse(vSpDateIn).Date) != 0)   //дата регистрации и дата начала спец отметок              
+                        if (spCount == 0)                                           //спец отметки в пределах дня    
                         {
-                            msg = "Обратите внимание на даты" + "\r\n" +
-                             "  " + mcRegDate.SelectionStart.ToString("dd.MM.yyyy") + " - текущая дата Регистрации" + "\r\n" +
-                             "  " + DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - дата начала Специальных отметок" + "\r\n" +
-                             "не совпадают" + "\r\n" +
-                             " *данные будут записаны на Дату начала Специальных отметок" + "\r\n\r\n";
-                        }
-                        msg += DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + "-" + DateTime.Parse(vSpDateOut).ToString("dd.MM.yyyy") +
-                            " - период действия Специальных отметок превышает одни сутки" + "\r\n" +
-                            " *данные будут записаны на данный период с использованием времени из графика сотрудника " +
-                            DateTime.Parse(timeIn).ToString("HH:mm") + "-" + DateTime.Parse(timeOut).ToString("HH:mm") + "\r\n\r\n" +
-                            "Продолжить?" + "\r\n";
-                        response = MessageBox.Show(
-                                msg,
-                                "Изменение даты регистрации",
-                                MessageBoxButtons.YesNo,
-                                MessageBoxIcon.Information,
-                                MessageBoxDefaultButton.Button2,
-                                MessageBoxOptions.DefaultDesktopOnly
-                                );
-                        if (response == DialogResult.Yes)
-                        {
-                            for (int i = 0; i <= spCount; i++)                          //цикл по всем датам диапазона спец отметок начиная со следующего дня 
+                            vDate = DateTime.Parse(vSpDateIn);                      //дата из начала спец отметок + время их формы
+                            vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //Время прихода
+                            vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
+
+                            //обработка исключений
+                            response = DialogResult.Yes;
+                            if (DateTime.Compare(mcRegDate.SelectionStart.Date, DateTime.Parse(vSpDateIn).Date) != 0)    //дата регистрации и дата начала спец отметок              
                             {
-                                vDate = DateTime.Parse(vSpDateIn).AddDays(i);           //смещение на день
-                                vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + DateTime.Parse(timeIn).ToString("HH:mm"));        //+ Время начала из графика
-                                vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + DateTime.Parse(timeOut).ToString("HH:mm"));      //+ Время окончания из графика
-                                if (pCalendar.chechWorkDay(vDate))                  //если это рабочий день
-                                    WriteRecord(
-                                        vDate,
-                                        vDateIn,
-                                        vDateOut,
-                                        (int)((DataRowView)cbSMarks.SelectedItem).Row["id"],
-                                        vSpDateIn, 
-                                        vSpDateOut,
-                                        tbNote.Text.Trim());//добавить/обновить запись прохода
+                                response = MessageBox.Show(
+                                    "Обратите внимание на даты" + "\r\n" +
+                                    "  " + mcRegDate.SelectionStart.ToString("dd.MM.yyyy") + " - текущая дата Регистрации" + "\r\n" +
+                                    "  " + DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - дата начала Специальных отметок" + "\r\n" +
+                                    "не совпадают" + "\r\n" +
+                                    " *данные будут записаны на Дату начала Специальных отметок" + "\r\n\r\n" +
+                                    "Продолжить?" + "\r\n",
+                                    "Изменение даты регистрации",
+                                    MessageBoxButtons.YesNo,
+                                    MessageBoxIcon.Information,
+                                    MessageBoxDefaultButton.Button2,
+                                    MessageBoxOptions.DefaultDesktopOnly
+                                    );
+                            }
+                            if (response == DialogResult.Yes)
+                                WriteRecord(
+                                    vDate,
+                                    vDateIn,
+                                    vDateOut,
+                                    (int)((DataRowView)cbSMarks.SelectedItem).Row["id"],
+                                    vSpDateIn,
+                                    vSpDateOut,
+                                    tbNote.Text.Trim());//добавить/обновить запись прохода
+                        }
+                        else                                                        //спец отметки более одного дня
+                        {
+                            timeIn = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[3].Text;      //Время начала работы по графику
+                            timeOut = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[4].Text;     //Время окончания работы по графику
+
+                            //обработка исключений
+                            msg = "";
+                            response = DialogResult.Yes;
+                            if (DateTime.Compare(mcRegDate.SelectionStart.Date, DateTime.Parse(vSpDateIn).Date) != 0)   //дата регистрации и дата начала спец отметок              
+                            {
+                                msg = "Обратите внимание на даты" + "\r\n" +
+                                 "  " + mcRegDate.SelectionStart.ToString("dd.MM.yyyy") + " - текущая дата Регистрации" + "\r\n" +
+                                 "  " + DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - дата начала Специальных отметок" + "\r\n" +
+                                 "не совпадают" + "\r\n" +
+                                 " *данные будут записаны на Дату начала Специальных отметок" + "\r\n\r\n";
+                            }
+                            msg += DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + "-" + DateTime.Parse(vSpDateOut).ToString("dd.MM.yyyy") +
+                                " - период действия Специальных отметок превышает одни сутки" + "\r\n" +
+                                " *данные будут записаны на данный период с использованием времени из графика сотрудника " +
+                                DateTime.Parse(timeIn).ToString("HH:mm") + "-" + DateTime.Parse(timeOut).ToString("HH:mm") + "\r\n\r\n" +
+                                "Продолжить?" + "\r\n";
+                            response = MessageBox.Show(
+                                    msg,
+                                    "Изменение даты регистрации",
+                                    MessageBoxButtons.YesNo,
+                                    MessageBoxIcon.Information,
+                                    MessageBoxDefaultButton.Button2,
+                                    MessageBoxOptions.DefaultDesktopOnly
+                                    );
+                            if (response == DialogResult.Yes)
+                            {
+                                for (int i = 0; i <= spCount; i++)                          //цикл по всем датам диапазона спец отметок начиная со следующего дня 
+                                {
+                                    vDate = DateTime.Parse(vSpDateIn).AddDays(i);           //смещение на день
+                                    vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + DateTime.Parse(timeIn).ToString("HH:mm"));        //+ Время начала из графика
+                                    vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + DateTime.Parse(timeOut).ToString("HH:mm"));      //+ Время окончания из графика
+                                    if (pCalendar.chechWorkDay(vDate))                  //если это рабочий день
+                                        WriteRecord(
+                                            vDate,
+                                            vDateIn,
+                                            vDateOut,
+                                            (int)((DataRowView)cbSMarks.SelectedItem).Row["id"],
+                                            vSpDateIn, 
+                                            vSpDateOut,
+                                            tbNote.Text.Trim());//добавить/обновить запись прохода
+                                }
                             }
                         }
-                    }
-                break;
+                    break;
+                }
             }
-
             //перемещение по списку
             if (btInsertUpdate.Text != "Обновить")
             {

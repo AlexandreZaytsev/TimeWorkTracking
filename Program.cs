@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 //using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+
 
 
 namespace TimeWorkTracking
@@ -43,6 +45,24 @@ namespace TimeWorkTracking
     -----------------------------------------------------------------------------------------------------------*/
     public static class Extension
     {
+
+        //получить значение элемента (для выбора по DisplayMember или  )
+        public static object extGetItemValue(this ListControl list, object item)
+        {
+            if (item == null)
+                throw new ArgumentNullException("item");
+
+            if (string.IsNullOrEmpty(list.ValueMember))
+                return item;
+
+            var property = TypeDescriptor.GetProperties(item)[list.ValueMember];
+            if (property == null)
+                throw new ArgumentException(
+                    string.Format("item doesn't contain '{0}' property or column.",
+                    list.ValueMember));
+            return property.GetValue(item);
+        }
+
         //получить индекс выделенной строки ListView
         public static int extSelectedIndex(this ListView listView)
         {
