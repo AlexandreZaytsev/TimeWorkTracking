@@ -1,0 +1,241 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Data;
+using System.Data.OleDb;
+using System.IO;
+using System.Net;
+using System.Threading;
+using System.Collections.Specialized;
+using System.Web.Script.Serialization;
+using System.Web;
+using System.Windows.Forms;
+
+namespace TimeWorkTracking
+{
+
+
+    class clWebServiceDataBase
+    {
+
+        //получить хеш строку MD5   
+        private static string getMD5(string input)
+        {
+            // Use input string to calculate MD5 hash
+            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+            {
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                // Convert the byte array to hexadecimal string
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("X2"));
+                }
+                return sb.ToString();
+            }
+        }
+
+        /*
+        // utility method to read the cookie value:
+        public static string ReadCookie(string cookieName)
+        {
+            var cookies = HttpContext.Current.Request.Cookies;
+            var cookie = cookies.Get(cookieName);
+            if (cookie != null)
+                return cookie.Value;
+            return null;
+        }
+        
+        private void dd()
+        {
+            string url = "http://site.com/";
+
+            using (var webClient = new WebClient())
+            {
+                // Создаём коллекцию параметров
+                var pars = new NameValueCollection();
+
+                // Добавляем необходимые параметры в виде пар ключ, значение
+                pars.Add("format", "json");
+
+                // Посылаем параметры на сервер
+                // Может быть ответ в виде массива байт
+                var response = webClient.UploadValues(url, pars);
+            }
+        }
+        */
+
+
+        /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        'функция Отправка GET POST запроса на хост
+        '----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        ' REQUEST_URI - запрашиваемый сайт
+        ' REQUEST_METHOD - метод запроса
+        '  GET - запрашивает данные из указанного ресурса
+        '  POST - отправляет данных, подлежащие обработке, на указанный ресурс
+        ' QUERY_STRING - запрос
+        ' Content-Type: application/x-www-form-urlencoded идентифицирует тип передаваемых данных
+        ' Accept: text/html, text/plain, image/gif, image/jpeg   какие типы документов он "понимает"
+        //http://scriptcoding.ru/2013/03/19/protocol-http/
+        //http://www.read.excode.ru/art5783p3.html
+        */
+        private static string getDataFromURL(string host, string request)
+        {
+            string ret="";
+            //        https://stackoverflow.com/questions/4015324/how-to-make-an-http-post-web-request
+
+            // WebClient:
+            try
+            {
+                using (var webClient = new WebClient())
+                {
+                    webClient.Encoding = Encoding.UTF8;
+                    webClient.Headers[HttpRequestHeader.ContentType] = "application/json";
+                    ret = webClient.UploadString(host, request);// "http://some/address", "{some:\"json data\"}");
+                    /*
+                    JavaScriptSerializer serializer = new JavaScriptSerializer();
+                    byte[] requestData = Encoding.ASCII.GetBytes(serializer.Serialize(postRequest));
+                    HttpWebRequest request = WebRequest.Create(requestUrl) as HttpWebRequest;
+                    request.Method = "POST";
+                    request.ContentType = "application/json";
+                    request.ContentLength = requestData.Length;
+                    request.ContentType = "application/json";
+                    request.Expect = "application/json";
+                    request.Headers.Set("Authorization", ReadCookie("AuthCookie"));
+                    request.GetRequestStream().Write(requestData, 0, requestData.Length);
+                    using (var response1 = (HttpWebResponse)request.GetResponse())
+                    {
+                        var reader = new StreamReader(response1.GetResponseStream());
+                        var objText = reader.ReadToEnd(); // objText will have the value
+                    }
+                    */
+                    /*
+                     //http://www.cbr.ru/scripts/XML_daily.asp
+                Stream data = web.OpenRead(url);
+                StreamReader reader = new StreamReader(data, Encoding.GetEncoding(1251));
+                html = reader.ReadLine();
+                data.Close();
+                reader.Close();
+                FileStream file = new FileStream("data.txt", FileMode.Create, FileAccess.ReadWrite);
+                StreamWriter wData = new StreamWriter(file);
+                wData.Write(html);
+                wData.Close(); 
+                     
+                     */
+                }
+            }
+            catch
+            {
+                MessageBox.Show("No data from CB.");
+            }
+            return ret;
+        }
+
+        /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        'запрос к серверу и получение ответа
+        '----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        ' url - адрес сервера
+        ' return - ответ сервера
+        'прочитать данные из СКУД
+        */
+        private static string getRestData(string url, string pointHostName, string req, int printMsg)
+        {
+            string ret = "";
+            try
+            {
+                ret = getDataFromURL(url + pointHostName, req);
+                if (printMsg == 1)
+                    printDebug(pointHostName, req, ret);                //отчет о операции
+            }
+            catch
+            {
+                MessageBox.Show("No data from CB.");
+                //                ret = "" ' CStr("{'Credentials':null,'Language':'','UserSID':'','UserToken':0}")
+            }
+            return ret;
+        }
+
+        //напечатать отладочную информацию
+        private static void printDebug(string name, string req, string ret) 
+        {
+/*
+            Dim page
+                                 page = vbLf 'vbCr 'vbLf ' vbCrLf
+                                 Debug.Print "  Host: " & name & page
+                                 Debug.Print "  Requesr: " & page & req & page
+                                 Debug.Print "  Response: " & page & ret & page
+                              End Sub
+*/
+        }
+
+
+        //проверить соединение сразу по строке подключения
+        //без выдачи ошибок
+        public static bool CheckConnectWithConnectionWeb(string connectionString)
+        {
+            return FullConnectExists(connectionString);
+        }
+
+        //проверить что и соединение и бд существует
+        private static bool FullConnectExists(string connectionString)
+        {
+            bool ret = false;
+            string httpRet = "";
+            if (connectionString != "")
+            {
+                string pass = getMD5(getMD5(getMD5(connectionString) + "F593B01C562548C6B7A31B30884BDE53"));
+                string pointHostName = "Authenticate";
+                //-------------авторизация
+                string req =
+                    "{" +
+                    "\"PasswordHash\":\" + pass + \", " +
+                    "\"UserName\":\" + srvLogint + \"" +
+                    "}";
+
+                httpRet = getRestData("http://" + "srvHost" + ":40001/json/", pointHostName, req, 0);
+                if (httpRet.Length > 0) 
+                {
+                    //                     private static JavaScriptSerializer _Serializer = new JavaScriptSerializer();
+                    /*
+                            Set json = pwJsonConverter.ParseJSON(ret)
+                                         ret = json("UserSID")
+                                        Set json = Nothing
+                    */
+                }
+            }
+
+            return ret;
+        }
+/*
+       //       StringBuilder errorMessages = new StringBuilder();
+     //  var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+     //  using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
+       {
+           try
+           {
+      //         sqlConnection.Open();
+               ret = true;
+           }
+           catch ()//SqlException)
+           { }
+           finally
+           {
+               if (sqlConnection != null)
+               {
+                   sqlConnection.Close();                         //Close the connection
+               }
+           }
+       }
+       */
+// }
+//      return ret;
+//    }
+
+
+
+
+    }
+}
