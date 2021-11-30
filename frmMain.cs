@@ -760,8 +760,8 @@ namespace TimeWorkTracking
                 "author = " + "N'" + Environment.UserName.ToString() + "', " +
                 "passTimeStart = " + "'" + vDateIn.ToString("yyyyMMdd") + "', " +
                 "passTimeStop = " + "'" + vDateOut.ToString("yyyyMMdd") + "', " +
-                "pacsTimeStart = " + (pacsTimeStart == "" ? "NULL" : "'" + pacsTimeStart + "'") + ", " +
-                "pacsTimeStop = " + (pacsTimeStop == "" ? "NULL" : "'" + pacsTimeStop + "'") + ", " +
+//                "pacsTimeStart = " + (pacsTimeStart == "" ? "NULL" : "'" + pacsTimeStart + "'") + ", " +
+//                "pacsTimeStop = " + (pacsTimeStop == "" ? "NULL" : "'" + pacsTimeStop + "'") + ", " +
                 "timeScheduleFact = " + timeScheduleFact + ", " +
                 "timeScheduleWithoutLunch = " + timeScheduleWithoutLunch + ", " +
                 "timeScheduleLess = " + timeScheduleLess + ", " +
@@ -781,8 +781,8 @@ namespace TimeWorkTracking
                     "passId, " +                                    //*внешний id пользователя
                     "passTimeStart, " +                             //время первого входа (без даты)
                     "passTimeStop, " +                              //время последнего выхода (без даты)
-                    "pacsTimeStart, " +                             //время первого входа по СКУД (без даты)
-                    "pacsTimeStop, " +                              //время последнего выхода по СКУД (без даты)
+//                    "pacsTimeStart, " +                             //время первого входа по СКУД (без даты)
+//                    "pacsTimeStop, " +                              //время последнего выхода по СКУД (без даты)
                     "timeScheduleFact, " +                          //отработанное время (мин)
                     "timeScheduleWithoutLunch, " +                  //отработанное время без обеда (мин)
                     "timeScheduleLess, " +                          //время недоработки (мин)
@@ -799,8 +799,8 @@ namespace TimeWorkTracking
                     "'" + keyUser + "', " +
                     "'" + vDateIn.ToString("yyyyMMdd") + "', " +
                     "'" + vDateOut.ToString("yyyyMMdd") + "', " +
-                    (pacsTimeStart == "" ? "NULL" : "'" + pacsTimeStart + "'") + ", " +
-                    (pacsTimeStop == "" ? "NULL" : "'" + pacsTimeStop + "'") + ", " +
+//                    (pacsTimeStart == "" ? "NULL" : "'" + pacsTimeStart + "'") + ", " +
+//                    (pacsTimeStop == "" ? "NULL" : "'" + pacsTimeStop + "'") + ", " +
                     timeScheduleFact + ", " +
                     timeScheduleWithoutLunch + ", " +
                     timeScheduleLess + ", " +
@@ -812,9 +812,23 @@ namespace TimeWorkTracking
                     totalHoursInWork + ", " +
                     totalHoursOutsideWork +
                   ")";
-
             clMsSqlDatabase.RequestNonQuery(cs, sql, false);
 
+            //проверка специальной отметки и активация ее если нужно
+            sql = "select count(*) from EventsPass where specmarkId = " + specmarkId;
+            if (Convert.ToInt32(clMsSqlDatabase.RequesScalar(cs, sql, false)) == 0)   //посмотреть в проходах - была ли такая отметка
+            {                                                                         //если нет - сделать ее активной    
+                sql = "UPDATE SpecialMarks Set uses = 1 Where id = " + specmarkId;
+                clMsSqlDatabase.RequestNonQuery(cs, sql, false);
+            }
+            //увеличиение рейтинга специальной отметки
+            sql = "SELECT rating FROM SpecialMarks Where id=" + specmarkId;
+            int specialMarksRating = Convert.ToInt32(clMsSqlDatabase.RequesScalar(cs,sql,false));  //прочитать рейтинг
+            specialMarksRating++;                                                   //поднять рейтинг                        
+            sql = "UPDATE SpecialMarks Set rating = " + specialMarksRating + " Where id = " + specmarkId;
+            clMsSqlDatabase.RequestNonQuery(cs, sql, false);
+            
+            //обновление информации регистрации списка сотрудников
             LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + keyDate + "','') order by fio"));
             lstwDataBaseMain.Items[index].Selected = true;
             lstwDataBaseMain.HideSelection = false;                         //оставить выделение строки при потере фокуса ListView

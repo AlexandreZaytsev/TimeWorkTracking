@@ -145,6 +145,8 @@ namespace TimeWorkTracking
             if (connectionString !="" && tbDatabaseTWT.Text != "")
             {
                 clMsSqlDatabase.CreateDataBase(connectionString);
+                System.Threading.Thread.Sleep(2000);    //пауза 2 сек чтобы база вписалась в сервер
+
                 if (TestFormConnectionTwt())                            //проверить соединение по настройкам формы
                     this.Close();// Hide();                                        //закрыть форму
             }

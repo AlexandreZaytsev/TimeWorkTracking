@@ -236,7 +236,8 @@ namespace TimeWorkTracking
             this.chUse.TabIndex = 16;
             this.chUse.Text = "Доступ";
             this.chUse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.toolTipMsgMarks.SetToolTip(this.chUse, "Отметка активна");
+            this.toolTipMsgMarks.SetToolTip(this.chUse, "Отметка активна  (если отметка активна - Вы не можете ее отключить - она уже заде" +
+        "йствована в истории)");
             this.chUse.UseVisualStyleBackColor = true;
             this.chUse.CheckedChanged += new System.EventHandler(this.chUse_CheckedChanged);
             // 

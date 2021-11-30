@@ -60,7 +60,7 @@ namespace TimeWorkTracking
                 usersData = clMsSqlDatabase.TableRequest(cs, "select * from twt_GetUserInfo('') where access=1 order by fio");
 
                 //Загрузить массив специальных отметок для таблицы Excel
-                dtSpecialMarks = clMsSqlDatabase.TableRequest(cs, "select * from SpecialMarks where uses=1");
+                //dtSpecialMarks = clMsSqlDatabase.TableRequest(cs, "select * from SpecialMarks where uses=1");
             }
         }
 
@@ -180,10 +180,13 @@ namespace TimeWorkTracking
                         DataRow drow = dtSpecialMarks.Rows[i]; 
                         if (drow.RowState != DataRowState.Deleted)                              //Only row that have not been deleted
                         {
-                            headerIndex.Add(drow["letterCode"].ToString(), lengthDays + 4 + i); //добавить значение словаря заголока
-                            captionData[0, lengthDays + 4 + i] = pad + 
-                                "+(" + drow["letterCode"].ToString() + ") " +
-                                drow["name"].ToString();
+                            if (drow["letterCode"].ToString() != "Я") 
+                            {
+                                headerIndex.Add(drow["letterCode"].ToString(), lengthDays + 4 + i); //добавить значение словаря заголока
+                                captionData[0, lengthDays + 4 + i] = pad +
+                                    "+(" + drow["letterCode"].ToString() + ") " +
+                                    drow["name"].ToString();
+                            }
                         }
                     }
                     captionData[0, lengthDays + 3 + dtSpecialMarks.Rows.Count + 1] = pad + "Итого спец. отметок";
@@ -819,7 +822,17 @@ namespace TimeWorkTracking
         //напечатать итоговый отчет
         private void btReportTotalPrint_Click(object sender, EventArgs e)
         {
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            //Загрузить массив специальных отметок для таблицы Excel
+//            dtSpecialMarks = clMsSqlDatabase.TableRequest(cs, "select * from SpecialMarks where uses=1");
+            //            dtSpecialMarks = clMsSqlDatabase.TableRequest(cs, EXEC twt_TotalReport '" + mcReport.SelectionStart.ToString("yyyyMMdd") + "','" + mcReport.SelectionEnd.ToString("yyyyMMdd") + "'")
+            dtSpecialMarks = clMsSqlDatabase.TableRequest(cs, "Select distinct sm.letterCode, " +
+                                                                "sm.name " +
+                                                               " From EventsPass ep, SpecialMarks sm " +
+                                                               " Where sm.id = ep.specmarkId and passDate between '" + mcReport.SelectionStart.ToString("yyyyMMdd") + "' and '" + mcReport.SelectionEnd.ToString("yyyyMMdd") + "'");
+
             toolStripStatusLabelInfo.Text = "";
+
             ReportTotalPrint();
             /*
                         string msg =
@@ -929,7 +942,7 @@ namespace TimeWorkTracking
                                workSheet.Cells[8 + tableData.GetUpperBound(0) + 1, 1 + captionData.GetUpperBound(1) + 1]],
                 XlListObjectHasHeaders: Excel.XlYesNoGuess.xlYes);
                 tbSmartReport.Name = "ReportData";
-                tbSmartReport.TableStyle = "TableStyleMedium20";
+                tbSmartReport.TableStyle = "TableStyleLight1";//"TableStyleLight2";//"TableStyleMedium20";
                 tbSmartReport.ShowTotals = true;
                 tbSmartReport.ShowTableStyleFirstColumn = true;
 
@@ -1066,6 +1079,7 @@ namespace TimeWorkTracking
                 for (int i = 1; i< tbSmartReport.DataBodyRange.Rows.Count; i++)
                     {
                         ((Excel.Range)tbSmartReport.DataBodyRange.Cells[i, 2]).Font.Italic = true;
+                        ((Excel.Range)tbSmartReport.DataBodyRange.Rows[i]).Font.Size = 9;
                         i++;
                         ((Excel.Range)tbSmartReport.DataBodyRange.Rows[i]).Font.Size = 12;
                         //((Excel.Range)tbSmartReport.DataBodyRange.Rows[i]).Font.Bold = true;

@@ -113,6 +113,10 @@ namespace TimeWorkTracking
         //выбор значения из списка
         private void lstwDataBaseSpecialMarks_SelectedIndexChanged(object sender, EventArgs e)
         {
+            string sql;
+            string key = tbName.Text.Trim();                                    //ключевое поле
+            string cs = Properties.Settings.Default.twtConnectionSrting;        //connection string
+
             int ind = lstwDataBaseSpecialMarks.extSelectedIndex();
             if (ind >= 0)
             {
@@ -122,6 +126,24 @@ namespace TimeWorkTracking
                 tbName.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[3].Text;             //name
                 tbNote.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[4].Text;             //note
                 chUse.Checked = lstwDataBaseSpecialMarks.Items[ind].Text == "True";
+
+                //проверка специальной отметки на достоверность
+                sql = "select count(*) from EventsPass where specmarkId = " + tbID.Text;
+                int status = Convert.ToInt32(clMsSqlDatabase.RequesScalar(cs, sql, false));     //посмотреть в проходах - была ли такая отметка
+                if (status == 0 && chUse.Checked)       //если отметка отсутствует в списке проходов но отмечена как активна - сбросить ее
+                {
+                    sql = "UPDATE SpecialMarks Set uses = 0 Where id = " + tbID.Text;
+                    clMsSqlDatabase.RequestNonQuery(cs, sql, false);
+
+                    LoadList(clMsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));// order by extId desc"));
+                    lstwDataBaseSpecialMarks.extFindListByColValue(3, key);             //найти и выделить позицию
+                    tbName_TextChanged(null, null);                                     //обновить поля и кнопки
+
+                    chUse.Enabled = true;
+                }
+                else
+                    chUse.Enabled = false;
+
             }
         }
 
