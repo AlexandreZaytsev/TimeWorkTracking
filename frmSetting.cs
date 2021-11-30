@@ -349,6 +349,7 @@ namespace TimeWorkTracking
                         sqlConnection.Close();
                     }
                 }
+                System.Threading.Thread.Sleep(1000);    //пауза 1 сек чтобы главная форма успела обновить список юзеров
                 MessageBox.Show("Список сотрудников загружен в БД");
             }
             catch (Exception ex)
