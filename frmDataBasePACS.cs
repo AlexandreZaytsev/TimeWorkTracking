@@ -21,6 +21,18 @@ namespace TimeWorkTracking
         //test Connrection СКУД (web сервис PACS)
         private void btTestConnectionPacs_Click(object sender, EventArgs e)
         {
+            if (!clSystemChecks.CheckPing(tbHostNamePACS.Text))
+                MessageBox.Show("Cетевое имя сервера PACS\r\n  " +
+                                tbHostNamePACS.Text +
+                                "- недоступно\r\n",
+                                "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else
+                TestFormConnectionPACS();        //проверить соединение по настройкам формы
+
+            CallBack_FrmDataBasePACS_outEvent.callbackEventHandler("", "", null);  //send a general notification
+
+
+
             //PACS DataBase
             Properties.Settings.Default.pacsHost = tbHostNamePACS.Text;
             Properties.Settings.Default.pascLogin = tbUserNamePACS.Text;
@@ -31,6 +43,84 @@ namespace TimeWorkTracking
             Properties.Settings.Default.Save();
         }
 
+        //проверить соединение по настройкам формы
+        private Boolean TestFormConnectionPACS()
+        {
+            bool ret = false;
+            string connectionString = GetFormConnectionString();        //полчить строку соединения по настройкам формы
+            StringBuilder Messages = new StringBuilder();
+            string statusDB = clMsSqlDatabase.GetSqlConnection(connectionString);
+/*
+            switch (statusDB)
+            {
+                case "-1":      //бд не существует
+                    statusDB = "";
+                    picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.no;
+                    btCreateDBTwt.Visible = true;
+                    btTestConnectionTwt.Visible = false;
+                    Messages.Append("База данных с именем:" + "\n" +
+                                                "'" + tbDatabaseTWT.Text + "'" + "\n" +
+                                                "не существует на сервере");
+                    break;
+                case "-9":      //соединение установить не удалось
+                    statusDB = "";
+                    picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.no;
+                    btCreateDBTwt.Visible = false;
+                    btTestConnectionTwt.Visible = true;
+                    string msg = cbAutentificationTWT.Text == "SQL Server Autentification" ? $"\tИмя пользователя: { tbUserNameTWT.Text}" + "\n" + $"\tПароль: {tbPasswordTWT.Text}" + "\n" : "";
+                    Messages.Append("Соединение:" + "\n" +
+                                $"\tСервер: {tbServerTWT.Text}" + "\n" +
+                                $"\tАутентификация: {cbAutentificationTWT.Text}" + "\n" + msg +
+                                $"\tБаза данных: {tbDatabaseTWT.Text}" + "\n" +
+                                "установить не удалось");
+                    break;
+                default:        //все чики-пуки
+                    picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.ok;
+                    btCreateDBTwt.Visible = false;
+                    btTestConnectionTwt.Visible = true;
+                    Messages.Append("Соединение установлено");
+                    ret = true;
+                    break;
+            }
+            MessageBox.Show(Messages.ToString(),
+                            "Подключение к Базе Данных",
+                             MessageBoxButtons.OK,
+                             MessageBoxIcon.Warning);
+
+            Properties.Settings.Default.twtConnectionSrting = statusDB;
+            //TimeWorkTracking DataBase
+            Properties.Settings.Default.twtServerName = tbServerTWT.Text;
+            Properties.Settings.Default.twtDatabase = tbDatabaseTWT.Text;
+            Properties.Settings.Default.twtAuthenticationDef = cbAutentificationTWT.Text;
+            Properties.Settings.Default.twtLogin = tbUserNameTWT.Text;
+            Properties.Settings.Default.twtPassword = tbPasswordTWT.Text;
+
+            Properties.Settings.Default.Save();
+*/
+            CallBack_FrmDataBaseSQL_outEvent.callbackEventHandler("", "", null);  //send a general notification
+            return ret;
+        }
+
+        //полчить строку соединения по настройкам формы
+        private string GetFormConnectionString()
+        {
+            string connectionString="";
+            /*
+            switch (cbAutentificationTWT.Text)
+            {
+                case "SQL Server Autentification":
+                    connectionString = @"Data Source=" + tbServerTWT.Text + ";Initial Catalog=" + tbDatabaseTWT.Text + ";Persist Security Info=True;User ID=" + tbUserNameTWT.Text + ";Password=" + tbPasswordTWT.Text;
+                    break;
+                case "Windows Autentification":
+                    connectionString = @"Data Source=" + tbServerTWT.Text + "; Initial Catalog=" + tbDatabaseTWT.Text + "; Integrated Security=True";
+                    break;
+                default:
+                    connectionString = "";
+                    break;
+            }
+            */
+            return connectionString;
+        }
         private void frmDataBasePACS_Load(object sender, EventArgs e)
         {
             //PACS DataBase
@@ -39,11 +129,7 @@ namespace TimeWorkTracking
             tbPasswordPASC.Text = Properties.Settings.Default.pacsPassword;
         }
 
-        //кнопка проверить соединение
-        private void btTestConnectionPacs_Click_1(object sender, EventArgs e)
-        {
-            CallBack_FrmDataBasePACS_outEvent.callbackEventHandler("", "", null);  //send a general notification
-        }
+
 
         /*--------------------------------------------------------------------------------------------  
         CALLBACK InPut (подписка на внешние сообщения)
@@ -65,7 +151,6 @@ namespace TimeWorkTracking
             }
             */
         }
-
     }
 
 

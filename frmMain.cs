@@ -302,8 +302,12 @@ namespace TimeWorkTracking
             string hostPACS = Properties.Settings.Default.pacsHost;
             string csPACS = Properties.Settings.Default.pacsConnectionString;
             bool pingPACS = csPACS != "" && clSystemChecks.CheckPing(hostPACS);
+            bool conWeb = false;
             if (!pingPACS)
                 msg += "Cетевое имя сервиса СКУД\r\n  " + hostPACS + "- недоступно\r\n";
+            else
+                conWeb = clWebServiceDataBase.CheckConnectWithConnectionWeb(csPACS);
+
 
             this.tsbtDataBaseSQL.Image = conSQL ? Properties.Resources.ok : Properties.Resources.no;
             mainPanelRegistration.Enabled = conSQL && lstwDataBaseMain.Items.Count > 0;

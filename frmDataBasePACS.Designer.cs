@@ -119,7 +119,7 @@ namespace TimeWorkTracking
             this.btTestConnectionPacs.TabIndex = 1;
             this.btTestConnectionPacs.Text = "Проверитиь соединение";
             this.btTestConnectionPacs.UseVisualStyleBackColor = true;
-            this.btTestConnectionPacs.Click += new System.EventHandler(this.btTestConnectionPacs_Click_1);
+            this.btTestConnectionPacs.Click += new System.EventHandler(this.btTestConnectionPacs_Click);
             // 
             // mainPanelPACS
             // 
