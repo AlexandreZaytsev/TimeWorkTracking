@@ -4,6 +4,17 @@ using System.Linq;
 using System.Text;
 //using System.Net.Http;
 
+using System.Data;
+using System.Data.OleDb;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Script.Serialization;
+
+
+
 namespace TimeWorkTracking
 {
     class clWebServiceDataBase
@@ -27,6 +38,36 @@ namespace TimeWorkTracking
             }
         }
 
+        /// <summary>
+        /// Makes an async HTTP Request
+        /// </summary>
+        /// <param name="pMethod">Those methods you know: GET, POST, HEAD, etc...</param>
+        /// <param name="pUrl">Very predictable...</param>
+        /// <param name="pJsonContent">String data to POST on the server</param>
+        /// <param name="pHeaders">If you use some kind of Authorization you should use this</param>
+        /// <returns></returns>
+        static async Task<HttpResponseMessage> Request(HttpMethod pMethod, string pUrl, string pJsonContent, Dictionary<string, string> pHeaders)
+        {
+            var httpRequestMessage = new HttpRequestMessage();
+            httpRequestMessage.Method = pMethod;
+            httpRequestMessage.RequestUri = new Uri(pUrl);
+            foreach (var head in pHeaders)
+            {
+                httpRequestMessage.Headers.Add(head.Key, head.Value);
+            }
+            switch (pMethod.Method)
+            {
+                case "POST":
+                    HttpContent httpContent = new StringContent(pJsonContent, Encoding.UTF8, "application/json");
+                    httpRequestMessage.Content = httpContent;
+                    break;
+
+            }
+
+            return await _Client.SendAsync(httpRequestMessage);
+        }
+
+
         /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         'функция Отправка GET POST запроса на хост
         '----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -42,6 +83,9 @@ namespace TimeWorkTracking
         */
         private string getDataFromURL(string REQUEST_URI, string REQUEST_METHOD, string QUERY_STRING, string CONTENT_TYPE, string HTTP_ACCEPT, string strAuthorization)
         {
+
+//        https://stackoverflow.com/questions/4015324/how-to-make-an-http-post-web-request
+
             int lngTimeout;                     //таймаут
             int intSslErrorIgnoreFlags;         //флаг intSslErrorIgnoreFlags Игноировать ошбибки при SSL соединении
             bool blnEnableRedirects;            //флаг blnEnableRedirects Разрешить перенаправления
