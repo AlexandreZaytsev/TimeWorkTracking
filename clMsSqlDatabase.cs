@@ -38,6 +38,7 @@ namespace TimeWorkTracking
                 sqlConnection.Open();
                 using (var sqlCommand = sqlConnection.CreateCommand())
                 {
+                    string sql;
         //СТРУКТУРА ДАННЫХ
         //ОГРАНИЧЕНИЯ ДЛЯ СТАРЫХ СЕРВЕРОВ
         //Insert по отдельности, типов Data и Time - нет, строковую дату передавать как yyyymmdd
@@ -51,9 +52,10 @@ namespace TimeWorkTracking
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
+                    sql = "\r\nINSERT INTO UserWorkScheme(name) VALUES ";
                     sqlCommand.CommandText =
-                        "\r\nINSERT INTO UserWorkScheme(name) VALUES (N'Почасовой') " +
-                        "\r\nINSERT INTO UserWorkScheme(name) VALUES (N'Поминутный') ";
+                        sql + "(N'Почасовой') " +
+                        sql + "(N'Поминутный') ";
                     sqlCommand.ExecuteNonQuery();
 
                     //Тип дня производственного календаря (таблица для списка)
@@ -64,9 +66,10 @@ namespace TimeWorkTracking
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
+                    sql = "\r\nINSERT INTO CalendarDateType(name) VALUES ";
                     sqlCommand.CommandText =
-                        "\r\nINSERT INTO CalendarDateType(name) VALUES (N'Праздничный') " +
-                        "\r\nINSERT INTO CalendarDateType(name) VALUES (N'Выходной') ";
+                        sql + "(N'Праздничный') " +
+                        sql + "(N'Выходной') ";
                     sqlCommand.ExecuteNonQuery();
 
                     //Продолжительность дня производственного календаря (таблица для списка)
@@ -77,9 +80,10 @@ namespace TimeWorkTracking
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText =
-                        "\r\nINSERT INTO CalendarLengthDay(name) VALUES (N'Короткий') " +
-                        "\r\nINSERT INTO CalendarLengthDay(name) VALUES (N'Полный') " +
+                    sql = "\r\nINSERT INTO CalendarLengthDay(name) VALUES ";
+                    sqlCommand.CommandText = 
+                        sql + "(N'Короткий') " +
+                        sql + "VALUES (N'Полный') " +
                         "\r\nINSERT INTO CalendarLengthDay(name) VALUES (N'Длинный')";
                     sqlCommand.ExecuteNonQuery();
 
@@ -93,18 +97,19 @@ namespace TimeWorkTracking
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
                         ")";                                                        
                     sqlCommand.ExecuteNonQuery();
+                    sql = "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES ";
                     sqlCommand.CommandText =
-                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'Новый год', '20000101', 1) " +
-                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'Новогодние каникулы', NULL, 1) " +
-                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'Рождество Христово', '20000107', 1) " +
-                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'День защитника Отечества', '20000223', 1) " +
-                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'Международный женский день', '20000308', 1) " +
-                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'Праздник весны и труда', '20000501', 1) " +
-                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'День Победы', '20000509', 1) " +
-                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'День России', '20000612', 1) " +
-                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'День народного единства', '20001104', 1) " +
-                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'Нерабочий день', NULL, 2) " +
-                        "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES (N'Предпраздничный день', NULL, 2) ";                                                             //другое
+                        sql + "(N'Новый год', '20000101', 1) " +
+                        sql + "(N'Новогодние каникулы', NULL, 1) " +
+                        sql + "(N'Рождество Христово', '20000107', 1) " +
+                        sql + "(N'День защитника Отечества', '20000223', 1) " +
+                        sql + "(N'Международный женский день', '20000308', 1) " +
+                        sql + "(N'Праздник весны и труда', '20000501', 1) " +
+                        sql + "(N'День Победы', '20000509', 1) " +
+                        sql + "(N'День России', '20000612', 1) " +
+                        sql + "(N'День народного единства', '20001104', 1) " +
+                        sql + "(N'Нерабочий день', NULL, 2) " +
+                        sql + "(N'Предпраздничный день', NULL, 2) ";                                                             //другое
                     sqlCommand.ExecuteNonQuery();
 
                     //Подразделение (таблица для списка)
@@ -115,17 +120,18 @@ namespace TimeWorkTracking
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
+                    sql = "\r\nINSERT INTO UserDepartment(name) VALUES ";
                     sqlCommand.CommandText =
-                        "\r\nINSERT INTO UserDepartment(name) VALUES (N'Бухгалтерия') " +
-                        "\r\nINSERT INTO UserDepartment(name) VALUES (N'Департамент закупок и договоров') " +
-                        "\r\nINSERT INTO UserDepartment(name) VALUES (N'Департамент маркетинга') " +
-                        "\r\nINSERT INTO UserDepartment(name) VALUES (N'Департамент обеспечения бизнеса') " +
-                        "\r\nINSERT INTO UserDepartment(name) VALUES (N'Департамент продаж') " +
-                        "\r\nINSERT INTO UserDepartment(name) VALUES (N'Департамент Тендерных и Конкурсных поставок') " +
-                        "\r\nINSERT INTO UserDepartment(name) VALUES (N'Департамент технической поддержки') " +
-                        "\r\nINSERT INTO UserDepartment(name) VALUES (N'Департамент ЧПУ') " +
-                        "\r\nINSERT INTO UserDepartment(name) VALUES (N'Общее руководство') " +
-                        "\r\nINSERT INTO UserDepartment(name) VALUES (N'Представительство Академия САПР и ГИС') ";
+                        sql + "(N'Бухгалтерия') " +
+                        sql + "(N'Департамент закупок и договоров') " +
+                        sql + "(N'Департамент маркетинга') " +
+                        sql + "(N'Департамент обеспечения бизнеса') " +
+                        sql + "(N'Департамент продаж') " +
+                        sql + "(N'Департамент Тендерных и Конкурсных поставок') " +
+                        sql + "(N'Департамент технической поддержки') " +
+                        sql + "(N'Департамент ЧПУ') " +
+                        sql + "(N'Общее руководство') " +
+                        sql + "(N'Представительство Академия САПР и ГИС') ";
                     sqlCommand.ExecuteNonQuery();
 
                     //Должность (таблица для списка)
@@ -136,27 +142,28 @@ namespace TimeWorkTracking
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
+                    sql = "\r\nINSERT INTO UserPost(name) VALUES "; 
                     sqlCommand.CommandText =
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Ассистент менеджера') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Бухгалтер') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Ведущий инженер') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Ведущий менеджер') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Главный Бухгалтер') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Дизайнер') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Инженер') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Курьер') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Логист') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Менеджер') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Руководитель') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Руководитель департамента') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Руководитель направления') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Руководитель учебного центра') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Секретарь') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Системный администратор') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Юрист') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Ведущий менеджер отдела продаж') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'Заместитель генерального директора') " +
-                        "\r\nINSERT INTO UserPost(name) VALUES (N'и.о. Руководителя') ";
+                        sql + "(N'Ассистент менеджера') " +
+                        sql + "(N'Бухгалтер') " +
+                        sql + "(N'Ведущий инженер') " +
+                        sql + "(N'Ведущий менеджер') " +
+                        sql + "(N'Главный Бухгалтер') " +
+                        sql + "(N'Дизайнер') " +
+                        sql + "(N'Инженер') " +
+                        sql + "(N'Курьер') " +
+                        sql + "(N'Логист') " +
+                        sql + "(N'Менеджер') " +
+                        sql + "(N'Руководитель') " +
+                        sql + "(N'Руководитель департамента') " +
+                        sql + "(N'Руководитель направления') " +
+                        sql + "(N'Руководитель учебного центра') " +
+                        sql + "(N'Секретарь') " +
+                        sql + "(N'Системный администратор') " +
+                        sql + "(N'Юрист') " +
+                        sql + "(N'Ведущий менеджер отдела продаж') " +
+                        sql + "(N'Заместитель генерального директора') " +
+                        sql + "(N'и.о. Руководителя') ";
                     sqlCommand.ExecuteNonQuery();
 
                     //Специальные отметки (самостоятельная таблица)
@@ -167,43 +174,65 @@ namespace TimeWorkTracking
                         "letterCode VARCHAR(4) NOT NULL, " +                                        //строковый код
                         "name VARCHAR(150) NOT NULL UNIQUE, " +                                     //*наименование
                         "note VARCHAR(1024) NULL, " +                                               //расшифровка
+                        "rating int DEFAULT 0, " +                                                  //рейтинг для сортировки    
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
                     //http://www.consultant.ru/document/cons_doc_LAW_47274/05305f7475e7ec92c38eb6e6e6b4ff56c94cd475/
-            //        object[,] guide = new object[30, 5];
-            //        guide = { { 0} { '01', N'Я', N'-', N'Продолжительность работы в дневное время', 1} };
+                    sql = "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, rating, uses) VALUES ";
                     sqlCommand.CommandText =
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('01', N'Я', N'-', N'Продолжительность работы в дневное время', 1) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('02', N'Н', N'Ночные работы', N'Продолжительность работы в ночное время', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('03', N'РВ', N'Работа в выходные', N'Продолжительность работы в выходные и нерабочие праздничные дни', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('04', N'C', N'Сверхурочная работа', N'Продолжительность сверхурочной работы', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('05', N'ВМ', N'Работа на вахте', N'Продолжительность работы вахтовым методом', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('06', N'К', N'Служебная командировка', N'Служебная командировка', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('07', N'ПК', N'Повышение квалификации с отрывом от работы', N'Повышение квалификации с отрывом от работы', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('08', N'ПМ', N'Повышение квалификации с отрывом от работы в другой местности', N'Повышение квалификации с отрывом от работы в другой местности', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('09', N'ОТ', N'Отпуск', N'Ежегодный основной оплачиваемый отпуск', 1) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('10', N'ОД', N'Дополнительный отпуск с сохранением з.п.', N'Ежегодный дополнительный оплачиваемый отпуск', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('11', N'У', N'Отпуск на учебу с сохранением средней з.п.', N'Дополнительный отпуск в связи с обучением с сохранением среднего заработка работникам, совмещающим работу с обучением', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('12', N'УВ', N'Отпуск на учебу с частичным сохранением з.п.', N'Сокращенная продолжительность рабочего времени для обучающихся без отрыва от производства с частичным сохранением заработной платы ', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('13', N'УД', N'Отпуск на учебу без сохранения з.п.', N'Дополнительный отпуск в связи с обучением без сохранения заработной платыДополнительный отпуск в связи с обучением с сохранением среднего заработка работникам, совмещающим работу с обучением', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('14', N'Р', N'Отпуск по беременности и родам', N'Отпуск по беременности и родам (в связи с усыновлением новорожденного ребенка)', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('15', N'ОЖ', N'Отпуск по уходу за ребенком', N'Отпуск по уходу за ребенком до достижения им возраста трех лет', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('16', N'ДО', N'Отпуск (от работодателя) без сохранения з.п.', N'Отпуск без сохранения заработной платы, предоставленный работнику по разрешению работодателя', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('17', N'ОЗ', N'Отпуск (от РФ) без сохранения з.п.', N'Отпуск без сохранения заработной платы при условиях, предусмотренных действующим законодательством Российской Федерации', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('18', N'ДБ', N'Дополнительный отпуск без сохранения з.п.', N'Ежегодный дополнительный отпуск без сохранения заработной платы', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('19', N'Б', N'Больничный с оплатой', N'Временная нетрудоспособность (кроме случаев, предусмотренных кодом «Т») с назначением пособия согласно законодательству', 1) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('20', N'Т', N'Больничный без оплаты', N'Временная нетрудоспособность без назначения пособия в случаях, предусмотренных законодательством', 0) " +
-
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('24', N'ПР', N'Прогул', N'Прогулы (отсутствие на рабочем месте без уважительных причин в течение времени, установленного законодательством)', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('29', N'ЗБ', N'Забастовка', N'Забастовка (при условиях и в порядке, предусмотренных законом)', 0) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('30', N'НН', N'Неявка', N'Неявки по невыясненным причинам (до выяснения обстоятельств)', 0) " +
-
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('00', 'СЗ', N'Служебное задание', '' , 1) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('00', 'РД', N'Работа из дома', '', 1) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('00', 'ОД', N'Общественное дело', '', 1) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('00', 'ЛД', N'Личные дела', '', 1) " +
-                        "\r\nINSERT INTO SpecialMarks(digitalCode, letterCode, name, note, uses) VALUES ('00', 'УД', N'Удаленка', '', 1) ";
+                        //Продолжительность работы
+                        sql + "('01', N'Я',  N'-', N'Продолжительность работы в дневное время', 0, 1) " +
+                        sql + "('02', N'Н',  N'Ночные работы', N'Продолжительность работы в ночное время', 0, 0) " +
+                        sql + "('03', N'РВ', N'Работа в выходные', N'Продолжительность работы в выходные и нерабочие праздничные дни', 0, 0) " +
+                        sql + "('04', N'C',  N'Сверхурочная работа', N'Продолжительность сверхурочной работы', 0, 0) " +
+                        sql + "('05', N'ВМ', N'Работа на вахте', N'Продолжительность работы вахтовым методом', 0, 0) " +
+                        sql + "('12', N'УВ', N'Отпуск на учебу (частично-оплачиваемый)', N'Сокращенная продолжительность рабочего времени для обучающихся без отрыва от производства с частичным сохранением заработной платы ', 0, 0) " +
+                        sql + "('21', N'ЛЧ', N'Сокращенный день (законодательство РФ)', N'Сокращенная продолжительность рабочего времени против нормальной продолжительности рабочего дня в случаях, предусмотренных законодательством', 0, 0) " +
+                        sql + "('25', N'НС', N'Сокращенный день (работодатель)', N'Продолжительность работы в режиме неполного рабочего времени по инициативе работодателя в случаях, предусмотренных законодательством', 0, 0) " +
+                        //Командировка
+                        sql + "('06', N'К',  N'Служебная командировка', N'Служебная командировка', 0, 0) " +
+                        //Повышение квалификации
+                        sql + "('07', N'ПК', N'Повышение квалификации с отрывом от работы', N'Повышение квалификации с отрывом от работы', 0, 0) " +
+                        sql + "('08', N'ПМ', N'Повышение квалификации с отрывом от работы в другой местности', N'Повышение квалификации с отрывом от работы в другой местности', 0, 0) " +
+                        //Отпуск
+                        sql + "('09', N'ОТ', N'Отпуск ежегодный (оплачиваемый)', N'Ежегодный основной оплачиваемый отпуск', 0, 1) " +
+                        sql + "('10', N'ОД', N'(Отгул) Дополнительный ежегодный отпуск (оплачиваемый)', N'Ежегодный дополнительный оплачиваемый отпуск', 0, 0) " +
+                        sql + "('11', N'У',  N'Отпуск на учебу (средне-оплачиваемый)', N'Дополнительный отпуск в связи с обучением с сохранением среднего заработка работникам, совмещающим работу с обучением', 0, 0) " +
+                        sql + "('13', N'УД', N'Отпуск на учебу (не оплачиваемый)', N'Дополнительный отпуск в связи с обучением без сохранения заработной платыДополнительный отпуск в связи с обучением с сохранением среднего заработка работникам, совмещающим работу с обучением', 0, 0) " +
+                        sql + "('14', N'Р',  N'Отпуск по беременности и родам', N'Отпуск по беременности и родам (в связи с усыновлением новорожденного ребенка)', 0, 0) " +
+                        sql + "('15', N'ОЖ', N'Отпуск по уходу за ребенком', N'Отпуск по уходу за ребенком до достижения им возраста трех лет', 0, 0) " +
+                        sql + "('16', N'ДО', N'Отпуск (не оплачиваемый)(работодатель)', N'Отпуск без сохранения заработной платы, предоставленный работнику по разрешению работодателя', 0, 0) " +
+                        sql + "('17', N'ОЗ', N'Отпуск (не оплачиваемый)(законодательство РФ)', N'Отпуск без сохранения заработной платы при условиях, предусмотренных действующим законодательством Российской Федерации', 0, 0) " +
+                        sql + "('18', N'ДБ', N'Дополнительный ежегодный отпуск (не оплачиваемый)', N'Ежегодный дополнительный отпуск без сохранения заработной платы', 0, 0) " +
+                        //Нетрудоспособность
+                        sql + "('19', N'Б',  N'Больничный (оплачиваемый)', N'Временная нетрудоспособность (кроме случаев, предусмотренных кодом «Т») с назначением пособия согласно законодательству', 0, 1) " +
+                        sql + "('20', N'Т',  N'Больничный (не оплачиваемый)', N'Временная нетрудоспособность без назначения пособия в случаях, предусмотренных законодательством', 0, 0) " +
+                        //Прогулы, неявки
+                        sql + "('22', N'ПВ', N'Вынужденный прогул', N'Время вынужденного прогула в случае признания увольнения, перевода на другую работу или отстранения от работы незаконными с восстановлением на прежней работе', 0, 0) " +
+                        sql + "('23', N'Г',  N'Не выход на общественные работы (законодательство РФ)', N'Невыходы на время исполнения государственных или общественных обязанностей согласно законодательству', 0, 0) " +
+                        sql + "('24', N'ПР', N'Прогул', N'Прогулы (отсутствие на рабочем месте без уважительных причин в течение времени, установленного законодательством)', 0, 0) " +
+                        sql + "('30', N'НН', N'Неявка', N'Неявки по невыясненным причинам (до выяснения обстоятельств)', 0, 0) " +
+                        //Выходные дни
+                        sql + "('26', N'В',  N'Выходные (еженедельный отпуск) и праздники', N'Выходные дни (еженедельный отпуск) и  нерабочие праздничные дни', 0, 0) " +
+                        sql + "('27', N'ОВ', N'Дополнительный выходной (оплачиваемый)', N'Дополнительные выходные дни (оплачиваемые)', 0, 0) " +
+                        sql + "('28', N'НВ', N'Дополнительный выходной (не оплачиваемый)', N'Дополнительные выходные дни (без сохранения заработной платы)', 0, 0) " +
+                        //Забастовка
+                        sql + "('29', N'ЗБ', N'Забастовка (законодательство РФ)', N'Забастовка (при условиях и в порядке, предусмотренных законом)', 0, 0) " +
+                        //Простой
+                        sql + "('31', N'РП', N'Простой (работодатель)', N'Время простоя по вине работодателя', 0, 0) " +
+                        sql + "('32', N'НП', N'Простой (форс-мажор)', N'Время простоя по причинам, не зависящим от работодателя и работника', 0, 0) " +
+                        sql + "('33', N'ВП', N'Простой (работник)', N'Время простоя по вине работника', 0, 0) " +
+                        sql + "('36', N'НЗ', N'Приостановка работы при задержке оплаты', N'Время приостановки работы в случае задержки выплаты заработной платы', 0, 0) " +
+                        //Отстранение от работы
+                        sql + "('34', N'НО', N'Отстранение от работы (оплачиваемое)(законодательство РФ)', N'Отстранение от работы (недопущение к работе) с оплатой(пособием) в соответствии с законодательством ', 0, 0) " +
+                        sql + "('35', N'НБ', N'Отстранение от работы (не оплачиваемое)(законодательство РФ)', N'Отстранение от работы (недопущение к работе) по причинам, предусмотренным законодательством, без начисления заработной платы ', 0, 0) " +
+                        //местные кодировки
+                       // sql + "('00', 'СЗ', N'Служебное задание', '', 0, 1) " +
+                        sql + "('100', 'РД', N'Работа из дома', '', 0, 1) " +
+                        sql + "('101', 'ОД', N'Общественное дело', '', 0, 1) " +
+                        sql + "('102', 'ЛД', N'Личные дела', '', 0, 1) " +
+                        sql + "('103', 'УД', N'Удаленка', '', 0, 1) ";
                     sqlCommand.ExecuteNonQuery();
 
                     //таблицы
@@ -218,38 +247,39 @@ namespace TimeWorkTracking
                         "uses bit DEFAULT 1 " +                                                         //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
+                    sql = "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES "; 
                     sqlCommand.CommandText =
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210101', '20210101', 1, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210102', '20211105', 2, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210103', '20211231', 2, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210104', '20210104', 2, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210105', '20210105', 2, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210106', '20210106', 2, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210107', '20210107', 3, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210108', '20210108', 2, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210220', '20210222', 10, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210223', '20210223', 4, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210308', '20210308', 5, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210501', '20210501', 6, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210509', '20210509', 7, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20210612', '20210612', 8, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20211104', '20211104', 9, 2, 1) " +
+                        sql + "('20210101', '20210101', 1, 2, 1) " +
+                        sql + "('20210102', '20211105', 2, 2, 1) " +
+                        sql + "('20210103', '20211231', 2, 2, 1) " +
+                        sql + "('20210104', '20210104', 2, 2, 1) " +
+                        sql + "('20210105', '20210105', 2, 2, 1) " +
+                        sql + "('20210106', '20210106', 2, 2, 1) " +
+                        sql + "('20210107', '20210107', 3, 2, 1) " +
+                        sql + "('20210108', '20210108', 2, 2, 1) " +
+                        sql + "('20210220', '20210222', 10, 1, 1) " +
+                        sql + "('20210223', '20210223', 4, 2, 1) " +
+                        sql + "('20210308', '20210308', 5, 2, 1) " +
+                        sql + "('20210501', '20210501', 6, 2, 1) " +
+                        sql + "('20210509', '20210509', 7, 2, 1) " +
+                        sql + "('20210612', '20210612', 8, 2, 1) " +
+                        sql + "('20211104', '20211104', 9, 2, 1) " +
 
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220101', '20220503', 1, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220102', '20220510', 2, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220103', '20220103', 2, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220104', '20220104', 2, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220105', '20220105', 2, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220106', '20220106', 2, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220107', '20220107', 3, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220108', '20220108', 2, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220223', '20220223', 4, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220305', '20220310', 10, 1, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220308', '20220308', 5, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220501', '20220501', 6, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220509', '20220509', 7, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20220612', '20220612', 8, 2, 1) " +
-                        "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ('20221104', '20221104', 9, 2, 1) ";
+                        sql + "('20220101', '20220503', 1, 2, 1) " +
+                        sql + "('20220102', '20220510', 2, 2, 1) " +
+                        sql + "('20220103', '20220103', 2, 2, 1) " +
+                        sql + "('20220104', '20220104', 2, 2, 1) " +
+                        sql + "('20220105', '20220105', 2, 2, 1) " +
+                        sql + "('20220106', '20220106', 2, 2, 1) " +
+                        sql + "('20220107', '20220107', 3, 2, 1) " +
+                        sql + "('20220108', '20220108', 2, 2, 1) " +
+                        sql + "('20220223', '20220223', 4, 2, 1) " +
+                        sql + "('20220305', '20220310', 10, 1, 1) " +
+                        sql + "('20220308', '20220308', 5, 2, 1) " +
+                        sql + "('20220501', '20220501', 6, 2, 1) " +
+                        sql + "('20220509', '20220509', 7, 2, 1) " +
+                        sql + "('20220612', '20220612', 8, 2, 1) " +
+                        sql + "('20221104', '20221104', 9, 2, 1) ";
                     sqlCommand.ExecuteNonQuery();
 
                     //Пользователь (таблица использующая внешние данные)

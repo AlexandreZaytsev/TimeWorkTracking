@@ -440,11 +440,26 @@ namespace TimeWorkTracking
                                         switch (sp)
                                         {
                                             case "Больничный":
-                                                sp = "Больничный с оплатой";
+                                                sp = "Больничный (оплачиваемый)";
+                                                break;
+                                            case "Отгул":
+                                                sp = "(Отгул) Дополнительный ежегодный отпуск (оплачиваемый)";
+                                                break;
+                                            case "Служебное задание":
+                                                sp = "Служебная командировка";
                                                 break;
                                         }
-                                        sqlCommand.CommandText = "SELECT id FROM SpecialMarks Where name='" + sp + "'";
-                                        int specialMarksId = (int)sqlCommand.ExecuteScalar();
+
+                                        sqlCommand.CommandText = "SELECT id FROM SpecialMarks Where name='" + sp + "'";         
+                                        int specialMarksId = (int)sqlCommand.ExecuteScalar();               //получить  id спец отметки                                   
+
+                                        //поднять рейтинг спец отметки
+                                        sqlCommand.CommandText = "SELECT rating FROM SpecialMarks Where id=" + specialMarksId;        
+                                        int specialMarksRating = (int)sqlCommand.ExecuteScalar();           //прочитать рейтинг
+                                        specialMarksRating++;                                               //поднять рейтинг                        
+                                        sqlCommand.CommandText = "UPDATE SpecialMarks Set rating = " + specialMarksRating + "  Where id=" + specialMarksId;
+                                        sqlCommand.ExecuteNonQuery();                                       //обновить рейтинг
+
                                         string specmarkTimeStart = specialMarksId == 1 ? "NULL" : "'" + Convert.ToDateTime(result.GetValue(14)).ToString("yyyyMMdd HH:mm") + "'";
                                         string specmarkTimeStop = specialMarksId == 1 ? "NULL" : "'" + Convert.ToDateTime(result.GetValue(15)).ToString("yyyyMMdd HH:mm") + "'";
                                         string specmarkNote = result.GetValue(16) == DBNull.Value ? "NULL" : "N'" + Convert.ToString(result.GetValue(16)).Replace("'","''") + "'";

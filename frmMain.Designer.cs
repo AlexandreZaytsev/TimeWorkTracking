@@ -65,6 +65,7 @@ namespace TimeWorkTracking
             this.grRegistrator = new System.Windows.Forms.GroupBox();
             this.panel7 = new System.Windows.Forms.Panel();
             this.cbSMarks = new System.Windows.Forms.ComboBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.smTStop = new System.Windows.Forms.DateTimePicker();
             this.lbSmarkStop = new System.Windows.Forms.Label();
             this.smDStop = new System.Windows.Forms.DateTimePicker();
@@ -91,7 +92,6 @@ namespace TimeWorkTracking
             this.webInfoDay = new System.Windows.Forms.WebBrowser();
             this.mcRegDate = new System.Windows.Forms.MonthCalendar();
             this.toolTipMsgMain = new System.Windows.Forms.ToolTip(this.components);
-            this.label11 = new System.Windows.Forms.Label();
             this.statusStripMain.SuspendLayout();
             this.mainPanelRegistration.SuspendLayout();
             this.btPanel.SuspendLayout();
@@ -179,7 +179,7 @@ namespace TimeWorkTracking
             // 
             this.toolStripStatusLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(218, 21);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(219, 21);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "    Справочники:";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -519,6 +519,17 @@ namespace TimeWorkTracking
             this.cbSMarks.TabIndex = 19;
             this.cbSMarks.SelectedIndexChanged += new System.EventHandler(this.cbSMarks_SelectedIndexChanged);
             // 
+            // label11
+            // 
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label11.Location = new System.Drawing.Point(4, 8);
+            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(97, 18);
+            this.label11.TabIndex = 18;
+            this.label11.Text = "Отметка";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // smTStop
             // 
             this.smTStop.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -824,17 +835,6 @@ namespace TimeWorkTracking
             this.mcRegDate.ShowWeekNumbers = true;
             this.mcRegDate.TabIndex = 2;
             this.mcRegDate.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.mcRegDate_DateChanged);
-            // 
-            // label11
-            // 
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label11.Location = new System.Drawing.Point(4, 8);
-            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(97, 18);
-            this.label11.TabIndex = 18;
-            this.label11.Text = "Спец. отметки";
-            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // frmMain
             // 
