@@ -63,10 +63,8 @@ namespace TimeWorkTracking
                     lstwDataBaseSpecialMarks.LabelEdit = false;      //запрет редактирования item
                     ListViewItem lvi = new ListViewItem(drow["uses"].ToString(), 0) //имя для сортировки
                     {
-                        ImageIndex = (Boolean)drow["uses"] ? 1 : 0
-                        ,
-                        StateImageIndex = (Boolean)drow["uses"] ? 1 : 0
-                        ,
+                        ImageIndex = (Boolean)drow["uses"] ? 1 : 0,
+                        StateImageIndex = (Boolean)drow["uses"] ? 1 : 0,
                         Checked = (Boolean)drow["uses"]
                         //                        , UseItemStyleForSubItems = true
                     };
@@ -127,6 +125,7 @@ namespace TimeWorkTracking
                 tbNote.Text = lstwDataBaseSpecialMarks.Items[ind].SubItems[4].Text;             //note
                 chUse.Checked = lstwDataBaseSpecialMarks.Items[ind].Text == "True";
 
+                /*
                 //проверка специальной отметки на достоверность
                 sql = "select count(*) from EventsPass where specmarkId = " + tbID.Text;
                 int status = Convert.ToInt32(clMsSqlDatabase.RequesScalar(cs, sql, false));     //посмотреть в проходах - была ли такая отметка
@@ -142,8 +141,8 @@ namespace TimeWorkTracking
                     chUse.Enabled = true;
                 }
                 else
-                    chUse.Enabled = false;
-
+                    chUse.Enabled = !chUse.Checked;                                    //ошибки нет - работаем нормально 
+                */
             }
         }
 
