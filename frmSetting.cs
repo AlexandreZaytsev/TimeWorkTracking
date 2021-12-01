@@ -135,11 +135,11 @@ namespace TimeWorkTracking
 
         private void frmSetting_Load(object sender, EventArgs e)
         {
-            if (!clSystemChecks.checkProvider()) this.Close();
+            if (!clSystemSet.checkProvider()) this.Close();
             checkFileImport(Properties.Settings.Default.importFilename);
 
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            mainPanelSetting.Enabled = clMsSqlDatabase.CheckConnectWithConnectionStr(cs);
+            mainPanelSetting.Enabled = clMsSqlDatabase.sqlConnectSimple(cs);
             tbCompanyName.Text = Properties.Settings.Default.companyName;   //наименование компании
             nDaysInWorkWeek.Value = Properties.Settings.Default.daysInWorkWeek;
             nHoursInFullWorkDay.Value = Properties.Settings.Default.hoursInFullWorkDay;

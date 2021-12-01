@@ -19,7 +19,7 @@ namespace TimeWorkTracking
         private void frmSpecialMarks_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            mainPanelSpecialMarks.Enabled = clMsSqlDatabase.CheckConnectWithConnectionStr(cs);
+            mainPanelSpecialMarks.Enabled = clMsSqlDatabase.sqlConnectSimple(cs);
             if (mainPanelSpecialMarks.Enabled)
             {
                 InitializeListView();

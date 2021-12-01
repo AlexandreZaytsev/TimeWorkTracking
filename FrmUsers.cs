@@ -21,7 +21,7 @@ namespace TimeWorkTracking
         private void frmUsers_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            mainPanelUsers.Enabled = clMsSqlDatabase.CheckConnectWithConnectionStr(cs);
+            mainPanelUsers.Enabled = clMsSqlDatabase.sqlConnectSimple(cs);
             if (mainPanelUsers.Enabled)
             {
                 cbDepartment.DisplayMember = "Name";

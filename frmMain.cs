@@ -292,21 +292,21 @@ namespace TimeWorkTracking
             string msg = "";
             string hostSQL = Properties.Settings.Default.twtServerName;
             string csSQL = Properties.Settings.Default.twtConnectionSrting;
-            bool pingSQL = csSQL != "" && clSystemChecks.CheckPing(hostSQL);
+            bool pingSQL = csSQL != "" && clSystemSet.CheckPing(hostSQL);
             bool conSQL = false;
             if (!pingSQL)
                 msg += "Cетевое имя сервера SQL\r\n  " + hostSQL + "- недоступно\r\n\r\n";
             else
-                conSQL = clMsSqlDatabase.CheckConnectWithConnectionStr(csSQL);
+                conSQL = clMsSqlDatabase.sqlConnectSimple(csSQL);
 
             string hostPACS = Properties.Settings.Default.pacsHost;
             string csPACS = Properties.Settings.Default.pacsConnectionString;
-            bool pingPACS = csPACS != "" && clSystemChecks.CheckPing(hostPACS);
+            bool pingPACS = csPACS != "" && clSystemSet.CheckPing(hostPACS);
             bool conWeb = false;
             if (!pingPACS)
                 msg += "Cетевое имя сервиса СКУД\r\n  " + hostPACS + "- недоступно\r\n";
             else
-                conWeb = clWebServiceDataBase.CheckConnectWithConnectionWeb(csPACS);
+                conWeb = clWebServiceDataBase.pacsConnectSimple(csPACS);
 
 
             this.tsbtDataBaseSQL.Image = conSQL ? Properties.Resources.ok : Properties.Resources.no;

@@ -45,7 +45,7 @@ namespace TimeWorkTracking
 
         private void frmReport_Load(object sender, EventArgs e)
         {
-            if (!clSystemChecks.checkProvider()) this.Close();
+            if (!clSystemSet.checkProvider()) this.Close();
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             if (CheckConnects())                                            //проверить соединение с базой данных SQL
             {
@@ -386,7 +386,7 @@ namespace TimeWorkTracking
         {
             //проверка соединения с SQL
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            bool conSQL = clMsSqlDatabase.CheckConnectWithConnectionStr(cs);
+            bool conSQL = clMsSqlDatabase.sqlConnectSimple(cs);
             mainPanelReport.Enabled = conSQL;
             return conSQL;
         }

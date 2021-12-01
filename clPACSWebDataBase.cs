@@ -19,24 +19,7 @@ namespace TimeWorkTracking
     class clWebServiceDataBase
     {
 
-        //получить хеш строку MD5   
-        private static string getMD5(string input)
-        {
-            // Use input string to calculate MD5 hash
-            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
-            {
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
-                byte[] hashBytes = md5.ComputeHash(inputBytes);
-
-                // Convert the byte array to hexadecimal string
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < hashBytes.Length; i++)
-                {
-                    sb.Append(hashBytes[i].ToString("X2"));
-                }
-                return sb.ToString();
-            }
-        }
+  
 
         /*
         // utility method to read the cookie value:
@@ -219,38 +202,15 @@ namespace TimeWorkTracking
             return true;
         }
 
-        //проверить соединение отдельно по соединению (на базе master) и по имени базы в списке баз
-        //выдать расшифровку ошибок
-        public static string GetPACSConnection(string connectionString)
-        {
-            /*
-            if (ConnectExists(connectionString))
-            {
-                if (DatabaseExists(connectionString))
-                    return connectionString;
-                else
-                    return "-1";        //база данных не существует
-            }
-            else
-                return "-9";            //соединение установить не удалось
-*/
-            return "";
-        }
-        //проверить соединение сразу по строке подключения
-        //без выдачи ошибок
-        public static bool CheckConnectWithConnectionWeb(string connectionString)
-        {
-            return FullConnectExists(connectionString);
-        }
 
         //проверить что и соединение и бд существует
-        private static bool FullConnectExists(string connectionString)
+        private static bool CheckConnectSimple(string connectionString)
         {
             bool ret = false;
             string httpRet = "";
             if (connectionString != "")
             {
-                string pass = getMD5(getMD5(getMD5(connectionString) + "F593B01C562548C6B7A31B30884BDE53"));
+                string pass = clSystemSet.getMD5(clSystemSet.getMD5(clSystemSet.getMD5(connectionString) + "F593B01C562548C6B7A31B30884BDE53"));
                 string pointHostName = "Authenticate";
                 //-------------авторизация
                 string req =
@@ -285,33 +245,61 @@ namespace TimeWorkTracking
 
             return ret;
         }
-/*
-       //       StringBuilder errorMessages = new StringBuilder();
-     //  var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
-     //  using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
-       {
-           try
-           {
-      //         sqlConnection.Open();
-               ret = true;
-           }
-           catch ()//SqlException)
-           { }
-           finally
-           {
-               if (sqlConnection != null)
+        /*
+               //       StringBuilder errorMessages = new StringBuilder();
+             //  var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+             //  using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
                {
-                   sqlConnection.Close();                         //Close the connection
+                   try
+                   {
+              //         sqlConnection.Open();
+                       ret = true;
+                   }
+                   catch ()//SqlException)
+                   { }
+                   finally
+                   {
+                       if (sqlConnection != null)
+                       {
+                           sqlConnection.Close();                         //Close the connection
+                       }
+                   }
                }
-           }
-       }
-       */
-// }
-//      return ret;
-//    }
+               */
+        // }
+        //      return ret;
+        //    }
 
 
+        //PUBLIC------------------------------------------------------------------------
 
+        //Подключения и проверки
 
+        //проверить соединение отдельно по соединению (на базе master) и по имени базы в списке баз
+        //выдать расшифровку ошибок
+        //(проверка только из формы настроек соединения)
+        public static string pacsConnectBase(string connectionString)
+        {
+            /*
+            if (ConnectExists(connectionString))
+            {
+                if (DatabaseExists(connectionString))
+                    return connectionString;
+                else
+                    return "-1";        //база данных не существует
+            }
+            else
+                return "-9";            //соединение установить не удалось
+*/
+            return "";
+        }
+
+        //проверить соединение сразу по строке подключения
+        //без выдачи ошибок
+        //(проверки из всех модулей)
+        public static bool pacsConnectSimple(string connectionString)
+        {
+            return CheckConnectSimple(connectionString);
+        }
     }
 }

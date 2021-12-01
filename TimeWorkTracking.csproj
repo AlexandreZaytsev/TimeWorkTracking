@@ -56,8 +56,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="clCalendar.cs" />
-    <Compile Include="clSystemChecks.cs" />
-    <Compile Include="clPACSWebDataBase.cs" />
+    <Compile Include="clSystemSet.cs" />
+    <Compile Include="clPacsWebDataBase.cs" />
     <Compile Include="frmCalendar.cs">
       <SubType>Form</SubType>
     </Compile>

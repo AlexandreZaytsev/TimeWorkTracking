@@ -11,6 +11,108 @@ namespace TimeWorkTracking
 {
     class clMsSqlDatabase
     {
+    //Подключения и проверки
+
+        //проверить что соединение есть в принципе на базе master
+        private static bool CheckConnectBase(string connectionString)
+        {
+            bool ret = false;
+            StringBuilder errorMessages = new StringBuilder();
+            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString)
+            {
+                //     var databaseName = sqlConnectionStringBuilder.InitialCatalog;
+                InitialCatalog = "master"
+            };
+            using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
+            {
+                try
+                {
+                    sqlConnection.Open();
+                    ret = true;
+                }
+                catch (SqlException ex)
+                {
+                    //https://docs.microsoft.com/ru-ru/sql/relational-databases/errors-events/database-engine-events-and-errors?view=sql-server-ver15#errors-4000-to-4999
+                    for (int i = 0; i < ex.Errors.Count; i++)
+                    {
+                        errorMessages.Append("Index #" + i + "\n" +
+                            "Message: " + ex.Errors[i].Message + "\n" +
+                            "Number: " + ex.Errors[i].Number + "\n" +
+                            "LineNumber: " + ex.Errors[i].LineNumber + "\n" +
+                            "Source: " + ex.Errors[i].Source + "\n" +
+                            "Procedure: " + ex.Errors[i].Procedure + "\n");
+                    }
+                    MessageBox.Show(errorMessages.ToString(),
+                                   "Подключение к Базе Данных",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Exclamation);
+                }
+                finally
+                {
+                    if (sqlConnection != null)
+                    {
+                        sqlConnection.Close();                         //Close the connection
+                    }
+                }
+                return ret;
+            }
+        }
+
+        //проверить что и соединение и бд существует 
+        private static bool CheckConnectSimple(string connectionString)
+        {
+            bool ret = false;
+            if (connectionString != "")
+            {
+         //       StringBuilder errorMessages = new StringBuilder();
+                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+                using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
+                {
+                    try
+                    {
+                        sqlConnection.Open();
+                        ret = true;
+                    }
+                    catch (SqlException)
+                    { }
+                    finally
+                    {
+                        if (sqlConnection != null)
+                        {
+                            sqlConnection.Close();                         //Close the connection
+                        }
+                    }
+                }
+            }
+            return ret;
+        }
+
+        //проверить что бд существует
+        private static bool CheckDatabaseExists(string connectionString)
+        {
+            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+            var databaseName = sqlConnectionStringBuilder.InitialCatalog;
+            sqlConnectionStringBuilder.InitialCatalog = "master";
+            using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
+            {
+                sqlConnection.Open();
+                /*
+                using (var command = sqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"SELECT db_id('{databaseName}')";
+                    return command.ExecuteScalar() != DBNull.Value;
+                }
+                */
+                using (SqlCommand cmd = new SqlCommand($"SELECT db_id('{databaseName}')", sqlConnection))
+                {
+                    return cmd.ExecuteScalar() != DBNull.Value;
+                }
+
+            }
+        }
+
+    //Действия
+
         //создать БД по строке подключения
         private static void CreateDatabase(string connectionString)
         {
@@ -30,20 +132,21 @@ namespace TimeWorkTracking
             }
             InitDataBase(connectionString);
         }
+
         //инициализировать БД по строке подключения
         private static void InitDataBase(string connectionString)
-        { 
+        {
             using (var sqlConnection = new SqlConnection(connectionString))
             {
                 sqlConnection.Open();
                 using (var sqlCommand = sqlConnection.CreateCommand())
                 {
                     string sql;
-        //СТРУКТУРА ДАННЫХ
-        //ОГРАНИЧЕНИЯ ДЛЯ СТАРЫХ СЕРВЕРОВ
-        //Insert по отдельности, типов Data и Time - нет, строковую дату передавать как yyyymmdd
+                    //СТРУКТУРА ДАННЫХ
+                    //ОГРАНИЧЕНИЯ ДЛЯ СТАРЫХ СЕРВЕРОВ
+                    //Insert по отдельности, типов Data и Time - нет, строковую дату передавать как yyyymmdd
 
-        //выпадающие списки
+                    //выпадающие списки
                     //График работы (таблица для списка) Почасовой/Поминутный
                     sqlCommand.CommandText = "CREATE TABLE UserWorkScheme (" +
                         "id int PRIMARY KEY IDENTITY, " +
@@ -81,7 +184,7 @@ namespace TimeWorkTracking
                         ")";
                     sqlCommand.ExecuteNonQuery();
                     sql = "\r\nINSERT INTO CalendarLengthDay(name) VALUES ";
-                    sqlCommand.CommandText = 
+                    sqlCommand.CommandText =
                         sql + "(N'Короткий') " +
                         sql + "(N'Полный') " +
                         "\r\nINSERT INTO CalendarLengthDay(name) VALUES (N'Длинный')";
@@ -95,7 +198,7 @@ namespace TimeWorkTracking
                         "date Datetime NULL, " +                                                    //дата (год не учитываем)
                         "dateTypeId int NOT NULL FOREIGN KEY REFERENCES CalendarDateType(id), " +   //->ссылка на тип дня (Праздничный/Выходной и т.д.)
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
-                        ")";                                                        
+                        ")";
                     sqlCommand.ExecuteNonQuery();
                     sql = "\r\nINSERT INTO CalendarDateName(name, date, dateTypeId) VALUES ";
                     sqlCommand.CommandText =
@@ -142,7 +245,7 @@ namespace TimeWorkTracking
                         "uses bit DEFAULT 1 " +                                                     //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
-                    sql = "\r\nINSERT INTO UserPost(name) VALUES "; 
+                    sql = "\r\nINSERT INTO UserPost(name) VALUES ";
                     sqlCommand.CommandText =
                         sql + "(N'Ассистент менеджера') " +
                         sql + "(N'Бухгалтер') " +
@@ -228,9 +331,9 @@ namespace TimeWorkTracking
                         sql + "('34', N'НО', N'Отстранение от работы (оплачиваемое)(законодательство РФ)', N'Отстранение от работы (недопущение к работе) с оплатой(пособием) в соответствии с законодательством ', 0, 0) " +
                         sql + "('35', N'НБ', N'Отстранение от работы (не оплачиваемое)(законодательство РФ)', N'Отстранение от работы (недопущение к работе) по причинам, предусмотренным законодательством, без начисления заработной платы ', 0, 0) " +
                         //местные кодировки
-                       // sql + "('00', 'СЗ', N'Служебное задание', '', 0, 1) " +
+                        // sql + "('00', 'СЗ', N'Служебное задание', '', 0, 1) " +
                         sql + "('100', 'РД', N'Работа из дома', '', 0, 1) " +
-                       // sql + "('101', 'ОД', N'Общественное дело', '', 0, 1) " +
+                        // sql + "('101', 'ОД', N'Общественное дело', '', 0, 1) " +
                         sql + "('102', 'ЛД', N'Личные дела', '', 0, 1) " +
                         sql + "('103', 'УДЛ', N'Удаленка', '', 0, 1) ";
                     sqlCommand.ExecuteNonQuery();
@@ -247,7 +350,7 @@ namespace TimeWorkTracking
                         "uses bit DEFAULT 1 " +                                                         //флаг доступа для использования
                         ")";
                     sqlCommand.ExecuteNonQuery();
-                    sql = "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES "; 
+                    sql = "\r\nINSERT INTO Calendars(originalDate, transferDate, dateNameId, dayLengthId, uses) VALUES ";
                     sqlCommand.CommandText =
                         sql + "('20210101', '20210101', 1, 2, 1) " +
                         sql + "('20210102', '20211105', 2, 2, 1) " +
@@ -340,7 +443,7 @@ namespace TimeWorkTracking
                     //UDF информация о дате календаря (пользовательски функции для ускорения процесса выборки)
                     sqlCommand.CommandText = "Create function twt_GetDateInfo\r\n(\r\n@Name varchar(20) = '', \r\n@Date varchar(4) = ''\r\n)" +
                         "\r\n/*" +
-                        "\r\n возвращает информацию о дате" + 
+                        "\r\n возвращает информацию о дате" +
                         "\r\n   по части (like) наименования" +
                         "\r\n   или по дате без года (4 символа в формате MMDD) с ведущими нулями" +
                         "\r\n*/" +
@@ -582,53 +685,8 @@ namespace TimeWorkTracking
             }
         }
 
-        //проверить что соединение есть в принципе на базе master
-        private static bool ConnectExists(string connectionString)
-        {
-            bool ret = false;
-            StringBuilder errorMessages = new StringBuilder();
-            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString)
-            {
-                //     var databaseName = sqlConnectionStringBuilder.InitialCatalog;
-                InitialCatalog = "master"
-            };
-            using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
-            {
-                try
-                {
-                    sqlConnection.Open();
-                    ret = true;
-                }
-                catch (SqlException ex)
-                {
-                    //https://docs.microsoft.com/ru-ru/sql/relational-databases/errors-events/database-engine-events-and-errors?view=sql-server-ver15#errors-4000-to-4999
-                    for (int i = 0; i < ex.Errors.Count; i++)
-                    {
-                        errorMessages.Append("Index #" + i + "\n" +
-                            "Message: " + ex.Errors[i].Message + "\n" +
-                            "Number: " + ex.Errors[i].Number + "\n" +
-                            "LineNumber: " + ex.Errors[i].LineNumber + "\n" +
-                            "Source: " + ex.Errors[i].Source + "\n" +
-                            "Procedure: " + ex.Errors[i].Procedure + "\n");
-                    }
-                    MessageBox.Show(errorMessages.ToString(),
-                                   "Подключение к Базе Данных",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Exclamation);
-                }
-                finally
-                {
-                    if (sqlConnection != null)
-                    {
-                        sqlConnection.Close();                         //Close the connection
-                    }
-                }
-                return ret;
-            }
-        }
-
-        //проверить что бд существует
-        private static bool DatabaseExists(string connectionString)
+        //удалить бд
+        private static void DropDatabase(string connectionString)
         {
             var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
             var databaseName = sqlConnectionStringBuilder.InitialCatalog;
@@ -636,49 +694,20 @@ namespace TimeWorkTracking
             using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
             {
                 sqlConnection.Open();
-                /*
-                using (var command = sqlConnection.CreateCommand())
+                using (var sqlCommand = sqlConnection.CreateCommand())
                 {
-                    command.CommandText = $"SELECT db_id('{databaseName}')";
-                    return command.ExecuteScalar() != DBNull.Value;
+                    //$ - использхование вставки параметров в строку без конкатенации
+                    //@ - строка без экранирующих символов
+                    sqlCommand.CommandText = $@"
+                    ALTER DATABASE {databaseName} SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+                    DROP DATABASE [{databaseName}]
+                    ";
+                    sqlCommand.ExecuteNonQuery();
                 }
-                */
-                    using (SqlCommand cmd = new SqlCommand($"SELECT db_id('{databaseName}')", sqlConnection)) 
-                {
-                    return cmd.ExecuteScalar() != DBNull.Value;
-                }
-
             }
         }
 
-        //проверить что и соединение и бд существует
-        private static bool FullConnectExists(string connectionString)
-        {
-            bool ret = false;
-            if (connectionString != "")
-            {
-         //       StringBuilder errorMessages = new StringBuilder();
-                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
-                using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
-                {
-                    try
-                    {
-                        sqlConnection.Open();
-                        ret = true;
-                    }
-                    catch (SqlException)
-                    { }
-                    finally
-                    {
-                        if (sqlConnection != null)
-                        {
-                            sqlConnection.Close();                         //Close the connection
-                        }
-                    }
-                }
-            }
-            return ret;
-        }
+    //Запросы
 
         //выполнить запрос на обновление создание и удаление
         // connectionString - строка соединения
@@ -762,48 +791,18 @@ namespace TimeWorkTracking
             return ds.Tables[0]; //ds.Tables[tableName];    // Возвращаем первую таблицу из набора Dataset
         }
 
-        //удалить бд
-        private static void DropDatabase(string connectionString)
-        {
-            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
-            var databaseName = sqlConnectionStringBuilder.InitialCatalog;
-            sqlConnectionStringBuilder.InitialCatalog = "master";
-            using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
-            {
-                sqlConnection.Open();
-                using (var sqlCommand = sqlConnection.CreateCommand())
-                {
-                    //$ - использхование вставки параметров в строку без конкатенации
-                    //@ - строка без экранирующих символов
-                    sqlCommand.CommandText = $@"
-                    ALTER DATABASE {databaseName} SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-                    DROP DATABASE [{databaseName}]
-                    ";
-                    sqlCommand.ExecuteNonQuery();
-                }
-            }
-        }
-
 
         //PUBLIC------------------------------------------------------------------------
 
-        //пересоздать БД 
-        public static void CreateDataBase(string connectionstring)
-        {
-            if (DatabaseExists(connectionstring))
-            {
-                DropDatabase(connectionstring);
-            }
-            CreateDatabase(connectionstring); 
-        }
-
+    //Подключения и проверки
         //проверить соединение отдельно по соединению (на базе master) и по имени базы в списке баз
         //выдать расшифровку ошибок
-        public static string GetSqlConnection(string connectionString) 
+        //(проверка только из формы настроек соединения)
+        public static string sqlConnectBase(string connectionString) 
         {
-            if (ConnectExists(connectionString))
+            if (CheckConnectBase(connectionString))
             {
-                if (DatabaseExists(connectionString))
+                if (CheckDatabaseExists(connectionString))
                     return connectionString;
                 else
                     return "-1";        //база данных не существует
@@ -814,22 +813,38 @@ namespace TimeWorkTracking
 
         //проверить соединение сразу по строке подключения
         //без выдачи ошибок
-        public static bool CheckConnectWithConnectionStr(string connectionString)
+        //(проверки из всех модулей)
+        public static bool sqlConnectSimple(string connectionString)
         {
-            return FullConnectExists(connectionString);
+            return CheckConnectSimple(connectionString);
         }
+
+    //Действия
+
+        //пересоздать БД 
+        public static void CreateDataBase(string connectionstring)
+        {
+            if (CheckDatabaseExists(connectionstring))
+            {
+                DropDatabase(connectionstring);
+            }
+            CreateDatabase(connectionstring);
+        }
+
+    //Запросы
 
         //выполнить запрос и вернуть DataSet
         public static DataTable TableRequest(string connectionString, string sqlRequest)
         {
             return GetTableRequest(connectionString, sqlRequest);
         }
-        //выполнить запрос на создание удаление обновление 
-        //возврат true или false
+ 
+        //выполнить запрос на создание удаление обновление и вернуть true или false
         public static bool RequestNonQuery(string connectionString, string sqlRequest, Boolean errMode)
         {
             return GetRequestNonQuery(connectionString, sqlRequest, errMode) > 0;
         }
+
         //выполнить скалярный запрос и вернуть строку
         public static string RequesScalar(string connectionString, string sqlRequest, Boolean errMode)
         {

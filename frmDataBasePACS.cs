@@ -21,7 +21,7 @@ namespace TimeWorkTracking
         //test Connrection СКУД (web сервис PACS)
         private void btTestConnectionPacs_Click(object sender, EventArgs e)
         {
-            if (!clSystemChecks.CheckPing(tbHostNamePACS.Text))
+            if (!clSystemSet.CheckPing(tbHostNamePACS.Text))
                 MessageBox.Show("Cетевое имя сервера PACS\r\n  " +
                                 tbHostNamePACS.Text +
                                 "- недоступно\r\n",
@@ -42,7 +42,7 @@ namespace TimeWorkTracking
             bool ret = false;
             string connectionString = GetFormConnectionString();        //полчить строку соединения по настройкам формы
             StringBuilder Messages = new StringBuilder();
-            string statusDB = clWebServiceDataBase.GetPACSConnection(connectionString);
+            string statusDB = clWebServiceDataBase.pacsConnectBase(connectionString);
             /*
                         switch (statusDB)
                         {

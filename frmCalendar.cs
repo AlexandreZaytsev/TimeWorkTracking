@@ -22,7 +22,7 @@ namespace TimeWorkTracking
         private void frmCalendar_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            mainPanelCalendar.Enabled = clMsSqlDatabase.CheckConnectWithConnectionStr(cs);
+            mainPanelCalendar.Enabled = clMsSqlDatabase.sqlConnectSimple(cs);
             if (mainPanelCalendar.Enabled)
             {
                 //сначала вспомогательные данные
