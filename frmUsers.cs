@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace TimeWorkTracking
-{
+{ 
     public partial class frmUsers : Form
     {
         clListViewItemComparer _lvwItemComparer;
@@ -21,9 +21,9 @@ namespace TimeWorkTracking
         private void frmUsers_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            mainPanelUsers.Enabled = clMsSqlDatabase.CheckConnectWithConnectionStr(cs);
+            mainPanelUsers.Enabled = clMsSqlDatabase.sqlConnectSimple(cs);
             if (mainPanelUsers.Enabled)
-            {
+            { 
                 cbDepartment.DisplayMember = "Name";
                 cbDepartment.ValueMember = "id";
                 cbDepartment.DataSource = clMsSqlDatabase.TableRequest(cs, "Select id, name From UserDepartment where uses=1");
