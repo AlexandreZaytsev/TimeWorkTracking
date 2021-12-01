@@ -23,7 +23,7 @@ namespace TimeWorkTracking
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             mainPanelUsers.Enabled = clMsSqlDatabase.sqlConnectSimple(cs);
             if (mainPanelUsers.Enabled)
-            {
+            { 
                 cbDepartment.DisplayMember = "Name";
                 cbDepartment.ValueMember = "id";
                 cbDepartment.DataSource = clMsSqlDatabase.TableRequest(cs, "Select id, name From UserDepartment where uses=1");
