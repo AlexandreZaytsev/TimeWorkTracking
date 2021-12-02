@@ -19,7 +19,7 @@ namespace TimeWorkTracking
     class clWebServiceDataBase
     {
 
-  
+
 
         /*
         // utility method to read the cookie value:
@@ -55,22 +55,13 @@ namespace TimeWorkTracking
         /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         'функция Отправка GET POST запроса на хост
         '----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        ' REQUEST_URI - запрашиваемый сайт
-        ' REQUEST_METHOD - метод запроса
-        '  GET - запрашивает данные из указанного ресурса
-        '  POST - отправляет данных, подлежащие обработке, на указанный ресурс
-        ' QUERY_STRING - запрос
-        ' Content-Type: application/x-www-form-urlencoded идентифицирует тип передаваемых данных
-        ' Accept: text/html, text/plain, image/gif, image/jpeg   какие типы документов он "понимает"
-        //http://scriptcoding.ru/2013/03/19/protocol-http/
-        //http://www.read.excode.ru/art5783p3.html
+        ' host - запрашиваемый сайт
+        ' request - запрос
+        //        https://stackoverflow.com/questions/4015324/how-to-make-an-http-post-web-request
         */
         private static string getDataFromURL(string host, string request)
         {
             string ret="";
-            //        https://stackoverflow.com/questions/4015324/how-to-make-an-http-post-web-request
-
-            // WebClient:
             try
             {
                 using (var webClient = new WebClient())

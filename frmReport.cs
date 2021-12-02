@@ -185,7 +185,7 @@ namespace TimeWorkTracking
                                 headerIndex.Add(drow["letterCode"].ToString(), lengthDays + 4 + i); //добавить значение словаря заголока
                                 captionData[0, lengthDays + 4 + i] = pad +
                                     "+(" + drow["letterCode"].ToString() + ") " +
-                                    drow["name"].ToString();
+                                    drow["name"].ToString().Wrap(20, "\r\n" + pad);
                             }
                         }
                     }
