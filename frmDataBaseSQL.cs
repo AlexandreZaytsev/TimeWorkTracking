@@ -60,7 +60,7 @@ namespace TimeWorkTracking
                 TestFormConnectionTwt();        //проверить соединение по настройкам формы
         }
 
-        //полчить строку соединения по настройкам формы
+        //полчить строку соединения SQL по настройкам формы
         private string GetFormConnectionString() 
         {
             string connectionString;

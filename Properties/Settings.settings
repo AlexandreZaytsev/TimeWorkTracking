@@ -15,7 +15,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="pacsHost" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://localhost:40001</Value>
+      <Value Profile="(Default)">rpk-342</Value>
     </Setting>
     <Setting Name="pascLogin" Type="System.String" Scope="User">
       <Value Profile="(Default)">web_api_read</Value>
@@ -58,6 +58,12 @@
     </Setting>
     <Setting Name="minutesChangingFullWorkDay" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="pacsScheme" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http</Value>
+    </Setting>
+    <Setting Name="pacsPort" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">40001</Value>
     </Setting>
   </Settings>
 </SettingsFile>

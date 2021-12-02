@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Web;
 using System.Windows.Forms;
 
 namespace TimeWorkTracking
@@ -50,12 +51,25 @@ namespace TimeWorkTracking
                 else
                     return false;
             }
-            catch (PingException)// e)
+            catch (PingException e)
             {
                 return false;
             }
         }
 
+        //проверить доступ к хосту
+        static public bool CheckHost(string uriHost)
+        {
+            //https://professorweb.ru/my/csharp/web/level2/2_4.php
+            try
+            {
+                return new System.Net.WebClient().DownloadString(uriHost).Contains("");
+            }
+            catch
+            {
+                return false;
+            }
+        }
         //проверить провайдеров для работы с Excel
         static public bool checkProvider()
         {

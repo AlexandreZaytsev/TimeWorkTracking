@@ -12,6 +12,7 @@ using System.Web.Script.Serialization;
 using System.Web;
 using System.Windows.Forms;
 
+
 namespace TimeWorkTracking
 {
 
@@ -58,7 +59,8 @@ namespace TimeWorkTracking
         ' host - запрашиваемый сайт
         ' request - запрос
         //        https://stackoverflow.com/questions/4015324/how-to-make-an-http-post-web-request
-        */
+        //https://zetcode.com/csharp/httpclient/
+         */
         private static string getDataFromURL(string host, string request)
         {
             string ret="";
@@ -145,17 +147,17 @@ namespace TimeWorkTracking
 */
         }
 
-        //проверить что соединение есть в принципе на базе master
-        private static bool ConnectExists(string connectionString)
+        //проверить что соединение есть в принципе 
+        private static bool CheckConnectBase(string connectionString, string login, string password)
         {
             bool ret = false;
             StringBuilder errorMessages = new StringBuilder();
-            /*
-            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString)
-            {
-                //     var databaseName = sqlConnectionStringBuilder.InitialCatalog;
-                InitialCatalog = "master"
-            };
+            UriBuilder builderURI = new UriBuilder(connectionString);
+            string res = getRestData(builderURI.Uri.AbsoluteUri, login, password, 0);//,
+
+/*
+ * getRestData(string url, string pointHostName, string req, int printMsg)
+ * 
             using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
             {
                 try
@@ -269,19 +271,10 @@ namespace TimeWorkTracking
         //проверить соединение отдельно по соединению (на базе master) и по имени базы в списке баз
         //выдать расшифровку ошибок
         //(проверка только из формы настроек соединения)
-        public static string pacsConnectBase(string connectionString)
+        public static string pacsConnectBase(string connectionString, string login, string password)
         {
-            /*
-            if (ConnectExists(connectionString))
-            {
-                if (DatabaseExists(connectionString))
-                    return connectionString;
-                else
-                    return "-1";        //база данных не существует
-            }
-            else
+            if (!CheckConnectBase(connectionString, login, password))
                 return "-9";            //соединение установить не удалось
-*/
             return "";
         }
 

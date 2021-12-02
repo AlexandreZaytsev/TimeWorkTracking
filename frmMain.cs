@@ -299,12 +299,12 @@ namespace TimeWorkTracking
             else
                 conSQL = clMsSqlDatabase.sqlConnectSimple(csSQL);
 
-            string hostPACS = Properties.Settings.Default.pacsHost;
+         //   string hostPACS = Properties.Settings.Default.pacsHost;
             string csPACS = Properties.Settings.Default.pacsConnectionString;
-            bool pingPACS = csPACS != "" && clSystemSet.CheckPing(hostPACS);
+            bool pingPACS = csPACS != "" && clSystemSet.CheckHost(csPACS);
             bool conWeb = false;
             if (!pingPACS)
-                msg += "Cетевое имя сервиса СКУД\r\n  " + hostPACS + "- недоступно\r\n";
+                msg += "Хост СКУД\r\n  " + csPACS + "- недоступен\r\n";
             else
                 conWeb = clWebServiceDataBase.pacsConnectSimple(csPACS);
 

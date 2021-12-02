@@ -21,7 +21,7 @@ namespace TimeWorkTracking
         //test Connrection СКУД (web сервис PACS)
         private void btTestConnectionPacs_Click(object sender, EventArgs e)
         {
-            if (!clSystemSet.CheckPing(tbHostNamePACS.Text))
+            if (!clSystemSet.CheckHost(GetFormConnectionString()))
                 MessageBox.Show("Cетевое имя сервера PACS\r\n  " +
                                 tbHostNamePACS.Text +
                                 "- недоступно\r\n",
@@ -29,11 +29,24 @@ namespace TimeWorkTracking
             else
                 TestFormConnectionPACS();        //проверить соединение по настройкам формы
         }
-        //полчить строку соединения по настройкам формы
+        //полчить строку соединения PACS по настройкам формы
         private string GetFormConnectionString()
         {
-            string connectionString = tbHostNamePACS.Text.Trim();
-            return connectionString;
+            UriBuilder myURI = new UriBuilder(
+                tbHostSchemePACS.Text,
+                tbHostNamePACS.Text,
+                Convert.ToInt32(tbHostPortPACS.Text)
+                );///,
+//   "my/csharp/web/level2/2_2.php", "#titlecode"); ;
+
+
+            UriBuilder builder = new UriBuilder();
+            builder.Scheme = tbHostSchemePACS.Text;
+            builder.Port = Convert.ToInt32(tbHostPortPACS.Text);
+            builder.Host = tbHostNamePACS.Text;
+            builder.Password = tbPasswordPASC.Text;
+            builder.UserName = tbUserNamePACS.Text;
+            return builder.Uri.AbsoluteUri;
         }
 
         //проверить соединение по настройкам формы
@@ -42,7 +55,9 @@ namespace TimeWorkTracking
             bool ret = false;
             string connectionString = GetFormConnectionString();        //полчить строку соединения по настройкам формы
             StringBuilder Messages = new StringBuilder();
-            string statusDB = clWebServiceDataBase.pacsConnectBase(connectionString);
+            string login = tbUserNamePACS.Text;
+            string password = tbPasswordPASC.Text;
+            string statusDB = clWebServiceDataBase.pacsConnectBase(connectionString, login, password);
             /*
                         switch (statusDB)
                         {
@@ -96,6 +111,8 @@ namespace TimeWorkTracking
 
 
             //PACS DataBase
+            Properties.Settings.Default.pacsScheme = tbHostSchemePACS.Text;
+            Properties.Settings.Default.pacsPort = Convert.ToInt32(tbHostPortPACS.Text);
             Properties.Settings.Default.pacsHost = tbHostNamePACS.Text;
             Properties.Settings.Default.pascLogin = tbUserNamePACS.Text;
             Properties.Settings.Default.pacsPassword = tbPasswordPASC.Text;
@@ -111,6 +128,8 @@ namespace TimeWorkTracking
         private void frmDataBasePACS_Load(object sender, EventArgs e)
         {
             //PACS DataBase
+            tbHostSchemePACS.Text = Properties.Settings.Default.pacsScheme;
+            tbHostPortPACS.Text = Properties.Settings.Default.pacsPort.ToString();
             tbHostNamePACS.Text = Properties.Settings.Default.pacsHost;
             tbUserNamePACS.Text = Properties.Settings.Default.pascLogin;
             tbPasswordPASC.Text = Properties.Settings.Default.pacsPassword;
