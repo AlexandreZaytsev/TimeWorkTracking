@@ -181,8 +181,8 @@ namespace TimeWorkTracking
             return "RGB(" + c.R.ToString() + "," + c.G.ToString() + "," + c.B.ToString() + ")";
         }
 
-        //вставить в строку перевод строки контролируя длину строки и целые слова
-        //static int Abs(int x) => x >= 0 ? x : -x;
+        //разбить длинное предложение на части (по словам) не превышающие длину max и собрать его обратно используя разделитель delimeter
+        //https://ru.stackoverflow.com/questions/707937/c-%D0%BF%D0%B5%D1%80%D0%B5%D0%BD%D0%BE%D1%81-%D1%81%D0%BB%D0%BE%D0%B2-%D0%B2-%D1%81%D1%82%D1%80%D0%BE%D0%BA%D0%B5-%D1%81-%D1%80%D0%B0%D0%B7%D0%B1%D0%B8%D0%B2%D0%BA%D0%BE%D0%B9-%D0%BD%D0%B0-%D0%BE%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%BD%D1%83%D1%8E-%D0%B4%D0%BB%D0%B8%D0%BD%D1%83
         public static string Wrap(this string text, int max, string delimeter)
         {
             var charCount = 0;
