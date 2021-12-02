@@ -61,7 +61,7 @@ namespace TimeWorkTracking
         //        https://stackoverflow.com/questions/4015324/how-to-make-an-http-post-web-request
         //https://zetcode.com/csharp/httpclient/
          */
-        private static string getDataFromURL(string host, string request)
+        private static string getDataFromURL(string pacsUri, string request)
         {
             string ret="";
             try
@@ -70,7 +70,7 @@ namespace TimeWorkTracking
                 {
                     webClient.Encoding = Encoding.UTF8;
                     webClient.Headers[HttpRequestHeader.ContentType] = "application/json";
-                    ret = webClient.UploadString(host, request);// "http://some/address", "{some:\"json data\"}");
+                    ret = webClient.UploadString(pacsUri, request);// "http://some/address", "{some:\"json data\"}");
                     /*
                     JavaScriptSerializer serializer = new JavaScriptSerializer();
                     byte[] requestData = Encoding.ASCII.GetBytes(serializer.Serialize(postRequest));
@@ -117,14 +117,16 @@ namespace TimeWorkTracking
         ' return - ответ сервера
         'прочитать данные из СКУД
         */
-        private static string getRestData(string url, string pointHostName, string req, int printMsg)
+        private static string getRestData(Uri pacsUri, string add, string req, int printMsg)
         {
             string ret = "";
+            
+            string cn = pacsUri.OriginalString + add;
             try
             {
-                ret = getDataFromURL(url + pointHostName, req);
+                ret = getDataFromURL(cn, req);
                 if (printMsg == 1)
-                    printDebug(pointHostName, req, ret);                //отчет о операции
+                    printDebug(pacsUri.Host, req, ret);                //отчет о операции
             }
             catch
             {
@@ -148,12 +150,21 @@ namespace TimeWorkTracking
         }
 
         //проверить что соединение есть в принципе 
-        private static bool CheckConnectBase(string connectionString, string login, string password)
+        private static bool CheckConnectBase(Uri pacsUri)
         {
             bool ret = false;
             StringBuilder errorMessages = new StringBuilder();
-            UriBuilder builderURI = new UriBuilder(connectionString);
-            string res = getRestData(builderURI.Uri.AbsoluteUri, login, password, 0);//,
+            string pointHostName = "json/Authenticate";
+
+//            pacsUri.P = "json/Authenticate";
+            //-------------авторизация
+            string req =
+                "{" +
+                "\"PasswordHash\":\" + pacsUri + \", " +
+                "\"UserName\":\" + srvLogint + \"" +
+                "}";
+
+            string res = getRestData(pacsUri, "json/Authenticate/", pacsUri.LocalPath, 0);//,
 
 /*
  * getRestData(string url, string pointHostName, string req, int printMsg)
@@ -197,6 +208,7 @@ namespace TimeWorkTracking
 
 
         //проверить что и соединение и бд существует
+        //https://stackoverflow.com/questions/9620278/how-do-i-make-calls-to-a-rest-api-using-c
         private static bool CheckConnectSimple(string connectionString)
         {
             bool ret = false;
@@ -212,7 +224,7 @@ namespace TimeWorkTracking
                     "\"UserName\":\" + srvLogint + \"" +
                     "}";
 
-                httpRet = getRestData("http://" + "srvHost" + ":40001/json/", pointHostName, req, 0);
+                httpRet = "";// getRestData("http://" + "srvHost" + ":40001/json/", req, 0);
                 if (httpRet.Length > 0) 
                 {
                     //                     private static JavaScriptSerializer _Serializer = new JavaScriptSerializer();
@@ -271,9 +283,9 @@ namespace TimeWorkTracking
         //проверить соединение отдельно по соединению (на базе master) и по имени базы в списке баз
         //выдать расшифровку ошибок
         //(проверка только из формы настроек соединения)
-        public static string pacsConnectBase(string connectionString, string login, string password)
+        public static string pacsConnectBase(Uri pacsUri)
         {
-            if (!CheckConnectBase(connectionString, login, password))
+            if (!CheckConnectBase(pacsUri))
                 return "-9";            //соединение установить не удалось
             return "";
         }

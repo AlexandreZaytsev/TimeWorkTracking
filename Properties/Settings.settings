@@ -15,13 +15,13 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="pacsHost" Type="System.String" Scope="User">
-      <Value Profile="(Default)">rpk-342</Value>
+      <Value Profile="(Default)">localhost</Value>
     </Setting>
     <Setting Name="pascLogin" Type="System.String" Scope="User">
-      <Value Profile="(Default)">web_api_read</Value>
+      <Value Profile="(Default)">admin</Value>
     </Setting>
     <Setting Name="pacsPassword" Type="System.String" Scope="User">
-      <Value Profile="(Default)">ric</Value>
+      <Value Profile="(Default)">admin</Value>
     </Setting>
     <Setting Name="twtAuthenticationDef" Type="System.String" Scope="User">
       <Value Profile="(Default)">Windows Autentification</Value>

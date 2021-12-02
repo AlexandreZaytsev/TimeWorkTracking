@@ -73,7 +73,7 @@ namespace TimeWorkTracking.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("rpk-342")]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
         public string pacsHost {
             get {
                 return ((string)(this["pacsHost"]));
@@ -85,7 +85,7 @@ namespace TimeWorkTracking.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("web_api_read")]
+        [global::System.Configuration.DefaultSettingValueAttribute("admin")]
         public string pascLogin {
             get {
                 return ((string)(this["pascLogin"]));
@@ -97,7 +97,7 @@ namespace TimeWorkTracking.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("ric")]
+        [global::System.Configuration.DefaultSettingValueAttribute("admin")]
         public string pacsPassword {
             get {
                 return ((string)(this["pacsPassword"]));

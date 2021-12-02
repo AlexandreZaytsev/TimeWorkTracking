@@ -11,6 +11,7 @@ namespace TimeWorkTracking
 {
     public partial class frmDataBasePACS : Form
     {
+        private UriBuilder uriPacs;
         public frmDataBasePACS()
         {
             //подписка события внешних форм 
@@ -21,7 +22,10 @@ namespace TimeWorkTracking
         //test Connrection СКУД (web сервис PACS)
         private void btTestConnectionPacs_Click(object sender, EventArgs e)
         {
-            if (!clSystemSet.CheckHost(GetFormConnectionString()))
+            string cs = GetFormConnectionString().OriginalString;
+            cs = cs.Substring(0, cs.IndexOf('#'));
+            //            if (!clSystemSet.CheckHost(GetFormConnectionString().AbsoluteUri.Replace(uriPacs.Uri.UserInfo + "@", "")))
+            if (!clSystemSet.CheckHost(cs))
                 MessageBox.Show("Cетевое имя сервера PACS\r\n  " +
                                 tbHostNamePACS.Text +
                                 "- недоступно\r\n",
@@ -30,34 +34,35 @@ namespace TimeWorkTracking
                 TestFormConnectionPACS();        //проверить соединение по настройкам формы
         }
         //полчить строку соединения PACS по настройкам формы
-        private string GetFormConnectionString()
+        private Uri GetFormConnectionString()
         {
-            UriBuilder myURI = new UriBuilder(
-                tbHostSchemePACS.Text,
-                tbHostNamePACS.Text,
-                Convert.ToInt32(tbHostPortPACS.Text)
-                );///,
-//   "my/csharp/web/level2/2_2.php", "#titlecode"); ;
-
-
-            UriBuilder builder = new UriBuilder();
-            builder.Scheme = tbHostSchemePACS.Text;
-            builder.Port = Convert.ToInt32(tbHostPortPACS.Text);
-            builder.Host = tbHostNamePACS.Text;
-            builder.Password = tbPasswordPASC.Text;
-            builder.UserName = tbUserNamePACS.Text;
-            return builder.Uri.AbsoluteUri;
+            uriPacs = new UriBuilder();
+            uriPacs.Scheme = tbHostSchemePACS.Text;
+            uriPacs.Port = Convert.ToInt32(tbHostPortPACS.Text);
+            uriPacs.Host = tbHostNamePACS.Text;
+            string pass = clSystemSet.getMD5(clSystemSet.getMD5(clSystemSet.getMD5(tbPasswordPASC.Text) + "F593B01C562548C6B7A31B30884BDE53"));
+            // "admin 88020F057FE7287D8D57494382356F97"
+            //            uriPacs.Password = pass;                                                    //хеш пароль                               
+            //            uriPacs.UserName = tbUserNamePACS.Text;
+            //uriPacs.Path = "json/";// Authenticate/";
+            string query =
+                "{" +
+                "\"PasswordHash\":\"" + pass + "\", " +
+                "\"UserName\":\"" + tbUserNamePACS.Text + "\"" +
+                 "}";
+            uriPacs.Fragment = query;
+            return uriPacs.Uri;// uriPacs.Uri.AbsoluteUri.Replace(uriPacs.Uri.UserInfo + "@", "");     //вернуть строку без логина и пароля
         }
 
         //проверить соединение по настройкам формы
         private Boolean TestFormConnectionPACS()
         {
             bool ret = false;
-            string connectionString = GetFormConnectionString();        //полчить строку соединения по настройкам формы
+            Uri pacsUri = GetFormConnectionString();        //полчить строку соединения по настройкам формы
             StringBuilder Messages = new StringBuilder();
             string login = tbUserNamePACS.Text;
             string password = tbPasswordPASC.Text;
-            string statusDB = clWebServiceDataBase.pacsConnectBase(connectionString, login, password);
+            string statusDB = clWebServiceDataBase.pacsConnectBase(pacsUri);
             /*
                         switch (statusDB)
                         {
@@ -133,6 +138,7 @@ namespace TimeWorkTracking
             tbHostNamePACS.Text = Properties.Settings.Default.pacsHost;
             tbUserNamePACS.Text = Properties.Settings.Default.pascLogin;
             tbPasswordPASC.Text = Properties.Settings.Default.pacsPassword;
+            GetFormConnectionString();          //инициализируем uri   
         }
 
 
