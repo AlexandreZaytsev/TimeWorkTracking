@@ -204,6 +204,9 @@ namespace TimeWorkTracking
 //                 ret = GetRestData("http://" & srvHost & ":40001/json/", pointHostName, req, 0)
                 UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
                 string res = getRestData(pacsUriLite.Uri.AbsoluteUri, "EmployeeGetList", jsonReq, 0);//,
+
+//http://localhost:40001/json/help/operations/EmployeeGetList
+//https://stackoverflow.com/questions/5502245/deserializing-a-json-file-with-javascriptserializer                
                 JavaScriptSerializer ser = new JavaScriptSerializer();
                 Dictionary<string, object> company = (Dictionary<string, object>)ser.DeserializeObject(res);
                 if (company != null)
