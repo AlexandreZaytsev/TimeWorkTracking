@@ -193,6 +193,8 @@ namespace TimeWorkTracking
                 //crmId
                 //               chUse.Checked = lstwDataBaseUsers.Items[ind].Text == "True";                  //access    
                 tbName.Text = lstwDataBaseMain.Items[ind].SubItems[1].Text;                 //fio
+                //загружаемся из СКУД
+                LoadPascInfoByID(lstwDataBaseMain.Items[ind].SubItems[1].Text);
 
                 if (lstwDataBaseMain.Items[ind].Text == "0")                                //данных о проходе нет
                 {                                                                                      
@@ -285,6 +287,13 @@ namespace TimeWorkTracking
             mcRegDate.UpdateBoldedDates();
         }
 
+        //Загрузить информацию из СКУД
+        private bool LoadPascInfoByID(string userExtId) 
+        {
+            bool ret = false;
+            //            CheckConnectSimple
+            return ret;
+        }
 
         //проверить соединение с базами
         private bool CheckConnects()
@@ -320,12 +329,6 @@ namespace TimeWorkTracking
                 conWeb = clWebServiceDataBase.pacsConnectSimple(csPACS);
 
             this.tsbtDataBasePACS.Image = pingPACS ? Properties.Resources.ok : Properties.Resources.no;
-
-
-
-            //            if (msg != "")
-            //                MessageBox.Show(msg+"\r\nавторизуйтесь под Администратором и\r\nнастройте соединения", "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
             return conSQL;
         }
 

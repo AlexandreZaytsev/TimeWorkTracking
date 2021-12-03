@@ -23,11 +23,6 @@ namespace TimeWorkTracking
         private void btTestConnectionPacs_Click(object sender, EventArgs e)
         {
             UriBuilder uriPacs = GetFormConnectionString();
-            string cs = uriPacs.Uri.OriginalString.Replace(uriPacs.Uri.UserInfo + "@", "");
- //           cs = cs.Substring(0, cs.IndexOf('#'));
- //            cs = cs.Replace(uriPacs.Uri.UserInfo + "@", "")
-            //            if (!clSystemSet.CheckHost(GetFormConnectionString().AbsoluteUri.Replace(uriPacs.Uri.UserInfo + "@", "")))
-//            if (!clSystemSet.CheckHost(cs))
             if (!clSystemSet.CheckPing(uriPacs.Host))
                     MessageBox.Show("Cетевое имя сервера PACS\r\n  " +
                                 tbHostNamePACS.Text +
@@ -72,11 +67,11 @@ namespace TimeWorkTracking
                                 picStatusPACS.Image = global::TimeWorkTracking.Properties.Resources.no;
 //                                btTestConnectionPacs.Visible = true;
                                 Messages.Append("Соединение:" + "\n" +
-                                            $"\tСхема: {tbHostSchemePACS.Text}" + "\n" +
-                                            $"\tПорт: {tbHostPortPACS.Text}" + "\n" +
-                                            $"\tСервер: {tbHostNamePACS.Text}" + "\n" +
-                                            $"\tЛогин: {tbUserNamePACS.Text}" + "\n" +
-                                            $"\tПароль: {tbPasswordPASC.Text}" + "\n" +
+                                            $"  Схема: {tbHostSchemePACS.Text}" + "\n" +
+                                            $"  Порт: {tbHostPortPACS.Text}" + "\n" +
+                                            $"  Сервер: {tbHostNamePACS.Text}" + "\n" +
+                                            $"  Логин: {tbUserNamePACS.Text}" + "\n" +
+                                            $"  Пароль: {tbPasswordPASC.Text}" + "\n" +
                                             "установить не удалось");
                                 break;
                             default:        //все чики-пуки

@@ -19,37 +19,6 @@ namespace TimeWorkTracking
 {
     class clWebServiceDataBase
     {
-        /*
-        // utility method to read the cookie value:
-        public static string ReadCookie(string cookieName)
-        {
-            var cookies = HttpContext.Current.Request.Cookies;
-            var cookie = cookies.Get(cookieName);
-            if (cookie != null)
-                return cookie.Value;
-            return null;
-        }
-        
-        private void dd()
-        {
-            string url = "http://site.com/";
-
-            using (var webClient = new WebClient())
-            {
-                // Создаём коллекцию параметров
-                var pars = new NameValueCollection();
-
-                // Добавляем необходимые параметры в виде пар ключ, значение
-                pars.Add("format", "json");
-
-                // Посылаем параметры на сервер
-                // Может быть ответ в виде массива байт
-                var response = webClient.UploadValues(url, pars);
-            }
-        }
-        */
-
-
         /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         'функция Отправка GET POST запроса на хост
         '----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -119,7 +88,8 @@ namespace TimeWorkTracking
         private static string getRestData(UriBuilder pacsUri, string extPath, string jsonReq, int printMsg)
         {
             string ret = "";
-            string cs = pacsUri.Uri.OriginalString.Replace(pacsUri.Uri.UserInfo + "@", "");
+            string cs = pacsUri.Uri.OriginalString;
+//            string cs = pacsUri.Uri.OriginalString.Replace(pacsUri.Uri.UserInfo + "@", "");
             //           cs = cs.Substring(0, cs.IndexOf('#'));
             //            cs = cs.Replace(uriPacs.Uri.UserInfo + "@", "")
 
@@ -132,7 +102,8 @@ namespace TimeWorkTracking
             }
             catch
             {
-                MessageBox.Show("No data from CB.");
+                ret = "";
+                //MessageBox.Show("No data from CB.");
                 //                ret = "" ' CStr("{'Credentials':null,'Language':'','UserSID':'','UserToken':0}")
             }
             return ret;
@@ -172,6 +143,18 @@ namespace TimeWorkTracking
         private static bool CheckConnectSimple(string connectionString)
         {
             bool ret = false;
+
+            UriBuilder pacsUri = new UriBuilder(connectionString);
+
+//            string cs = uriPacs.Uri.OriginalString.Replace(uriPacs.Uri.UserInfo + "@", "");
+            //           cs = cs.Substring(0, cs.IndexOf('#'));
+            //            cs = cs.Replace(uriPacs.Uri.UserInfo + "@", "")
+            //            if (!clSystemSet.CheckHost(GetFormConnectionString().AbsoluteUri.Replace(uriPacs.Uri.UserInfo + "@", "")))
+            //            if (!clSystemSet.CheckHost(cs))
+
+
+
+
             string httpRet = "";
             if (connectionString != "")
             {
@@ -252,6 +235,10 @@ namespace TimeWorkTracking
                 "\"PasswordHash\":\"" + pacsUri.Password + "\", " +
                 "\"UserName\":\"" + pacsUri.UserName + "\"" +
                 "}";
+
+            //сбросим инфу по логину и паролю
+            pacsUri.UserName = "";
+            pacsUri.Password = "";
             string res = getRestData(pacsUri, "Authenticate", jsonReq, 0);//,
             JavaScriptSerializer ser = new JavaScriptSerializer();
             Dictionary<string, object> company = (Dictionary<string, object>)ser.DeserializeObject(res);
