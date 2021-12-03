@@ -292,19 +292,20 @@ namespace TimeWorkTracking
             string msg = "";
             string hostSQL = Properties.Settings.Default.twtServerName;
             string csSQL = Properties.Settings.Default.twtConnectionSrting;
-            bool pingSQL = csSQL != "" && clSystemSet.CheckPing(hostSQL);
+            bool pingSQL = csSQL != "" && clSystemSet.CheckPing(hostSQL);               //здесь sql сервер (внутри сети)
             bool conSQL = false;
             if (!pingSQL)
                 msg += "Cетевое имя сервера SQL\r\n  " + hostSQL + "- недоступно\r\n\r\n";
             else
                 conSQL = clMsSqlDatabase.sqlConnectSimple(csSQL);
 
-         //   string hostPACS = Properties.Settings.Default.pacsHost;
+            string hostPACS = Properties.Settings.Default.pacsHost;
             string csPACS = Properties.Settings.Default.pacsConnectionString;
-            bool pingPACS = csPACS != "" && clSystemSet.CheckHost(csPACS);
+//            bool pingPACS = csPACS != "" && clSystemSet.CheckHost(csPACS);            //здесь pacs сервер (внутри сети)
+            bool pingPACS = csPACS != "" && clSystemSet.CheckPing(hostPACS);
             bool conWeb = false;
             if (!pingPACS)
-                msg += "Хост СКУД\r\n  " + csPACS + "- недоступен\r\n";
+                msg += "Cетевое имя сервера СКУД\r\n  " + csPACS + "- недоступено\r\n";
             else
                 conWeb = clWebServiceDataBase.pacsConnectSimple(csPACS);
 

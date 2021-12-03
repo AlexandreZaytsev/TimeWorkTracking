@@ -108,6 +108,7 @@ namespace TimeWorkTracking
             this.tbPasswordTWT.PasswordChar = '*';
             this.tbPasswordTWT.Size = new System.Drawing.Size(239, 21);
             this.tbPasswordTWT.TabIndex = 8;
+            this.tbPasswordTWT.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbPasswordTWT_KeyPress);
             // 
             // label5
             // 

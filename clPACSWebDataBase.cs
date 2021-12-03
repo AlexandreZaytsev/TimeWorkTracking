@@ -11,17 +11,14 @@ using System.Collections.Specialized;
 using System.Web.Script.Serialization;
 using System.Web;
 using System.Windows.Forms;
+//using System.Runtime.Serialization.Json;
+using System.Web.Script.Serialization;
 
 
 namespace TimeWorkTracking
 {
-
-
     class clWebServiceDataBase
     {
-
-
-
         /*
         // utility method to read the cookie value:
         public static string ReadCookie(string cookieName)
@@ -114,19 +111,24 @@ namespace TimeWorkTracking
         'запрос к серверу и получение ответа
         '----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         ' url - адрес сервера
+        ' extPath - даполнительный путь
+        ' jsonReq - запрос формата Json
         ' return - ответ сервера
         'прочитать данные из СКУД
         */
-        private static string getRestData(Uri pacsUri, string add, string req, int printMsg)
+        private static string getRestData(UriBuilder pacsUri, string extPath, string jsonReq, int printMsg)
         {
             string ret = "";
-            
-            string cn = pacsUri.OriginalString + add;
+            string cs = pacsUri.Uri.OriginalString.Replace(pacsUri.Uri.UserInfo + "@", "");
+            //           cs = cs.Substring(0, cs.IndexOf('#'));
+            //            cs = cs.Replace(uriPacs.Uri.UserInfo + "@", "")
+
+            string cn = cs + "json/" + extPath;
             try
             {
-                ret = getDataFromURL(cn, req);
+                ret = getDataFromURL(cn, jsonReq);
                 if (printMsg == 1)
-                    printDebug(pacsUri.Host, req, ret);                //отчет о операции
+                    printDebug(pacsUri.Host, jsonReq, ret);                //отчет о операции
             }
             catch
             {
@@ -150,61 +152,18 @@ namespace TimeWorkTracking
         }
 
         //проверить что соединение есть в принципе 
-        private static bool CheckConnectBase(Uri pacsUri)
+        private static bool CheckConnectBase(UriBuilder pacsUri)
         {
             bool ret = false;
-            StringBuilder errorMessages = new StringBuilder();
-            string pointHostName = "json/Authenticate";
-
-//            pacsUri.P = "json/Authenticate";
-            //-------------авторизация
-            string req =
-                "{" +
-                "\"PasswordHash\":\" + pacsUri + \", " +
-                "\"UserName\":\" + srvLogint + \"" +
-                "}";
-
-            string res = getRestData(pacsUri, "json/Authenticate/", pacsUri.LocalPath, 0);//,
-
-/*
- * getRestData(string url, string pointHostName, string req, int printMsg)
- * 
-            using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
+            if (connectRestApi(pacsUri) != "")
+                ret = true;
+            else 
             {
-                try
-                {
-                    sqlConnection.Open();
-                    ret = true;
-                }
-                catch (SqlException ex)
-                {
-                    //https://docs.microsoft.com/ru-ru/sql/relational-databases/errors-events/database-engine-events-and-errors?view=sql-server-ver15#errors-4000-to-4999
-                    for (int i = 0; i < ex.Errors.Count; i++)
-                    {
-                        errorMessages.Append("Index #" + i + "\n" +
-                            "Message: " + ex.Errors[i].Message + "\n" +
-                            "Number: " + ex.Errors[i].Number + "\n" +
-                            "LineNumber: " + ex.Errors[i].LineNumber + "\n" +
-                            "Source: " + ex.Errors[i].Source + "\n" +
-                            "Procedure: " + ex.Errors[i].Procedure + "\n");
-                    }
-                    MessageBox.Show(errorMessages.ToString(),
-                                   "Подключение к Базе Данных",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Exclamation);
-                }
-                finally
-                {
-                    if (sqlConnection != null)
-                    {
-                        sqlConnection.Close();                         //Close the connection
-                    }
-                }
-                return ret;
+                StringBuilder errorMessages = new StringBuilder();
             }
-            */
             return true;
         }
+
 
 
         //проверить что и соединение и бд существует
@@ -276,6 +235,28 @@ namespace TimeWorkTracking
         //    }
 
 
+        /*'----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        'попытка авторизации на сервере
+        '----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        ' возврат - строка UserSID или если неудачно - пустая строка
+        '//https://streletzcoder.ru/rabotaem-s-json-v-c-serializatsiya-i-deserializatsiya/
+        */
+        private static string connectRestApi(UriBuilder pacsUri) 
+        {
+            string ret = "";
+            StringBuilder errorMessages = new StringBuilder();
+            //-------------авторизация
+            string jsonReq =
+                "{" +
+                "\"PasswordHash\":\"" + pacsUri.Password + "\", " +
+                "\"UserName\":\"" + pacsUri.UserName + "\"" +
+                "}";
+            string res = getRestData(pacsUri, "Authenticate", jsonReq, 0);//,
+            JavaScriptSerializer ser = new JavaScriptSerializer();
+            Dictionary<string, object> company = (Dictionary<string, object>)ser.DeserializeObject(res);
+            return company["UserSID"].ToString();
+        } 
+
         //PUBLIC------------------------------------------------------------------------
 
         //Подключения и проверки
@@ -283,7 +264,7 @@ namespace TimeWorkTracking
         //проверить соединение отдельно по соединению (на базе master) и по имени базы в списке баз
         //выдать расшифровку ошибок
         //(проверка только из формы настроек соединения)
-        public static string pacsConnectBase(Uri pacsUri)
+        public static string pacsConnectBase(UriBuilder pacsUri)
         {
             if (!CheckConnectBase(pacsUri))
                 return "-9";            //соединение установить не удалось

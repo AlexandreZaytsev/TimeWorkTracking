@@ -29,7 +29,7 @@ namespace TimeWorkTracking
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.picStatusPACS = new System.Windows.Forms.PictureBox();
             this.tbPasswordPASC = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.tbUserNamePACS = new System.Windows.Forms.TextBox();
@@ -38,24 +38,24 @@ namespace TimeWorkTracking
             this.tbHostNamePACS = new System.Windows.Forms.TextBox();
             this.btTestConnectionPacs = new System.Windows.Forms.Button();
             this.mainPanelPACS = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tbHostSchemePACS = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tbHostPortPACS = new System.Windows.Forms.TextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tbHostSchemePACS = new System.Windows.Forms.TextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.picStatusPACS)).BeginInit();
             this.mainPanelPACS.SuspendLayout();
             this.SuspendLayout();
             // 
-            // pictureBox1
+            // picStatusPACS
             // 
-            this.pictureBox1.Image = global::TimeWorkTracking.Properties.Resources.no;
-            this.pictureBox1.Location = new System.Drawing.Point(306, 104);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(30, 28);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 14;
-            this.pictureBox1.TabStop = false;
+            this.picStatusPACS.Image = global::TimeWorkTracking.Properties.Resources.no;
+            this.picStatusPACS.Location = new System.Drawing.Point(306, 104);
+            this.picStatusPACS.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.picStatusPACS.Name = "picStatusPACS";
+            this.picStatusPACS.Size = new System.Drawing.Size(30, 28);
+            this.picStatusPACS.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picStatusPACS.TabIndex = 14;
+            this.picStatusPACS.TabStop = false;
             // 
             // tbPasswordPASC
             // 
@@ -64,6 +64,7 @@ namespace TimeWorkTracking
             this.tbPasswordPASC.Name = "tbPasswordPASC";
             this.tbPasswordPASC.Size = new System.Drawing.Size(239, 21);
             this.tbPasswordPASC.TabIndex = 12;
+            this.tbPasswordPASC.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbPasswordPASC_KeyPress);
             // 
             // label9
             // 
@@ -132,7 +133,7 @@ namespace TimeWorkTracking
             this.mainPanelPACS.Controls.Add(this.label1);
             this.mainPanelPACS.Controls.Add(this.tbHostSchemePACS);
             this.mainPanelPACS.Controls.Add(this.label10);
-            this.mainPanelPACS.Controls.Add(this.pictureBox1);
+            this.mainPanelPACS.Controls.Add(this.picStatusPACS);
             this.mainPanelPACS.Controls.Add(this.label8);
             this.mainPanelPACS.Controls.Add(this.tbPasswordPASC);
             this.mainPanelPACS.Controls.Add(this.tbUserNamePACS);
@@ -145,26 +146,6 @@ namespace TimeWorkTracking
             this.mainPanelPACS.Name = "mainPanelPACS";
             this.mainPanelPACS.Size = new System.Drawing.Size(349, 139);
             this.mainPanelPACS.TabIndex = 16;
-            // 
-            // label1
-            // 
-            this.label1.AccessibleName = "";
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(53, 15);
-            this.label1.TabIndex = 16;
-            this.label1.Text = "Scheme";
-            // 
-            // tbHostSchemePACS
-            // 
-            this.tbHostSchemePACS.AccessibleName = "";
-            this.tbHostSchemePACS.Location = new System.Drawing.Point(97, 6);
-            this.tbHostSchemePACS.Margin = new System.Windows.Forms.Padding(4);
-            this.tbHostSchemePACS.Name = "tbHostSchemePACS";
-            this.tbHostSchemePACS.Size = new System.Drawing.Size(78, 21);
-            this.tbHostSchemePACS.TabIndex = 15;
             // 
             // label2
             // 
@@ -186,6 +167,26 @@ namespace TimeWorkTracking
             this.tbHostPortPACS.Size = new System.Drawing.Size(78, 21);
             this.tbHostPortPACS.TabIndex = 17;
             // 
+            // label1
+            // 
+            this.label1.AccessibleName = "";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(53, 15);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "Scheme";
+            // 
+            // tbHostSchemePACS
+            // 
+            this.tbHostSchemePACS.AccessibleName = "";
+            this.tbHostSchemePACS.Location = new System.Drawing.Point(97, 6);
+            this.tbHostSchemePACS.Margin = new System.Windows.Forms.Padding(4);
+            this.tbHostSchemePACS.Name = "tbHostSchemePACS";
+            this.tbHostSchemePACS.Size = new System.Drawing.Size(78, 21);
+            this.tbHostSchemePACS.TabIndex = 15;
+            // 
             // frmDataBasePACS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -198,7 +199,7 @@ namespace TimeWorkTracking
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Подключение web сервису СКУД";
             this.Load += new System.EventHandler(this.frmDataBasePACS_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picStatusPACS)).EndInit();
             this.mainPanelPACS.ResumeLayout(false);
             this.mainPanelPACS.PerformLayout();
             this.ResumeLayout(false);
@@ -206,7 +207,7 @@ namespace TimeWorkTracking
         }
 
         #endregion
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox picStatusPACS;
         private System.Windows.Forms.TextBox tbPasswordPASC;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox tbUserNamePACS;

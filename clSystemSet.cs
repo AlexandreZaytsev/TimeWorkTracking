@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Windows.Forms;
 
@@ -100,6 +101,22 @@ namespace TimeWorkTracking
             }
             else
                 return true;
+        }
+
+        //проверка ввода логинов паролей
+        static public bool checkChar(Char chr) 
+        {
+            //            var regex = new Regex(@"[^a-zA-Z0-9\s[\b]]");
+            //            var regex = new Regex(@"[a-zA-Z\d\b]");
+            var regex = new Regex(@"[^\w\b]");                          //все символы по текущей локализации + цифры + backspace
+            return regex.IsMatch(chr.ToString());
+/*
+            char val = e.KeyChar;
+            if (!Char.IsLetterOrDigit(val) && !Char.IsDigit(val) && val != 8 && (val <= 39 || val >= 46) && val != 47 && val != 61) //калькулятор
+            {
+                e.Handled = true;
+            }
+*/
         }
     }
 

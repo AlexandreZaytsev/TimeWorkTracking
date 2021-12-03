@@ -73,7 +73,7 @@ namespace TimeWorkTracking.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
+        [global::System.Configuration.DefaultSettingValueAttribute("rpk-342")]
         public string pacsHost {
             get {
                 return ((string)(this["pacsHost"]));

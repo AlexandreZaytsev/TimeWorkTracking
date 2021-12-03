@@ -15,7 +15,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="pacsHost" Type="System.String" Scope="User">
-      <Value Profile="(Default)">localhost</Value>
+      <Value Profile="(Default)">rpk-342</Value>
     </Setting>
     <Setting Name="pascLogin" Type="System.String" Scope="User">
       <Value Profile="(Default)">admin</Value>

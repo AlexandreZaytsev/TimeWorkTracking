@@ -112,20 +112,8 @@ namespace TimeWorkTracking
         //проверка вводимых симолов нового пароля
         private void tbNewPassword_KeyPress(object sender, KeyPressEventArgs e)
         {
-            //            var regex = new Regex(@"[^a-zA-Z0-9\s[\b]]");
-            //            var regex = new Regex(@"[a-zA-Z\d\b]");
-            var regex = new Regex(@"[^\w\b]");                          //все символы по текущей локализации + цифры + backspace
-            if (regex.IsMatch(e.KeyChar.ToString()))
-            {
+            if (clSystemSet.checkChar(e.KeyChar))       //проверить допустимые символы
                 e.Handled = true;
-            }
-/*
-            char val = e.KeyChar;
-            if (!Char.IsLetterOrDigit(val) && !Char.IsDigit(val) && val != 8 && (val <= 39 || val >= 46) && val != 47 && val != 61) //калькулятор
-            {
-                e.Handled = true;
-            }
-*/
         }
         //показать пароль при наезде на кнопку
         private void btSave_MouseHover(object sender, EventArgs e)
