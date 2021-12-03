@@ -34,23 +34,16 @@ namespace TimeWorkTracking
         //полчить строку соединения PACS по настройкам формы
         private UriBuilder GetFormConnectionString()
         {
-            UriBuilder uriPacs = new UriBuilder();
-            uriPacs.Scheme = tbHostSchemePACS.Text;
-            uriPacs.Port = Convert.ToInt32(tbHostPortPACS.Text);
-            uriPacs.Host = tbHostNamePACS.Text;
+            UriBuilder uriPacs = new UriBuilder
+            {
+                Scheme = cbHostSchemePACS.Text,
+                Port = Convert.ToInt32(nHostPortPACS.Text),
+                Host = tbHostNamePACS.Text
+            };
             string pass = clSystemSet.getMD5(clSystemSet.getMD5(clSystemSet.getMD5(tbPasswordPASC.Text) + "F593B01C562548C6B7A31B30884BDE53"));
             // "admin 88020F057FE7287D8D57494382356F97"
             uriPacs.Password = pass;                                                    //хеш пароль                               
             uriPacs.UserName = tbUserNamePACS.Text;
-            //uriPacs.Path = "json/";// Authenticate/";
-            /*
-            string query =
-                "{" +
-                "\"PasswordHash\":\"" + pass + "\", " +
-                "\"UserName\":\"" + tbUserNamePACS.Text + "\"" +
-                 "}";
-            uriPacs.Fragment = query;
-            */
             return uriPacs;// uriPacs.Uri.AbsoluteUri.Replace(uriPacs.Uri.UserInfo + "@", "");     //вернуть строку без логина и пароля
         }
 
@@ -59,7 +52,7 @@ namespace TimeWorkTracking
         {
             bool ret = false;
             StringBuilder Messages = new StringBuilder();
-            string statusDB = clWebServiceDataBase.pacsConnectBase(uriPacs);
+            string statusDB = clPacsWebDataBase.pacsConnectBase(uriPacs);
                         switch (statusDB)
                         {
                             case "-9":      //соединение установить не удалось
@@ -67,8 +60,8 @@ namespace TimeWorkTracking
                                 picStatusPACS.Image = global::TimeWorkTracking.Properties.Resources.no;
 //                                btTestConnectionPacs.Visible = true;
                                 Messages.Append("Соединение:" + "\n" +
-                                            $"  Схема: {tbHostSchemePACS.Text}" + "\n" +
-                                            $"  Порт: {tbHostPortPACS.Text}" + "\n" +
+                                            $"  Схема: {cbHostSchemePACS.Text}" + "\n" +
+                                            $"  Порт: {nHostPortPACS.Text}" + "\n" +
                                             $"  Сервер: {tbHostNamePACS.Text}" + "\n" +
                                             $"  Логин: {tbUserNamePACS.Text}" + "\n" +
                                             $"  Пароль: {tbPasswordPASC.Text}" + "\n" +
@@ -88,8 +81,8 @@ namespace TimeWorkTracking
 
             Properties.Settings.Default.pacsConnectionString = statusDB;
             //PACS DataBase
-            Properties.Settings.Default.pacsScheme = tbHostSchemePACS.Text.Trim();
-            Properties.Settings.Default.pacsPort = Convert.ToInt32(tbHostPortPACS.Text.Trim());
+            Properties.Settings.Default.pacsScheme = cbHostSchemePACS.Text.Trim();
+            Properties.Settings.Default.pacsPort = Convert.ToInt32(nHostPortPACS.Text.Trim());
             Properties.Settings.Default.pacsHost = tbHostNamePACS.Text.Trim();
             Properties.Settings.Default.pascLogin = tbUserNamePACS.Text.Trim();
             Properties.Settings.Default.pacsPassword = tbPasswordPASC.Text.Trim();
@@ -103,14 +96,36 @@ namespace TimeWorkTracking
         private void frmDataBasePACS_Load(object sender, EventArgs e)
         {
             //PACS DataBase
-            tbHostSchemePACS.Text = Properties.Settings.Default.pacsScheme;
-            tbHostPortPACS.Text = Properties.Settings.Default.pacsPort.ToString();
+            cbHostSchemePACS.Text = Properties.Settings.Default.pacsScheme;
+            nHostPortPACS.Text = Properties.Settings.Default.pacsPort.ToString();
             tbHostNamePACS.Text = Properties.Settings.Default.pacsHost;
             tbUserNamePACS.Text = Properties.Settings.Default.pascLogin;
             tbPasswordPASC.Text = Properties.Settings.Default.pacsPassword;
- //           GetFormConnectionString();          //инициализируем uri   
-        }
 
+            CheckConnects();        //проверить соединение с базами
+        }
+        //проверить соединение с базами
+        private void CheckConnects()
+        {
+            if (!clSystemSet.CheckPing(tbHostNamePACS.Text))
+            {
+                this.picStatusPACS.Image = Properties.Resources.no;
+                /*
+                   MessageBox.Show("Cетевое имя сервера PACS\r\n  " +
+                                   tbServerTWT.Text +
+                                   "- недоступно\r\n",
+                                   "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+               */
+            }
+            else
+            {
+                if (clPacsWebDataBase.pacsConnectSimple(Properties.Settings.Default.pacsConnectionString))
+                    this.picStatusPACS.Image = Properties.Resources.ok;
+                else
+                    this.picStatusPACS.Image = Properties.Resources.no;
+
+            }
+        }
         //проверка вводимых симолов нового пароля
         private void tbPasswordPASC_KeyPress(object sender, KeyPressEventArgs e)
         {

@@ -322,11 +322,12 @@ namespace TimeWorkTracking
             string csPACS = Properties.Settings.Default.pacsConnectionString;
 //            bool pingPACS = csPACS != "" && clSystemSet.CheckHost(csPACS);            //здесь pacs сервер (внутри сети)
             bool pingPACS = csPACS != "" && clSystemSet.CheckPing(hostPACS);
-            bool conWeb = false;
+            bool conWeb;// = false;
             if (!pingPACS)
                 msg += "Cетевое имя сервера СКУД\r\n  " + csPACS + "- недоступено\r\n";
             else
-                conWeb = clWebServiceDataBase.pacsConnectSimple(csPACS);
+                clPacsWebDataBase.pacsConnectSimple(csPACS);
+            //                conWeb = clPacsWebDataBase.pacsConnectSimple(csPACS);
 
             this.tsbtDataBasePACS.Image = pingPACS ? Properties.Resources.ok : Properties.Resources.no;
             return conSQL;

@@ -11,13 +11,12 @@ using System.Collections.Specialized;
 using System.Web.Script.Serialization;
 using System.Web;
 using System.Windows.Forms;
-//using System.Runtime.Serialization.Json;
-using System.Web.Script.Serialization;
+
 
 
 namespace TimeWorkTracking
 {
-    class clWebServiceDataBase
+    class clPacsWebDataBase
     {
         /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         'функция Отправка GET POST запроса на хост
@@ -36,42 +35,12 @@ namespace TimeWorkTracking
                 {
                     webClient.Encoding = Encoding.UTF8;
                     webClient.Headers[HttpRequestHeader.ContentType] = "application/json";
-                    ret = webClient.UploadString(pacsUri, request);// "http://some/address", "{some:\"json data\"}");
-                    /*
-                    JavaScriptSerializer serializer = new JavaScriptSerializer();
-                    byte[] requestData = Encoding.ASCII.GetBytes(serializer.Serialize(postRequest));
-                    HttpWebRequest request = WebRequest.Create(requestUrl) as HttpWebRequest;
-                    request.Method = "POST";
-                    request.ContentType = "application/json";
-                    request.ContentLength = requestData.Length;
-                    request.ContentType = "application/json";
-                    request.Expect = "application/json";
-                    request.Headers.Set("Authorization", ReadCookie("AuthCookie"));
-                    request.GetRequestStream().Write(requestData, 0, requestData.Length);
-                    using (var response1 = (HttpWebResponse)request.GetResponse())
-                    {
-                        var reader = new StreamReader(response1.GetResponseStream());
-                        var objText = reader.ReadToEnd(); // objText will have the value
-                    }
-                    */
-                    /*
-                     //http://www.cbr.ru/scripts/XML_daily.asp
-                Stream data = web.OpenRead(url);
-                StreamReader reader = new StreamReader(data, Encoding.GetEncoding(1251));
-                html = reader.ReadLine();
-                data.Close();
-                reader.Close();
-                FileStream file = new FileStream("data.txt", FileMode.Create, FileAccess.ReadWrite);
-                StreamWriter wData = new StreamWriter(file);
-                wData.Write(html);
-                wData.Close(); 
-                     
-                     */
+                    ret = webClient.UploadString(pacsUri, request);
                 }
             }
-            catch
+            catch (WebException ex)
             {
-                MessageBox.Show("No data from CB.");
+                MessageBox.Show(ex.Message);
             }
             return ret;
         }
@@ -85,20 +54,15 @@ namespace TimeWorkTracking
         ' return - ответ сервера
         'прочитать данные из СКУД
         */
-        private static string getRestData(UriBuilder pacsUri, string extPath, string jsonReq, int printMsg)
+        private static string getRestData(string pacsUriStr, string extPath, string jsonReq, int printMsg)
         {
             string ret = "";
-            string cs = pacsUri.Uri.OriginalString;
-//            string cs = pacsUri.Uri.OriginalString.Replace(pacsUri.Uri.UserInfo + "@", "");
-            //           cs = cs.Substring(0, cs.IndexOf('#'));
-            //            cs = cs.Replace(uriPacs.Uri.UserInfo + "@", "")
-
-            string cn = cs + "json/" + extPath;
+            string cn = pacsUriStr + "json/" + extPath;
             try
             {
                 ret = getDataFromURL(cn, jsonReq);
-                if (printMsg == 1)
-                    printDebug(pacsUri.Host, jsonReq, ret);                //отчет о операции
+             //   if (printMsg == 1)
+                  //  printDebug(pacsUri.Host, jsonReq, ret);                //отчет о операции
             }
             catch
             {
@@ -143,54 +107,10 @@ namespace TimeWorkTracking
         private static bool CheckConnectSimple(string connectionString)
         {
             bool ret = false;
-
             UriBuilder pacsUri = new UriBuilder(connectionString);
-
-//            string cs = uriPacs.Uri.OriginalString.Replace(uriPacs.Uri.UserInfo + "@", "");
-            //           cs = cs.Substring(0, cs.IndexOf('#'));
-            //            cs = cs.Replace(uriPacs.Uri.UserInfo + "@", "")
-            //            if (!clSystemSet.CheckHost(GetFormConnectionString().AbsoluteUri.Replace(uriPacs.Uri.UserInfo + "@", "")))
-            //            if (!clSystemSet.CheckHost(cs))
-
-
-
-
-            string httpRet = "";
-            if (connectionString != "")
-            {
-                string pass = clSystemSet.getMD5(clSystemSet.getMD5(clSystemSet.getMD5(connectionString) + "F593B01C562548C6B7A31B30884BDE53"));
-                string pointHostName = "Authenticate";
-                //-------------авторизация
-                string req =
-                    "{" +
-                    "\"PasswordHash\":\" + pass + \", " +
-                    "\"UserName\":\" + srvLogint + \"" +
-                    "}";
-
-                httpRet = "";// getRestData("http://" + "srvHost" + ":40001/json/", req, 0);
-                if (httpRet.Length > 0) 
-                {
-                    //                     private static JavaScriptSerializer _Serializer = new JavaScriptSerializer();
-                    /*
-                            Set json = pwJsonConverter.ParseJSON(ret)
-                                         ret = json("UserSID")
-                                        Set json = Nothing
-                    */
-                    /*
-                     * 
-                     * https://stackoverflow.com/questions/15091300/posting-json-to-url-via-webclient-in-c-sharp
-                    var vm = new { k = "1", a = "2", c = "3", v = "4" };
-                    using (var client = new WebClient())
-                    {
-                        var dataString = JsonConvert.SerializeObject(vm);
-                        client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
-                        client.UploadString(new Uri("http://www.contoso.com/1.0/service/action"), "POST", dataString);
-                    }
-                    */
-
-                }
-            }
-
+            if (connectRestApi(pacsUri) != "")
+                ret = true;
+                
             return ret;
         }
         /*
@@ -227,7 +147,7 @@ namespace TimeWorkTracking
         */
         private static string connectRestApi(UriBuilder pacsUri) 
         {
-//            string ret = "";
+            string ret = "";
 //            StringBuilder errorMessages = new StringBuilder();
             
             string jsonReq =        //-------------авторизация
@@ -236,15 +156,168 @@ namespace TimeWorkTracking
                 "\"UserName\":\"" + pacsUri.UserName + "\"" +
                 "}";
 
-            //пересоберем инфу без логина и пароля
-            UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);
+            UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
+
             string res = getRestData(pacsUriLite.Uri.AbsoluteUri, "Authenticate", jsonReq, 0);//,
             JavaScriptSerializer ser = new JavaScriptSerializer();
             Dictionary<string, object> company = (Dictionary<string, object>)ser.DeserializeObject(res);
-            return company["UserSID"].ToString();
+            if (company != null)
+                ret = company["UserSID"].ToString();
 
-//        https://coderoad.wiki/36674888/%D0%9A%D0%B0%D0%BA-%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D1%8C-%D0%B2%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D1%83%D1%8E-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D1%8C-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81-JavascriptSerializer-%D0%B2-C
-        } 
+            return ret;
+
+            //        https://coderoad.wiki/36674888/%D0%9A%D0%B0%D0%BA-%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D1%8C-%D0%B2%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D1%83%D1%8E-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D1%8C-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81-JavascriptSerializer-%D0%B2-C
+        }
+
+        /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        'получить внутренний id пользователя СКУД ProxWay
+        '----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        ' idRic - id хвостик Лоции или Табельный номер пользователя в ProxWay
+        ' userName - ФИО пользоватея (допускается использование маски через символ %) скорее всего в формате SQL для функции Like
+        ' idExcel - id пользователя в служебной базе РПК - учет рабочего времени
+        ' возврат - id (Token) пользователя системы ProxWay - или в случае неудачи - пустая строка
+        */
+        private static string getUserIdProxWayByName(UriBuilder pacsUri, string idRic, string userName, string idExcel) //'infoArr
+        {
+            string ret = "";
+            string msg = "";
+            string pwUserID = "";
+            string UserSID = connectRestApi(pacsUri);
+
+            if (UserSID.Length > 0) 
+            {
+                '-------------список пользователей
+               //  pointHostName = "EmployeeGetList"
+                string jsonReq =
+                    "{" +
+                    "\"Language\":\"ru\", " +
+                    "\"UserSID\":\"" + UserSID + "\", " +
+                    "\"SubscriptionEnabled\":true, " +
+                    "\"Limit\":0, " +
+                    "\"StartToken\":0, " +
+                    "\"AdditionalFieldsRequired\":true, " +
+                    "\"Name\":\"" + userName + "\", " +
+                    "}";
+
+           // '           """DepartmentToken"":0, "
+           // '           """DepartmentUsed"":true, " &
+           // '           """HideDismissed"":true, " &
+//                 ret = GetRestData("http://" & srvHost & ":40001/json/", pointHostName, req, 0)
+                UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
+                string res = getRestData(pacsUriLite.Uri.AbsoluteUri, "EmployeeGetList", jsonReq, 0);//,
+                JavaScriptSerializer ser = new JavaScriptSerializer();
+                Dictionary<string, object> company = (Dictionary<string, object>)ser.DeserializeObject(res);
+                if (company != null)
+                    ret = company["Employee"].ToString();
+            }
+
+            /*
+               Dim info, req, ret, json, UserSID, pointHostName, usersInfo, userInfo, i
+              Dim pwUserID, count, msg
+
+
+               msg = ""
+               pwUserID = ""
+               UserSID = connectRestApi()
+               If Len(UserSID) > 0 Then
+
+             '-------------список пользователей
+                 pointHostName = "EmployeeGetList"
+                 req = "{" & _
+                       """Language"":""ru"", " & _
+                       """UserSID"":""" & UserSID & """, " & _
+                       """SubscriptionEnabled"":true, " & _
+                       """Limit"":0, " & _
+                       """StartToken"":0, " & _
+                       """AdditionalFieldsRequired"":true, " & _
+                       """Name"":""" & userName & """, " & _
+                       "}"
+
+            '           """DepartmentToken"":0, "
+            '           """DepartmentUsed"":true, " &
+            '           """HideDismissed"":true, " &
+                 ret = GetRestData("http://" & srvHost & ":40001/json/", pointHostName, req, 0)
+
+
+                 Set json = pwJsonConverter.ParseJSON(ret)
+                 count = json("Employee").count
+
+                 Select Case count
+                   Case 0
+                     msg = "совпадений не обнаружено"
+                   Case Else
+                     If count > 1 Then
+                       msg = "обнаружено более одного пользователя" & vbCrLf & "будет использован последний"
+                     End If
+
+
+                     Dim item As Object                ' Reference to each JSON Object found in the "data" property.
+                     Dim rows As VBA.Collection        ' Reference to each JSON Object found in the "data" property's JSON Array.
+                     Dim row  As Long                  ' Number of rows in the "data" property's JSON Array.
+                     Dim data As Scripting.Dictionary  ' Reference to a JSON Object in the "data" property's JSON Array.
+
+                     i = 0
+                     For Each userInfo In json("Employee")
+                       pwUserID = userInfo("Token")                         'id юзера
+
+                       If Len(idRic) > 0 Then                               'если нужна проверка на id сотрудника из Лоции (табельный номер в ProxWay)
+                         If idRic<> CStr(userInfo("EmployeeNumber")) Then
+                          pwUserID = ""
+                           msg = "совпадений по табельному номеру сотрудника" & vbCrLf & "не обнаружено"
+                           Exit For
+                         End If
+                       End If
+
+
+                       If Len(idExcel) > 0 Then                             'если нужна проверка на idExcel сотрудника из Excel базы учета рабочего времени (доп поля в ProxWay)
+                         Set rows = userInfo("AdditionalFields")            'получить коллекцию
+                         If rows.count > 0 Then
+                           For row = 1 To rows.count Step 1                   'пройти по коллекции
+                             Set item = rows.item(row)                        'получить объект из коллекции (JSON Array)
+                             Set data = item                                  'преобразовать его в словарь
+                             If data.Items(0) = "id базы учета рабочего времени (Excel)" Then 'проверить конкретное поле
+                               If idExcel<> CStr(data.Items(1)) Then
+                                pwUserID = ""
+                                 msg = "совпадений не обнаружено"
+                                 Exit For
+                               End If
+                             End If
+                           Next row
+                         Else
+                           pwUserID = ""
+                           msg = "совпадений не обнаружено" & vbCrLf & "в базе ProxWay не настроены дополнительные поля сотрудника"
+                           Exit For
+                         End If
+                       End If
+                       i = i + 1
+                     Next userInfo
+                 End Select
+                 If Len(msg) > 0 Then
+                   MsgBox "Ошибка сопоставления пользователя" & vbCrLf & vbCrLf & _
+                          " по параметрам запроса" & vbCrLf & _
+                          "   ФИО сотрудника        : '" & userName & "'" & vbCrLf & _
+                          "   id сотрудника из Лоции: '" & idRic & "'" & vbCrLf & _
+                          "   id сотрудника из Excel: '" & idExcel & "'" & vbCrLf & _
+                          vbCrLf & msg, vbOKCancel + vbInformation, "Пользователи СКУД ProwWay"
+                 End If
+
+                '-------------выход
+                 pointHostName = "Logout"
+                 req = "{""UserSID"":""" & UserSID & """}"
+                 ret = GetRestData("http://" & srvHost & ":40001/json/", pointHostName, req, 0)
+
+
+                 Set json = Nothing
+
+               End If
+               GetUserIdProxWayByName = pwUserID
+            End Function
+
+             */
+
+            return ret;
+        }
+
 
         //PUBLIC------------------------------------------------------------------------
 

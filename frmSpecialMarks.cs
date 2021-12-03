@@ -111,7 +111,7 @@ namespace TimeWorkTracking
         //выбор значения из списка
         private void lstwDataBaseSpecialMarks_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string sql;
+            //string sql;
             string key = tbName.Text.Trim();                                    //ключевое поле
             string cs = Properties.Settings.Default.twtConnectionSrting;        //connection string
 
