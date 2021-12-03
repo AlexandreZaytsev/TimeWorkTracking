@@ -299,6 +299,16 @@ namespace TimeWorkTracking
             else
                 conSQL = clMsSqlDatabase.sqlConnectSimple(csSQL);
 
+            this.tsbtDataBaseSQL.Image = conSQL ? Properties.Resources.ok : Properties.Resources.no;
+            mainPanelRegistration.Enabled = conSQL && lstwDataBaseMain.Items.Count > 0;
+            tsbtGuideUsers.Enabled = conSQL;                                            //справочник пользователей
+            tsbtGuideMarks.Enabled = conSQL;                                            //справочник спец отметок    
+            tsbtGuideCalendar.Enabled = conSQL;                                         //справочник производственного календаря
+            tsbtFormHeatCheck.Enabled = conSQL;                                         //печать бланка температуры
+            tsbtFormTimeCheck.Enabled = conSQL;                                         //печать блака проходов
+            tsbtReportTotal.Enabled = conSQL;                                           //печать итогового отчета
+            toolSetting.Enabled = conSQL;                                               //кнопка настроек экспорт импорт
+
             string hostPACS = Properties.Settings.Default.pacsHost;
             string csPACS = Properties.Settings.Default.pacsConnectionString;
 //            bool pingPACS = csPACS != "" && clSystemSet.CheckHost(csPACS);            //здесь pacs сервер (внутри сети)
@@ -309,19 +319,12 @@ namespace TimeWorkTracking
             else
                 conWeb = clWebServiceDataBase.pacsConnectSimple(csPACS);
 
+            this.tsbtDataBasePACS.Image = pingPACS ? Properties.Resources.ok : Properties.Resources.no;
 
-            this.tsbtDataBaseSQL.Image = conSQL ? Properties.Resources.ok : Properties.Resources.no;
-            mainPanelRegistration.Enabled = conSQL && lstwDataBaseMain.Items.Count > 0;
-            tsbtGuideUsers.Enabled = conSQL;
-            tsbtGuideMarks.Enabled = conSQL;
-            tsbtGuideCalendar.Enabled = conSQL;
-            tsbtFormHeatCheck.Enabled = conSQL;
-            tsbtFormTimeCheck.Enabled = conSQL;
-            tsbtReportTotal.Enabled = conSQL;
-            toolSetting.Enabled = conSQL;
 
-//            if (msg != "")
-//                MessageBox.Show(msg+"\r\nавторизуйтесь под Администратором и\r\nнастройте соединения", "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            //            if (msg != "")
+            //                MessageBox.Show(msg+"\r\nавторизуйтесь под Администратором и\r\nнастройте соединения", "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
             return conSQL;
         }

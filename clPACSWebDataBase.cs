@@ -159,9 +159,10 @@ namespace TimeWorkTracking
                 ret = true;
             else 
             {
-                StringBuilder errorMessages = new StringBuilder();
+                //описание ошибко подключения
+                //   StringBuilder errorMessages = new StringBuilder();
             }
-            return true;
+            return ret;
         }
 
 
@@ -266,9 +267,10 @@ namespace TimeWorkTracking
         //(проверка только из формы настроек соединения)
         public static string pacsConnectBase(UriBuilder pacsUri)
         {
-            if (!CheckConnectBase(pacsUri))
+            if (CheckConnectBase(pacsUri))
+                return pacsUri.Uri.AbsoluteUri;
+            else
                 return "-9";            //соединение установить не удалось
-            return "";
         }
 
         //проверить соединение сразу по строке подключения

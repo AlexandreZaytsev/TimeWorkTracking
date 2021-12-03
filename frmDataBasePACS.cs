@@ -70,19 +70,19 @@ namespace TimeWorkTracking
                             case "-9":      //соединение установить не удалось
                                 statusDB = "";
                                 picStatusPACS.Image = global::TimeWorkTracking.Properties.Resources.no;
-                                btTestConnectionPacs.Visible = true;
-                                string msg = cbAutentificationTWT.Text == "SQL Server Autentification" ? $"\tИмя пользователя: { tbUserNameTWT.Text}" + "\n" + $"\tПароль: {tbPasswordTWT.Text}" + "\n" : "";
+//                                btTestConnectionPacs.Visible = true;
                                 Messages.Append("Соединение:" + "\n" +
-                                            $"\tСервер: {tbServerTWT.Text}" + "\n" +
-                                            $"\tАутентификация: {cbAutentificationTWT.Text}" + "\n" + msg +
-                                            $"\tБаза данных: {tbDatabaseTWT.Text}" + "\n" +
+                                            $"\tСхема: {tbHostSchemePACS.Text}" + "\n" +
+                                            $"\tПорт: {tbHostPortPACS.Text}" + "\n" +
+                                            $"\tСервер: {tbHostNamePACS.Text}" + "\n" +
+                                            $"\tЛогин: {tbUserNamePACS.Text}" + "\n" +
+                                            $"\tПароль: {tbPasswordPASC.Text}" + "\n" +
                                             "установить не удалось");
                                 break;
                             default:        //все чики-пуки
-                                picStatusTWT.Image = global::TimeWorkTracking.Properties.Resources.ok;
-                                btCreateDBTwt.Visible = false;
-                                btTestConnectionTwt.Visible = true;
-                                Messages.Append("Соединение установлено");
+                                picStatusPACS.Image = Properties.Resources.ok;
+//                                btTestConnectionPacs.Visible = true;
+                                  Messages.Append("Соединение установлено");
                                 ret = true;
                                 break;
                         }
@@ -90,8 +90,8 @@ namespace TimeWorkTracking
                                         "Подключение к Базе Данных",
                                          MessageBoxButtons.OK,
                                          MessageBoxIcon.Warning);
-            */
 
+            Properties.Settings.Default.pacsConnectionString = statusDB;
             //PACS DataBase
             Properties.Settings.Default.pacsScheme = tbHostSchemePACS.Text.Trim();
             Properties.Settings.Default.pacsPort = Convert.ToInt32(tbHostPortPACS.Text.Trim());
