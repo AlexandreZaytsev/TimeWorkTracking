@@ -186,9 +186,8 @@ namespace TimeWorkTracking
 
             if (UserSID.Length > 0) 
             {
-                '-------------список пользователей
                //  pointHostName = "EmployeeGetList"
-                string jsonReq =
+                string jsonReq =    //-------------список пользователей
                     "{" +
                     "\"Language\":\"ru\", " +
                     "\"UserSID\":\"" + UserSID + "\", " +
