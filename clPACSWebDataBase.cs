@@ -227,22 +227,23 @@ namespace TimeWorkTracking
         */
         private static string connectRestApi(UriBuilder pacsUri) 
         {
-            string ret = "";
-            StringBuilder errorMessages = new StringBuilder();
-            //-------------авторизация
-            string jsonReq =
+//            string ret = "";
+//            StringBuilder errorMessages = new StringBuilder();
+            
+            string jsonReq =        //-------------авторизация
                 "{" +
                 "\"PasswordHash\":\"" + pacsUri.Password + "\", " +
                 "\"UserName\":\"" + pacsUri.UserName + "\"" +
                 "}";
 
-            //сбросим инфу по логину и паролю
-            pacsUri.UserName = "";
-            pacsUri.Password = "";
-            string res = getRestData(pacsUri, "Authenticate", jsonReq, 0);//,
+            //пересоберем инфу без логина и пароля
+            UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);
+            string res = getRestData(pacsUriLite.Uri.AbsoluteUri, "Authenticate", jsonReq, 0);//,
             JavaScriptSerializer ser = new JavaScriptSerializer();
             Dictionary<string, object> company = (Dictionary<string, object>)ser.DeserializeObject(res);
             return company["UserSID"].ToString();
+
+//        https://coderoad.wiki/36674888/%D0%9A%D0%B0%D0%BA-%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D1%8C-%D0%B2%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D1%83%D1%8E-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D1%8C-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81-JavascriptSerializer-%D0%B2-C
         } 
 
         //PUBLIC------------------------------------------------------------------------
