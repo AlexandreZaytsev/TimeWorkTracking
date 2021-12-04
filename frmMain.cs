@@ -194,7 +194,10 @@ namespace TimeWorkTracking
                 //               chUse.Checked = lstwDataBaseUsers.Items[ind].Text == "True";                  //access    
                 tbName.Text = lstwDataBaseMain.Items[ind].SubItems[1].Text;                 //fio
                 //загружаемся из СКУД
-                LoadPascInfoByID(lstwDataBaseMain.Items[ind].SubItems[2].Text);
+                LoadPascInfoByID(
+                    "",                                                                     //crmId табельный номер из Лоции
+                    lstwDataBaseMain.Items[ind].SubItems[2].Text,                           //extId внешний код для синнхронизации
+                    lstwDataBaseMain.Items[ind].SubItems[1].Text);                          //фио юзера
 
                 if (lstwDataBaseMain.Items[ind].Text == "0")                                //данных о проходе нет
                 {                                                                                      
@@ -287,12 +290,18 @@ namespace TimeWorkTracking
             mcRegDate.UpdateBoldedDates();
         }
 
-        //Загрузить информацию из СКУД
-        private bool LoadPascInfoByID(string userExtId) 
+        /// <summary>
+        /// Зpагрузить информацию из СКУД
+        /// </summary>
+        /// <param name="crmId">табельный номер из Лоции</param>
+        /// <param name="extId">внешний код для синнхронизации</param>
+        /// <param name="userName">имя пользователя</param>
+        /// <returns></returns>
+        private bool LoadPascInfoByID(string crmId, string extId, string userName) 
         {
             bool ret = false;
             string csPACS = Properties.Settings.Default.pacsConnectionString;
-            string[] arr = clPacsWebDataBase.сheckPointPWTime(csPACS, userExtId, mcRegDate.SelectionStart.ToString("yyyy.MM.dd"));
+            string[] arr = clPacsWebDataBase.сheckPointPWTime(csPACS, crmId, extId, userName,  mcRegDate.SelectionStart.ToString("yyyy.MM.dd"));
             //сheckPointPWTime(string connectionString, string pwIdUser, string findDateTime)
 
             //            CheckConnectSimple

@@ -28,6 +28,7 @@ namespace TimeWorkTracking
     {
         public string Token { get; set; }
         public string EmployeeNumber { get; set; }
+        public string Name { get; set; }
         public pacsAdditionalFields[] AdditionalFields { get; set; }
 
     }
@@ -190,17 +191,20 @@ namespace TimeWorkTracking
         /// получить внутренний id пользователя СКУД ProxWay
         /// </summary>
         /// <param name="pacsUri">строка подключения uriBuilder</param>
-        /// <param name="idRic">id хвостик Лоции или Табельный номер пользователя в ProxWay</param>
+        /// <param name="crmId">id хвостик Лоции или Табельный номер пользователя в ProxWay</param>
+        /// <param name="extId">d пользователя в служебной базе РПК - учет рабочего времени</param>
         /// <param name="userName">ФИО пользоватея (допускается использование маски через символ %) скорее всего в формате SQL для функции Like</param>
-        /// <param name="idExcel">d пользователя в служебной базе РПК - учет рабочего времени</param>
         /// <returns>id (Token) пользователя системы ProxWay - или в случае неудачи - пустая строка</returns>
-        private static string getUserIdProxWayByName(UriBuilder pacsUri, string idRic, string userName, string idExcel) //'infoArr
+        /// //http://localhost:40001/json/help/operations/EmployeeGetList
+        /// //https://stackoverflow.com/questions/5502245/deserializing-a-json-file-with-javascriptserializer                
+        private static string getUserIdProxWayByName(UriBuilder pacsUri, string crmId,  string extId, string userName)
         {
             string ret = "";
             string msg = "";
             string pwUserID = "";
             string UserSID = connectRestApi(pacsUri);
 
+           // userName = "%" + "ле" + "%";
             if (UserSID.Length > 0) 
             {
                //  pointHostName = "EmployeeGetList"
@@ -218,144 +222,104 @@ namespace TimeWorkTracking
            // '           """DepartmentToken"":0, "
            // '           """DepartmentUsed"":true, " &
            // '           """HideDismissed"":true, " &
-//                 ret = GetRestData("http://" & srvHost & ":40001/json/", pointHostName, req, 0)
                 UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
                 string res = getRestData(pacsUriLite.Uri.AbsoluteUri, "EmployeeGetList", jsonReq, 0);//,
                 pacsEmployeeGetList jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
 
+                switch (jsonRet.Employee.GetLength(0))
+                {
+                    case 0:
+                        msg = "совпадений не обнаружено";
+                        break;
+                    case 1:
+                        msg = "";
+                        break;
+                    default:
+                        msg = "обнаружено более одного пользователя" + "\r\n" + "будет использован последний";
 
+                        for (int i = 0; i < jsonRet.Employee.GetLength(0); i++)
+                        {
+                            pwUserID = jsonRet.Employee[i].Token;   //id юзера
 
-                //http://localhost:40001/json/help/operations/EmployeeGetList
-                //https://stackoverflow.com/questions/5502245/deserializing-a-json-file-with-javascriptserializer                
+                            //если нужна проверка на id сотрудника из Лоции (табельный номер в ProxWay)
+                            if (crmId.Length> 0)                    
+                            {
+                                if(crmId != jsonRet.Employee[i].EmployeeNumber)
+                                {
+                                    pwUserID = "";
+                                    msg = "совпадений по табельному номеру сотрудника" + "\r\n" + "не обнаружено";
+                                    break;
+                                }
+                            }
 
-/*
-                JavaScriptSerializer ser = new JavaScriptSerializer();
-                Dictionary<string, object> company = (Dictionary<string, object>)ser.DeserializeObject(res);
-                if (company != null)
-                    ret = company["Employee"].ToString();
-*/
+                            //если нужна проверка на idExcel сотрудника из Excel базы учета рабочего времени (доп поля в ProxWay)
+                            if (extId.Length > 0) 
+                            {
+                                if (jsonRet.Employee[i].AdditionalFields.GetLength(0) > 0) 
+                                {
+                                    for(int j=0;j< jsonRet.Employee[i].AdditionalFields.GetLength(0); i++) 
+                                    {
+                                        if(jsonRet.Employee[i].AdditionalFields[j].Name== "id базы учета рабочего времени (Excel)") 
+                                        { 
+                                            if(extId != jsonRet.Employee[i].AdditionalFields[j].Value) 
+                                            {
+                                                pwUserID = "";
+                                                msg = "совпадений не обнаружено";
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else 
+                            {
+                                pwUserID = "";
+                                msg = "совпадений не обнаружено" + "\r\n" + 
+                                    "в базе ProxWay не настроены дополнительные поля сотрудника";
+                                break;
+                            }
+                        }
+                        break;
+                }
 
+                if (msg.Length > 0) 
+                {
+                    MessageBox.Show(
+                        "Ошибка сопоставления пользователя" + "\r\n\r\n" +
+                        " по параметрам запроса" + "\r\n" +
+                        "   ФИО сотрудника        : '" + userName + "'" + "\r\n" +
+                        "   id сотрудника из Лоции: '" + crmId + "'" + "\r\n" +
+                        "   id сотрудника из Excel: '" + extId + "'" + "\r\n" +
+                        "\r\n" + msg, "Пользователи СКУД ProwWay", MessageBoxButtons.OK, MessageBoxIcon.Warning 
+                        );
+                }
+
+                //-------------выход
+                //pointHostName = "Logout"
+                jsonReq = 
+                    "{" +
+                    "\"UserSID\":\"" + UserSID + "\"" + 
+                    "}";
+                res = getRestData(pacsUriLite.Uri.AbsoluteUri, "Logout", jsonReq, 0);
+                jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
             }
-
-            /*
-               Dim info, req, ret, json, UserSID, pointHostName, usersInfo, userInfo, i
-              Dim pwUserID, count, msg
-
-
-               msg = ""
-               pwUserID = ""
-               UserSID = connectRestApi()
-               If Len(UserSID) > 0 Then
-
-             '-------------список пользователей
-                 pointHostName = "EmployeeGetList"
-                 req = "{" & _
-                       """Language"":""ru"", " & _
-                       """UserSID"":""" & UserSID & """, " & _
-                       """SubscriptionEnabled"":true, " & _
-                       """Limit"":0, " & _
-                       """StartToken"":0, " & _
-                       """AdditionalFieldsRequired"":true, " & _
-                       """Name"":""" & userName & """, " & _
-                       "}"
-
-            '           """DepartmentToken"":0, "
-            '           """DepartmentUsed"":true, " &
-            '           """HideDismissed"":true, " &
-                 ret = GetRestData("http://" & srvHost & ":40001/json/", pointHostName, req, 0)
-
-
-                 Set json = pwJsonConverter.ParseJSON(ret)
-                 count = json("Employee").count
-
-                 Select Case count
-                   Case 0
-                     msg = "совпадений не обнаружено"
-                   Case Else
-                     If count > 1 Then
-                       msg = "обнаружено более одного пользователя" & vbCrLf & "будет использован последний"
-                     End If
-
-
-                     Dim item As Object                ' Reference to each JSON Object found in the "data" property.
-                     Dim rows As VBA.Collection        ' Reference to each JSON Object found in the "data" property's JSON Array.
-                     Dim row  As Long                  ' Number of rows in the "data" property's JSON Array.
-                     Dim data As Scripting.Dictionary  ' Reference to a JSON Object in the "data" property's JSON Array.
-
-                     i = 0
-                     For Each userInfo In json("Employee")
-                       pwUserID = userInfo("Token")                         'id юзера
-
-                       If Len(idRic) > 0 Then                               'если нужна проверка на id сотрудника из Лоции (табельный номер в ProxWay)
-                         If idRic<> CStr(userInfo("EmployeeNumber")) Then
-                          pwUserID = ""
-                           msg = "совпадений по табельному номеру сотрудника" & vbCrLf & "не обнаружено"
-                           Exit For
-                         End If
-                       End If
-
-
-                       If Len(idExcel) > 0 Then                             'если нужна проверка на idExcel сотрудника из Excel базы учета рабочего времени (доп поля в ProxWay)
-                         Set rows = userInfo("AdditionalFields")            'получить коллекцию
-                         If rows.count > 0 Then
-                           For row = 1 To rows.count Step 1                   'пройти по коллекции
-                             Set item = rows.item(row)                        'получить объект из коллекции (JSON Array)
-                             Set data = item                                  'преобразовать его в словарь
-                             If data.Items(0) = "id базы учета рабочего времени (Excel)" Then 'проверить конкретное поле
-                               If idExcel<> CStr(data.Items(1)) Then
-                                pwUserID = ""
-                                 msg = "совпадений не обнаружено"
-                                 Exit For
-                               End If
-                             End If
-                           Next row
-                         Else
-                           pwUserID = ""
-                           msg = "совпадений не обнаружено" & vbCrLf & "в базе ProxWay не настроены дополнительные поля сотрудника"
-                           Exit For
-                         End If
-                       End If
-                       i = i + 1
-                     Next userInfo
-                 End Select
-                 If Len(msg) > 0 Then
-                   MsgBox "Ошибка сопоставления пользователя" & vbCrLf & vbCrLf & _
-                          " по параметрам запроса" & vbCrLf & _
-                          "   ФИО сотрудника        : '" & userName & "'" & vbCrLf & _
-                          "   id сотрудника из Лоции: '" & idRic & "'" & vbCrLf & _
-                          "   id сотрудника из Excel: '" & idExcel & "'" & vbCrLf & _
-                          vbCrLf & msg, vbOKCancel + vbInformation, "Пользователи СКУД ProwWay"
-                 End If
-
-                '-------------выход
-                 pointHostName = "Logout"
-                 req = "{""UserSID"":""" & UserSID & """}"
-                 ret = GetRestData("http://" & srvHost & ":40001/json/", pointHostName, req, 0)
-
-
-                 Set json = Nothing
-
-               End If
-               GetUserIdProxWayByName = pwUserID
-            End Function
-
-             */
-
-            return ret;
+            return pwUserID;
         }
 
         /// <summary>
         /// запрос к серверу на счет входа выхода конкретного сотрудника в/из офиса, и получение ответа
         /// </summary>
         /// <param name="connectionString">строка подключения</param>
-        /// <param name="pwIdUser">id пользователя ProxWay</param>
+        /// <param name="crmId">id хвостик Лоции или Табельный номер пользователя в ProxWay</param>
+        /// <param name="extId">id пользователя в служебной базе РПК - учет рабочего времени</param>
+        /// <param name="userName">ФИО пользоватея (допускается использование маски через символ %) скорее всего в формате SQL для функции Like</param>
         /// <param name="findDateTime">день запроса в формате "уууу.mm.dd" (поиск будет произведен на указанную дату в диапазоне времени от 00:00:00 до 23:59:59)</param>
         /// <returns>одномерный массив - первое значение - время первого входа (если есть), второе значение - время последнего выхода (если есть)</returns>
-        public static string[] сheckPointPWTime(string connectionString, string pwIdUser, string findDateTime) 
+        public static string[] сheckPointPWTime(string connectionString, string crmId, string extId, string userName, string findDateTime) 
         {
             UriBuilder pacsUri = new UriBuilder(connectionString);
            // UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
-            string ret = getUserIdProxWayByName(pacsUri, "", "", pwIdUser); //'infoArr
+            string ret = getUserIdProxWayByName(pacsUri, crmId, extId, userName); //'infoArr
 
             return new string[1];
         }
