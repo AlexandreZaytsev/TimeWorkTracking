@@ -35,6 +35,7 @@
     <WarningLevel>4</WarningLevel>
     <NoWarn>IDE1006</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Release\TimeWorkTracking.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>twt.ico</ApplicationIcon>

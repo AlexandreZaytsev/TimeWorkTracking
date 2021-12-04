@@ -1,32 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Data;
-using System.Data.OleDb;
-using System.IO;
 using System.Net;
-using System.Threading;
-using System.Collections.Specialized;
 using System.Web.Script.Serialization;
-using System.Web;
 using System.Windows.Forms;
 
 
 
 namespace TimeWorkTracking
 {
-    class clPacsWebDataBase
+    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //Структуры для парсинга Json ответов
+
+    //http://localhost:40001/json/help/operations/Authenticate
+    public class pacsAuthenticate
     {
-        /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        'функция Отправка GET POST запроса на хост
-        '----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        ' host - запрашиваемый сайт
-        ' request - запрос
-        //        https://stackoverflow.com/questions/4015324/how-to-make-an-http-post-web-request
-        //https://zetcode.com/csharp/httpclient/
-         */
-        private static string getDataFromURL(string pacsUri, string request)
+        public string UserSID { get; set; }
+    }
+
+    //http://localhost:40001/json/help/operations/EmployeeGetList
+    public class pacsEmployeeGetList
+    {
+        public pacsEmployee[] Employee { get; set; }
+    }
+
+    public class pacsEmployee
+    {
+        public string Token { get; set; }
+        public string EmployeeNumber { get; set; }
+        public pacsAdditionalFields[] AdditionalFields { get; set; }
+
+    }
+    public class pacsAdditionalFields
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
+    }
+    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    class clPacsWebDataBase
+{
+    /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    'функция Отправка GET POST запроса на хост
+    '----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    ' host - запрашиваемый сайт
+    ' request - запрос
+    //        https://stackoverflow.com/questions/4015324/how-to-make-an-http-post-web-request
+    //https://zetcode.com/csharp/httpclient/
+     */
+    private static string getDataFromURL(string pacsUri, string request)
         {
             string ret="";
             try
@@ -86,7 +108,7 @@ namespace TimeWorkTracking
 */
         }
 
-        //проверить что соединение есть в принципе 
+        //проверить по настройкам формы что соединение есть в принципе 
         private static bool CheckConnectBase(UriBuilder pacsUri)
         {
             bool ret = false;
@@ -100,9 +122,7 @@ namespace TimeWorkTracking
             return ret;
         }
 
-
-
-        //проверить что и соединение и бд существует
+        //проверить по строке подключения что соединение  существует
         //https://stackoverflow.com/questions/9620278/how-do-i-make-calls-to-a-rest-api-using-c
         private static bool CheckConnectSimple(string connectionString)
         {
@@ -139,18 +159,19 @@ namespace TimeWorkTracking
         //    }
 
 
-        /*'----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        'попытка авторизации на сервере
-        '----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        ' возврат - строка UserSID или если неудачно - пустая строка
-        '//https://streletzcoder.ru/rabotaem-s-json-v-c-serializatsiya-i-deserializatsiya/
-        */
+        //
+        
+        /// <summary>
+        /// авторизации на сервере СКУД
+        /// </summary>
+        /// <param name="pacsUri">строка подключения uriBuilder</param>
+        /// <returns>строка UserSID или если неудачно - пустая строка</returns>
+        /// https://streletzcoder.ru/rabotaem-s-json-v-c-serializatsiya-i-deserializatsiya/
+        /// https://coderoad.wiki/36674888/%D0%9A%D0%B0%D0%BA-%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D1%8C-%D0%B2%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D1%83%D1%8E-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D1%8C-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81-JavascriptSerializer-%D0%B2-C
+
         private static string connectRestApi(UriBuilder pacsUri) 
         {
-            string ret = "";
-//            StringBuilder errorMessages = new StringBuilder();
-            
-            string jsonReq =        //-------------авторизация
+            string jsonReq =        
                 "{" +
                 "\"PasswordHash\":\"" + pacsUri.Password + "\", " +
                 "\"UserName\":\"" + pacsUri.UserName + "\"" +
@@ -159,24 +180,20 @@ namespace TimeWorkTracking
             UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
 
             string res = getRestData(pacsUriLite.Uri.AbsoluteUri, "Authenticate", jsonReq, 0);//,
-            JavaScriptSerializer ser = new JavaScriptSerializer();
-            Dictionary<string, object> company = (Dictionary<string, object>)ser.DeserializeObject(res);
-            if (company != null)
-                ret = company["UserSID"].ToString();
-
-            return ret;
-
-            //        https://coderoad.wiki/36674888/%D0%9A%D0%B0%D0%BA-%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D1%8C-%D0%B2%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D1%83%D1%8E-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D1%8C-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81-JavascriptSerializer-%D0%B2-C
+            pacsAuthenticate jsonRet = new JavaScriptSerializer().Deserialize<pacsAuthenticate>(res);
+            //dynamic usr = new JavaScriptSerializer().DeserializeObject(res);
+            //Dictionary<string, object> company = (Dictionary<string, object>)new JavaScriptSerializer().DeserializeObject(res);
+            return jsonRet.UserSID;
         }
 
-        /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        'получить внутренний id пользователя СКУД ProxWay
-        '----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        ' idRic - id хвостик Лоции или Табельный номер пользователя в ProxWay
-        ' userName - ФИО пользоватея (допускается использование маски через символ %) скорее всего в формате SQL для функции Like
-        ' idExcel - id пользователя в служебной базе РПК - учет рабочего времени
-        ' возврат - id (Token) пользователя системы ProxWay - или в случае неудачи - пустая строка
-        */
+        /// <summary>
+        /// получить внутренний id пользователя СКУД ProxWay
+        /// </summary>
+        /// <param name="pacsUri">строка подключения uriBuilder</param>
+        /// <param name="idRic">id хвостик Лоции или Табельный номер пользователя в ProxWay</param>
+        /// <param name="userName">ФИО пользоватея (допускается использование маски через символ %) скорее всего в формате SQL для функции Like</param>
+        /// <param name="idExcel">d пользователя в служебной базе РПК - учет рабочего времени</param>
+        /// <returns>id (Token) пользователя системы ProxWay - или в случае неудачи - пустая строка</returns>
         private static string getUserIdProxWayByName(UriBuilder pacsUri, string idRic, string userName, string idExcel) //'infoArr
         {
             string ret = "";
@@ -204,13 +221,20 @@ namespace TimeWorkTracking
 //                 ret = GetRestData("http://" & srvHost & ":40001/json/", pointHostName, req, 0)
                 UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
                 string res = getRestData(pacsUriLite.Uri.AbsoluteUri, "EmployeeGetList", jsonReq, 0);//,
+                pacsEmployeeGetList jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
 
-//http://localhost:40001/json/help/operations/EmployeeGetList
-//https://stackoverflow.com/questions/5502245/deserializing-a-json-file-with-javascriptserializer                
+
+
+                //http://localhost:40001/json/help/operations/EmployeeGetList
+                //https://stackoverflow.com/questions/5502245/deserializing-a-json-file-with-javascriptserializer                
+
+/*
                 JavaScriptSerializer ser = new JavaScriptSerializer();
                 Dictionary<string, object> company = (Dictionary<string, object>)ser.DeserializeObject(res);
                 if (company != null)
                     ret = company["Employee"].ToString();
+*/
+
             }
 
             /*
@@ -320,6 +344,21 @@ namespace TimeWorkTracking
             return ret;
         }
 
+        /// <summary>
+        /// запрос к серверу на счет входа выхода конкретного сотрудника в/из офиса, и получение ответа
+        /// </summary>
+        /// <param name="connectionString">строка подключения</param>
+        /// <param name="pwIdUser">id пользователя ProxWay</param>
+        /// <param name="findDateTime">день запроса в формате "уууу.mm.dd" (поиск будет произведен на указанную дату в диапазоне времени от 00:00:00 до 23:59:59)</param>
+        /// <returns>одномерный массив - первое значение - время первого входа (если есть), второе значение - время последнего выхода (если есть)</returns>
+        public static string[] сheckPointPWTime(string connectionString, string pwIdUser, string findDateTime) 
+        {
+            UriBuilder pacsUri = new UriBuilder(connectionString);
+           // UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
+            string ret = getUserIdProxWayByName(pacsUri, "", "", pwIdUser); //'infoArr
+
+            return new string[1];
+        }
 
         //PUBLIC------------------------------------------------------------------------
 

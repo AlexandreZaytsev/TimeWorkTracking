@@ -194,7 +194,7 @@ namespace TimeWorkTracking
                 //               chUse.Checked = lstwDataBaseUsers.Items[ind].Text == "True";                  //access    
                 tbName.Text = lstwDataBaseMain.Items[ind].SubItems[1].Text;                 //fio
                 //загружаемся из СКУД
-                LoadPascInfoByID(lstwDataBaseMain.Items[ind].SubItems[1].Text);
+                LoadPascInfoByID(lstwDataBaseMain.Items[ind].SubItems[2].Text);
 
                 if (lstwDataBaseMain.Items[ind].Text == "0")                                //данных о проходе нет
                 {                                                                                      
@@ -291,6 +291,10 @@ namespace TimeWorkTracking
         private bool LoadPascInfoByID(string userExtId) 
         {
             bool ret = false;
+            string csPACS = Properties.Settings.Default.pacsConnectionString;
+            string[] arr = clPacsWebDataBase.сheckPointPWTime(csPACS, userExtId, mcRegDate.SelectionStart.ToString("yyyy.MM.dd"));
+            //сheckPointPWTime(string connectionString, string pwIdUser, string findDateTime)
+
             //            CheckConnectSimple
             return ret;
         }
