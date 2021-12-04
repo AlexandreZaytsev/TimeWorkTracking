@@ -161,7 +161,7 @@ namespace TimeWorkTracking
             pacsAuthenticate jsonRet = new JavaScriptSerializer().Deserialize<pacsAuthenticate>(res);
             //dynamic usr = new JavaScriptSerializer().DeserializeObject(res);
             //Dictionary<string, object> company = (Dictionary<string, object>)new JavaScriptSerializer().DeserializeObject(res);
-            return jsonRet.UserSID;
+            return jsonRet == null ? "" : jsonRet.UserSID;
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace TimeWorkTracking
             string pwUserID = "";
             string UserSID = connectRestApi(pacsUri);   //получить внутренний id пользователя СКУД ProxWay
 
-            // userName = "%" + "ле" + "%";
+           //  userName = "%" + "ле" + "%";
             if (UserSID.Length > 0) 
             {
                //  pointHostName = "EmployeeGetList"
@@ -197,10 +197,11 @@ namespace TimeWorkTracking
            // '           """DepartmentUsed"":true, " &
            // '           """HideDismissed"":true, " &
                 UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
+             
                 string res = getRestData(pacsUriLite.Uri.AbsoluteUri, "EmployeeGetList", jsonReq, 0);//,
                 pacsEmployeeGetList jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
-
-                switch (jsonRet.Employee.GetLength(0))
+                int count = jsonRet == null ? 0 : jsonRet.Employee.GetLength(0);
+                switch (count)
                 {
                     case 0:
                         msg = "совпадений не обнаружено";
@@ -291,7 +292,7 @@ namespace TimeWorkTracking
         /// <returns>одномерный массив - первое значение - время первого входа (если есть), второе значение - время последнего выхода (если есть)</returns>
         private static string[] checkPointPWTime(UriBuilder pacsUri, string pwIdUser, string findDateTime) 
         {
-            string[] res = new string[1];
+            string[] res = new string[2];
             res[0] = "";        //время первого входа
             res[1] = "";        //время последнего выхода
             string UserSID = connectRestApi(pacsUri);   //получить внутренний id пользователя СКУД ProxWay
@@ -305,8 +306,8 @@ namespace TimeWorkTracking
                     "\"SubscriptionEnabled\":true, " +
                     "\"Limit\":0, " +
                     "\"StartToken\":0, " +
-                    "\"IssuedFrom\":\"" + @"\/Date(" + clSystemSet.convertToUnixTimeStamp(findDateTime + "\" 00:00:00\"", 3) + @")\/" + @"\, " +
-                    "\"IssuedTo\":\"" + @"\/Date(" + clSystemSet.convertToUnixTimeStamp(findDateTime + "\" 23:59:59\"", 3) + @")\/" + @"\, " +
+                    "\"IssuedFrom\":\"" + @"\/Date(" + clSystemSet.convertToUnixTimeStamp(findDateTime + " 00:00:00", 3) + @")\/" + @"\, " +
+                    "\"IssuedTo\":\"" + @"\/Date(" + clSystemSet.convertToUnixTimeStamp(findDateTime + " 23:59:59", 3) + @")\/" + @"\, " +
                     "}";
                 //""IssuedFrom":"\/Date(1638046800000)\/", "
  
