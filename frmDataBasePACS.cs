@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -11,7 +7,7 @@ namespace TimeWorkTracking
 {
     public partial class frmDataBasePACS : Form
     {
-     //   private UriBuilder uriPacs;
+        //   private UriBuilder uriPacs;
         public frmDataBasePACS()
         {
             //подписка события внешних форм 
@@ -24,10 +20,10 @@ namespace TimeWorkTracking
         {
             UriBuilder uriPacs = GetFormConnectionString();
             if (!clSystemSet.CheckPing(uriPacs.Host))
-                    MessageBox.Show("Cетевое имя сервера PACS\r\n  " +
-                                tbHostNamePACS.Text +
-                                "- недоступно\r\n",
-                                "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Cетевое имя сервера PACS\r\n  " +
+                            tbHostNamePACS.Text +
+                            "- недоступно\r\n",
+                            "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
                 TestFormConnectionPACS(uriPacs);        //проверить соединение по настройкам формы
         }
@@ -53,31 +49,31 @@ namespace TimeWorkTracking
             bool ret = false;
             StringBuilder Messages = new StringBuilder();
             string statusDB = clPacsWebDataBase.pacsConnectBase(uriPacs);
-                        switch (statusDB)
-                        {
-                            case "-9":      //соединение установить не удалось
-                                statusDB = "";
-                                picStatusPACS.Image = global::TimeWorkTracking.Properties.Resources.no;
-//                                btTestConnectionPacs.Visible = true;
-                                Messages.Append("Соединение:" + "\n" +
-                                            $"  Схема: {cbHostSchemePACS.Text}" + "\n" +
-                                            $"  Порт: {nHostPortPACS.Text}" + "\n" +
-                                            $"  Сервер: {tbHostNamePACS.Text}" + "\n" +
-                                            $"  Логин: {tbUserNamePACS.Text}" + "\n" +
-                                            $"  Пароль: {tbPasswordPASC.Text}" + "\n" +
-                                            "установить не удалось");
-                                break;
-                            default:        //все чики-пуки
-                                picStatusPACS.Image = Properties.Resources.ok;
-//                                btTestConnectionPacs.Visible = true;
-                                  Messages.Append("Соединение установлено");
-                                ret = true;
-                                break;
-                        }
-                        MessageBox.Show(Messages.ToString(),
-                                        "Подключение к Базе Данных",
-                                         MessageBoxButtons.OK,
-                                         MessageBoxIcon.Warning);
+            switch (statusDB)
+            {
+                case "-9":      //соединение установить не удалось
+                    statusDB = "";
+                    picStatusPACS.Image = global::TimeWorkTracking.Properties.Resources.no;
+                    //                                btTestConnectionPacs.Visible = true;
+                    Messages.Append("Соединение:" + "\n" +
+                                $"  Схема: {cbHostSchemePACS.Text}" + "\n" +
+                                $"  Порт: {nHostPortPACS.Text}" + "\n" +
+                                $"  Сервер: {tbHostNamePACS.Text}" + "\n" +
+                                $"  Логин: {tbUserNamePACS.Text}" + "\n" +
+                                $"  Пароль: {tbPasswordPASC.Text}" + "\n" +
+                                "установить не удалось");
+                    break;
+                default:        //все чики-пуки
+                    picStatusPACS.Image = Properties.Resources.ok;
+                    //                                btTestConnectionPacs.Visible = true;
+                    Messages.Append("Соединение установлено");
+                    ret = true;
+                    break;
+            }
+            MessageBox.Show(Messages.ToString(),
+                            "Подключение к Базе Данных",
+                             MessageBoxButtons.OK,
+                             MessageBoxIcon.Warning);
 
             Properties.Settings.Default.pacsConnectionString = statusDB;
             //PACS DataBase
@@ -107,6 +103,7 @@ namespace TimeWorkTracking
         //проверить соединение с базами
         private void CheckConnects()
         {
+
             if (!clSystemSet.CheckPing(tbHostNamePACS.Text))
             {
                 this.picStatusPACS.Image = Properties.Resources.no;
