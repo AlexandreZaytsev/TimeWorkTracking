@@ -305,8 +305,8 @@ namespace TimeWorkTracking
                     "\"SubscriptionEnabled\":true, " +
                     "\"Limit\":0, " +
                     "\"StartToken\":0, " +
-                    "\"IssuedFrom\":\"" + @"\/Date(" + "pwUTC.ConvertToUnixTimeStamp(findDateTime + \" 00:00:00\", 3))" + @")\/" + @"\, " +
-                    "\"IssuedTo\":\"" + @"\/Date(" + "pwUTC.ConvertToUnixTimeStamp(findDateTime + \" 23:59:59\", 3))" + @")\/" + @"\, " +
+                    "\"IssuedFrom\":\"" + @"\/Date(" + clSystemSet.convertToUnixTimeStamp(findDateTime + "\" 00:00:00\"", 3) + @")\/" + @"\, " +
+                    "\"IssuedTo\":\"" + @"\/Date(" + clSystemSet.convertToUnixTimeStamp(findDateTime + "\" 23:59:59\"", 3) + @")\/" + @"\, " +
                     "}";
                 //""IssuedFrom":"\/Date(1638046800000)\/", "
  
@@ -329,14 +329,15 @@ namespace TimeWorkTracking
                 // '           """DepartmentUsed"":true, " &
                 // '           """HideDismissed"":true, " &
                 UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
-                string res = getRestData(pacsUriLite.Uri.AbsoluteUri, "EmployeeGetList", jsonReq, 0);//,
-                pacsEmployeeGetList jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
+       //         string res = getRestData(pacsUriLite.Uri.AbsoluteUri, "EmployeeGetList", jsonReq, 0);//,
+       //         pacsEmployeeGetList jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
 
             }        
 
                 return res;
         }
 
+        /*
    If Len(UserSID) > 0 Then
 
 
@@ -407,7 +408,7 @@ namespace TimeWorkTracking
    End If
   CheckPointPWTime = res
 End Function
-
+        */
 
 
         //PUBLIC------------------------------------------------------------------------
@@ -447,8 +448,8 @@ End Function
         public static string[] сheckPointPWTime(string connectionString, string crmId, string extId, string userName, string findDateTime)
         {
             UriBuilder pacsUri = new UriBuilder(connectionString);
-            string ret = getUserIdProxWayByName(pacsUri, crmId, extId, userName);           //получить id юзера (токен) в proxway
-
+            string pwIdUser = getUserIdProxWayByName(pacsUri, crmId, extId, userName);           //получить id юзера (токен) в proxway
+            string[] ret = checkPointPWTime(pacsUri, pwIdUser, findDateTime);
             return new string[1];
         }
     }
