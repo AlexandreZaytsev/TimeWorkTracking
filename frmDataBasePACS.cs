@@ -126,13 +126,12 @@ namespace TimeWorkTracking
 
             }
         }
-        //проверка вводимых симолов нового пароля
-        private void tbPasswordPASC_KeyPress(object sender, KeyPressEventArgs e)
+        //проверка вводимых симолов нового пароля логина
+        private void tb_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (clSystemSet.checkChar(e.KeyChar))       //проверить допустимые символы
                 e.Handled = true;
         }
-
 
         /*--------------------------------------------------------------------------------------------  
         CALLBACK InPut (подписка на внешние сообщения)

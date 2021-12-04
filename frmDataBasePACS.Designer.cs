@@ -38,10 +38,10 @@ namespace TimeWorkTracking
             this.tbHostNamePACS = new System.Windows.Forms.TextBox();
             this.btTestConnectionPacs = new System.Windows.Forms.Button();
             this.mainPanelPACS = new System.Windows.Forms.Panel();
+            this.nHostPortPACS = new System.Windows.Forms.NumericUpDown();
             this.cbHostSchemePACS = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.nHostPortPACS = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.picStatusPACS)).BeginInit();
             this.mainPanelPACS.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nHostPortPACS)).BeginInit();
@@ -65,7 +65,7 @@ namespace TimeWorkTracking
             this.tbPasswordPASC.Name = "tbPasswordPASC";
             this.tbPasswordPASC.Size = new System.Drawing.Size(239, 24);
             this.tbPasswordPASC.TabIndex = 12;
-            this.tbPasswordPASC.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbPasswordPASC_KeyPress);
+            this.tbPasswordPASC.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tb_KeyPress);
             // 
             // label9
             // 
@@ -84,6 +84,7 @@ namespace TimeWorkTracking
             this.tbUserNamePACS.Name = "tbUserNamePACS";
             this.tbUserNamePACS.Size = new System.Drawing.Size(239, 24);
             this.tbUserNamePACS.TabIndex = 10;
+            this.tbUserNamePACS.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tb_KeyPress);
             // 
             // label10
             // 
@@ -148,6 +149,28 @@ namespace TimeWorkTracking
             this.mainPanelPACS.Size = new System.Drawing.Size(349, 151);
             this.mainPanelPACS.TabIndex = 16;
             // 
+            // nHostPortPACS
+            // 
+            this.nHostPortPACS.Location = new System.Drawing.Point(258, 7);
+            this.nHostPortPACS.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.nHostPortPACS.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.nHostPortPACS.Name = "nHostPortPACS";
+            this.nHostPortPACS.Size = new System.Drawing.Size(78, 24);
+            this.nHostPortPACS.TabIndex = 20;
+            this.nHostPortPACS.Value = new decimal(new int[] {
+            40001,
+            0,
+            0,
+            0});
+            // 
             // cbHostSchemePACS
             // 
             this.cbHostSchemePACS.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -181,23 +204,6 @@ namespace TimeWorkTracking
             this.label1.Size = new System.Drawing.Size(63, 18);
             this.label1.TabIndex = 16;
             this.label1.Text = "Scheme";
-            // 
-            // nHostPortPACS
-            // 
-            this.nHostPortPACS.Location = new System.Drawing.Point(258, 7);
-            this.nHostPortPACS.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.nHostPortPACS.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            -2147483648});
-            this.nHostPortPACS.Name = "nHostPortPACS";
-            this.nHostPortPACS.Size = new System.Drawing.Size(78, 24);
-            this.nHostPortPACS.TabIndex = 20;
             // 
             // frmDataBasePACS
             // 

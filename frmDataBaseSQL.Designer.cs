@@ -54,7 +54,7 @@ namespace TimeWorkTracking
             this.label14.Location = new System.Drawing.Point(16, 118);
             this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(60, 15);
+            this.label14.Size = new System.Drawing.Size(71, 18);
             this.label14.TabIndex = 14;
             this.label14.Text = "Database";
             // 
@@ -87,7 +87,7 @@ namespace TimeWorkTracking
             this.tbDatabaseTWT.Location = new System.Drawing.Point(102, 115);
             this.tbDatabaseTWT.Margin = new System.Windows.Forms.Padding(4);
             this.tbDatabaseTWT.Name = "tbDatabaseTWT";
-            this.tbDatabaseTWT.Size = new System.Drawing.Size(238, 21);
+            this.tbDatabaseTWT.Size = new System.Drawing.Size(238, 24);
             this.tbDatabaseTWT.TabIndex = 1;
             // 
             // label11
@@ -96,7 +96,7 @@ namespace TimeWorkTracking
             this.label11.Location = new System.Drawing.Point(15, 7);
             this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(79, 15);
+            this.label11.Size = new System.Drawing.Size(95, 18);
             this.label11.TabIndex = 10;
             this.label11.Text = "Server Name";
             // 
@@ -106,9 +106,9 @@ namespace TimeWorkTracking
             this.tbPasswordTWT.Margin = new System.Windows.Forms.Padding(4);
             this.tbPasswordTWT.Name = "tbPasswordTWT";
             this.tbPasswordTWT.PasswordChar = '*';
-            this.tbPasswordTWT.Size = new System.Drawing.Size(239, 21);
+            this.tbPasswordTWT.Size = new System.Drawing.Size(239, 24);
             this.tbPasswordTWT.TabIndex = 8;
-            this.tbPasswordTWT.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbPasswordTWT_KeyPress);
+            this.tbPasswordTWT.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tb_KeyPress);
             // 
             // label5
             // 
@@ -116,7 +116,7 @@ namespace TimeWorkTracking
             this.label5.Location = new System.Drawing.Point(15, 34);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(86, 15);
+            this.label5.Size = new System.Drawing.Size(102, 18);
             this.label5.TabIndex = 3;
             this.label5.Text = "Autentifiication";
             // 
@@ -126,7 +126,7 @@ namespace TimeWorkTracking
             this.label7.Location = new System.Drawing.Point(15, 89);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(61, 15);
+            this.label7.Size = new System.Drawing.Size(75, 18);
             this.label7.TabIndex = 7;
             this.label7.Text = "Password";
             // 
@@ -140,7 +140,7 @@ namespace TimeWorkTracking
             this.cbAutentificationTWT.Location = new System.Drawing.Point(102, 31);
             this.cbAutentificationTWT.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbAutentificationTWT.Name = "cbAutentificationTWT";
-            this.cbAutentificationTWT.Size = new System.Drawing.Size(239, 23);
+            this.cbAutentificationTWT.Size = new System.Drawing.Size(239, 26);
             this.cbAutentificationTWT.TabIndex = 4;
             this.cbAutentificationTWT.SelectedIndexChanged += new System.EventHandler(this.cbAutentificationTWT_SelectedIndexChanged);
             // 
@@ -149,7 +149,7 @@ namespace TimeWorkTracking
             this.tbServerTWT.Location = new System.Drawing.Point(102, 4);
             this.tbServerTWT.Margin = new System.Windows.Forms.Padding(4);
             this.tbServerTWT.Name = "tbServerTWT";
-            this.tbServerTWT.Size = new System.Drawing.Size(239, 21);
+            this.tbServerTWT.Size = new System.Drawing.Size(239, 24);
             this.tbServerTWT.TabIndex = 9;
             // 
             // tbUserNameTWT
@@ -157,8 +157,9 @@ namespace TimeWorkTracking
             this.tbUserNameTWT.Location = new System.Drawing.Point(102, 60);
             this.tbUserNameTWT.Margin = new System.Windows.Forms.Padding(4);
             this.tbUserNameTWT.Name = "tbUserNameTWT";
-            this.tbUserNameTWT.Size = new System.Drawing.Size(239, 21);
+            this.tbUserNameTWT.Size = new System.Drawing.Size(239, 24);
             this.tbUserNameTWT.TabIndex = 6;
+            this.tbUserNameTWT.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tb_KeyPress);
             // 
             // label6
             // 
@@ -166,7 +167,7 @@ namespace TimeWorkTracking
             this.label6.Location = new System.Drawing.Point(13, 63);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(70, 15);
+            this.label6.Size = new System.Drawing.Size(84, 18);
             this.label6.TabIndex = 5;
             this.label6.Text = "User Name";
             // 
@@ -206,7 +207,7 @@ namespace TimeWorkTracking
             // 
             // frmDataBaseSQL
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(347, 179);
             this.Controls.Add(this.mainPanelSQL);

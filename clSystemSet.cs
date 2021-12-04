@@ -106,10 +106,18 @@ namespace TimeWorkTracking
         //проверка ввода логинов паролей
         static public bool checkChar(Char chr) 
         {
+            //http://website-lab.ru/article/regexp/shpargalka_po_regulyarnyim_vyirajeniyam/
+            string input = chr.ToString();
             //            var regex = new Regex(@"[^a-zA-Z0-9\s[\b]]");
             //            var regex = new Regex(@"[a-zA-Z\d\b]");
-            var regex = new Regex(@"[^\w\b]");                          //все символы по текущей локализации + цифры + backspace
-            return regex.IsMatch(chr.ToString());
+            var regexOk = new Regex(@"[^\w\b]");                        //все символы по текущей локализации + цифры + backspace
+            var regexExc = new Regex(@"[\._\@\:\-\/\*\(\)]");           //кроме
+            //            var hasNumber = new Regex(@"[0-9]+");
+            //            var hasUpperChar = new Regex(@"[A-Z]+");
+            //            var hasMinimum8Chars = new Regex(@".{8,}");
+            bool isValidated = regexOk.IsMatch(input) && regexExc.IsMatch(input) ;
+
+            return isValidated;
 /*
             char val = e.KeyChar;
             if (!Char.IsLetterOrDigit(val) && !Char.IsDigit(val) && val != 8 && (val <= 39 || val >= 46) && val != 47 && val != 61) //калькулятор
