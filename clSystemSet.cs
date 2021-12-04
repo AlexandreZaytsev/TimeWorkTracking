@@ -17,7 +17,16 @@ namespace TimeWorkTracking
 {
     static class clSystemSet
     {
-        //получить хеш строку MD5   
+        public const int utcOffset = 3;                     //'GMT смещение для Москвы +3 часа к UTC
+
+
+
+
+        /// <summary>
+        /// получить хеш строку MD5
+        /// </summary>
+        /// <param name="input">исходная строка</param>
+        /// <returns>хеш строки</returns>
         public static string getMD5(string input)
         {
             // Use input string to calculate MD5 hash
@@ -36,7 +45,11 @@ namespace TimeWorkTracking
             }
         }
 
-        //проверить доступ к сетевым ресурсам 
+        /// <summary>
+        /// проверить доступ к сетевым ресурсам используя ping
+        /// </summary>
+        /// <param name="addrPing">адрес ресурса</param>
+        /// <returns>true в случае успеха</returns>
         static public bool CheckPing(string addrPing)
         {
             Ping Pinger = new Ping();
@@ -58,7 +71,11 @@ namespace TimeWorkTracking
             }
         }
 
-        //проверить доступ к хосту
+        /// <summary>
+        /// проверить доступ к http хосту используя webclient 
+        /// </summary>
+        /// <param name="uriHost">адрес ресурса</param>
+        /// <returns>true в случае успеха</returns>
         static public bool CheckHost(string uriHost)
         {
             //https://professorweb.ru/my/csharp/web/level2/2_4.php
@@ -71,7 +88,11 @@ namespace TimeWorkTracking
                 return false;
             }
         }
-        //проверить провайдеров для работы с Excel
+
+        /// <summary>
+        /// проверить провайдеров для работы с Excel
+        /// </summary>
+        /// <returns>true в случае успеха</returns>
         static public bool checkProvider()
         {
             //проверим наличие провайдера
@@ -103,7 +124,11 @@ namespace TimeWorkTracking
                 return true;
         }
 
-        //проверка ввода логинов паролей
+        /// <summary>
+        /// проверка символов при вводе логинов паролей
+        /// </summary>
+        /// <param name="chr">входящий символ</param>
+        /// <returns>true в случае успеха</returns>
         static public bool checkChar(Char chr) 
         {
             //http://website-lab.ru/article/regexp/shpargalka_po_regulyarnyim_vyirajeniyam/
@@ -135,7 +160,12 @@ namespace TimeWorkTracking
     public static class Extension
     {
 
-        //получить значение элемента (для выбора по DisplayMember или  )
+        /// <summary>
+        /// получить значение элемента (для выбора по DisplayMember или ValueMember)
+        /// </summary>
+        /// <param name="list">проверяемый контрол</param>
+        /// <param name="item">проверяемый элемент</param>
+        /// <returns>значение в виде объекта</returns>
         public static object extGetItemValue(this ListControl list, object item)
         {
             if (item == null)
@@ -152,7 +182,11 @@ namespace TimeWorkTracking
             return property.GetValue(item);
         }
 
-        //получить индекс выделенной строки ListView
+        /// <summary>
+        /// получить индекс выделенной строки ListView
+        /// </summary>
+        /// <param name="listView">исследуемый List</param>
+        /// <returns>найденный индекс или -1 если не нашли</returns>
         public static int extSelectedIndex(this ListView listView)
         {
             for (int index = 0; index <= listView.Items.Count - 1; index++)
@@ -168,7 +202,15 @@ namespace TimeWorkTracking
                             return ret;
             */
         }
-        //найти индекс строки ListView в колонке SubItem по значению
+
+        /// <summary>
+        /// найти индекс строки ListView в колонке SubItem по значению
+        /// </summary>
+        /// <param name="lstView">исследуемый List</param>
+        /// <param name="numCol">номер колонки SubItem</param>
+        /// <param name="find">значение для поиска</param>
+        /// <returns>найденный индекс или -1 если не нашли</returns>
+        //
         public static int extFindListByColValue(this ListView lstView, int numCol, string find)
         {
             int ret = -1;
