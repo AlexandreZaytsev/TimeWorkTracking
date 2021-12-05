@@ -46,7 +46,7 @@ namespace TimeWorkTracking
     public class pacsEvent 
     {
         public string CardCode { get; set; }
-        public string Issued { get; set; }
+        public DateTime Issued { get; set; }
         public pacsMessage Message { get; set; }
 
     }
@@ -346,9 +346,10 @@ namespace TimeWorkTracking
             DateTime pwDataTime;
             string msg = "";
 
-//            DateTime now = DateTime.Now;//локальное/универсальное время
-//            DateTime utc = DateTime.UtcNow;//времяutc без часового пояся
+            //            DateTime now = DateTime.Now;//локальное/универсальное время
+            //            DateTime utc = DateTime.UtcNow;//времяutc без часового пояся
 
+            //передача с преобразованием в универсальное время (с учетом смещения GMT)
             DateTime utcFrom = DateTime.Parse(findDateTime + " 00:00:00").ToUniversalTime();    //с часовым прясом
             double unixFrom = utcFrom.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
             DateTime utcTo = DateTime.Parse(findDateTime + " 23:59:59").ToUniversalTime();
@@ -398,14 +399,14 @@ namespace TimeWorkTracking
                             switch (jsonRet.Event[i].Message.Name) 
                             {
                                 case "Вход совершен":
-                                    pwDataTime = DateTime.Parse(jsonRet.Event[i].Issued, new CultureInfo(cultureNames[0])).AddHours(3); //'clSystemSet.convertUnixTimeStampToDateTime(ConvertCDate(pwUTC.parseJSONdate(userInfo("Issued"), utcOffset))
+                                    pwDataTime = jsonRet.Event[i].Issued.ToLocalTime();     //прием с преобразованием в локальное время (с учетом смещения GMT)
                                     if (timeArr[0] == "")
                                         timeArr[0] = pwDataTime.ToString();
                                     else if (pwDataTime < Convert.ToDateTime(timeArr[0]))
                                         timeArr[0] = pwDataTime.ToString();
                                     break;
                                 case "Выход совершен":
-                                    pwDataTime = DateTime.Parse(jsonRet.Event[i].Issued, new CultureInfo(cultureNames[0])).AddHours(3); //'clSystemSet.convertUnixTimeStampToDateTime(ConvertCDate(pwUTC.parseJSONdate(userInfo("Issued"), utcOffset))
+                                    pwDataTime = jsonRet.Event[i].Issued.ToLocalTime();     //прием с преобразованием в локальное время (с учетом смещения GMT)
                                     if (timeArr[1] == "")
                                         timeArr[1] = pwDataTime.ToString();
                                     else if (pwDataTime > Convert.ToDateTime(timeArr[1]))
