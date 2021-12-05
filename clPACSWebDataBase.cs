@@ -344,7 +344,6 @@ namespace TimeWorkTracking
             string jsonReq = "";
             string res = "";
             DateTime pwDataTime;
-            string msg = "";
 
             //            DateTime now = DateTime.Now;//локальное/универсальное время
             //            DateTime utc = DateTime.UtcNow;//времяutc без часового пояся
@@ -430,14 +429,18 @@ namespace TimeWorkTracking
 
             return timeArr;
         }
- 
+
         //PUBLIC------------------------------------------------------------------------
 
         //Подключения и проверки
 
-        //проверить соединение отдельно по соединению (на базе master) и по имени базы в списке баз
-        //выдать расшифровку ошибок
-        //(проверка только из формы настроек соединения)
+        /// <summary>
+        /// проверить соединение отдельно по соединению (на базе master) и по имени базы в списке баз
+        /// выдать расшифровку ошибок
+        /// (проверка только из формы настроек соединения)
+        /// </summary>
+        /// <param name="pacsUri"></param>
+        /// <returns></returns>
         public static string pacsConnectBase(UriBuilder pacsUri)
         {
             if (CheckConnectBase(pacsUri))
@@ -446,26 +449,30 @@ namespace TimeWorkTracking
                 return "-9";            //соединение установить не удалось
         }
 
-        //проверить соединение сразу по строке подключения
-        //без выдачи ошибок
-        //(проверки из всех модулей)
+        /// <summary>
+        /// проверить соединение сразу по строке подключения
+        /// без выдачи ошибок
+        /// (проверки из всех модулей)
+        /// </summary>
+        /// <param name="connectionString">строка соединения</param>
+        /// <returns></returns>
         public static bool pacsConnectSimple(string connectionString)
         {
             return CheckConnectSimple(connectionString);
         }
 
-    //Запросы
+        //Запросы
 
         /// <summary>
         /// запрос к серверу на счет входа выхода конкретного сотрудника в/из офиса, и получение ответа
         /// </summary>
         /// <param name="connectionString">строка подключения</param>
+        /// <param name="findDateTime">день запроса в формате "уууу.mm.dd" (поиск будет произведен на указанную дату в диапазоне времени от 00:00:00 до 23:59:59)</param>
         /// <param name="crmId">id хвостик Лоции или Табельный номер пользователя в ProxWay</param>
         /// <param name="extId">id пользователя в служебной базе РПК - учет рабочего времени</param>
         /// <param name="userName">ФИО пользоватея (допускается использование маски через символ %) скорее всего в формате SQL для функции Like</param>
-        /// <param name="findDateTime">день запроса в формате "уууу.mm.dd" (поиск будет произведен на указанную дату в диапазоне времени от 00:00:00 до 23:59:59)</param>
         /// <returns>одномерный массив - первое значение - время первого входа (если есть), второе значение - время последнего выхода (если есть)</returns>
-        public static string[] сheckPointPWTime(string connectionString, string crmId, string extId, string userName, string findDateTime)
+        public static string[] сheckPointPWTime(string findDateTime, string connectionString, string crmId, string extId, string userName)
         {
             string[] ret = new string[2];
             UriBuilder pacsUri = new UriBuilder(connectionString);

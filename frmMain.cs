@@ -189,12 +189,13 @@ namespace TimeWorkTracking
             if (ind >= 0)
             {
                 grRegistrator.Enabled = true;
-                //               tbExtID.Text = lstwDataBaseUsers.Items[ind].SubItems[2].Text;                 //extID
+//               tbExtID.Text = lstwDataBaseUsers.Items[ind].SubItems[2].Text;                 //extID
                 //crmId
-                //               chUse.Checked = lstwDataBaseUsers.Items[ind].Text == "True";                  //access    
+//               chUse.Checked = lstwDataBaseUsers.Items[ind].Text == "True";                  //access    
                 tbName.Text = lstwDataBaseMain.Items[ind].SubItems[1].Text;                 //fio
                 //загружаемся из СКУД
                 LoadPascInfoByID(
+                    mcRegDate.SelectionStart,                                               //дата регистрации
                     "",                                                                     //crmId табельный номер из Лоции
                     lstwDataBaseMain.Items[ind].SubItems[2].Text,                           //extId внешний код для синнхронизации
                     lstwDataBaseMain.Items[ind].SubItems[1].Text);                          //фио юзера
@@ -297,13 +298,35 @@ namespace TimeWorkTracking
         /// <param name="extId">внешний код для синнхронизации</param>
         /// <param name="userName">имя пользователя</param>
         /// <returns></returns>
-        private bool LoadPascInfoByID(string crmId, string extId, string userName) 
+        private bool LoadPascInfoByID(DateTime checkDate, string crmId, string extId, string userName) 
         {
             bool ret = false;
-            string csPACS = Properties.Settings.Default.pacsConnectionString;
-            string[] arr = clPacsWebDataBase.сheckPointPWTime(csPACS, crmId, extId, userName,  mcRegDate.SelectionStart.ToString("yyyy.MM.dd"));
-            //сheckPointPWTime(string connectionString, string pwIdUser, string findDateTime)
+            //попробуеи прочесть из БД
+            string csSQL = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            string timeSqlFrom = clMsSqlDatabase.RequesScalar(csSQL, "Select coalesce(Convert(varchar(30), pacsTimeStart, 20), '') From TimeProvider Where passDate = '" + checkDate.ToString("yyyyMMdd") + "' and and passId = '" + extId + "'", false);
+            string timeSqlTo = clMsSqlDatabase.RequesScalar(csSQL, "Select coalesce(Convert(varchar(30), pacsTimeStop, 20), '') From TimeProvider Where passDate = '" + checkDate.ToString("yyyyMMdd") + "' and and passId = '" + extId + "'", false);
 
+            string csPACS = Properties.Settings.Default.pacsConnectionString;
+            string[] timePacs = clPacsWebDataBase.сheckPointPWTime(checkDate.ToString("yyyy.MM.dd"), csPACS, crmId, extId, userName);
+            string timePacsFrom = timePacs[0];
+            string timePacsTo = timePacs[1];
+
+            pPacs.Enabled = (timeSqlFrom + timeSqlTo + timePacsFrom + timePacsTo).Length > 0;
+            //СКУД панель Статус
+            /*
+                If srvAccess Then
+                  Frame7.Enabled = True
+                  'разблокировать панель СКУД
+                  checkPoint = pwPACS.cheskPassProxWay("", CStr(lbUsers.List(lbUsers.ListIndex, 3)), CStr(lbUsers.List(lbUsers.ListIndex, 1)), Format(CDate(tbDate), "yyyy.mm.dd"))
+                  tbInTime.Value = checkPoint(0)                                    'подставить время входа из СКУД
+                  tbOutTime.Value = checkPoint(1)                                   'подставить время выхода из СКУД
+                  SetStatusPWPassPanel                                              'управление панелью статуса СКУД
+                Else
+                  Frame7.Enabled = False                                            'заблокировать панель СКУД
+            '      Frame7.BackColor = &HE0E0E0
+                End If
+                    // СКУД панель Статус
+            */
             //            CheckConnectSimple
             return ret;
         }
