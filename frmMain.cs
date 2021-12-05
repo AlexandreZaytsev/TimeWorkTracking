@@ -311,7 +311,46 @@ namespace TimeWorkTracking
             string timePacsFrom = timePacs[0];
             string timePacsTo = timePacs[1];
 
+            //засветить панель если есть какой нибудь результат
             pPacs.Enabled = (timeSqlFrom + timeSqlTo + timePacsFrom + timePacsTo).Length > 0;
+            string frmFrom = "00:00";
+            string frmTo = "00:00";
+            DateTime dateSql;
+            DateTime datePacs;
+            //время первого входа
+            if (timeSqlFrom != "" && timePacsFrom != "") 
+            { 
+                dateSql = Convert.ToDateTime(timeSqlFrom);
+                datePacs = Convert.ToDateTime(timePacsFrom);
+                if (dateSql< datePacs)
+                    frmFrom = dateSql.ToString("HH:mm");
+                else
+                    frmFrom = datePacs.ToString("HH:mm");
+            }
+            else if (timeSqlFrom != "" && timePacsFrom == "")
+                frmFrom = Convert.ToDateTime(timeSqlFrom).ToString("HH:mm");
+            else if (timeSqlFrom == "" && timePacsFrom != "")
+                frmFrom = Convert.ToDateTime(timePacsFrom).ToString("HH:mm");
+
+            //время последнего выхода
+            if (timeSqlTo != "" && timePacsTo != "")
+            {
+                dateSql = Convert.ToDateTime(timeSqlTo);
+                datePacs = Convert.ToDateTime(timePacsTo);
+                if (dateSql > datePacs)
+                    frmFrom = dateSql.ToString("HH:mm");
+                else
+                    frmFrom = datePacs.ToString("HH:mm");
+            }
+            else if (timeSqlTo != "" && timePacsTo == "")
+                frmFrom = Convert.ToDateTime(timeSqlTo).ToString("HH:mm");
+            else if (timeSqlTo == "" && timePacsTo != "")
+                frmFrom = Convert.ToDateTime(timePacsTo).ToString("HH:mm");
+
+            tbPacsIn.Text = frmFrom;
+            tbPacsOut.Text = frmTo;
+
+
             //СКУД панель Статус
             /*
                 If srvAccess Then
