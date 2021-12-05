@@ -4,8 +4,7 @@ using System.Text;
 using System.Net;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
-
-
+using System.Globalization;
 
 namespace TimeWorkTracking
 {
@@ -58,6 +57,9 @@ namespace TimeWorkTracking
     }
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+   
+
+
     class clPacsWebDataBase
 {
         /// <summary>
@@ -66,16 +68,23 @@ namespace TimeWorkTracking
         /// <param name="pacsUri">connectionstring</param>
         /// <param name="request">json запрос</param>
         /// <returns>json строка ответа</returns>
-        private static string getDataFromURL(string pacsUri, string request)
+        private static string getDataFromURL(Uri pacsUri, string request)
         {
             string ret="";
             try
             {
-                using (var webClient = new WebClient())
+                using (var wc = new WebClient())
                 {
-                    webClient.Encoding = Encoding.UTF8;
-                    webClient.Headers[HttpRequestHeader.ContentType] = "application/json";
-                    ret = webClient.UploadString(pacsUri, request);
+                    wc.Headers.Clear();
+                    wc.Encoding = Encoding.UTF8;
+                    wc.Headers[HttpRequestHeader.ContentType] = "application/json"; // Is about the payload/content of the current request or response. Do not use it if the request doesn't have a payload/ body.
+                    wc.Headers[HttpRequestHeader.Accept] = "application/json"; // Tells the server the kind of response the client will accept.
+//                    wc.Headers[HttpRequestHeader.UserAgent] = "PostmanRuntime/7.28.3";
+//                    wc.Headers[HttpRequestHeader.Authorization] = "yourKey"; // Can be Bearer token, API Key etc.....
+//                    wc.Headers.Add("Content-Type", "application/json");
+
+                    ret = wc.UploadString(pacsUri, request);
+//                    pacsAuthenticate jsonRet = new JavaScriptSerializer().Deserialize<pacsAuthenticate>(res);
                 }
             }
             catch (WebException ex)
@@ -93,21 +102,16 @@ namespace TimeWorkTracking
         /// <param name="jsonReq">запрос формата Json</param>
         /// <param name="printMsg">печатать или нет отладку</param>
         /// <returns></returns>
-        private static string getRestData(string pacsUriStr, string extPath, string jsonReq, int printMsg)
+        private static string getRestData(Uri pacsUri, string jsonReq, int printMsg)
         {
             string ret = "";
-            string cn = pacsUriStr + "json/" + extPath;
             try
             {
-                ret = getDataFromURL(cn, jsonReq);
-             //   if (printMsg == 1)
-                  //  printDebug(pacsUri.Host, jsonReq, ret);                //отчет о операции
+                ret = getDataFromURL(pacsUri, jsonReq);
             }
             catch
             {
                 ret = "";
-                //MessageBox.Show("No data from CB.");
-                //                ret = "" ' CStr("{'Credentials':null,'Language':'','UserSID':'','UserToken':0}")
             }
             return ret;
         }
@@ -170,18 +174,21 @@ namespace TimeWorkTracking
         private static string connectRestApi(UriBuilder pacsUri, bool logout) 
         {
             string ret = "";
-            string jsonReq =        
-                "{" +
-                "\"PasswordHash\":\"" + pacsUri.Password + "\", " +
-                "\"UserName\":\"" + pacsUri.UserName + "\"" +
-                "}";
-
+            string res = "";
+            string jsonReq = "";
             UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
 
-            string res = getRestData(pacsUriLite.Uri.AbsoluteUri, "Authenticate", jsonReq, 0);//,
+            jsonReq =
+                    "{" +
+                    "\"PasswordHash\":\"" + pacsUri.Password + "\", " +
+                    "\"UserName\":\"" + pacsUri.UserName + "\"" +
+                    "}";
+            pacsUriLite.Path = "json/Authenticate";
+            res = getRestData(pacsUriLite.Uri, jsonReq, 0);//,
             pacsAuthenticate jsonRet = new JavaScriptSerializer().Deserialize<pacsAuthenticate>(res);
             //dynamic usr = new JavaScriptSerializer().DeserializeObject(res);
             //Dictionary<string, object> company = (Dictionary<string, object>)new JavaScriptSerializer().DeserializeObject(res);
+
             if (jsonRet != null) 
             {
                 ret = jsonRet.UserSID;
@@ -193,12 +200,10 @@ namespace TimeWorkTracking
                             "{" +
                             "\"UserSID\":\"" + ret + "\"" +
                             "}";
-                    res = getRestData(pacsUriLite.Uri.AbsoluteUri, "Logout", jsonReq, 0);
-                }
+                    pacsUriLite.Path = "json/Logout";
+                    res = getRestData(pacsUriLite.Uri, jsonReq, 0);
+                    }
             }
-
-
-
             return ret;
         }
 
@@ -217,8 +222,9 @@ namespace TimeWorkTracking
             string msg = "";
             string pwUserID = "";
             string UserSID = connectRestApi(pacsUri, false);   //получить внутренний id пользователя СКУД ProxWay
+            UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
 
-             //userName = "%" + "ле" + "%";
+            //userName = "%" + "ле" + "%";
             if (UserSID.Length > 0) 
             {
                //  pointHostName = "EmployeeGetList"
@@ -236,9 +242,9 @@ namespace TimeWorkTracking
            // '           """DepartmentToken"":0, "
            // '           """DepartmentUsed"":true, " &
            // '           """HideDismissed"":true, " &
-                UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
-             
-                res = getRestData(pacsUriLite.Uri.AbsoluteUri, "EmployeeGetList", jsonReq, 0);//,
+               // UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
+                pacsUriLite.Path = "json/EmployeeGetList";
+                res = getRestData(pacsUriLite.Uri, jsonReq, 0);//,
                 pacsEmployeeGetList jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
                 if (jsonRet != null)
                 {
@@ -319,7 +325,8 @@ namespace TimeWorkTracking
                     "{" +
                     "\"UserSID\":\"" + UserSID + "\"" + 
                     "}";
-                res = getRestData(pacsUriLite.Uri.AbsoluteUri, "Logout", jsonReq, 0);
+                pacsUriLite.Path = "json/Logout";
+                res = getRestData(pacsUriLite.Uri, jsonReq, 0);
                 //jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
             }
             return pwUserID;
@@ -334,13 +341,19 @@ namespace TimeWorkTracking
         /// <returns>одномерный массив - первое значение - время первого входа (если есть), второе значение - время последнего выхода (если есть)</returns>
         private static string[] checkPointPWTime(UriBuilder pacsUri, string pwIdUser, string findDateTime) 
         {
-
             string jsonReq = "";
             string res = "";
             DateTime pwDataTime;
             string msg = "";
 
-            //            DateTime utcFrom = DateTime.Parse(findDateTime + " 00:00:00");
+//            DateTime now = DateTime.Now;//локальное/универсальное время
+//            DateTime utc = DateTime.UtcNow;//времяutc без часового пояся
+
+            DateTime utcFrom = DateTime.Parse(findDateTime + " 00:00:00").ToUniversalTime();    //с часовым прясом
+            double unixFrom = utcFrom.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
+            DateTime utcTo = DateTime.Parse(findDateTime + " 23:59:59").ToUniversalTime();
+            double unixTo = utcTo.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
+
             //            DateTime utcTo = DateTime.Parse(findDateTime + " 23:59:59");
             //            string unixTime = clSystemSet.convertToUnixTimeStamp(findDateTime + " 00:00:00", 3);
 
@@ -348,8 +361,12 @@ namespace TimeWorkTracking
             timeArr[0] = "";        //время первого входа
             timeArr[1] = "";        //время последнего выхода
             string UserSID = connectRestApi(pacsUri, false);   //получить внутренний id пользователя СКУД ProxWay
+            UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
+
+
             if (UserSID.Length > 0)
             {
+                //https://zetcode.com/csharp/datetime/
                 //  pointHostName = "EventGetList"
                 jsonReq =    //-------------список проходов
                     "{" +
@@ -359,16 +376,21 @@ namespace TimeWorkTracking
                     "\"Limit\":0, " +
                     "\"StartToken\":0, " +
                     "\"Employees\":[" + pwIdUser + "], " +
-                    "\"IssuedFrom\":\"" + @"\/Date(" + clSystemSet.convertToUnixTimeStamp(findDateTime + " 00:00:00", 3) + @")\/" + "\", " +
-                    "\"IssuedTo\":\"" + @"\/Date(" + clSystemSet.convertToUnixTimeStamp(findDateTime + " 23:59:59", 3) + @")\/" + "\", " +
+                    "\"IssuedFrom\":\"" + @"\/Date(" + unixFrom.ToString() + @")\/" + "\", " +
+                    "\"IssuedTo\":\"" + @"\/Date(" + unixTo.ToString() + @")\/" + "\", " +
                     "}";
-                //"""Employees"":[], "  'массив id сотрудников [1785, 1809] Ечина и Зайцев
-                UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
-       
-                res = getRestData(pacsUriLite.Uri.AbsoluteUri, "EventGetList", jsonReq, 0);//,
+//                "\"IssuedFrom\":\"" + @"\/Date(" + clSystemSet.convertToUnixTimeStamp(findDateTime + " 00:00:00", 3) + @")\/" + "\", " +
+//                "\"IssuedTo\":\"" + @"\/Date(" + clSystemSet.convertToUnixTimeStamp(findDateTime + " 23:59:59", 3) + @")\/" + "\", " +
+            //"""Employees"":[], "  'массив id сотрудников [1785, 1809] Ечина и Зайцев
+
+            pacsUriLite.Path = "json/EventGetList";
+                res = getRestData(pacsUriLite.Uri, jsonReq, 0);//,
                 pacsEventGetList jsonRet = new JavaScriptSerializer().Deserialize<pacsEventGetList>(res);
                 if (jsonRet != null)
                 {
+                    string[] cultureNames = { "en-US", "ru-RU", "ja-JP" };
+                    CultureInfo culture = new CultureInfo(cultureNames[1]);
+
                     for (int i = 0; i < jsonRet.Event.GetLength(0); i++)
                     {
                         if (jsonRet.Event[i].CardCode.Length > 0) 
@@ -376,14 +398,14 @@ namespace TimeWorkTracking
                             switch (jsonRet.Event[i].Message.Name) 
                             {
                                 case "Вход совершен":
-                                    pwDataTime = Convert.ToDateTime(jsonRet.Event[i].Issued).AddHours(3); //'clSystemSet.convertUnixTimeStampToDateTime(ConvertCDate(pwUTC.parseJSONdate(userInfo("Issued"), utcOffset))
+                                    pwDataTime = DateTime.Parse(jsonRet.Event[i].Issued, new CultureInfo(cultureNames[0])).AddHours(3); //'clSystemSet.convertUnixTimeStampToDateTime(ConvertCDate(pwUTC.parseJSONdate(userInfo("Issued"), utcOffset))
                                     if (timeArr[0] == "")
                                         timeArr[0] = pwDataTime.ToString();
                                     else if (pwDataTime < Convert.ToDateTime(timeArr[0]))
                                         timeArr[0] = pwDataTime.ToString();
                                     break;
                                 case "Выход совершен":
-                                    pwDataTime = Convert.ToDateTime(jsonRet.Event[i].Issued).AddHours(3); //'clSystemSet.convertUnixTimeStampToDateTime(ConvertCDate(pwUTC.parseJSONdate(userInfo("Issued"), utcOffset))
+                                    pwDataTime = DateTime.Parse(jsonRet.Event[i].Issued, new CultureInfo(cultureNames[0])).AddHours(3); //'clSystemSet.convertUnixTimeStampToDateTime(ConvertCDate(pwUTC.parseJSONdate(userInfo("Issued"), utcOffset))
                                     if (timeArr[1] == "")
                                         timeArr[1] = pwDataTime.ToString();
                                     else if (pwDataTime > Convert.ToDateTime(timeArr[1]))
@@ -400,87 +422,14 @@ namespace TimeWorkTracking
                     "{" +
                     "\"UserSID\":\"" + UserSID + "\"" +
                     "}";
-                res = getRestData(pacsUriLite.Uri.AbsoluteUri, "Logout", jsonReq, 0);
+                pacsUriLite.Path = "json/Logout";
+                res = getRestData(pacsUriLite.Uri, jsonReq, 0);
                     //jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
             }
 
             return timeArr;
         }
-
-        /*
-   If Len(UserSID) > 0 Then
-
-
- '-------------прочитать журнал событий
-     pointHostName = "EventGetList"
-'     url = "http://" & srvHost & ":40001/json/EventGetListV2"
-     req = "{" & _
-           """Language"":""ru"", " & _
-           """UserSID"":""" & UserSID & """, " & _
-           """SubscriptionEnabled"":false, " & _
-           """Limit"":0, " & _
-           """StartToken"":0, " & _
-           """Employees"":[" & pwIdUser & "], " & _
-           """IssuedFrom"":""" & "\/Date(" & CStr(pwUTC.ConvertToUnixTimeStamp(findDateTime & " 00:00:00", 3)) & ")\/" & """, " & _
-           """IssuedTo"":""" & "\/Date(" & CStr(pwUTC.ConvertToUnixTimeStamp(findDateTime & " 23:59:59", 3)) & ")\/" & """, " & _
-           "}"
-'           """Employees"":[], "  'массив id сотрудников[1785, 1809] Ечина и Зайцев
-     ret = GetRestData("http://" & srvHost & ":40001/json/", pointHostName, req, 0)
-
-
-     Set json = pwJsonConverter.ParseJSON(ret)
-'     MsgBox json("Event").count
-
-
-     ReDim usersInfo(json("Event").count, 6)
-     i = 0
-     For Each userInfo In json("Event")
-       If Len(CStr(userInfo("CardCode"))) > 0 Then                      'если событие прохода по ключу
-         ' =userInfo("CardCode")                                        'код карты
-'         Select Case CInt(userInfo("Sender")("Token"))
-'           Case 5356                                                    ':5356,"Name":"Офис РПК - вход"
-'           Case 5357                                                    ':5357,"Name":"Офис РПК - выход"
-'         End Select
-
-
-         Select Case CStr(userInfo("Message")("Name"))                  'время события в системе
-           Case "Вход совершен"                                         'или "Вход разрешен"
-             pwDataTime = CDate(pwUTC.parseJSONdate(userInfo("Issued"), utcOffset))
-             If res(0) = "" Then
-               res(0) = pwDataTime
-             ElseIf pwDataTime<CDate(res(0)) Then
-             res(0) = pwDataTime
-           End If
-         Case "Выход совершен"                                        'или "Выход разрешен"
-             pwDataTime = CDate(pwUTC.parseJSONdate(userInfo("Issued"), utcOffset))
-             If res(1) = "" Then
-               res(1) = pwDataTime
-             ElseIf pwDataTime > CDate(res(1)) Then
-               res(1) = pwDataTime
-             End If
-                       
-'           usersInfo(i, 0) = userInfo("Token")                      'id события
-'           usersInfo(i, 1) = utc.parseJSONdate(userInfo("Issued"), utcOffset)      'время события
-'           usersInfo(i, 2) = userInfo("User")("Token")              'id юзера
-'           usersInfo(i, 3) = userInfo("User")("EmployeeNumber")     'табельный номер юзера
-'           usersInfo(i, 4) = userInfo("User")("Name")               'имя юзера
-'           usersInfo(i, 5) = userInfo("Message")("Token")           'id события
-'           usersInfo(i, 5) = userInfo("Message")("Name")            'наименование события
-         End Select
-       End If
-       i = i + 1
-     Next userInfo
-
- '-------------выход
-     pointHostName = "Logout"
-     req = "{""UserSID"":""" & UserSID & """}"
-     ret = GetRestData("http://" & srvHost & ":40001/json/", pointHostName, req, 0)
-   End If
-  CheckPointPWTime = res
-End Function
-        */
-
-
+ 
         //PUBLIC------------------------------------------------------------------------
 
         //Подключения и проверки
