@@ -28,8 +28,11 @@ namespace TimeWorkTracking
         public static string convertToUnixTimeStamp(string input_datetime, double utc_offset) 
         {
             DateTime d = Convert.ToDateTime(input_datetime).AddHours(0 - utc_offset);   //' GMT offset Moskow (+3h)
-            Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-            return d.AddSeconds(unixTimestamp).ToString();
+                                                                                        //            Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+//            int unixTime = (int)(d - new DateTime(1970, 1, 1)).TotalSeconds;
+            double unixTimestamp = d.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
+
+            return unixTimestamp.ToString();// d.AddSeconds(unixTimestamp).ToString();
         }
 
         /// <summary>
