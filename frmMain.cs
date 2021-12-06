@@ -49,7 +49,7 @@ namespace TimeWorkTracking
             btDelete.Visible = false;                                       //заблокировать кнопку DELETE 
 
             pacsTimeIn = Convert.ToDateTime(DateTime.Now.ToShortDateString() + " 00:00:00");
-            pacsTimeOut = dtpPacsIn.Value;
+            pacsTimeOut = pacsTimeIn;
             dtpPacsIn.Value = pacsTimeIn;
             dtpPacsOut.Value = pacsTimeOut;
         }
@@ -604,7 +604,7 @@ namespace TimeWorkTracking
                         vDate = mcRegDate.SelectionStart;                           //дата из формы + время их формы
                         vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //Время прихода
                         vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
-                        WriteRecord(
+                        WritePassInfo(
                             vDate, 
                             vDateIn, 
                             vDateOut, 
@@ -644,7 +644,7 @@ namespace TimeWorkTracking
                                     );
                             }
                             if (response == DialogResult.Yes)
-                                WriteRecord(
+                                WritePassInfo(
                                     vDate,
                                     vDateIn,
                                     vDateOut,
@@ -690,7 +690,7 @@ namespace TimeWorkTracking
                                     vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + DateTime.Parse(timeIn).ToString("HH:mm"));        //+ Время начала из графика
                                     vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + DateTime.Parse(timeOut).ToString("HH:mm"));      //+ Время окончания из графика
                                     if (pCalendar.chechWorkDay(vDate))                  //если это рабочий день
-                                        WriteRecord(
+                                        WritePassInfo(
                                             vDate,
                                             vDateIn,
                                             vDateOut,
@@ -732,7 +732,7 @@ namespace TimeWorkTracking
             }
         }
         //Добавить/Обновить запись в БД
-        void WriteRecord(DateTime regDate, DateTime vDateIn, DateTime vDateOut, int vSpID, string vSpDateIn, string vSpDateOut, string vSpNote)
+        void WritePassInfo(DateTime regDate, DateTime vDateIn, DateTime vDateOut, int vSpID, string vSpDateIn, string vSpDateOut, string vSpNote)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
@@ -919,8 +919,14 @@ namespace TimeWorkTracking
             lstwDataBaseMain.HideSelection = false;                         //оставить выделение строки при потере фокуса ListView
             lstwDataBaseMain.EnsureVisible(index);                          //показать в области видимости окна
         }
-        //кнопка удалить запись в БД
-        private void btDelete_Click(object sender, EventArgs e)
+
+        //Добавить/Обновить информацию от провайдера СКУД в БД
+        void WritePacsInfo(DateTime regDate, DateTime vDateIn, DateTime vDateOut, int vSpID, string vSpDateIn, string vSpDateOut, string vSpNote)
+        {
+        }
+
+            //кнопка удалить запись в БД
+            private void btDelete_Click(object sender, EventArgs e)
         {
             int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
             string keyUser = lstwDataBaseMain.Items[index].SubItems[2].Text;//ключевое поле внешний id пользователя
@@ -964,10 +970,30 @@ namespace TimeWorkTracking
         //использовать или нет значения СКУД первый проход
         private void chPacsIn_CheckedChanged(object sender, EventArgs e)
         {
+            int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
+            //график сотрудника
+            DateTime userTimeIn = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[3].Text);
+            DateTime userTimeOut = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[4].Text);
+/*
+            //то что сохранил регистратор в Базе Данных
+            DateTime passTimeIn = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[9].Text);
+            DateTime passTimeOut = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[10].Text);
+            //информация СКУД из Базы Данных
+            DateTime pacsTimeIn = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[15].Text);
+            DateTime pacsTimeOut = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[16].Text);
+*/
+/*
+            dt = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[3].Text);  //время начала работы по графику
+            udBeforeH.Value = dt;
+            udBeforeM.Value = dt;
+            dt = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[4].Text);  //время окончания работы по графику
+            udAfterH.Value = dt;
+            udAfterM.Value = dt;
+
             if (chPacsIn.Checked) 
             {
             }
-
+*/
         }
         //использовать или нет значения СКУД последний выход
         private void chPacsOut_CheckedChanged(object sender, EventArgs e)
