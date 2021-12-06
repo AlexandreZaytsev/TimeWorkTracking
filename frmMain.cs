@@ -26,6 +26,8 @@ namespace TimeWorkTracking
         private bool readType;                                              //true - чтение из списка/БД false - запись в БД  
         DateTime pacsTimeIn;                                                //итоговое время первого прохода SQL & PACS 
         DateTime pacsTimeOut;                                               //итоговое время последнего выхода SQL & PACS                                                   
+        DateTime formTimeIn;                                                //текущие данные из формы время первого прохода 
+        DateTime formTimeOut;                                               //текущие данные из формы время последнего выхода SQL & PACS  
 
         public frmMain()
         {
@@ -970,30 +972,65 @@ namespace TimeWorkTracking
         //использовать или нет значения СКУД первый проход
         private void chPacsIn_CheckedChanged(object sender, EventArgs e)
         {
-            int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
-            //график сотрудника
-            DateTime userTimeIn = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[3].Text);
-            DateTime userTimeOut = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[4].Text);
-/*
-            //то что сохранил регистратор в Базе Данных
-            DateTime passTimeIn = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[9].Text);
-            DateTime passTimeOut = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[10].Text);
-            //информация СКУД из Базы Данных
-            DateTime pacsTimeIn = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[15].Text);
-            DateTime pacsTimeOut = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[16].Text);
-*/
-/*
-            dt = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[3].Text);  //время начала работы по графику
-            udBeforeH.Value = dt;
-            udBeforeM.Value = dt;
-            dt = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[4].Text);  //время окончания работы по графику
-            udAfterH.Value = dt;
-            udAfterM.Value = dt;
 
-            if (chPacsIn.Checked) 
+            //сохраним текущие значения из формы
+  //          if (!chPacsIn.Checked && !chPacsOut.Checked) 
+  //          {
+                formTimeIn = DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //Время прихода
+                formTimeOut = DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
+  //          }
+
+            //            pacsTimeIn
+            //            pacsTimeIn
+
+            if (chPacsIn.Checked && pacsTimeIn !=null)                                           //изменение даты прохода      
             {
+                udBeforeH.Value = pacsTimeIn;
+                udBeforeM.Value = pacsTimeIn;
             }
-*/
+            else 
+            {
+                udBeforeH.Value = formTimeIn;
+                udBeforeM.Value = formTimeIn;
+            }
+
+            if (chPacsOut.Checked && pacsTimeOut != null)                                           //изменение даты прохода      
+            {
+                udAfterH.Value = pacsTimeOut;
+                udAfterM.Value = pacsTimeOut;
+            }
+            else
+            {
+                udAfterH.Value = formTimeOut;
+                udAfterM.Value = formTimeOut;
+            }
+
+
+            /*
+
+                        int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
+                        //график сотрудника
+                        DateTime userTimeIn = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[3].Text);
+                        DateTime userTimeOut = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[4].Text);
+                        //то что сохранил регистратор в Базе Данных
+                        DateTime passTimeIn = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[9].Text);
+                        DateTime passTimeOut = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[10].Text);
+                        //информация СКУД из Базы Данных
+                        DateTime pacsTimeIn = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[15].Text);
+                        DateTime pacsTimeOut = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[16].Text);
+            */
+            /*
+                        dt = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[3].Text);  //время начала работы по графику
+                        udBeforeH.Value = dt;
+                        udBeforeM.Value = dt;
+                        dt = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[4].Text);  //время окончания работы по графику
+                        udAfterH.Value = dt;
+                        udAfterM.Value = dt;
+
+                        if (chPacsIn.Checked) 
+                        {
+                        }
+            */
         }
         //использовать или нет значения СКУД последний выход
         private void chPacsOut_CheckedChanged(object sender, EventArgs e)
@@ -1001,18 +1038,89 @@ namespace TimeWorkTracking
 
         }
 
-
-        /*--------------------------------------------------------------------------------------------  
-        CALLBACK InPut (подписка на внешние сообщения)
-        --------------------------------------------------------------------------------------------*/
         /// <summary>
-        /// Callbacks the reload.
-        /// входящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров
+        /// восстановить значения из план графика сотрудника
         /// </summary>
-        /// <param name="controlName">имя CTRL</param>
-        /// <param name="controlParentName">имя родителя CNTRL</param>
-        /// <param name="param">параметры ключ-значение.</param>
-        private void CallbackReload(string controlName, string controlParentName, Dictionary<String, String> param)
+        /// <param name="direct">0 - работаем с блоком входа, 1 - работаем с блоком выхода</param>
+        /// <param name="src">0 - работаем с данными из справочника или базы сотрудника, 1 - работаем с данными из СКУД</param>
+        private void restoreDateFromUserList(int direct, int src) 
+        { 
+
+  Dim j, timeIn, timeOut, i
+  Dim pHr, pMn, sHr, sMn
+    pHr = 9
+    pMn = 0
+    sHr = 18
+    sMn = 0
+ 
+        switch (src) 
+        {
+            case 0:                                                 //данные из истории проходов или из график сотрудника
+                                                                  //данные из истории проходов
+                    If lbUsers.List(lbUsers.ListIndex, 0) <> "" Then
+         i = cbGetPosFromTable("DataBase", "Data", lbUsers.List(lbUsers.ListIndex, 0), 1, 0)
+         If i<> -1 Then
+           With Worksheets("DataBase").ListObjects("Data")                 ' просмотреть весь диапазон
+            'пришел ушел
+             timeIn = CDate(.DataBodyRange.Cells(i, 6))         ' пришел
+             timeOut = CDate(.DataBodyRange.Cells(i, 7))        ' ушел
+           End With
+         End If
+       Else
+       //данные из справочника сотрудника
+         For j = 1 To Worksheets("Reference").ListObjects("Users").ListRows.count
+'          If CStr(lbUsers.List(lbUsers.ListIndex, 1)) = CStr(Worksheets("Reference").ListObjects("Users").DataBodyRange.Cells(j, 1)) Then
+           If StrComp(CStr(lbUsers.List(lbUsers.ListIndex, 1)), CStr(Worksheets("Reference").ListObjects("Users").DataBodyRange.Cells(j, 1)), vbBinaryCompare) = 0 Then    ' найдем сотрудника по id
+             timeIn = Worksheets("Reference").ListObjects("Users").DataBodyRange.Cells(j, 5)   ' Время начала работы
+             timeOut = Worksheets("Reference").ListObjects("Users").DataBodyRange.Cells(j, 6)  ' Время окончания работы
+             Exit For
+           End If
+         Next
+       End If
+                break;
+            case 1:                                                 //данные из скуд
+                timeIn = pacsTimeIn;
+                timeOut = pacsTimeOut;
+                break;
+            }
+
+            /*
+               Select Case direct
+                 Case 0 'вход
+                   'переключатель
+                   sbHrBaseIn = Hour(CDate(timeIn)) 'Hour(CDate(lbUsers.List(lbUsers.ListIndex, 4)))      ' 09
+                   sbMnBaseIn = Minute(CDate(timeIn)) 'Minute(CDate(lbUsers.List(lbUsers.ListIndex, 4)))    ' 00
+                   'текстовые поля
+                   'sbHrBaseIn.Value = pHr:
+                   tbHrBaseIn.Value = Right("0" & CStr(sbHrBaseIn.Value), 2)
+                   'sbMnBaseIn.Value = pMn:
+                   tbMnBaseIn.Value = Right("0" & CStr(sbMnBaseIn.Value), 2)
+
+
+                 Case 1 'выход
+                   'переключатель
+                   sbHrBaseOut = Hour(CDate(timeOut)) 'Hour(CDate(lbUsers.List(lbUsers.ListIndex, 5)))     ' 18
+                   sbMnBaseOut = Minute(CDate(timeOut)) 'Minute(CDate(lbUsers.List(lbUsers.ListIndex, 5)))   ' 00
+                   'текстовые поля
+                   'sbHrBaseOut.Value = sHr:
+                   tbHrBaseOut.Value = Right("0" & CStr(sbHrBaseOut.Value), 2)
+                   'sbMnBaseOut.Value = sMn:
+                   tbMnBaseOut.Value = Right("0" & CStr(sbMnBaseOut.Value), 2)
+               End Select
+            */
+        }
+
+    /*--------------------------------------------------------------------------------------------  
+    CALLBACK InPut (подписка на внешние сообщения)
+    --------------------------------------------------------------------------------------------*/
+    /// <summary>
+    /// Callbacks the reload.
+    /// входящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров
+    /// </summary>
+    /// <param name="controlName">имя CTRL</param>
+    /// <param name="controlParentName">имя родителя CNTRL</param>
+    /// <param name="param">параметры ключ-значение.</param>
+    private void CallbackReload(string controlName, string controlParentName, Dictionary<String, String> param)
         {
             CheckConnects();        //проверить соединение с базами
             /*
