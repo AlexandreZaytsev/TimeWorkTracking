@@ -42,7 +42,7 @@ namespace TimeWorkTracking
     {
         public string UserSID { get; set; }
         public pacsEvent[] Event { get; set; }
-        public pacsEventColumns[] EventColumns { get; set; }
+ //       public pacsEventColumns[] EventColumns { get; set; }
 }
 
     public class pacsEvent 
@@ -65,11 +65,12 @@ namespace TimeWorkTracking
         public string EmployeeNumber { get; set; }
     }
 
-    public class pacsEventColumns
+/*    public class pacsEventColumns
     {
         public string Name { get; set; }
 
     }
+*/
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -170,10 +171,12 @@ namespace TimeWorkTracking
         private static bool CheckConnectSimple(string connectionString)
         {
             bool ret = false;
-            UriBuilder pacsUri = new UriBuilder(connectionString);
-            if (connectRestApi(pacsUri, true) != "")
-                ret = true;
-                
+            if (connectionString != "")
+            {
+                UriBuilder pacsUri = new UriBuilder(connectionString);
+                if (connectRestApi(pacsUri, true) != "")
+                    ret = true;
+            }
             return ret;
         }
 
@@ -364,9 +367,11 @@ namespace TimeWorkTracking
             //            DateTime utc = DateTime.UtcNow;//времяutc без часового пояся
 
             //передача с преобразованием в универсальное время (с учетом смещения GMT)
-            DateTime utcFrom = DateTime.Parse(findDateTime + " 00:00:00").ToUniversalTime();    //с часовым прясом
+            DateTime utcFrom = DateTime.Parse(findDateTime + " 00:00:00");
+//            utcFrom = utcFrom.ToUniversalTime();                                                    //с учетом часового пояса (-3 часа для Москвы)
             double unixFrom = utcFrom.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
-            DateTime utcTo = DateTime.Parse(findDateTime + " 23:59:59").ToUniversalTime();
+            DateTime utcTo = DateTime.Parse(findDateTime + " 23:59:59");
+//            utcTo = utcTo.ToUniversalTime();                                                        //с учетом часового пояса (-3 часа для Москвы)
             double unixTo = utcTo.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
 
             //            DateTime utcTo = DateTime.Parse(findDateTime + " 23:59:59");
@@ -410,7 +415,7 @@ namespace TimeWorkTracking
 
                     for (int i = 0; i < jsonRet.Event.GetLength(0); i++)
                     {
-                        if (jsonRet.Event[i].CardCode.Length > 0) 
+                        if (jsonRet.Event[i].CardCode.Length > 0 && jsonRet.Event[i].User.Token == pwIdUser) //!!!если чела небыло есть проход от юзера 0??? jsonRet.Event[i].User.Token == pwIdUser
                         {
                             switch (jsonRet.Event[i].Message.Name) 
                             {
