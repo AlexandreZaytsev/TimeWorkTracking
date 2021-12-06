@@ -665,6 +665,7 @@ namespace TimeWorkTracking
             this.chPacsOut.TabIndex = 1;
             this.chPacsOut.Text = "выход";
             this.chPacsOut.UseVisualStyleBackColor = true;
+            this.chPacsOut.CheckedChanged += new System.EventHandler(this.chPacsOut_CheckedChanged);
             // 
             // chPacsIn
             // 
@@ -675,6 +676,7 @@ namespace TimeWorkTracking
             this.chPacsIn.TabIndex = 0;
             this.chPacsIn.Text = "вход";
             this.chPacsIn.UseVisualStyleBackColor = true;
+            this.chPacsIn.CheckedChanged += new System.EventHandler(this.chPacsIn_CheckedChanged);
             // 
             // tbNote
             // 

@@ -120,7 +120,7 @@ namespace TimeWorkTracking
         //Загрузить Data из DataSet в ListViewUser
         private void LoadListUser(DataTable dtable)
         {
-            lstwDataBaseMain.Items.Clear();                // Clear the ListView control
+            lstwDataBaseMain.Items.Clear();                 // Clear the ListView control
             for (int i = 0; i < dtable.Rows.Count; i++)     // Display items in the ListView control
             {
                 DataRow drow = dtable.Rows[i];
@@ -947,15 +947,32 @@ namespace TimeWorkTracking
                 this.Text = "Учет рабочего времени (Регистратор) " + Properties.Settings.Default.companyName;
         }
 
-        //изменилось время входа/выхода PASC
+        //изменилось значение времени входа/выхода PASC
         private void Pacs_ValueChanged(object sender, EventArgs e)
         {
-            chPacsIn.Enabled = pacsTimeIn.TimeOfDay.TotalMinutes != 0;
-            chPacsOut.Enabled = pacsTimeOut.TimeOfDay.TotalMinutes != 0;
+            chPacsIn.Checked = false;                                       //сбросить флаг использования значения входа
+            chPacsIn.Enabled = pacsTimeIn.TimeOfDay.TotalMinutes != 0;      //если время входа есть  
+
+            chPacsOut.Checked = false;                                      //сбросить флаг использования значения выхода
+            chPacsOut.Enabled = pacsTimeOut.TimeOfDay.TotalMinutes != 0;    //если время выхода есть
 
             //засветить панель если есть какой нибудь результат
             pPacs.Enabled = pacsTimeIn.TimeOfDay.TotalMinutes + pacsTimeOut.TimeOfDay.TotalMinutes > 0;// (sqlTimeIn + sqlTimeOut + pacsTimeIn + pacsTimeOut).Length > 0;
             pPacs.BackColor = pPacs.Enabled ? Color.FromArgb(192, 255, 192) : SystemColors.Control;
+        }
+
+        //использовать или нет значения СКУД первый проход
+        private void chPacsIn_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chPacsIn.Checked) 
+            {
+            }
+
+        }
+        //использовать или нет значения СКУД последний выход
+        private void chPacsOut_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
 
 
