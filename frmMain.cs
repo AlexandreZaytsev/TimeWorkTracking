@@ -24,6 +24,8 @@ namespace TimeWorkTracking
         private readonly clCalendar pCalendar;                              //класс производственный календаоь
         public bool userType;                                               //false - пользователь true - админ
         private bool readType;                                              //true - чтение из списка/БД false - запись в БД  
+        DateTime pacsTimeIn;                                                //итоговое время первого прохода SQL & PACS 
+        DateTime pacsTimeOut;                                               //итоговое время последнего выхода SQL & PACS                                                   
 
         public frmMain()
         {
@@ -45,6 +47,11 @@ namespace TimeWorkTracking
             */
             pCalendar = new clCalendar();                                   //создать экземпляр класса Производственный календарь
             btDelete.Visible = false;                                       //заблокировать кнопку DELETE 
+
+            pacsTimeIn = Convert.ToDateTime(DateTime.Now.ToShortDateString() + " 00:00:00");
+            pacsTimeOut = dtpPacsIn.Value;
+            dtpPacsIn.Value = pacsTimeIn;
+            dtpPacsOut.Value = pacsTimeOut;
         }
         private void frmMain_Load(object sender, EventArgs e)
         {
@@ -207,18 +214,22 @@ namespace TimeWorkTracking
                     lstwDataBaseMain.Items[ind].SubItems[1].Text                            //фио сотрудника
                     );
                 //сверим время из БД и из СКУД
-                string[] chTime = checkTime(lstwDataBaseMain.Items[ind].SubItems[15].Text, lstwDataBaseMain.Items[ind].SubItems[16].Text, timePacs["timeIn"], timePacs["timeOut"]);
+                checkTime(lstwDataBaseMain.Items[ind].SubItems[15].Text, lstwDataBaseMain.Items[ind].SubItems[16].Text, timePacs["timeIn"], timePacs["timeOut"]);
+
+                dtpPacsIn.Value = pacsTimeIn;
+                dtpPacsOut.Value = pacsTimeOut;
 
 
 
 
-/*
-                LoadPascInfoByID(
-                    mcRegDate.SelectionStart,                                               //дата регистрации
-                    "",                                                                     //crmId табельный номер из Лоции
-                    lstwDataBaseMain.Items[ind].SubItems[2].Text,                           //extId внешний код для синнхронизации
-                    lstwDataBaseMain.Items[ind].SubItems[1].Text);                          //фио юзера
-*/
+
+                /*
+                                LoadPascInfoByID(
+                                    mcRegDate.SelectionStart,                                               //дата регистрации
+                                    "",                                                                     //crmId табельный номер из Лоции
+                                    lstwDataBaseMain.Items[ind].SubItems[2].Text,                           //extId внешний код для синнхронизации
+                                    lstwDataBaseMain.Items[ind].SubItems[1].Text);                          //фио юзера
+                */
 
                 if (lstwDataBaseMain.Items[ind].Text == "0")                                //данных о проходе нет
                 {                                                                                      
@@ -311,134 +322,50 @@ namespace TimeWorkTracking
             mcRegDate.UpdateBoldedDates();
         }
 
-        private string[] checkTime(string sqlTimeIn, string sqlTimeOut, string pacsTimeIn, string pacsTimeOut)
+        /// <summary>
+        /// Сравнить данные из БД SQL и БД СКУД - и поправить значения если нужно
+        /// </summary>
+        /// <param name="sTimeIn">первый проход по SQL</param>
+        /// <param name="sTimeOut">последний выход по SQL</param>
+        /// <param name="pTimeIn">первый проход по СКУД</param>
+        /// <param name="pTimeOut">последний выход по СКУД</param>
+        private void checkTime(string sTimeIn, string sTimeOut, string pTimeIn, string pTimeOut)
         {
-            string[] arrTime = new string[2];
-            //засветить панель если есть какой нибудь результат
-            pPacs.Enabled = false;// (sqlTimeIn + sqlTimeOut + pacsTimeIn + pacsTimeOut).Length > 0;
-            string frmFrom = "00:00";
-            string frmTo = "00:00";
             DateTime dateSql;
             DateTime datePacs;
+
+            pacsTimeIn = Convert.ToDateTime(DateTime.Now.ToShortDateString() + " 00:00:00");
+            pacsTimeOut = dtpPacsIn.Value;
+
             //время первого входа
-            if (sqlTimeIn != "" && pacsTimeIn != "")
+            if (sTimeIn != "" && pTimeIn != "")
             {
-                dateSql = Convert.ToDateTime(sqlTimeIn);
+                dateSql = Convert.ToDateTime(sTimeIn);
                 datePacs = Convert.ToDateTime(pacsTimeIn);
                 if (dateSql < datePacs)
-                    frmFrom = dateSql.ToString("HH:mm");
+                    pacsTimeIn = dateSql;
                 else
-                    frmFrom = datePacs.ToString("HH:mm");
+                    pacsTimeIn = datePacs;
             }
-            else if (sqlTimeIn != "" && pacsTimeIn == "")
-                frmFrom = Convert.ToDateTime(sqlTimeIn).ToString("HH:mm");
-            else if (sqlTimeIn == "" && pacsTimeIn != "")
-                frmFrom = Convert.ToDateTime(pacsTimeIn).ToString("HH:mm");
+            else if (sTimeIn != "" && pTimeIn == "")
+                pacsTimeIn = Convert.ToDateTime(sTimeIn);
+            else if (sTimeIn == "" && pTimeIn != "")
+                pacsTimeIn = Convert.ToDateTime(pTimeIn);
 
             //время последнего выхода
-            if (sqlTimeOut != "" && pacsTimeOut != "")
+            if (sTimeOut != "" && pTimeOut != "")
             {
-                dateSql = Convert.ToDateTime(sqlTimeOut);
-                datePacs = Convert.ToDateTime(pacsTimeOut);
+                dateSql = Convert.ToDateTime(sTimeOut);
+                datePacs = Convert.ToDateTime(pTimeOut);
                 if (dateSql > datePacs)
-                    frmTo = dateSql.ToString("HH:mm");
+                    pacsTimeOut = dateSql;
                 else
-                    frmTo = datePacs.ToString("HH:mm");
+                    pacsTimeOut = datePacs;
             }
-            else if (sqlTimeOut != "" && pacsTimeOut == "")
-                frmTo = Convert.ToDateTime(sqlTimeOut).ToString("HH:mm");
-            else if (sqlTimeOut == "" && pacsTimeOut != "")
-                frmTo = Convert.ToDateTime(pacsTimeOut).ToString("HH:mm");
-
-            tbPacsIn.Text = frmFrom;
-            tbPacsOut.Text = frmTo;
-
-
-            return arrTime;
-        }
-
-            /// <summary>
-            /// Зpагрузить информацию из СКУД
-            /// </summary>
-            /// <param name="crmId">табельный номер из Лоции</param>
-            /// <param name="extId">внешний код для синнхронизации</param>
-            /// <param name="userName">имя пользователя</param>
-            /// <returns></returns>
-            private bool LoadPascInfoByID(DateTime checkDate, string crmId, string extId, string userName) 
-        {
-            bool ret = false;
-            Dictionary<string, string> timePacs = new Dictionary<string, string>();
-
-            //попробуеи прочесть из БД
-            string csSQL = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            string timeSqlFrom = clMsSqlDatabase.RequesScalar(csSQL, "Select coalesce(Convert(varchar(30), pacsTimeStart, 20), '') From TimeProvider Where passDate = '" + checkDate.ToString("yyyyMMdd") + "' and and passId = '" + extId + "'", false);
-            string timeSqlTo = clMsSqlDatabase.RequesScalar(csSQL, "Select coalesce(Convert(varchar(30), pacsTimeStop, 20), '') From TimeProvider Where passDate = '" + checkDate.ToString("yyyyMMdd") + "' and and passId = '" + extId + "'", false);
-      //     lstwDataBaseMain.Items[ind].SubItems[15].Text
-      //      lstwDataBaseMain.Items[ind].SubItems[16].Text
-
-
-            string csPACS = Properties.Settings.Default.pacsConnectionString;
-            timePacs = clPacsWebDataBase.сheckPointPWTime(checkDate.ToString("yyyy.MM.dd"), csPACS, crmId, extId, userName);
-            string timePacsFrom = timePacs["timeIn"];
-            string timePacsTo = timePacs["timeOut"];
-
-            //засветить панель если есть какой нибудь результат
-            pPacs.Enabled = (timeSqlFrom + timeSqlTo + timePacsFrom + timePacsTo).Length > 0;
-            string frmFrom = "00:00";
-            string frmTo = "00:00";
-            DateTime dateSql;
-            DateTime datePacs;
-            //время первого входа
-            if (timeSqlFrom != "" && timePacsFrom != "") 
-            { 
-                dateSql = Convert.ToDateTime(timeSqlFrom);
-                datePacs = Convert.ToDateTime(timePacsFrom);
-                if (dateSql< datePacs)
-                    frmFrom = dateSql.ToString("HH:mm");
-                else
-                    frmFrom = datePacs.ToString("HH:mm");
-            }
-            else if (timeSqlFrom != "" && timePacsFrom == "")
-                frmFrom = Convert.ToDateTime(timeSqlFrom).ToString("HH:mm");
-            else if (timeSqlFrom == "" && timePacsFrom != "")
-                frmFrom = Convert.ToDateTime(timePacsFrom).ToString("HH:mm");
-
-            //время последнего выхода
-            if (timeSqlTo != "" && timePacsTo != "")
-            {
-                dateSql = Convert.ToDateTime(timeSqlTo);
-                datePacs = Convert.ToDateTime(timePacsTo);
-                if (dateSql > datePacs)
-                    frmFrom = dateSql.ToString("HH:mm");
-                else
-                    frmFrom = datePacs.ToString("HH:mm");
-            }
-            else if (timeSqlTo != "" && timePacsTo == "")
-                frmFrom = Convert.ToDateTime(timeSqlTo).ToString("HH:mm");
-            else if (timeSqlTo == "" && timePacsTo != "")
-                frmFrom = Convert.ToDateTime(timePacsTo).ToString("HH:mm");
-
-            tbPacsIn.Text = frmFrom;
-            tbPacsOut.Text = frmTo;
-
-
-            //СКУД панель Статус
-            /*
-                If srvAccess Then
-                  Frame7.Enabled = True
-                  'разблокировать панель СКУД
-                  checkPoint = pwPACS.cheskPassProxWay("", CStr(lbUsers.List(lbUsers.ListIndex, 3)), CStr(lbUsers.List(lbUsers.ListIndex, 1)), Format(CDate(tbDate), "yyyy.mm.dd"))
-                  tbInTime.Value = checkPoint(0)                                    'подставить время входа из СКУД
-                  tbOutTime.Value = checkPoint(1)                                   'подставить время выхода из СКУД
-                  SetStatusPWPassPanel                                              'управление панелью статуса СКУД
-                Else
-                  Frame7.Enabled = False                                            'заблокировать панель СКУД
-            '      Frame7.BackColor = &HE0E0E0
-                End If
-                    // СКУД панель Статус
-            */
-            //            CheckConnectSimple
-            return ret;
+            else if (sTimeOut != "" && pTimeOut == "")
+                pacsTimeOut = Convert.ToDateTime(sTimeOut);
+            else if (sTimeOut == "" && pTimeOut != "")
+                pacsTimeOut = Convert.ToDateTime(pTimeOut);
         }
 
         //проверить соединение с базами
@@ -1020,6 +947,18 @@ namespace TimeWorkTracking
                 this.Text = "Учет рабочего времени (Регистратор) " + Properties.Settings.Default.companyName;
         }
 
+        //изменилось время входа/выхода PASC
+        private void Pacs_ValueChanged(object sender, EventArgs e)
+        {
+            chPacsIn.Enabled = pacsTimeIn.TimeOfDay.TotalMinutes != 0;
+            chPacsOut.Enabled = pacsTimeOut.TimeOfDay.TotalMinutes != 0;
+
+            //засветить панель если есть какой нибудь результат
+            pPacs.Enabled = pacsTimeIn.TimeOfDay.TotalMinutes + pacsTimeOut.TimeOfDay.TotalMinutes > 0;// (sqlTimeIn + sqlTimeOut + pacsTimeIn + pacsTimeOut).Length > 0;
+            pPacs.BackColor = pPacs.Enabled ? Color.FromArgb(192, 255, 192) : SystemColors.Control;
+        }
+
+
         /*--------------------------------------------------------------------------------------------  
         CALLBACK InPut (подписка на внешние сообщения)
         --------------------------------------------------------------------------------------------*/
@@ -1071,7 +1010,6 @@ namespace TimeWorkTracking
             }
             reloadCaption();                            //Обновить имя главного окна
         }
-
 
     }
 

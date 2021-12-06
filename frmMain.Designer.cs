@@ -73,9 +73,9 @@ namespace TimeWorkTracking
             this.lbSmarkStart = new System.Windows.Forms.Label();
             this.smDStart = new System.Windows.Forms.DateTimePicker();
             this.pPacs = new System.Windows.Forms.Panel();
+            this.dtpPacsOut = new System.Windows.Forms.DateTimePicker();
+            this.dtpPacsIn = new System.Windows.Forms.DateTimePicker();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.tbPacsOut = new System.Windows.Forms.TextBox();
-            this.tbPacsIn = new System.Windows.Forms.TextBox();
             this.chPacsOut = new System.Windows.Forms.CheckBox();
             this.chPacsIn = new System.Windows.Forms.CheckBox();
             this.tbNote = new System.Windows.Forms.TextBox();
@@ -608,11 +608,11 @@ namespace TimeWorkTracking
             // 
             // pPacs
             // 
-            this.pPacs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.pPacs.BackColor = System.Drawing.SystemColors.Control;
             this.pPacs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pPacs.Controls.Add(this.dtpPacsOut);
+            this.pPacs.Controls.Add(this.dtpPacsIn);
             this.pPacs.Controls.Add(this.panel1);
-            this.pPacs.Controls.Add(this.tbPacsOut);
-            this.pPacs.Controls.Add(this.tbPacsIn);
             this.pPacs.Controls.Add(this.chPacsOut);
             this.pPacs.Controls.Add(this.chPacsIn);
             this.pPacs.Enabled = false;
@@ -623,6 +623,30 @@ namespace TimeWorkTracking
             this.pPacs.Size = new System.Drawing.Size(380, 37);
             this.pPacs.TabIndex = 27;
             // 
+            // dtpPacsOut
+            // 
+            this.dtpPacsOut.CustomFormat = "HH:mm";
+            this.dtpPacsOut.Enabled = false;
+            this.dtpPacsOut.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dtpPacsOut.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpPacsOut.Location = new System.Drawing.Point(210, 3);
+            this.dtpPacsOut.Name = "dtpPacsOut";
+            this.dtpPacsOut.Size = new System.Drawing.Size(64, 29);
+            this.dtpPacsOut.TabIndex = 6;
+            this.dtpPacsOut.ValueChanged += new System.EventHandler(this.Pacs_ValueChanged);
+            // 
+            // dtpPacsIn
+            // 
+            this.dtpPacsIn.CustomFormat = "HH:mm";
+            this.dtpPacsIn.Enabled = false;
+            this.dtpPacsIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dtpPacsIn.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpPacsIn.Location = new System.Drawing.Point(101, 3);
+            this.dtpPacsIn.Name = "dtpPacsIn";
+            this.dtpPacsIn.Size = new System.Drawing.Size(64, 29);
+            this.dtpPacsIn.TabIndex = 5;
+            this.dtpPacsIn.ValueChanged += new System.EventHandler(this.Pacs_ValueChanged);
+            // 
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -630,26 +654,6 @@ namespace TimeWorkTracking
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(2, 20);
             this.panel1.TabIndex = 4;
-            // 
-            // tbPacsOut
-            // 
-            this.tbPacsOut.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tbPacsOut.Location = new System.Drawing.Point(210, 3);
-            this.tbPacsOut.Name = "tbPacsOut";
-            this.tbPacsOut.Size = new System.Drawing.Size(64, 29);
-            this.tbPacsOut.TabIndex = 3;
-            this.tbPacsOut.Text = "00:00";
-            this.tbPacsOut.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // tbPacsIn
-            // 
-            this.tbPacsIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tbPacsIn.Location = new System.Drawing.Point(101, 3);
-            this.tbPacsIn.Name = "tbPacsIn";
-            this.tbPacsIn.Size = new System.Drawing.Size(64, 29);
-            this.tbPacsIn.TabIndex = 2;
-            this.tbPacsIn.Text = "00:00";
-            this.tbPacsIn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // chPacsOut
             // 
@@ -926,8 +930,6 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Label lbSmarkStop;
         private System.Windows.Forms.DateTimePicker smDStop;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.TextBox tbPacsOut;
-        private System.Windows.Forms.TextBox tbPacsIn;
         private System.Windows.Forms.CheckBox chPacsOut;
         private System.Windows.Forms.CheckBox chPacsIn;
         private System.Windows.Forms.MonthCalendar mcRegDate;
@@ -937,6 +939,8 @@ namespace TimeWorkTracking
         private System.Windows.Forms.ToolStripDropDownButton toolSetting;
         protected internal System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.DateTimePicker dtpPacsIn;
+        private System.Windows.Forms.DateTimePicker dtpPacsOut;
     }
 }
 
