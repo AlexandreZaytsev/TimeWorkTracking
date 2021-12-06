@@ -1044,70 +1044,42 @@ namespace TimeWorkTracking
         /// <param name="direct">0 - работаем с блоком входа, 1 - работаем с блоком выхода</param>
         /// <param name="src">0 - работаем с данными из справочника или базы сотрудника, 1 - работаем с данными из СКУД</param>
         private void restoreDateFromUserList(int direct, int src) 
-        { 
-
-  Dim j, timeIn, timeOut, i
-  Dim pHr, pMn, sHr, sMn
-    pHr = 9
-    pMn = 0
-    sHr = 18
-    sMn = 0
- 
-        switch (src) 
         {
-            case 0:                                                 //данные из истории проходов или из график сотрудника
-                                                                  //данные из истории проходов
-                    If lbUsers.List(lbUsers.ListIndex, 0) <> "" Then
-         i = cbGetPosFromTable("DataBase", "Data", lbUsers.List(lbUsers.ListIndex, 0), 1, 0)
-         If i<> -1 Then
-           With Worksheets("DataBase").ListObjects("Data")                 ' просмотреть весь диапазон
-            'пришел ушел
-             timeIn = CDate(.DataBodyRange.Cells(i, 6))         ' пришел
-             timeOut = CDate(.DataBodyRange.Cells(i, 7))        ' ушел
-           End With
-         End If
-       Else
-       //данные из справочника сотрудника
-         For j = 1 To Worksheets("Reference").ListObjects("Users").ListRows.count
-'          If CStr(lbUsers.List(lbUsers.ListIndex, 1)) = CStr(Worksheets("Reference").ListObjects("Users").DataBodyRange.Cells(j, 1)) Then
-           If StrComp(CStr(lbUsers.List(lbUsers.ListIndex, 1)), CStr(Worksheets("Reference").ListObjects("Users").DataBodyRange.Cells(j, 1)), vbBinaryCompare) = 0 Then    ' найдем сотрудника по id
-             timeIn = Worksheets("Reference").ListObjects("Users").DataBodyRange.Cells(j, 5)   ' Время начала работы
-             timeOut = Worksheets("Reference").ListObjects("Users").DataBodyRange.Cells(j, 6)  ' Время окончания работы
-             Exit For
-           End If
-         Next
-       End If
-                break;
-            case 1:                                                 //данные из скуд
-                timeIn = pacsTimeIn;
-                timeOut = pacsTimeOut;
-                break;
+            int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
+            DateTime timeIn;
+            DateTime timeOut;
+
+            switch (src) 
+            {
+                case 1:                                             //данные из скуд
+                    timeIn = pacsTimeIn;
+                    timeOut = pacsTimeOut;
+                    break;
+                default://               case 0:                                             //данные из истории проходов или из график сотрудника
+                    if(lstwDataBaseMain.Items[index].SubItems[9].Text!="" && lstwDataBaseMain.Items[index].SubItems[10].Text != "")
+                    {                                               //данные из истории проходов 
+                        timeIn = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[9].Text);    //пришел
+                        timeOut = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[10].Text);  //ушел
+                    }
+                    else
+                    {                                               //данные из справочника сотрудника 
+                        timeIn = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[3].Text);    //Время начала работы
+                        timeOut = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[4].Text);   //Время окончания работы
+                    }
+                    break;
             }
 
-            /*
-               Select Case direct
-                 Case 0 'вход
-                   'переключатель
-                   sbHrBaseIn = Hour(CDate(timeIn)) 'Hour(CDate(lbUsers.List(lbUsers.ListIndex, 4)))      ' 09
-                   sbMnBaseIn = Minute(CDate(timeIn)) 'Minute(CDate(lbUsers.List(lbUsers.ListIndex, 4)))    ' 00
-                   'текстовые поля
-                   'sbHrBaseIn.Value = pHr:
-                   tbHrBaseIn.Value = Right("0" & CStr(sbHrBaseIn.Value), 2)
-                   'sbMnBaseIn.Value = pMn:
-                   tbMnBaseIn.Value = Right("0" & CStr(sbMnBaseIn.Value), 2)
-
-
-                 Case 1 'выход
-                   'переключатель
-                   sbHrBaseOut = Hour(CDate(timeOut)) 'Hour(CDate(lbUsers.List(lbUsers.ListIndex, 5)))     ' 18
-                   sbMnBaseOut = Minute(CDate(timeOut)) 'Minute(CDate(lbUsers.List(lbUsers.ListIndex, 5)))   ' 00
-                   'текстовые поля
-                   'sbHrBaseOut.Value = sHr:
-                   tbHrBaseOut.Value = Right("0" & CStr(sbHrBaseOut.Value), 2)
-                   'sbMnBaseOut.Value = sMn:
-                   tbMnBaseOut.Value = Right("0" & CStr(sbMnBaseOut.Value), 2)
-               End Select
-            */
+            switch (direct) 
+            {
+                case 0:                                         //вход
+                    udBeforeH.Value = timeIn;
+                    udBeforeM.Value = timeIn;
+                    break;
+                case 1:                                         //выход
+                    udAfterH.Value = timeOut;
+                    udAfterM.Value = timeOut;
+                    break;
+            }
         }
 
     /*--------------------------------------------------------------------------------------------  
