@@ -508,22 +508,25 @@ namespace TimeWorkTracking
                         "\r\n  , Case When e.passDate is null Then 0 Else 1 END used " +
                         "\r\n  , u.extId " +
                         "\r\n  , u.name fio " +
-                        "\r\n  , u.timeStart gtStart " +
-                        "\r\n  , u.timeStop gtStop " +
+                        "\r\n  , u.timeStart userTimeIn " +
+                        "\r\n  , u.timeStop userTimeOut " +
                         "\r\n  , u.noLunch " +
                         "\r\n  , u.workSchemeId " +
-                        "\r\n  , e.passTimeStart ptSart " +
-                        "\r\n  , e.passTimeStop ptStop " +
+                        "\r\n  , e.passTimeStart passTimeIn " +
+                        "\r\n  , e.passTimeStop passTimeOut " +
                         "\r\n  , e.specmarkId " +
                         "\r\n  , e.specmarkNote " +
-                        "\r\n  , e.specmarkTimeStart stSatrt " +
-                        "\r\n  , e.specmarkTimeStop stStop " +
+                        "\r\n  , e.specmarkTimeStart markTimeIn " +
+                        "\r\n  , e.specmarkTimeStop markTimeOut " +
                         "\r\n  , e.timeScheduleFact " +
                         "\r\n  , e.timeScheduleLess " +
                         "\r\n  , e.timeScheduleOver " +
                         "\r\n  , e.timeScheduleWithoutLunch " +
                         "\r\n  , e.totalHoursInWork " +
                         "\r\n  , e.totalHoursOutsideWork " +
+                        "\r\n  , p.pacsUserId " +
+                        "\r\n  , p.pacsTimeStart pacsTimeIn " +
+                        "\r\n  , p.pacsTimeStop pacsTimeOut " +
                         "\r\nFrom " +
                         "\r\n  (Select * " +
                         "\r\n     From Users " +
@@ -533,7 +536,12 @@ namespace TimeWorkTracking
                         "\r\n  (Select * " +
                         "\r\n     From EventsPass " +
                         "\r\n    Where passDate = @bDate) as e --cast('2021/01/02' as date)) as e " +
-                        "\r\n  on u.ExtId = e.passId";
+                        "\r\n  on u.ExtId = e.passId " +
+                        "\r\n  left join " +
+                        "\r\n  (Select * " +
+                        "\r\n     From TimeProvider " +
+                        "\r\n    Where passDate = @bDate) as p " +
+                        "\r\n  on u.ExtId = p.passId";
                     sqlCommand.ExecuteNonQuery();
 
                     //UDF календарь дат (вспомогательная функция для тотального отчета)

@@ -40,24 +40,39 @@ namespace TimeWorkTracking
     //http://localhost:40001/json/help/operations/EventGetList
     public class pacsEventGetList 
     {
+        public string UserSID { get; set; }
         public pacsEvent[] Event { get; set; }
-    }
+        public pacsEventColumns[] EventColumns { get; set; }
+}
 
     public class pacsEvent 
     {
         public string CardCode { get; set; }
         public DateTime Issued { get; set; }
         public pacsMessage Message { get; set; }
-
+        public pacsUser User { get; set; }
     }
 
     public class pacsMessage 
     {
         public string Name { get; set; }
     }
+
+    public class pacsUser
+    {
+        public string Token { get; set; }
+        public string Name { get; set; }
+        public string EmployeeNumber { get; set; }
+    }
+
+    public class pacsEventColumns
+    {
+        public string Name { get; set; }
+
+    }
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-   
+
 
 
     class clPacsWebDataBase
@@ -339,7 +354,7 @@ namespace TimeWorkTracking
         /// <param name="pwIdUser"> id пользователя ProxWay</param>
         /// <param name="findDateTime">день запроса в формате "уууу.mm.dd" (поиск будет произведен на указанную дату в диапазоне времени от 00:00:00 до 23:59:59)</param>
         /// <returns>одномерный массив - первое значение - время первого входа (если есть), второе значение - время последнего выхода (если есть)</returns>
-        private static string[] checkPointPWTime(UriBuilder pacsUri, string pwIdUser, string findDateTime) 
+        private static Dictionary<string, string> checkPointPWTime(UriBuilder pacsUri, string pwIdUser, string findDateTime) 
         {
             string jsonReq = "";
             string res = "";
@@ -358,12 +373,14 @@ namespace TimeWorkTracking
             //            string unixTime = clSystemSet.convertToUnixTimeStamp(findDateTime + " 00:00:00", 3);
 
             string[] timeArr = new string[2];
-            timeArr[0] = "";        //время первого входа
-            timeArr[1] = "";        //время последнего выхода
-            string UserSID = connectRestApi(pacsUri, false);   //получить внутренний id пользователя СКУД ProxWay
+            Dictionary<string, string> timePacs = new Dictionary<string, string>();
+            timePacs.Add("userSID", "");                                                            //id сотрудника в СКУД
+            timePacs.Add("timeIn", "");                                                             //время первого входа                       
+            timePacs.Add("timeOut", "");                                                            //время последнего выхода
+
+            string UserSID = connectRestApi(pacsUri, false);                                        //получить внутренний id пользователя СКУД ProxWay
             UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
-
-
+            timePacs["userSID"] = UserSID;
             if (UserSID.Length > 0)
             {
                 //https://zetcode.com/csharp/datetime/
@@ -399,17 +416,17 @@ namespace TimeWorkTracking
                             {
                                 case "Вход совершен":
                                     pwDataTime = jsonRet.Event[i].Issued.ToLocalTime();     //прием с преобразованием в локальное время (с учетом смещения GMT)
-                                    if (timeArr[0] == "")
-                                        timeArr[0] = pwDataTime.ToString();
-                                    else if (pwDataTime < Convert.ToDateTime(timeArr[0]))
-                                        timeArr[0] = pwDataTime.ToString();
+                                    if (timePacs["timeIn"] == "")
+                                        timePacs["timeIn"] = pwDataTime.ToString();
+                                    else if (pwDataTime < Convert.ToDateTime(timePacs["timeIn"]))
+                                        timePacs["timeIn"] = pwDataTime.ToString();
                                     break;
                                 case "Выход совершен":
                                     pwDataTime = jsonRet.Event[i].Issued.ToLocalTime();     //прием с преобразованием в локальное время (с учетом смещения GMT)
-                                    if (timeArr[1] == "")
-                                        timeArr[1] = pwDataTime.ToString();
-                                    else if (pwDataTime > Convert.ToDateTime(timeArr[1]))
-                                        timeArr[1] = pwDataTime.ToString();
+                                    if (timePacs["timeOut"] == "")
+                                        timePacs["timeOut"] = pwDataTime.ToString();
+                                    else if (pwDataTime > Convert.ToDateTime(timePacs["timeOut"]))
+                                        timePacs["timeOut"] = pwDataTime.ToString();
                                     break;
                             }
                         }
@@ -426,8 +443,7 @@ namespace TimeWorkTracking
                 res = getRestData(pacsUriLite.Uri, jsonReq, 0);
                     //jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
             }
-
-            return timeArr;
+            return timePacs;
         }
 
         //PUBLIC------------------------------------------------------------------------
@@ -471,16 +487,15 @@ namespace TimeWorkTracking
         /// <param name="crmId">id хвостик Лоции или Табельный номер пользователя в ProxWay</param>
         /// <param name="extId">id пользователя в служебной базе РПК - учет рабочего времени</param>
         /// <param name="userName">ФИО пользоватея (допускается использование маски через символ %) скорее всего в формате SQL для функции Like</param>
-        /// <returns>одномерный массив - первое значение - время первого входа (если есть), второе значение - время последнего выхода (если есть)</returns>
-        public static string[] сheckPointPWTime(string findDateTime, string connectionString, string crmId, string extId, string userName)
+        /// <returns>словарь - userSID, timeIn, timeOut</returns>
+        public static Dictionary<string, string> сheckPointPWTime(string findDateTime, string connectionString, string crmId, string extId, string userName)
         {
-            string[] ret = new string[2];
+            Dictionary<string, string> timePacs = new Dictionary<string, string>();
             UriBuilder pacsUri = new UriBuilder(connectionString);
             string pwIdUser = getUserIdProxWayByName(pacsUri, crmId, extId, userName);           //получить id юзера (токен) в proxway
             if (pwIdUser!="")
-                ret = checkPointPWTime(pacsUri, pwIdUser, findDateTime);
-
-            return ret;
+                timePacs = checkPointPWTime(pacsUri, pwIdUser, findDateTime);
+            return timePacs;
         }
     }
 }
