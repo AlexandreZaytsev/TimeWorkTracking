@@ -972,39 +972,10 @@ namespace TimeWorkTracking
         //использовать или нет значения СКУД первый проход
         private void chPacsIn_CheckedChanged(object sender, EventArgs e)
         {
-
-            //сохраним текущие значения из формы
-  //          if (!chPacsIn.Checked && !chPacsOut.Checked) 
-  //          {
-                formTimeIn = DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //Время прихода
-                formTimeOut = DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
-  //          }
-
-            //            pacsTimeIn
-            //            pacsTimeIn
-
-            if (chPacsIn.Checked && pacsTimeIn !=null)                                           //изменение даты прохода      
-            {
-                udBeforeH.Value = pacsTimeIn;
-                udBeforeM.Value = pacsTimeIn;
-            }
-            else 
-            {
-                udBeforeH.Value = formTimeIn;
-                udBeforeM.Value = formTimeIn;
-            }
-
-            if (chPacsOut.Checked && pacsTimeOut != null)                                           //изменение даты прохода      
-            {
-                udAfterH.Value = pacsTimeOut;
-                udAfterM.Value = pacsTimeOut;
-            }
+            if (!chPacsIn.Checked)
+                restoreDateFromUserList(0, 0);
             else
-            {
-                udAfterH.Value = formTimeOut;
-                udAfterM.Value = formTimeOut;
-            }
-
+                restoreDateFromUserList(0, 1);
 
             /*
 
@@ -1035,7 +1006,10 @@ namespace TimeWorkTracking
         //использовать или нет значения СКУД последний выход
         private void chPacsOut_CheckedChanged(object sender, EventArgs e)
         {
-
+            if (!chPacsOut.Checked)
+                restoreDateFromUserList(1, 0);
+            else
+                restoreDateFromUserList(1, 1);
         }
 
         /// <summary>
