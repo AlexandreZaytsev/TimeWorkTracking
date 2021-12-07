@@ -224,23 +224,14 @@ namespace TimeWorkTracking
                 //загружаемся из СКУД
                 pacsStruct = new pacsProvider(
                             Properties.Settings.Default.pacsConnectionString,               //строка соединения
-                            mcRegDate.SelectionStart.ToString("yyyy.MM.dd"),                //дата регистрации           
+                            mcRegDate.SelectionStart,                                       //дата регистрации           
                             "",                                                             //crmId табельный номер из Лоции
                             lstwDataBaseMain.Items[ind].SubItems[2].Text,                   //extId внешний код для синнхронизации
                             lstwDataBaseMain.Items[ind].SubItems[1].Text                    //фио сотрудника
                     );
-                pacsStruct = clPacsWebDataBase.сheckPointPWTime(pacsStruct);
-
-                //   string cs, DateTime getDate, string crmId, string extId, string fio)
-
-                /*
-                                Pacs = new pacsProvider(
-                                        clPacsWebDataBase.сheckPointPWTime(
-                                    ));
-                */
+                clPacsWebDataBase.сheckPointPWTime(ref pacsStruct);
                 //сверим время из БД и из СКУД
                 pacsStruct.updatePacsTime(lstwDataBaseMain.Items[ind].SubItems[15].Text, lstwDataBaseMain.Items[ind].SubItems[16].Text);
-
                 dtpPacsIn.Value = pacsStruct.TimeIn;
                 dtpPacsOut.Value = pacsStruct.TimeOut;
 
@@ -1113,6 +1104,7 @@ namespace TimeWorkTracking
             LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
             mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
         }
+ 
         /// <summary>
         /// inCallBack
         /// проверить кто будет работать с программой

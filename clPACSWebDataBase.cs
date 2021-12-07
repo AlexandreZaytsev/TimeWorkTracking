@@ -28,10 +28,10 @@ namespace TimeWorkTracking
         public DateTime TimeIn;                             //итоговое время первого прохода SQL & PACS 
         public DateTime TimeOut;                            //итоговое время последнего выхода SQL & PACS
 
-        public pacsProvider(string cs, string getDate, string crmId, string extId, string fio)
+        public pacsProvider(string cs, DateTime getDate, string crmId, string extId, string fio)
         {
             getConnectionString = cs;
-            getReguestDate = getDate;
+            getReguestDate = getDate.ToString("yyyy.MM.dd");
             getUserCrmId = crmId;
             getUserExtId = extId;
             getUserName = fio;
@@ -42,8 +42,8 @@ namespace TimeWorkTracking
             statusSrv = 0;
             statusExt = 0;
 
-            TimeIn = DateTime.Now.Date;
-            TimeOut = DateTime.Now.Date;
+            TimeIn = getDate.Date;
+            TimeOut = getDate.Date;
         }
         private int getStatus(string inTime, string outTime)
         {
@@ -81,12 +81,12 @@ namespace TimeWorkTracking
             statusSrv = getStatus(respTimeIn, respTimeOut);
             statusExt = getStatus(extTimeIn, extTimeOut);
 
-            switch (statusSrv)
-            {
-                case 1:
+    //        switch (statusSrv)
+    //        {
+    //            case 1:
 
-                    return;
-            }
+    //                return;
+    //        }
 
             //время первого входа
             if (extTimeIn != "" && respTimeIn != "")
@@ -342,9 +342,8 @@ namespace TimeWorkTracking
         /// получить внутренний id пользователя СКУД ProxWay
         /// </summary>
         /// <param name="pacsUri">строка подключения uriBuilder</param>
-        /// <param name="pacsStruct">структура взаимодейстивия с сервисом Pacs ProxWay</param>
-        /// <returns>структура взаимодейстивия с сервисом Pacs ProxWay</returns>
-        private static pacsProvider getUserIdProxWayByName(UriBuilder pacsUri, pacsProvider pacsStruct)
+        /// <param name="pacsStruct">ref структура взаимодейстивия с сервисом Pacs ProxWay</param>
+        private static void getUserIdProxWayByName(UriBuilder pacsUri, ref pacsProvider pacsStruct)
         {
             string jsonReq = "";
             string res = "";
@@ -458,16 +457,14 @@ namespace TimeWorkTracking
                 res = getRestData(pacsUriLite.Uri, jsonReq, 0);
                 //jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
             }
-            return pacsStruct;
         }
 
         /// <summary>
         /// запрос к серверу на счет входа выхода конкретного сотрудника в/из офиса, и получение ответа
         /// </summary>
         /// <param name="pacsUri">строка подключения uriBuilder</param>
-        /// <param name="pacsStruct">структура взаимодейстивия с сервисом Pacs ProxWay</param>
-        /// <returns>структура взаимодейстивия с сервисом Pacs ProxWay</returns>
-        private static pacsProvider checkPointPWTime(UriBuilder pacsUri, pacsProvider pacsStruct) 
+        /// <param name="pacsStruct">ref структура взаимодейстивия с сервисом Pacs ProxWay</param>
+        private static void checkPointPWTime(UriBuilder pacsUri, ref pacsProvider pacsStruct) 
         {
             string jsonReq = "";
             string res = "";
@@ -551,7 +548,6 @@ namespace TimeWorkTracking
                 res = getRestData(pacsUriLite.Uri, jsonReq, 0);
                     //jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
             }
-            return pacsStruct;
         }
 
         //PUBLIC------------------------------------------------------------------------
@@ -591,14 +587,12 @@ namespace TimeWorkTracking
         /// запрос к серверу на счет входа выхода конкретного сотрудника в/из офиса, и получение ответа
         /// </summary>
         /// <param name="pacsStruct">структура взаимодейстивия с сервисом Pacs ProxWay</param>
-        /// <returns>структура взаимодейстивия с сервисом Pacs ProxWay</returns>
-        public static pacsProvider сheckPointPWTime(pacsProvider pacsStruct)
+        public static void сheckPointPWTime(ref pacsProvider pacsStruct)
         {
             UriBuilder pacsUri = new UriBuilder(pacsStruct.getConnectionString);
-            pacsStruct = getUserIdProxWayByName(pacsUri, pacsStruct);        //получить id юзера (токен) в proxway
+            getUserIdProxWayByName(pacsUri, ref pacsStruct);        //получить id юзера (токен) в proxway
             if (pacsStruct.respUserId != "")
-                pacsStruct = checkPointPWTime(pacsUri, pacsStruct);          //получить события прохода на дату
-            return pacsStruct;
+                checkPointPWTime(pacsUri, ref pacsStruct);          //получить события прохода на дату
         }
     }
 }
