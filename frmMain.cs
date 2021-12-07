@@ -23,30 +23,36 @@ namespace TimeWorkTracking
     /// </summary>
     public struct pacsProvider
     {
-        public DateTime TimeIn;                                     //итоговое время первого прохода SQL & PACS 
-        public DateTime TimeOut;                                    //итоговое время последнего выхода SQL & PACS
+        public DateTime TimeIn;                                 //итоговое время первого прохода SQL & PACS 
+        public DateTime TimeOut;                                //итоговое время последнего выхода SQL & PACS
 
-        private string srvUserId;                                   //id пользователя PACS    
-        private string srvTimeIn;                                   //информация о первом входе PACS 
-        private string srvTimeOut;                                  //информация о последнем выходе PACS
-        private readonly int status;                                //статус данных
+        private string srvUserId;                               //id пользователя PACS    
+        private string srvTimeIn;                               //информация о первом входе PACS 
+        private string srvTimeOut;                              //информация о последнем выходе PACS
+        private int srvStatus;                                  //статус данных пришедших от СКУД
+        private int extStatus;                                  //статус данных пришедших из ранее сохраненных источников
+
+        private int getStatus(string inTime, string outTime) 
+        {
+            int ret = 0;
+            if (inTime != "" && outTime != "")
+                ret = 3;                                         //данные о входе и выходе есть
+            else if (inTime == "" && outTime != "")
+                ret = 2;                                         //есть данные о выходе, о входе нет                 
+            else if (inTime != "" && outTime == "")
+                ret = 1;                                         //есть данные о входе, о выходе нет                 
+
+            return ret;
+        }
         public pacsProvider(Dictionary<string, string> date)
         {
             srvUserId = date["usersID"];
             srvTimeIn = date["timeIn"];
             srvTimeOut = date["timeOut"];
-
-            status = 0;                                             //данных нет
-            if (srvTimeIn != "" && srvTimeOut != "")
-                status = 3;                                         //данные о входе и выходе есть
-            else if (srvTimeIn == "" && srvTimeOut != "")
-                status = 2;                                         //есть данные о выходе, о входе нет                 
-            else if (srvTimeIn != "" && srvTimeOut == "")
-                status = 1;                                         //есть данные о входе, о выходе нет                 
-
+            srvStatus = 0; 
+            extStatus = 0;
             TimeIn = DateTime.Now.Date;
             TimeOut = DateTime.Now.Date;
-
         }
 
         /// <summary>
@@ -58,8 +64,10 @@ namespace TimeWorkTracking
         {
             DateTime dateSql;
             DateTime datePacs;
+            srvStatus = getStatus(srvTimeIn, srvTimeOut);       
+            extStatus = getStatus(extTimeIn, extTimeOut);       
 
-            switch (status) 
+            switch (srvStatus) 
             {
                 case 1:
 
