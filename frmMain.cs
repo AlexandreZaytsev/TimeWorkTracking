@@ -302,26 +302,18 @@ namespace TimeWorkTracking
                 //загружаемся из СКУД
                 Pacs = new pacsProvider(
                         clPacsWebDataBase.сheckPointPWTime(
-                            mcRegDate.SelectionStart.ToString("yyyy.MM.dd"),                        //дата регистрации           
-                            Properties.Settings.Default.pacsConnectionString,                       //строка соединения
-                            "",                                                                     //crmId табельный номер из Лоции
-                            lstwDataBaseMain.Items[ind].SubItems[2].Text,                           //extId внешний код для синнхронизации
-                            lstwDataBaseMain.Items[ind].SubItems[1].Text                            //фио сотрудника
+                            mcRegDate.SelectionStart.ToString("yyyy.MM.dd"),                //дата регистрации           
+                            Properties.Settings.Default.pacsConnectionString,               //строка соединения
+                            "",                                                             //crmId табельный номер из Лоции
+                            lstwDataBaseMain.Items[ind].SubItems[2].Text,                   //extId внешний код для синнхронизации
+                            lstwDataBaseMain.Items[ind].SubItems[1].Text                    //фио сотрудника
                     ));
 
                 //сверим время из БД и из СКУД
                 Pacs.updatePacsTime(lstwDataBaseMain.Items[ind].SubItems[15].Text, lstwDataBaseMain.Items[ind].SubItems[16].Text);
-//                updatePacsTime(lstwDataBaseMain.Items[ind].SubItems[15].Text, lstwDataBaseMain.Items[ind].SubItems[16].Text, Pacs.srvTimeIn, Pacs.srvTimeOut);
+
                 dtpPacsIn.Value = Pacs.TimeIn;
                 dtpPacsOut.Value = Pacs.TimeOut;
-
-                /*
-                                LoadPascInfoByID(
-                                    mcRegDate.SelectionStart,                                               //дата регистрации
-                                    "",                                                                     //crmId табельный номер из Лоции
-                                    lstwDataBaseMain.Items[ind].SubItems[2].Text,                           //extId внешний код для синнхронизации
-                                    lstwDataBaseMain.Items[ind].SubItems[1].Text);                          //фио юзера
-                */
 
                 if (lstwDataBaseMain.Items[ind].Text == "0")                                //данных о проходе нет
                 {                                                                                      
@@ -417,53 +409,6 @@ namespace TimeWorkTracking
             mcRegDate.UpdateBoldedDates();
         }
 
-        /// <summary>
-        /// Сравнить данные из БД SQL и БД СКУД - и поправить значения если нужно
-        /// </summary>
-        /// <param name="sTimeIn">первый проход по SQL</param>
-        /// <param name="sTimeOut">последний выход по SQL</param>
-        /// <param name="pTimeIn">первый проход по СКУД</param>
-        /// <param name="pTimeOut">последний выход по СКУД</param>
-        private void updatePacsTime(string sTimeIn, string sTimeOut, object pTimeIn, object pTimeOut)
-        {
-            DateTime dateSql;
-            DateTime datePacs;
- 
-            Pacs.TimeIn = Convert.ToDateTime(DateTime.Now.ToShortDateString() + " 00:00:00");
-            Pacs.TimeOut = dtpPacsIn.Value;
-
-            //время первого входа
-            if (sTimeIn != "" && pTimeIn.ToString() != "")
-            {
-                dateSql = Convert.ToDateTime(sTimeIn);
-                datePacs = Convert.ToDateTime(Pacs.TimeIn);
-                if (dateSql < datePacs)
-                    Pacs.TimeIn = dateSql;
-                else
-                    Pacs.TimeIn = datePacs;
-            }
-            else if (sTimeIn != "" && pTimeIn.ToString() == "")
-                Pacs.TimeIn = Convert.ToDateTime(sTimeIn);
-            else if (sTimeIn == "" && pTimeIn.ToString() != "")
-                Pacs.TimeIn = Convert.ToDateTime(pTimeIn);
-
-            //время последнего выхода
-            if (sTimeOut != "" && pTimeOut.ToString() != "")
-            {
-                dateSql = Convert.ToDateTime(sTimeOut);
-                datePacs = Convert.ToDateTime(pTimeOut);
-                if (dateSql > datePacs)
-                    Pacs.TimeOut = dateSql;
-                else
-                    Pacs.TimeOut = datePacs;
-            }
-            else if (sTimeOut != "" && pTimeOut.ToString() == "")
-                Pacs.TimeOut = Convert.ToDateTime(sTimeOut);
-            else if (sTimeOut == "" && pTimeOut.ToString() != "")
-                Pacs.TimeOut = Convert.ToDateTime(pTimeOut);
-        }
-
-        //
         /// <summary>
         /// проверить соединение с базами SQL и СКУД/PACS
         /// </summary>
