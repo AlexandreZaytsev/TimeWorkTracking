@@ -49,12 +49,6 @@ namespace TimeWorkTracking
             cbDirect.SelectedIndex = 0;
             pCalendar = new clCalendar();                                   //создать экземпляр класса Производственный календарь
             btDelete.Visible = false;                                       //заблокировать кнопку DELETE 
-
-            Pacs = new pacsProvider();                                      //создание и инициализация структуры результатов pacs    
-            Pacs.TimeIn = Convert.ToDateTime(DateTime.Now.ToShortDateString() + " 00:00:00");
-            Pacs.TimeOut = Pacs.TimeIn;
-            dtpPacsIn.Value = Pacs.TimeIn;
-            dtpPacsOut.Value = Pacs.TimeOut;
         }
 
         /// <summary>
@@ -70,6 +64,8 @@ namespace TimeWorkTracking
                 pCalendar.uploadCalendar(cs, "Select * From twt_GetDateInfo('', '') order by dWork");   //прочитаем данные производственного календаря
                 LoadBoldedDatesCalendar(pCalendar.getListWorkHoliday());                                //Загрузить производственный календарь в массив непериодических выделенных дат
                 webInfoDay.DocumentText = pCalendar.getDateInfoHTML(mcRegDate.SelectionStart);          //прочитать харектеристики дня по производственному календарю 
+                dtpPacsIn.Value = mcRegDate.SelectionStart;                                             //инициализация времени регистрации
+                dtpPacsOut.Value = mcRegDate.SelectionStart;                                            //инициализация времени регистрации
 
                 cbSMarks.DisplayMember = "Name";
                 cbSMarks.ValueMember = "id";
@@ -223,12 +219,13 @@ namespace TimeWorkTracking
             readType = true;                                                                //включить режим чтения данных
             DateTime dt;
             int ind = lstwDataBaseMain.extSelectedIndex();
+
             if (ind >= 0)
             {
                 grRegistrator.Enabled = true;
-//               tbExtID.Text = lstwDataBaseUsers.Items[ind].SubItems[2].Text;                 //extID
+//               tbExtID.Text = lstwDataBaseUsers.Items[ind].SubItems[2].Text;              //extID
                 //crmId
-//               chUse.Checked = lstwDataBaseUsers.Items[ind].Text == "True";                  //access    
+//               chUse.Checked = lstwDataBaseUsers.Items[ind].Text == "True";               //access    
                 tbName.Text = lstwDataBaseMain.Items[ind].SubItems[1].Text;                 //fio
 
                 //загружаемся из СКУД
@@ -241,7 +238,8 @@ namespace TimeWorkTracking
                     lstwDataBaseMain.Items[ind].SubItems[1].Text                            //фио сотрудника
                     );
 
-                Pacs.UserId = timePacs["usersID"];                                           //id пользователя СКУД
+                Pacs = new pacsProvider();                                                  //создание и инициализация структуры результатов pacs 
+                Pacs.UserId = timePacs["usersID"];                                          //id пользователя СКУД
                 //сверим время из БД и из СКУД
                 checkTime(lstwDataBaseMain.Items[ind].SubItems[15].Text, lstwDataBaseMain.Items[ind].SubItems[16].Text, timePacs["timeIn"], timePacs["timeOut"]);
                 dtpPacsIn.Value = Pacs.TimeIn;
