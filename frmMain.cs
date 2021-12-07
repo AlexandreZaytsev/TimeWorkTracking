@@ -18,13 +18,35 @@ https://stackoverflow.com/questions/4657394/is-it-possible-to-change-toolstripme
 
 namespace TimeWorkTracking
 {
+    /// <summary>
+    /// структура ответа от сервиса СКУД
+    /// </summary>
     public struct pacsProvider
     {
-        public string UserId;                                      //id пользователя PACS    
-        public object srvTimeIn;
-        public object srvTimeOut;
-        public DateTime TimeIn;                                    //итоговое время первого прохода SQL & PACS 
-        public DateTime TimeOut;                                   //итоговое время последнего выхода SQL & PACS                                                   
+        public string srvUserId;                                    //id пользователя PACS    
+        public string srvTimeIn;                                    //информация о первом входе PACS 
+        public string srvTimeOut;                                   //информация о последнем выходе PACS
+        public DateTime TimeIn;                                     //итоговое время первого прохода SQL & PACS 
+        public DateTime TimeOut;                                    //итоговое время последнего выхода SQL & PACS
+        public readonly int status;                                 //статус данных
+        public pacsProvider(Dictionary<string, string> date)
+        {
+            srvUserId = date["usersID"];
+            srvTimeIn = date["timeIn"];
+            srvTimeOut = date["timeOut"];
+
+            status = 0;                                             //данных нет
+            if (srvTimeIn != "" && srvTimeOut != "")
+                status = 3;                                         //данные о входе и выходе есть
+            else if (srvTimeIn == "" && srvTimeOut != "")
+                status = 2;                                         //есть данные о выходе, о входе нет                 
+            else if (srvTimeIn != "" && srvTimeOut == "")
+                status = 1;                                         //есть данные о входе, о выходе нет                 
+
+            TimeIn = DateTime.Now.Date;
+            TimeOut = DateTime.Now.Date;
+
+        }
     }
 
     public partial class frmMain : Form
@@ -229,19 +251,17 @@ namespace TimeWorkTracking
                 tbName.Text = lstwDataBaseMain.Items[ind].SubItems[1].Text;                 //fio
 
                 //загружаемся из СКУД
-                Dictionary<string, string> timePacs = new Dictionary<string, string>();
-                timePacs = clPacsWebDataBase.сheckPointPWTime(
-                    mcRegDate.SelectionStart.ToString("yyyy.MM.dd"),                        //дата регистрации           
-                    Properties.Settings.Default.pacsConnectionString,                       //строка соединения
-                    "",                                                                     //crmId табельный номер из Лоции
-                    lstwDataBaseMain.Items[ind].SubItems[2].Text,                           //extId внешний код для синнхронизации
-                    lstwDataBaseMain.Items[ind].SubItems[1].Text                            //фио сотрудника
-                    );
+                Pacs = new pacsProvider(
+                        clPacsWebDataBase.сheckPointPWTime(
+                            mcRegDate.SelectionStart.ToString("yyyy.MM.dd"),                        //дата регистрации           
+                            Properties.Settings.Default.pacsConnectionString,                       //строка соединения
+                            "",                                                                     //crmId табельный номер из Лоции
+                            lstwDataBaseMain.Items[ind].SubItems[2].Text,                           //extId внешний код для синнхронизации
+                            lstwDataBaseMain.Items[ind].SubItems[1].Text                            //фио сотрудника
+                    ));
 
-                Pacs = new pacsProvider();                                                  //создание и инициализация структуры результатов pacs 
-                Pacs.UserId = timePacs["usersID"];                                          //id пользователя СКУД
                 //сверим время из БД и из СКУД
-                checkTime(lstwDataBaseMain.Items[ind].SubItems[15].Text, lstwDataBaseMain.Items[ind].SubItems[16].Text, timePacs["timeIn"], timePacs["timeOut"]);
+                updatePacsTime(lstwDataBaseMain.Items[ind].SubItems[15].Text, lstwDataBaseMain.Items[ind].SubItems[16].Text, Pacs.srvTimeIn, Pacs.srvTimeOut);
                 dtpPacsIn.Value = Pacs.TimeIn;
                 dtpPacsOut.Value = Pacs.TimeOut;
 
@@ -354,16 +374,16 @@ namespace TimeWorkTracking
         /// <param name="sTimeOut">последний выход по SQL</param>
         /// <param name="pTimeIn">первый проход по СКУД</param>
         /// <param name="pTimeOut">последний выход по СКУД</param>
-        private void checkTime(string sTimeIn, string sTimeOut, string pTimeIn, string pTimeOut)
+        private void updatePacsTime(string sTimeIn, string sTimeOut, object pTimeIn, object pTimeOut)
         {
             DateTime dateSql;
             DateTime datePacs;
-
+ 
             Pacs.TimeIn = Convert.ToDateTime(DateTime.Now.ToShortDateString() + " 00:00:00");
             Pacs.TimeOut = dtpPacsIn.Value;
 
             //время первого входа
-            if (sTimeIn != "" && pTimeIn != "")
+            if (sTimeIn != "" && pTimeIn.ToString() != "")
             {
                 dateSql = Convert.ToDateTime(sTimeIn);
                 datePacs = Convert.ToDateTime(Pacs.TimeIn);
@@ -372,13 +392,13 @@ namespace TimeWorkTracking
                 else
                     Pacs.TimeIn = datePacs;
             }
-            else if (sTimeIn != "" && pTimeIn == "")
+            else if (sTimeIn != "" && pTimeIn.ToString() == "")
                 Pacs.TimeIn = Convert.ToDateTime(sTimeIn);
-            else if (sTimeIn == "" && pTimeIn != "")
+            else if (sTimeIn == "" && pTimeIn.ToString() != "")
                 Pacs.TimeIn = Convert.ToDateTime(pTimeIn);
 
             //время последнего выхода
-            if (sTimeOut != "" && pTimeOut != "")
+            if (sTimeOut != "" && pTimeOut.ToString() != "")
             {
                 dateSql = Convert.ToDateTime(sTimeOut);
                 datePacs = Convert.ToDateTime(pTimeOut);
@@ -387,9 +407,9 @@ namespace TimeWorkTracking
                 else
                     Pacs.TimeOut = datePacs;
             }
-            else if (sTimeOut != "" && pTimeOut == "")
+            else if (sTimeOut != "" && pTimeOut.ToString() == "")
                 Pacs.TimeOut = Convert.ToDateTime(sTimeOut);
-            else if (sTimeOut == "" && pTimeOut != "")
+            else if (sTimeOut == "" && pTimeOut.ToString() != "")
                 Pacs.TimeOut = Convert.ToDateTime(pTimeOut);
         }
 
