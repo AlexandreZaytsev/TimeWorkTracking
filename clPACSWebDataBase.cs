@@ -379,13 +379,13 @@ namespace TimeWorkTracking
 
             string[] timeArr = new string[2];
             Dictionary<string, string> timePacs = new Dictionary<string, string>();
-            timePacs.Add("userSID", "");                                                            //id сотрудника в СКУД
+            timePacs.Add("usersID", "");                                                            //id сотрудника в СКУД
             timePacs.Add("timeIn", "");                                                             //время первого входа                       
             timePacs.Add("timeOut", "");                                                            //время последнего выхода
 
             string UserSID = connectRestApi(pacsUri, false);                                        //получить внутренний id пользователя СКУД ProxWay
             UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
-            timePacs["userSID"] = UserSID;
+            timePacs["usersID"] = pwIdUser;// UserSID;
             if (UserSID.Length > 0)
             {
                 //https://zetcode.com/csharp/datetime/

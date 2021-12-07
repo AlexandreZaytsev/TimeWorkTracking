@@ -18,16 +18,22 @@ https://stackoverflow.com/questions/4657394/is-it-possible-to-change-toolstripme
 
 namespace TimeWorkTracking
 {
+    public struct pacsProvider
+    {
+        public string UserId;                                      //id пользователя PACS    
+        public object srvTimeIn;
+        public object srvTimeOut;
+        public DateTime TimeIn;                                    //итоговое время первого прохода SQL & PACS 
+        public DateTime TimeOut;                                   //итоговое время последнего выхода SQL & PACS                                                   
+    }
+
     public partial class frmMain : Form
     {
-        clListViewItemComparer _lvwItemComparer;                            //объект сортировки по колонкам
-        private readonly clCalendar pCalendar;                              //класс производственный календаоь
-        public bool userType;                                               //false - пользователь true - админ
-        private bool readType;                                              //true - чтение из списка/БД false - запись в БД  
-        DateTime pacsTimeIn;                                                //итоговое время первого прохода SQL & PACS 
-        DateTime pacsTimeOut;                                               //итоговое время последнего выхода SQL & PACS                                                   
-        DateTime formTimeIn;                                                //текущие данные из формы время первого прохода 
-        DateTime formTimeOut;                                               //текущие данные из формы время последнего выхода SQL & PACS  
+        clListViewItemComparer _lvwItemComparer;                    //объект сортировки по колонкам
+        private readonly clCalendar pCalendar;                      //класс производственный календаоь
+        public bool userType;                                       //false - пользователь true - админ
+        private bool readType;                                      //true - чтение из списка/БД false - запись в БД  
+        public pacsProvider Pacs;                                   //структура данных для работы с результатами запроса к СКУД(PACS)
 
         public frmMain()
         {
@@ -41,20 +47,19 @@ namespace TimeWorkTracking
             InitializeComponent();
             lMsg.Visible = false;                                           //погасить сообщение о записи в БД
             cbDirect.SelectedIndex = 0;
-            /*
-                        smDStart.Value = DateTime.Now;
-                        smTStart.Value = DateTime.Now;
-                        smDStop.Value = DateTime.Now;
-                        smTStop.Value = DateTime.Now.AddHours(1);
-            */
             pCalendar = new clCalendar();                                   //создать экземпляр класса Производственный календарь
             btDelete.Visible = false;                                       //заблокировать кнопку DELETE 
 
-            pacsTimeIn = Convert.ToDateTime(DateTime.Now.ToShortDateString() + " 00:00:00");
-            pacsTimeOut = pacsTimeIn;
-            dtpPacsIn.Value = pacsTimeIn;
-            dtpPacsOut.Value = pacsTimeOut;
+            Pacs = new pacsProvider();                                      //создание и инициализация структуры результатов pacs    
+            Pacs.TimeIn = Convert.ToDateTime(DateTime.Now.ToShortDateString() + " 00:00:00");
+            Pacs.TimeOut = Pacs.TimeIn;
+            dtpPacsIn.Value = Pacs.TimeIn;
+            dtpPacsOut.Value = Pacs.TimeOut;
         }
+
+        /// <summary>
+        /// событие загругка формы 
+        /// </summary>
         private void frmMain_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
@@ -82,13 +87,19 @@ namespace TimeWorkTracking
             }
         }
 
-        //при первом показе формы
+        /// <summary>
+        /// событие при первом показе формы 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frmMain_Shown(object sender, EventArgs e)
         {
             LogIn();        //авторизация
         }
 
-        //Диалог Авторизации
+        /// <summary>
+        /// показать Диалог Авторизации 
+        /// </summary>
         private void LogIn() 
         {
             frmLogIn frm = new frmLogIn { Owner = this };
@@ -96,7 +107,9 @@ namespace TimeWorkTracking
             frm.ShowDialog();
         }
 
-        // Initialize ListView
+        /// <summary>
+        /// инициализация элемента ListView 
+        /// </summary>
         private void InitializeListView()
         {
             lstwDataBaseMain.View = View.Details;               // Set the view to show details.
@@ -117,9 +130,12 @@ namespace TimeWorkTracking
                 Order = SortOrder.Ascending
             };
             lstwDataBaseMain.ListViewItemSorter = _lvwItemComparer;
-
         }
-        //Загрузить Data из DataSet в ListViewUser
+
+        /// <summary>
+        /// Загрузить данные Data из DataSet в ListViewUser
+        /// </summary>
+        /// <param name="dtable">источник данных</param>
         private void LoadListUser(DataTable dtable)
         {
             lstwDataBaseMain.Items.Clear();                 // Clear the ListView control
@@ -163,7 +179,12 @@ namespace TimeWorkTracking
             tbSatusList.Text = getPassCount();
             grRegistrator.Enabled = false;
         }
-        //сортировка по заголовке столбца
+
+        /// <summary>
+        /// событие сортировка по заголовку столбца 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lstwDataBaseMain_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             // Determine if clicked column is already the column that is being sorted.
@@ -185,14 +206,18 @@ namespace TimeWorkTracking
             this.lstwDataBaseMain.Sort();
         }
 
-        //запретить изменение размеров
+        /// <summary>
+        /// событие запретить изменение размеров столбцов
+        /// </summary>
         private void lstwDataBaseMain_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             e.Cancel = true;
             e.NewWidth = lstwDataBaseMain.Columns[e.ColumnIndex].Width;
         }
 
-        //выбор значения из списка инициализация переменных формы
+        /// <summary>
+        /// событие выбор значения из списка активных сотрудников и инициализировать переменные формы
+        /// </summary>
         private void lstwDataBaseMain_SelectedIndexChanged(object sender, EventArgs e)
         {
             readType = true;                                                                //включить режим чтения данных
@@ -215,15 +240,12 @@ namespace TimeWorkTracking
                     lstwDataBaseMain.Items[ind].SubItems[2].Text,                           //extId внешний код для синнхронизации
                     lstwDataBaseMain.Items[ind].SubItems[1].Text                            //фио сотрудника
                     );
+
+                Pacs.UserId = timePacs["usersID"];                                           //id пользователя СКУД
                 //сверим время из БД и из СКУД
                 checkTime(lstwDataBaseMain.Items[ind].SubItems[15].Text, lstwDataBaseMain.Items[ind].SubItems[16].Text, timePacs["timeIn"], timePacs["timeOut"]);
-
-                dtpPacsIn.Value = pacsTimeIn;
-                dtpPacsOut.Value = pacsTimeOut;
-
-
-
-
+                dtpPacsIn.Value = Pacs.TimeIn;
+                dtpPacsOut.Value = Pacs.TimeOut;
 
                 /*
                                 LoadPascInfoByID(
@@ -313,7 +335,10 @@ namespace TimeWorkTracking
             readType = false;                                                               //выключить режим чтения данных
         }
 
-        //Загрузить Производственный календарь Data из DataSet в Calendar
+        /// <summary>
+        /// Загрузить Производственный календарь Data из DataSet в Calendar
+        /// </summary>
+        /// <param name="dList">источник данных</param>
         private void LoadBoldedDatesCalendar(List<DateTime> dList)
         {
             mcRegDate.RemoveAllBoldedDates();                           //Сбросить все непериодические даты
@@ -336,23 +361,23 @@ namespace TimeWorkTracking
             DateTime dateSql;
             DateTime datePacs;
 
-            pacsTimeIn = Convert.ToDateTime(DateTime.Now.ToShortDateString() + " 00:00:00");
-            pacsTimeOut = dtpPacsIn.Value;
+            Pacs.TimeIn = Convert.ToDateTime(DateTime.Now.ToShortDateString() + " 00:00:00");
+            Pacs.TimeOut = dtpPacsIn.Value;
 
             //время первого входа
             if (sTimeIn != "" && pTimeIn != "")
             {
                 dateSql = Convert.ToDateTime(sTimeIn);
-                datePacs = Convert.ToDateTime(pacsTimeIn);
+                datePacs = Convert.ToDateTime(Pacs.TimeIn);
                 if (dateSql < datePacs)
-                    pacsTimeIn = dateSql;
+                    Pacs.TimeIn = dateSql;
                 else
-                    pacsTimeIn = datePacs;
+                    Pacs.TimeIn = datePacs;
             }
             else if (sTimeIn != "" && pTimeIn == "")
-                pacsTimeIn = Convert.ToDateTime(sTimeIn);
+                Pacs.TimeIn = Convert.ToDateTime(sTimeIn);
             else if (sTimeIn == "" && pTimeIn != "")
-                pacsTimeIn = Convert.ToDateTime(pTimeIn);
+                Pacs.TimeIn = Convert.ToDateTime(pTimeIn);
 
             //время последнего выхода
             if (sTimeOut != "" && pTimeOut != "")
@@ -360,17 +385,21 @@ namespace TimeWorkTracking
                 dateSql = Convert.ToDateTime(sTimeOut);
                 datePacs = Convert.ToDateTime(pTimeOut);
                 if (dateSql > datePacs)
-                    pacsTimeOut = dateSql;
+                    Pacs.TimeOut = dateSql;
                 else
-                    pacsTimeOut = datePacs;
+                    Pacs.TimeOut = datePacs;
             }
             else if (sTimeOut != "" && pTimeOut == "")
-                pacsTimeOut = Convert.ToDateTime(sTimeOut);
+                Pacs.TimeOut = Convert.ToDateTime(sTimeOut);
             else if (sTimeOut == "" && pTimeOut != "")
-                pacsTimeOut = Convert.ToDateTime(pTimeOut);
+                Pacs.TimeOut = Convert.ToDateTime(pTimeOut);
         }
 
-        //проверить соединение с базами
+        //
+        /// <summary>
+        /// проверить соединение с базами SQL и СКУД/PACS
+        /// </summary>
+        /// <returns></returns>
         private bool CheckConnects()
         {
             string msg = "";
@@ -408,7 +437,10 @@ namespace TimeWorkTracking
             return conSQL;
         }
 
-        //прочитать количество обработанных строк
+        /// <summary>
+        /// прочитать количество обработанных строк
+        /// </summary>
+        /// <returns></returns>
         private string getPassCount()
         {
             int count = 0;
@@ -423,14 +455,23 @@ namespace TimeWorkTracking
             return "обработано " + count.ToString() + " из " + lstwDataBaseMain.Items.Count.ToString();
         }
 
-        //STATUS STRIP------------------------------------------------------------------- 
-        //кнока help
+//  STATUS STRIP 
+        /// <summary>
+        /// событие кнока help 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frmMain_HelpButtonClicked(object sender, CancelEventArgs e)
         {
             frmAbout aboutBox = new frmAbout();
             aboutBox.ShowDialog(this);
         }
-        //кнопка настройки базы SQL
+
+        /// <summary>
+        /// событие кнопка настройки базы SQL 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tsbtDataBaseSQL_Click(object sender, EventArgs e)
         {
             if (userType) 
@@ -440,7 +481,12 @@ namespace TimeWorkTracking
                 frm.ShowDialog();
             }
         }
-        //кнопка настройки базы СКУД
+
+        /// <summary>
+        /// событие кнопка настройки базы СКУД
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tsbtDataBasePACS_Click(object sender, EventArgs e)
         {
             if (userType)
@@ -450,47 +496,75 @@ namespace TimeWorkTracking
                 frm.ShowDialog();
             }
         }
-        //кнопка Импорт Экспорт
+
+        /// <summary>
+        /// событие кнопка настрект программы (Импорт Экспорт) 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void toolSetting_Click(object sender, EventArgs e)
         {
             frmSetting frm = new frmSetting { Owner = this };
             CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
             frm.ShowDialog();
         }
-        //кнопка настройки специальныз отметок
+
+        /// <summary>
+        /// событие кнопка настройки специальныз отметок 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tsbtGuideMarks_Click(object sender, EventArgs e)
         {
             frmSpecialMarks frm = new frmSpecialMarks { Owner = this };
             frm.ShowDialog();
         }
-        //кнопка настройки сотрудников
+
+        /// <summary>
+        /// событие кнопка настройки сотрудников 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TsbtGuideUsers_Click(object sender, EventArgs e)
         {
             frmUsers frm = new frmUsers { Owner = this };
             frm.ShowDialog();
         }
-        //кнопка настройки календаря
+
+        /// <summary>
+        /// событие кнопка настройки календаря
+        /// </summary>
         private void tsbtGuideCalendar_Click(object sender, EventArgs e)
         {
             frmCalendar frm = new frmCalendar { Owner = this };
             frm.ShowDialog();
         }
 
-        //кнопка Бланк Учета температуры
+        /// <summary>
+        /// событие кнопка Бланк Учета температуры
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tsbtFormHeatCheck_Click(object sender, EventArgs e)
         {
             frmReport frm = new frmReport { Owner = this };
             CallBack_FrmMain_outEvent.callbackEventHandler("FormHeatCheck", "Бланк Учета температуры", null);  //send a general notification
             frm.ShowDialog();
         }
-        //кнопка Бланк Учета рабочего времени
+
+        /// <summary>
+        /// событие кнопка Бланк Учета рабочего времени
+        /// </summary>
         private void tsbtFormTimeCheck_Click(object sender, EventArgs e)
         {
             frmReport frm = new frmReport { Owner = this };
             CallBack_FrmMain_outEvent.callbackEventHandler("FormTimeCheck", "Бланк Учета рабочего времени", null);  //send a general notification
             frm.ShowDialog();
         }
-        //кнопка Итоговый отчет
+
+        /// <summary>
+        /// событие кнопка Итоговый отчет
+        /// </summary>
         private void tsbtReportTotal_Click(object sender, EventArgs e)
         {
             frmReport frm = new frmReport { Owner = this };
@@ -498,9 +572,11 @@ namespace TimeWorkTracking
             frm.ShowDialog();
         }
 
-        //STATUS STRIP------------------------------------------------------------------- 
+//  STATUS STRIP 
 
-        //изменение специальных отметок
+        /// <summary>
+        /// событие изменение специальных отметок 
+        /// </summary>
         private void cbSMarks_SelectedIndexChanged(object sender, EventArgs e)
         {
             smDStart.Enabled = (int)cbSMarks.SelectedValue != 1;//   cbSMarks.Text != "-";
@@ -508,10 +584,14 @@ namespace TimeWorkTracking
             smDStop.Enabled = (int)cbSMarks.SelectedValue != 1;//   cbSMarks.Text != "-";
             smTStop.Enabled = (int)cbSMarks.SelectedValue != 1;//   cbSMarks.Text != "-";
         }
-        //проверка дат в специальных отметках
+
+        /// <summary>
+        /// событие проверка даты времени ('от' меньше 'до') в специальных отметках
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void checkDateSpecialMarks(object sender, EventArgs e)
         {
-//            if ((cbSMarks.Text != "-" && cbSMarks.Text != "") && mainPanelRegistration.Enabled && !readType)
             if (((int)cbSMarks.SelectedValue != 1 && cbSMarks.Text != "") && mainPanelRegistration.Enabled && !readType)
                 {
                     if (DateTime.Compare(DateTime.Parse(smDStart.Value.ToString("yyyy-MM-dd ") + smTStart.Value.ToString("HH:mm ")),
@@ -525,7 +605,9 @@ namespace TimeWorkTracking
             }
         }
 
-        //проверка базового времени
+        /// <summary>
+        /// событие проверка даты времени ('от' меньше 'до') в регистрируемом (базового) времени
+        /// </summary>
         private void checkBaseTimeWork(object sender, EventArgs e)
         {
             if (!readType)
@@ -541,7 +623,12 @@ namespace TimeWorkTracking
             }
 
         }
-        //изменение даты в календаре
+
+        /// <summary>
+        /// событие изменение даты в календаре 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void mcRegDate_DateChanged(object sender, DateRangeEventArgs e)
         {
             int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
@@ -558,21 +645,9 @@ namespace TimeWorkTracking
             }
         }
 
-        //подсчитать количество рабочих дней
-        /*
-                private static double getBusinessDays(DateTime startD, DateTime endD)
-                {
-                    double calcBusinessDays =
-                        1 + ((endD - startD).TotalDays * 5 -
-                        (startD.DayOfWeek - endD.DayOfWeek) * 2) / 7;
-
-                    if (endD.DayOfWeek == DayOfWeek.Saturday) calcBusinessDays--;
-                    if (startD.DayOfWeek == DayOfWeek.Sunday) calcBusinessDays--;
-
-                    return calcBusinessDays;
-                }
-        */
-        //кнопка Добавить/Обновить запись в БД
+        /// <summary>
+        /// событие кнопка Добавить/Обновить запись в БД
+        /// </summary>
         private void btInsertUpdate_Click(object sender, EventArgs e)
         {
             DialogResult response = DialogResult.No;
@@ -616,7 +691,7 @@ namespace TimeWorkTracking
                             tbNote.Text.Trim());//добавить/обновить запись прохода
                         break;
 
-                    default:                                                            //спец отметки есть
+                    default:                                                        //спец отметки есть
                         vSpDateIn = smDStart.Value.ToString("yyyy-MM-dd") + " " + smTStart.Value.ToString("HH:mm"); //строка Дата начала спец. отметок
                         vSpDateOut = smDStop.Value.ToString("yyyy-MM-dd") + " " + smTStop.Value.ToString("HH:mm");  //строка Дата окончания спец. отметок
                         spCount = (DateTime.Parse(vSpDateOut) - DateTime.Parse(vSpDateIn)).Days;                    //количество дней в спецотметках
@@ -733,26 +808,32 @@ namespace TimeWorkTracking
                 }
             }
         }
-        //Добавить/Обновить запись в БД
+        
+        /// <summary>
+        /// Добавить/Обновить запись в БД
+        /// </summary>
+        /// <param name="regDate">дата регистрации</param>
+        /// <param name="vDateIn">дата время первого прохода</param>
+        /// <param name="vDateOut">дата время последнего выхода</param>
+        /// <param name="vSpID">id справочника спец отметки</param>
+        /// <param name="vSpDateIn">дата время начала действия спец отметок</param>
+        /// <param name="vSpDateOut">дата время окончания действия спец отметок</param>
+        /// <param name="vSpNote">комментарий к спец отметкам</param>
         void WritePassInfo(DateTime regDate, DateTime vDateIn, DateTime vDateOut, int vSpID, string vSpDateIn, string vSpDateOut, string vSpNote)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
             string keyUser = lstwDataBaseMain.Items[index].SubItems[2].Text;//ключевое поле внешний id пользователя
             string keyDate = regDate.ToString("yyyyMMdd");  //mcRegDate.SelectionStart.ToString("yyyyMMdd"); //ключевое поле дата прохода
-
-            string pacsTimeStart = "";                                      //строка Дата Время прохода СКУД
-            string pacsTimeStop = "";                                       //строка Дата Время выхода СКУД
-
             int chLunch = lstwDataBaseMain.Items[index].SubItems[11].Text == "1" ? 0 : Properties.Settings.Default.minutesLunchBreakTime;  //0 мин не обедает 60 мин обедает
             int wScheme = lstwDataBaseMain.Items[index].SubItems[12].Text == "1" ? 1 : 0;   //1 режим почасовой 0 режим поминутный
-            double timeScheduleFact = (vDateOut - vDateIn).TotalMinutes;                           //Всего минут по факту 
+            double timeScheduleFact = (vDateOut - vDateIn).TotalMinutes;    //Всего минут по факту 
 
             int extMin = pCalendar.getLengthWorkHoliday(vDateIn);           //количество минут для короткого длинного и обычного дня     
             //------------------------
             double cMin = timeScheduleFact;
             double tempMin = cMin;                                          //Сохраним текущее время
-            switch (wScheme)                                                 //Тариф    
+            switch (wScheme)                                                //Тариф    
             {
                 case 1:                                                     //Почасовой
                     cMin -= chLunch;                                        //Учитывая Обед
@@ -760,7 +841,7 @@ namespace TimeWorkTracking
                     cMin = cMin < 0 ? tempMin : cMin;                       //Если ушли в минус вернемся обратно
                     tempMin = cMin;                                         //Сохраним текущее время
                     //!!!!! Плюс потому что секретарь отмечает фактическое время ухода а человек уходит раньше на час за счет праздника
-                    cMin += extMin;                                   //Учтем Сокращенный Предпраздничный День
+                    cMin += extMin;                                         //Учтем Сокращенный Предпраздничный День
                     //!!!!! Поэтому этот ранний уход компенсируем добавляя час из сокращенного времени
                     cMin = cMin < 0 ? tempMin : cMin;                       //Если ушли в минус вернемся обратно
                     break;
@@ -797,7 +878,7 @@ namespace TimeWorkTracking
 //            string specmarkTimeStop = cbSMarks.Text == "-" ? "" : smDStop.Value.ToString("yyyy-MM-dd") + " " + smTStop.Value.ToString("HH:mm");  //строка Дата окончания спец. отметок
             string specmarkTimeStart;   //строка Дата начала спец. отметок 
             string specmarkTimeStop;  //строка Дата окончания спец. отметок
-            string specmarkNote = vSpNote;// tbNote.Text.Trim();                       //Комментарий спец отметок
+            string specmarkNote = vSpNote;// tbNote.Text.Trim();            //Комментарий спец отметок
             //------------------------
             //формулы
             double totalHoursInWork;
@@ -860,7 +941,7 @@ namespace TimeWorkTracking
                 "totalHoursInWork = " + totalHoursInWork + ", " +
                 "totalHoursOutsideWork = " + totalHoursOutsideWork + " " +
               "WHERE passDate = '" + regDate.ToString("yyyyMMdd") + "' " +                   //*дата прохода
-                "and passId = '" + keyUser + "' ; " +                   //*внешний id сотрудника
+                "and passId = '" + keyUser + "' ; " +               //*внешний id сотрудника
               "IF @@ROWCOUNT = 0 " +
               "INSERT INTO EventsPass(" +
                     "author, " +                                    //имя учетной записи сеанса
@@ -868,8 +949,6 @@ namespace TimeWorkTracking
                     "passId, " +                                    //*внешний id пользователя
                     "passTimeStart, " +                             //время первого входа (без даты)
                     "passTimeStop, " +                              //время последнего выхода (без даты)
-//                    "pacsTimeStart, " +                             //время первого входа по СКУД (без даты)
-//                    "pacsTimeStop, " +                              //время последнего выхода по СКУД (без даты)
                     "timeScheduleFact, " +                          //отработанное время (мин)
                     "timeScheduleWithoutLunch, " +                  //отработанное время без обеда (мин)
                     "timeScheduleLess, " +                          //время недоработки (мин)
@@ -886,8 +965,6 @@ namespace TimeWorkTracking
                     "'" + keyUser + "', " +
                     "'" + vDateIn.ToString("yyyyMMdd") + "', " +
                     "'" + vDateOut.ToString("yyyyMMdd") + "', " +
-//                    (pacsTimeStart == "" ? "NULL" : "'" + pacsTimeStart + "'") + ", " +
-//                    (pacsTimeStop == "" ? "NULL" : "'" + pacsTimeStop + "'") + ", " +
                     timeScheduleFact + ", " +
                     timeScheduleWithoutLunch + ", " +
                     timeScheduleLess + ", " +
@@ -925,10 +1002,17 @@ namespace TimeWorkTracking
         //Добавить/Обновить информацию от провайдера СКУД в БД
         void WritePacsInfo(DateTime regDate, DateTime vDateIn, DateTime vDateOut, int vSpID, string vSpDateIn, string vSpDateOut, string vSpNote)
         {
+
+            //                    (pacsTimeStart == "" ? "NULL" : "'" + pacsTimeStart + "'") + ", " +
+            //                    (pacsTimeStop == "" ? "NULL" : "'" + pacsTimeStop + "'") + ", " +
         }
 
-            //кнопка удалить запись в БД
-            private void btDelete_Click(object sender, EventArgs e)
+        /// <summary>
+        /// событие кнопка удалить запись в БД
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btDelete_Click(object sender, EventArgs e)
         {
             int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
             string keyUser = lstwDataBaseMain.Items[index].SubItems[2].Text;//ключевое поле внешний id пользователя
@@ -946,7 +1030,10 @@ namespace TimeWorkTracking
             lstwDataBaseMain.HideSelection = false;                         //оставить выделение строки при потере фокуса ListView
             lstwDataBaseMain.EnsureVisible(index);                          //показать в области видимости окна
         }
-        //обновить имя главного окна
+
+        /// <summary>
+        /// обновить имя главного окна
+        /// </summary>
         private void reloadCaption() 
         {
             if (userType)
@@ -955,55 +1042,36 @@ namespace TimeWorkTracking
                 this.Text = "Учет рабочего времени (Регистратор) " + Properties.Settings.Default.companyName;
         }
 
-        //изменилось значение времени входа/выхода PASC
+        /// <summary>
+        /// событие изменилось значение времени входа/выхода PASC
+        /// </summary>
         private void Pacs_ValueChanged(object sender, EventArgs e)
         {
             chPacsIn.Checked = false;                                       //сбросить флаг использования значения входа
-            chPacsIn.Enabled = pacsTimeIn.TimeOfDay.TotalMinutes != 0;      //если время входа есть  
+            chPacsIn.Enabled = Pacs.TimeIn.TimeOfDay.TotalMinutes != 0;      //если время входа есть  
 
             chPacsOut.Checked = false;                                      //сбросить флаг использования значения выхода
-            chPacsOut.Enabled = pacsTimeOut.TimeOfDay.TotalMinutes != 0;    //если время выхода есть
+            chPacsOut.Enabled = Pacs.TimeOut.TimeOfDay.TotalMinutes != 0;    //если время выхода есть
 
             //засветить панель если есть какой нибудь результат
-            pPacs.Enabled = pacsTimeIn.TimeOfDay.TotalMinutes + pacsTimeOut.TimeOfDay.TotalMinutes > 0;// (sqlTimeIn + sqlTimeOut + pacsTimeIn + pacsTimeOut).Length > 0;
+            pPacs.Enabled = Pacs.TimeIn.TimeOfDay.TotalMinutes + Pacs.TimeOut.TimeOfDay.TotalMinutes > 0;// (sqlTimeIn + sqlTimeOut + pacsTimeIn + pacsTimeOut).Length > 0;
             pPacs.BackColor = pPacs.Enabled ? Color.FromArgb(192, 255, 192) : SystemColors.Control;
         }
 
-        //использовать или нет значения СКУД первый проход
+        /// <summary>
+        /// событие (не)использование значения СКУД первый проход
+        /// </summary>
         private void chPacsIn_CheckedChanged(object sender, EventArgs e)
         {
             if (!chPacsIn.Checked)
                 restoreDateFromUserList(0, 0);
             else
                 restoreDateFromUserList(0, 1);
-
-            /*
-
-                        int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
-                        //график сотрудника
-                        DateTime userTimeIn = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[3].Text);
-                        DateTime userTimeOut = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[4].Text);
-                        //то что сохранил регистратор в Базе Данных
-                        DateTime passTimeIn = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[9].Text);
-                        DateTime passTimeOut = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[10].Text);
-                        //информация СКУД из Базы Данных
-                        DateTime pacsTimeIn = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[15].Text);
-                        DateTime pacsTimeOut = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[16].Text);
-            */
-            /*
-                        dt = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[3].Text);  //время начала работы по графику
-                        udBeforeH.Value = dt;
-                        udBeforeM.Value = dt;
-                        dt = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[4].Text);  //время окончания работы по графику
-                        udAfterH.Value = dt;
-                        udAfterM.Value = dt;
-
-                        if (chPacsIn.Checked) 
-                        {
-                        }
-            */
         }
-        //использовать или нет значения СКУД последний выход
+
+        /// <summary>
+        /// событие (не)использование значения СКУД последний выход
+        /// </summary>
         private void chPacsOut_CheckedChanged(object sender, EventArgs e)
         {
             if (!chPacsOut.Checked)
@@ -1013,7 +1081,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// восстановить значения из план графика сотрудника
+        /// восстановить значения даты времени проходов из: план графика сотрудника; базы проходов; результатов запроса к СКУД 
         /// </summary>
         /// <param name="direct">0 - работаем с блоком входа, 1 - работаем с блоком выхода</param>
         /// <param name="src">0 - работаем с данными из справочника или базы сотрудника, 1 - работаем с данными из СКУД</param>
@@ -1025,18 +1093,19 @@ namespace TimeWorkTracking
 
             switch (src) 
             {
-                case 1:                                             //данные из скуд
-                    timeIn = pacsTimeIn;
-                    timeOut = pacsTimeOut;
+                case 1:                                                     //данные из скуд
+                    timeIn = Pacs.TimeIn;
+                    timeOut = Pacs.TimeOut;
                     break;
                 default://               case 0:                                             //данные из истории проходов или из график сотрудника
-                    if(lstwDataBaseMain.Items[index].SubItems[9].Text!="" && lstwDataBaseMain.Items[index].SubItems[10].Text != "")
-                    {                                               //данные из истории проходов 
+                   // readType
+                    if (lstwDataBaseMain.Items[index].SubItems[9].Text!="" && lstwDataBaseMain.Items[index].SubItems[10].Text != "")
+                    {                                                       //данные из истории проходов 
                         timeIn = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[9].Text);    //пришел
                         timeOut = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[10].Text);  //ушел
                     }
                     else
-                    {                                               //данные из справочника сотрудника 
+                    {                                                       //данные из справочника сотрудника 
                         timeIn = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[3].Text);    //Время начала работы
                         timeOut = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[4].Text);   //Время окончания работы
                     }
@@ -1045,28 +1114,27 @@ namespace TimeWorkTracking
 
             switch (direct) 
             {
-                case 0:                                         //вход
+                case 0:                                                     //вход
                     udBeforeH.Value = timeIn;
                     udBeforeM.Value = timeIn;
                     break;
-                case 1:                                         //выход
+                case 1:                                                     //выход
                     udAfterH.Value = timeOut;
                     udAfterM.Value = timeOut;
                     break;
             }
         }
 
-    /*--------------------------------------------------------------------------------------------  
-    CALLBACK InPut (подписка на внешние сообщения)
-    --------------------------------------------------------------------------------------------*/
-    /// <summary>
-    /// Callbacks the reload.
-    /// входящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров
-    /// </summary>
-    /// <param name="controlName">имя CTRL</param>
-    /// <param name="controlParentName">имя родителя CNTRL</param>
-    /// <param name="param">параметры ключ-значение.</param>
-    private void CallbackReload(string controlName, string controlParentName, Dictionary<String, String> param)
+//  CALLBACK InPut (подписка на внешние сообщения)
+
+        /// <summary>
+        /// inCallBack
+        /// входящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров
+        /// </summary>
+        /// <param name="controlName">имя CTRL</param>
+        /// <param name="controlParentName">имя родителя CNTRL</param>
+        /// <param name="param">параметры ключ-значение.</param>
+        private void CallbackReload(string controlName, string controlParentName, Dictionary<String, String> param)
         {
             CheckConnects();        //проверить соединение с базами
             /*
@@ -1077,19 +1145,39 @@ namespace TimeWorkTracking
             }
             */
         }
-        //обновить общие настройки 
+
+        /// <summary>
+        /// inCallBack
+        /// обновить общие настройки
+        /// </summary>
+        /// <param name="controlName"></param>
+        /// <param name="controlParentName"></param>
+        /// <param name="param"></param>
         private void CallbackSetting(string controlName, string controlParentName, Dictionary<String, String> param)
         {
             reloadCaption();                            //Обновить имя главного окна
         }
-        //обновить настройки после импорта (список юзеров в главном окне)
+
+        /// <summary>
+        /// inCallBack
+        /// обновить настройки после импорта (список юзеров в главном окне)
+        /// </summary>
+        /// <param name="controlName"></param>
+        /// <param name="controlParentName"></param>
+        /// <param name="param"></param>
         private void CallbackImport(string controlName, string controlParentName, Dictionary<String, String> param)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
             mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
         }
-        //проверить кто будет работать с программой
+        /// <summary>
+        /// inCallBack
+        /// проверить кто будет работать с программой
+        /// </summary>
+        /// <param name="typeLogIn"></param>
+        /// <param name="controlParentName"></param>
+        /// <param name="param"></param>
         private void CallbackLogIn(string typeLogIn, string controlParentName, Dictionary<String, String> param)
         {
             switch (typeLogIn)
@@ -1110,12 +1198,10 @@ namespace TimeWorkTracking
 
     }
 
-    /*--------------------------------------------------------------------------------------------  
-        CALLBACK OutPut (собственные сообщения)
-    --------------------------------------------------------------------------------------------*/
-    //general notification
+//  CALLBACK OutPut (собственные сообщения)
+
     /// <summary>
-    /// CallBack_GetParam
+    /// outCallBack
     /// исходящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров 
     /// </summary>
     public static class CallBack_FrmMain_outEvent
