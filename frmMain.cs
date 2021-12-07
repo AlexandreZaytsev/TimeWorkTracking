@@ -18,117 +18,7 @@ https://stackoverflow.com/questions/4657394/is-it-possible-to-change-toolstripme
 
 namespace TimeWorkTracking
 {
-    /// <summary>
-    /// структура ответа от сервиса СКУД
-    /// </summary>
-    public struct pacsProvider
-    {
-        private string getConnectionString;                 //строка соединения с сервером
-        private string getReguestDate;                      //запрос на дату регистрации           
-        private string getUserCrmId;                        //табельный номер сотрудника CRM
-        private string getUserExtId;                        //внешний id код синхронизации сотрудника
-        private string getUserName;                         //фио сотрудника
 
-        private string respUserId;                          //id пользователя PACS    
-        private string respTimeIn;                          //информация о первом входе PACS 
-        private string respTimeOut;                         //информация о последнем выходе PACS
-        private int srvStatus;                              //статус данных пришедших от СКУД
-        private int extStatus;                              //статус данных пришедших из ранее сохраненных источников
-
-        public DateTime TimeIn;                             //итоговое время первого прохода SQL & PACS 
-        public DateTime TimeOut;                            //итоговое время последнего выхода SQL & PACS
-
-        public pacsProvider(string cs, string getDate, string crmId, string extId, string fio)
-        {
-            getConnectionString = cs;
-            getReguestDate = getDate;
-            getUserCrmId = crmId;
-            getUserExtId = extId;
-            getUserName = fio;
-
-            respUserId = "";
-            respTimeIn = "";
-            respTimeOut = "";
-            srvStatus = 0;
-            extStatus = 0;
-
-            TimeIn = DateTime.Now.Date;
-            TimeOut = DateTime.Now.Date;
-        }
-        private int getStatus(string inTime, string outTime) 
-        {
-            int ret = 0;
-            if (inTime != "" && outTime != "")
-                ret = 3;                                         //данные о входе и выходе есть
-            else if (inTime == "" && outTime != "")
-                ret = 2;                                         //есть данные о выходе, о входе нет                 
-            else if (inTime != "" && outTime == "")
-                ret = 1;                                         //есть данные о входе, о выходе нет                 
-
-            return ret;
-        }
- /*
-        public pacsProvider(Dictionary<string, string> date)
-        {
-            srvUserId = date["usersID"];
-            srvTimeIn = date["timeIn"];
-            srvTimeOut = date["timeOut"];
-            srvStatus = 0; 
-            extStatus = 0;
-            TimeIn = DateTime.Now.Date;
-            TimeOut = DateTime.Now.Date;
-        }
-*/
-        /// <summary>
-        /// проверить и обновить данные проходов по внешним (ранее сохраненным) источникам провайдера СКУД 
-        /// </summary>
-        /// <param name="extTimeIn">внешняя дата время первого входа</param>
-        /// <param name="extTimeOut">внешняя дата время последнего выхода</param>
-        public void updatePacsTime(string extTimeIn, string extTimeOut) 
-        {
-            DateTime dateSql;
-            DateTime datePacs;
-            srvStatus = getStatus(respTimeIn, respTimeOut);       
-            extStatus = getStatus(extTimeIn, extTimeOut);       
-
-            switch (srvStatus) 
-            {
-                case 1:
-
-                    return;
-            }
-
-            //время первого входа
-            if (extTimeIn != "" && respTimeIn != "")
-            {
-                dateSql = Convert.ToDateTime(extTimeIn);
-                datePacs = Convert.ToDateTime(respTimeIn);
-                if (dateSql < datePacs)
-                    TimeIn = dateSql;
-                else
-                    TimeIn = datePacs;
-            }
-            else if (extTimeIn != "" && respTimeIn == "")
-                TimeIn = Convert.ToDateTime(extTimeIn);
-            else if (extTimeIn == "" && respTimeIn != "")
-                TimeIn = Convert.ToDateTime(respTimeIn);
-
-            //время последнего выхода
-            if (extTimeOut != "" && respTimeOut != "")
-            {
-                dateSql = Convert.ToDateTime(extTimeOut);
-                datePacs = Convert.ToDateTime(respTimeOut);
-                if (dateSql > datePacs)
-                    TimeOut = dateSql;
-                else
-                    TimeOut = datePacs;
-            }
-            else if (extTimeOut != "" && respTimeOut == "")
-                TimeOut = Convert.ToDateTime(extTimeOut);
-            else if (extTimeOut == "" && respTimeOut != "")
-                TimeOut = Convert.ToDateTime(respTimeOut);
-        }
-    }
 
     public partial class frmMain : Form
     {
@@ -136,7 +26,7 @@ namespace TimeWorkTracking
         private readonly clCalendar pCalendar;                      //класс производственный календаоь
         public bool userType;                                       //false - пользователь true - админ
         private bool readType;                                      //true - чтение из списка/БД false - запись в БД  
-        public pacsProvider Pacs;                                   //структура данных для работы с результатами запроса к СКУД(PACS)
+        public pacsProvider pacsStruct;                             //структура данных для работы с результатами запроса к СКУД(PACS)
 
         public frmMain()
         {
@@ -332,25 +222,27 @@ namespace TimeWorkTracking
                 tbName.Text = lstwDataBaseMain.Items[ind].SubItems[1].Text;                 //fio
 
                 //загружаемся из СКУД
-                Pacs = new pacsProvider(
+                pacsStruct = new pacsProvider(
                             Properties.Settings.Default.pacsConnectionString,               //строка соединения
                             mcRegDate.SelectionStart.ToString("yyyy.MM.dd"),                //дата регистрации           
                             "",                                                             //crmId табельный номер из Лоции
                             lstwDataBaseMain.Items[ind].SubItems[2].Text,                   //extId внешний код для синнхронизации
                             lstwDataBaseMain.Items[ind].SubItems[1].Text                    //фио сотрудника
                     );
-             //   string cs, DateTime getDate, string crmId, string extId, string fio)
+                pacsStruct = clPacsWebDataBase.сheckPointPWTime(pacsStruct);
 
-/*
-                Pacs = new pacsProvider(
-                        clPacsWebDataBase.сheckPointPWTime(
-                    ));
-*/
+                //   string cs, DateTime getDate, string crmId, string extId, string fio)
+
+                /*
+                                Pacs = new pacsProvider(
+                                        clPacsWebDataBase.сheckPointPWTime(
+                                    ));
+                */
                 //сверим время из БД и из СКУД
-                Pacs.updatePacsTime(lstwDataBaseMain.Items[ind].SubItems[15].Text, lstwDataBaseMain.Items[ind].SubItems[16].Text);
+                pacsStruct.updatePacsTime(lstwDataBaseMain.Items[ind].SubItems[15].Text, lstwDataBaseMain.Items[ind].SubItems[16].Text);
 
-                dtpPacsIn.Value = Pacs.TimeIn;
-                dtpPacsOut.Value = Pacs.TimeOut;
+                dtpPacsIn.Value = pacsStruct.TimeIn;
+                dtpPacsOut.Value = pacsStruct.TimeOut;
 
                 if (lstwDataBaseMain.Items[ind].Text == "0")                                //данных о проходе нет
                 {                                                                                      
@@ -1098,13 +990,13 @@ namespace TimeWorkTracking
         private void Pacs_ValueChanged(object sender, EventArgs e)
         {
             chPacsIn.Checked = false;                                       //сбросить флаг использования значения входа
-            chPacsIn.Enabled = Pacs.TimeIn.TimeOfDay.TotalMinutes != 0;      //если время входа есть  
+            chPacsIn.Enabled = pacsStruct.TimeIn.TimeOfDay.TotalMinutes != 0;      //если время входа есть  
 
             chPacsOut.Checked = false;                                      //сбросить флаг использования значения выхода
-            chPacsOut.Enabled = Pacs.TimeOut.TimeOfDay.TotalMinutes != 0;    //если время выхода есть
+            chPacsOut.Enabled = pacsStruct.TimeOut.TimeOfDay.TotalMinutes != 0;    //если время выхода есть
 
             //засветить панель если есть какой нибудь результат
-            pPacs.Enabled = Pacs.TimeIn.TimeOfDay.TotalMinutes + Pacs.TimeOut.TimeOfDay.TotalMinutes > 0;// (sqlTimeIn + sqlTimeOut + pacsTimeIn + pacsTimeOut).Length > 0;
+            pPacs.Enabled = pacsStruct.TimeIn.TimeOfDay.TotalMinutes + pacsStruct.TimeOut.TimeOfDay.TotalMinutes > 0;// (sqlTimeIn + sqlTimeOut + pacsTimeIn + pacsTimeOut).Length > 0;
             pPacs.BackColor = pPacs.Enabled ? Color.FromArgb(192, 255, 192) : SystemColors.Control;
         }
 
@@ -1144,8 +1036,8 @@ namespace TimeWorkTracking
             switch (src) 
             {
                 case 1:                                                     //данные из скуд
-                    timeIn = Pacs.TimeIn;
-                    timeOut = Pacs.TimeOut;
+                    timeIn = pacsStruct.TimeIn;
+                    timeOut = pacsStruct.TimeOut;
                     break;
                 default://               case 0:                                             //данные из истории проходов или из график сотрудника
                    // readType

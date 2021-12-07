@@ -8,6 +8,118 @@ using System.Globalization;
 
 namespace TimeWorkTracking
 {
+    /// <summary>
+    /// структура ответа от сервиса СКУД
+    /// </summary>
+    public struct pacsProvider
+    {
+        public string getConnectionString;                  //строка соединения с сервером
+        public string getReguestDate;                       //запрос на дату регистрации           
+        public string getUserCrmId;                         //табельный номер сотрудника CRM
+        public string getUserExtId;                         //внешний id код синхронизации сотрудника
+        public string getUserName;                          //фио сотрудника
+
+        public string respUserId;                           //id пользователя PACS    
+        public string respTimeIn;                           //информация о первом входе PACS 
+        public string respTimeOut;                          //информация о последнем выходе PACS
+        private int statusSrv;                              //статус данных пришедших от СКУД
+        private int statusExt;                              //статус данных пришедших из ранее сохраненных источников
+
+        public DateTime TimeIn;                             //итоговое время первого прохода SQL & PACS 
+        public DateTime TimeOut;                            //итоговое время последнего выхода SQL & PACS
+
+        public pacsProvider(string cs, string getDate, string crmId, string extId, string fio)
+        {
+            getConnectionString = cs;
+            getReguestDate = getDate;
+            getUserCrmId = crmId;
+            getUserExtId = extId;
+            getUserName = fio;
+
+            respUserId = "";
+            respTimeIn = "";
+            respTimeOut = "";
+            statusSrv = 0;
+            statusExt = 0;
+
+            TimeIn = DateTime.Now.Date;
+            TimeOut = DateTime.Now.Date;
+        }
+        private int getStatus(string inTime, string outTime)
+        {
+            int ret = 0;
+            if (inTime != "" && outTime != "")
+                ret = 3;                                         //данные о входе и выходе есть
+            else if (inTime == "" && outTime != "")
+                ret = 2;                                         //есть данные о выходе, о входе нет                 
+            else if (inTime != "" && outTime == "")
+                ret = 1;                                         //есть данные о входе, о выходе нет                 
+
+            return ret;
+        }
+        /*
+               public pacsProvider(Dictionary<string, string> date)
+               {
+                   srvUserId = date["usersID"];
+                   srvTimeIn = date["timeIn"];
+                   srvTimeOut = date["timeOut"];
+                   srvStatus = 0; 
+                   extStatus = 0;
+                   TimeIn = DateTime.Now.Date;
+                   TimeOut = DateTime.Now.Date;
+               }
+       */
+        /// <summary>
+        /// проверить и обновить данные проходов по внешним (ранее сохраненным) источникам провайдера СКУД 
+        /// </summary>
+        /// <param name="extTimeIn">внешняя дата время первого входа</param>
+        /// <param name="extTimeOut">внешняя дата время последнего выхода</param>
+        public void updatePacsTime(string extTimeIn, string extTimeOut)
+        {
+            DateTime dateSql;
+            DateTime datePacs;
+            statusSrv = getStatus(respTimeIn, respTimeOut);
+            statusExt = getStatus(extTimeIn, extTimeOut);
+
+            switch (statusSrv)
+            {
+                case 1:
+
+                    return;
+            }
+
+            //время первого входа
+            if (extTimeIn != "" && respTimeIn != "")
+            {
+                dateSql = Convert.ToDateTime(extTimeIn);
+                datePacs = Convert.ToDateTime(respTimeIn);
+                if (dateSql < datePacs)
+                    TimeIn = dateSql;
+                else
+                    TimeIn = datePacs;
+            }
+            else if (extTimeIn != "" && respTimeIn == "")
+                TimeIn = Convert.ToDateTime(extTimeIn);
+            else if (extTimeIn == "" && respTimeIn != "")
+                TimeIn = Convert.ToDateTime(respTimeIn);
+
+            //время последнего выхода
+            if (extTimeOut != "" && respTimeOut != "")
+            {
+                dateSql = Convert.ToDateTime(extTimeOut);
+                datePacs = Convert.ToDateTime(respTimeOut);
+                if (dateSql > datePacs)
+                    TimeOut = dateSql;
+                else
+                    TimeOut = datePacs;
+            }
+            else if (extTimeOut != "" && respTimeOut == "")
+                TimeOut = Convert.ToDateTime(extTimeOut);
+            else if (extTimeOut == "" && respTimeOut != "")
+                TimeOut = Convert.ToDateTime(respTimeOut);
+        }
+    }
+
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //Структуры для парсинга Json ответов
 
@@ -225,20 +337,19 @@ namespace TimeWorkTracking
             return ret;
         }
 
+
         /// <summary>
         /// получить внутренний id пользователя СКУД ProxWay
         /// </summary>
         /// <param name="pacsUri">строка подключения uriBuilder</param>
-        /// <param name="crmId">id хвостик Лоции или Табельный номер пользователя в ProxWay</param>
-        /// <param name="extId">d пользователя в служебной базе РПК - учет рабочего времени</param>
-        /// <param name="userName">ФИО пользоватея (допускается использование маски через символ %) скорее всего в формате SQL для функции Like</param>
-        /// <returns>id (Token) пользователя системы ProxWay - или в случае неудачи - пустая строка</returns>
-        private static string getUserIdProxWayByName(UriBuilder pacsUri, string crmId,  string extId, string userName)
+        /// <param name="pacsStruct">структура взаимодейстивия с сервисом Pacs ProxWay</param>
+        /// <returns>структура взаимодейстивия с сервисом Pacs ProxWay</returns>
+        private static pacsProvider getUserIdProxWayByName(UriBuilder pacsUri, pacsProvider pacsStruct)
         {
             string jsonReq = "";
             string res = "";
             string msg = "";
-            string pwUserID = "";
+
             string UserSID = connectRestApi(pacsUri, false);   //получить внутренний id пользователя СКУД ProxWay
             UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
 
@@ -254,7 +365,7 @@ namespace TimeWorkTracking
                     "\"Limit\":0, " +
                     "\"StartToken\":0, " +
                     "\"AdditionalFieldsRequired\":true, " +
-                    "\"Name\":\"" + userName + "\", " +
+                    "\"Name\":\"" + pacsStruct.getUserName + "\", " +
                     "}";
 
            // '           """DepartmentToken"":0, "
@@ -270,32 +381,32 @@ namespace TimeWorkTracking
                     {
                         case 0:
                             msg = "совпадений не обнаружено";
-                            pwUserID = "";
+                            pacsStruct.respUserId = "";
                             break;
                         case 1:
                             msg = "";
-                            pwUserID = jsonRet.Employee[0].Token;   //id юзера
+                            pacsStruct.respUserId = jsonRet.Employee[0].Token;   //id юзера
                             break;
                         default:
                             msg = "обнаружено более одного пользователя" + "\r\n" + "будет использован последний";
 
                             for (int i = 0; i < jsonRet.Employee.GetLength(0); i++)
                             {
-                                pwUserID = jsonRet.Employee[i].Token;   //id юзера
+                                pacsStruct.respUserId = jsonRet.Employee[i].Token;   //id юзера
 
                                 //если нужна проверка на id сотрудника из Лоции (табельный номер в ProxWay)
-                                if (crmId.Length> 0)                    
+                                if (pacsStruct.getUserCrmId.Length> 0)                    
                                 {
-                                    if(crmId != jsonRet.Employee[i].EmployeeNumber)
+                                    if(pacsStruct.getUserCrmId != jsonRet.Employee[i].EmployeeNumber)
                                     {
-                                        pwUserID = "";
+                                        pacsStruct.respUserId = "";
                                         msg = "совпадений по табельному номеру сотрудника" + "\r\n" + "не обнаружено";
                                         break;
                                     }
                                 }
 
                                 //если нужна проверка на idExcel сотрудника из Excel базы учета рабочего времени (доп поля в ProxWay)
-                                if (extId.Length > 0) 
+                                if (pacsStruct.getUserExtId.Length > 0) 
                                 {
                                     if (jsonRet.Employee[i].AdditionalFields.GetLength(0) > 0) 
                                     {
@@ -303,9 +414,9 @@ namespace TimeWorkTracking
                                         {
                                             if(jsonRet.Employee[i].AdditionalFields[j].Name== "id базы учета рабочего времени (Excel)") 
                                             { 
-                                                if(extId != jsonRet.Employee[i].AdditionalFields[j].Value) 
+                                                if(pacsStruct.getUserExtId != jsonRet.Employee[i].AdditionalFields[j].Value) 
                                                 {
-                                                    pwUserID = "";
+                                                    pacsStruct.respUserId = "";
                                                     msg = "совпадений не обнаружено";
                                                     break;
                                                 }
@@ -315,7 +426,7 @@ namespace TimeWorkTracking
                                 }
                                 else 
                                 {
-                                    pwUserID = "";
+                                    pacsStruct.respUserId = "";
                                     msg = "совпадений не обнаружено" + "\r\n" + 
                                         "в базе ProxWay не настроены дополнительные поля сотрудника";
                                     break;
@@ -330,9 +441,9 @@ namespace TimeWorkTracking
                     MessageBox.Show(
                         "Ошибка сопоставления пользователя" + "\r\n\r\n" +
                         " по параметрам запроса" + "\r\n" +
-                        "   ФИО сотрудника        : '" + userName + "'" + "\r\n" +
-                        "   id сотрудника из Лоции: '" + crmId + "'" + "\r\n" +
-                        "   id сотрудника из Excel: '" + extId + "'" + "\r\n" +
+                        "   ФИО сотрудника        : '" + pacsStruct.getUserName + "'" + "\r\n" +
+                        "   id сотрудника из Лоции: '" + pacsStruct.getUserCrmId + "'" + "\r\n" +
+                        "   id сотрудника из Excel: '" + pacsStruct.getUserExtId + "'" + "\r\n" +
                         "\r\n" + msg, "Пользователи СКУД ProwWay", MessageBoxButtons.OK, MessageBoxIcon.Warning 
                         );
                 }
@@ -347,17 +458,16 @@ namespace TimeWorkTracking
                 res = getRestData(pacsUriLite.Uri, jsonReq, 0);
                 //jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
             }
-            return pwUserID;
+            return pacsStruct;
         }
 
         /// <summary>
         /// запрос к серверу на счет входа выхода конкретного сотрудника в/из офиса, и получение ответа
         /// </summary>
         /// <param name="pacsUri">строка подключения uriBuilder</param>
-        /// <param name="pwIdUser"> id пользователя ProxWay</param>
-        /// <param name="findDateTime">день запроса в формате "уууу.mm.dd" (поиск будет произведен на указанную дату в диапазоне времени от 00:00:00 до 23:59:59)</param>
-        /// <returns>одномерный массив - первое значение - время первого входа (если есть), второе значение - время последнего выхода (если есть)</returns>
-        private static Dictionary<string, string> checkPointPWTime(UriBuilder pacsUri, string pwIdUser, string findDateTime) 
+        /// <param name="pacsStruct">структура взаимодейстивия с сервисом Pacs ProxWay</param>
+        /// <returns>структура взаимодейстивия с сервисом Pacs ProxWay</returns>
+        private static pacsProvider checkPointPWTime(UriBuilder pacsUri, pacsProvider pacsStruct) 
         {
             string jsonReq = "";
             string res = "";
@@ -367,25 +477,18 @@ namespace TimeWorkTracking
             //            DateTime utc = DateTime.UtcNow;//времяutc без часового пояся
 
             //передача с преобразованием в универсальное время (с учетом смещения GMT)
-            DateTime utcFrom = DateTime.Parse(findDateTime + " 00:00:00");
+            DateTime utcFrom = DateTime.Parse(pacsStruct.getReguestDate + " 00:00:00");
 //            utcFrom = utcFrom.ToUniversalTime();                                                    //с учетом часового пояса (-3 часа для Москвы)
             double unixFrom = utcFrom.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
-            DateTime utcTo = DateTime.Parse(findDateTime + " 23:59:59");
+            DateTime utcTo = DateTime.Parse(pacsStruct.getReguestDate + " 23:59:59");
 //            utcTo = utcTo.ToUniversalTime();                                                        //с учетом часового пояса (-3 часа для Москвы)
             double unixTo = utcTo.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
 
             //            DateTime utcTo = DateTime.Parse(findDateTime + " 23:59:59");
             //            string unixTime = clSystemSet.convertToUnixTimeStamp(findDateTime + " 00:00:00", 3);
 
-            string[] timeArr = new string[2];
-            Dictionary<string, string> timePacs = new Dictionary<string, string>();
-            timePacs.Add("usersID", "");                                                            //id сотрудника в СКУД
-            timePacs.Add("timeIn", "");                                                             //время первого входа                       
-            timePacs.Add("timeOut", "");                                                            //время последнего выхода
-
             string UserSID = connectRestApi(pacsUri, false);                                        //получить внутренний id пользователя СКУД ProxWay
             UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
-            timePacs["usersID"] = pwIdUser;// UserSID;
             if (UserSID.Length > 0)
             {
                 //https://zetcode.com/csharp/datetime/
@@ -397,7 +500,7 @@ namespace TimeWorkTracking
                     "\"SubscriptionEnabled\":false, " +
                     "\"Limit\":0, " +
                     "\"StartToken\":0, " +
-                    "\"Employees\":[" + pwIdUser + "], " +
+                    "\"Employees\":[" + pacsStruct.respUserId + "], " +
                     "\"IssuedFrom\":\"" + @"\/Date(" + unixFrom.ToString() + @")\/" + "\", " +
                     "\"IssuedTo\":\"" + @"\/Date(" + unixTo.ToString() + @")\/" + "\", " +
                     "}";
@@ -415,23 +518,23 @@ namespace TimeWorkTracking
 
                     for (int i = 0; i < jsonRet.Event.GetLength(0); i++)
                     {
-                        if (jsonRet.Event[i].CardCode.Length > 0 && jsonRet.Event[i].User.Token == pwIdUser) //!!!если чела небыло есть проход от юзера 0??? jsonRet.Event[i].User.Token == pwIdUser
+                        if (jsonRet.Event[i].CardCode.Length > 0 && jsonRet.Event[i].User.Token == pacsStruct.respUserId) //!!!если чела небыло есть проход от юзера 0??? jsonRet.Event[i].User.Token == pwIdUser
                         {
                             switch (jsonRet.Event[i].Message.Name) 
                             {
                                 case "Вход совершен":
                                     pwDataTime = jsonRet.Event[i].Issued.ToLocalTime();     //прием с преобразованием в локальное время (с учетом смещения GMT)
-                                    if (timePacs["timeIn"] == "")
-                                        timePacs["timeIn"] = pwDataTime.ToString();
-                                    else if (pwDataTime < Convert.ToDateTime(timePacs["timeIn"]))
-                                        timePacs["timeIn"] = pwDataTime.ToString();
+                                    if (pacsStruct.respTimeIn == "")
+                                        pacsStruct.respTimeIn = pwDataTime.ToString();
+                                    else if (pwDataTime < Convert.ToDateTime(pacsStruct.respTimeIn))
+                                        pacsStruct.respTimeIn = pwDataTime.ToString();
                                     break;
                                 case "Выход совершен":
                                     pwDataTime = jsonRet.Event[i].Issued.ToLocalTime();     //прием с преобразованием в локальное время (с учетом смещения GMT)
-                                    if (timePacs["timeOut"] == "")
-                                        timePacs["timeOut"] = pwDataTime.ToString();
-                                    else if (pwDataTime > Convert.ToDateTime(timePacs["timeOut"]))
-                                        timePacs["timeOut"] = pwDataTime.ToString();
+                                    if (pacsStruct.respTimeOut == "")
+                                        pacsStruct.respTimeOut = pwDataTime.ToString();
+                                    else if (pwDataTime > Convert.ToDateTime(pacsStruct.respTimeOut))
+                                        pacsStruct.respTimeOut = pwDataTime.ToString();
                                     break;
                             }
                         }
@@ -448,7 +551,7 @@ namespace TimeWorkTracking
                 res = getRestData(pacsUriLite.Uri, jsonReq, 0);
                     //jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
             }
-            return timePacs;
+            return pacsStruct;
         }
 
         //PUBLIC------------------------------------------------------------------------
@@ -487,20 +590,15 @@ namespace TimeWorkTracking
         /// <summary>
         /// запрос к серверу на счет входа выхода конкретного сотрудника в/из офиса, и получение ответа
         /// </summary>
-        /// <param name="connectionString">строка подключения</param>
-        /// <param name="findDateTime">день запроса в формате "уууу.mm.dd" (поиск будет произведен на указанную дату в диапазоне времени от 00:00:00 до 23:59:59)</param>
-        /// <param name="crmId">id хвостик Лоции или Табельный номер пользователя в ProxWay</param>
-        /// <param name="extId">id пользователя в служебной базе РПК - учет рабочего времени</param>
-        /// <param name="userName">ФИО пользоватея (допускается использование маски через символ %) скорее всего в формате SQL для функции Like</param>
-        /// <returns>словарь - userSID, timeIn, timeOut</returns>
-        public static Dictionary<string, string> сheckPointPWTime(string findDateTime, string connectionString, string crmId, string extId, string userName)
+        /// <param name="pacsStruct">структура взаимодейстивия с сервисом Pacs ProxWay</param>
+        /// <returns>структура взаимодейстивия с сервисом Pacs ProxWay</returns>
+        public static pacsProvider сheckPointPWTime(pacsProvider pacsStruct)
         {
-            Dictionary<string, string> timePacs = new Dictionary<string, string>();
-            UriBuilder pacsUri = new UriBuilder(connectionString);
-            string pwIdUser = getUserIdProxWayByName(pacsUri, crmId, extId, userName);           //получить id юзера (токен) в proxway
-            if (pwIdUser!="")
-                timePacs = checkPointPWTime(pacsUri, pwIdUser, findDateTime);
-            return timePacs;
+            UriBuilder pacsUri = new UriBuilder(pacsStruct.getConnectionString);
+            pacsStruct = getUserIdProxWayByName(pacsUri, pacsStruct);        //получить id юзера (токен) в proxway
+            if (pacsStruct.respUserId != "")
+                pacsStruct = checkPointPWTime(pacsUri, pacsStruct);          //получить события прохода на дату
+            return pacsStruct;
         }
     }
 }
