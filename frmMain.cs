@@ -23,12 +23,13 @@ namespace TimeWorkTracking
     /// </summary>
     public struct pacsProvider
     {
-        public string srvUserId;                                    //id пользователя PACS    
-        public string srvTimeIn;                                    //информация о первом входе PACS 
-        public string srvTimeOut;                                   //информация о последнем выходе PACS
         public DateTime TimeIn;                                     //итоговое время первого прохода SQL & PACS 
         public DateTime TimeOut;                                    //итоговое время последнего выхода SQL & PACS
-        public readonly int status;                                 //статус данных
+
+        private string srvUserId;                                   //id пользователя PACS    
+        private string srvTimeIn;                                   //информация о первом входе PACS 
+        private string srvTimeOut;                                  //информация о последнем выходе PACS
+        private readonly int status;                                //статус данных
         public pacsProvider(Dictionary<string, string> date)
         {
             srvUserId = date["usersID"];
@@ -46,6 +47,54 @@ namespace TimeWorkTracking
             TimeIn = DateTime.Now.Date;
             TimeOut = DateTime.Now.Date;
 
+        }
+
+        /// <summary>
+        /// проверить и обновить данные проходов по внешним (ранее сохраненным) источникам провайдера СКУД 
+        /// </summary>
+        /// <param name="extTimeIn">внешняя дата время первого входа</param>
+        /// <param name="extTimeOut">внешняя дата время последнего выхода</param>
+        public void updatePacsTime(string extTimeIn, string extTimeOut) 
+        {
+            DateTime dateSql;
+            DateTime datePacs;
+
+            switch (status) 
+            {
+                case 1:
+
+                    return;
+            }
+
+            //время первого входа
+            if (extTimeIn != "" && srvTimeIn != "")
+            {
+                dateSql = Convert.ToDateTime(extTimeIn);
+                datePacs = Convert.ToDateTime(srvTimeIn);
+                if (dateSql < datePacs)
+                    TimeIn = dateSql;
+                else
+                    TimeIn = datePacs;
+            }
+            else if (extTimeIn != "" && srvTimeIn == "")
+                TimeIn = Convert.ToDateTime(extTimeIn);
+            else if (extTimeIn == "" && srvTimeIn != "")
+                TimeIn = Convert.ToDateTime(srvTimeIn);
+
+            //время последнего выхода
+            if (extTimeOut != "" && srvTimeOut != "")
+            {
+                dateSql = Convert.ToDateTime(extTimeOut);
+                datePacs = Convert.ToDateTime(srvTimeOut);
+                if (dateSql > datePacs)
+                    TimeOut = dateSql;
+                else
+                    TimeOut = datePacs;
+            }
+            else if (extTimeOut != "" && srvTimeOut == "")
+                TimeOut = Convert.ToDateTime(extTimeOut);
+            else if (extTimeOut == "" && srvTimeOut != "")
+                TimeOut = Convert.ToDateTime(srvTimeOut);
         }
     }
 
@@ -261,7 +310,8 @@ namespace TimeWorkTracking
                     ));
 
                 //сверим время из БД и из СКУД
-                updatePacsTime(lstwDataBaseMain.Items[ind].SubItems[15].Text, lstwDataBaseMain.Items[ind].SubItems[16].Text, Pacs.srvTimeIn, Pacs.srvTimeOut);
+                Pacs.updatePacsTime(lstwDataBaseMain.Items[ind].SubItems[15].Text, lstwDataBaseMain.Items[ind].SubItems[16].Text);
+//                updatePacsTime(lstwDataBaseMain.Items[ind].SubItems[15].Text, lstwDataBaseMain.Items[ind].SubItems[16].Text, Pacs.srvTimeIn, Pacs.srvTimeOut);
                 dtpPacsIn.Value = Pacs.TimeIn;
                 dtpPacsOut.Value = Pacs.TimeOut;
 
