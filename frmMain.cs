@@ -23,15 +23,38 @@ namespace TimeWorkTracking
     /// </summary>
     public struct pacsProvider
     {
-        public DateTime TimeIn;                                 //итоговое время первого прохода SQL & PACS 
-        public DateTime TimeOut;                                //итоговое время последнего выхода SQL & PACS
+        private string getConnectionString;                 //строка соединения с сервером
+        private string getReguestDate;                      //запрос на дату регистрации           
+        private string getUserCrmId;                        //табельный номер сотрудника CRM
+        private string getUserExtId;                        //внешний id код синхронизации сотрудника
+        private string getUserName;                         //фио сотрудника
 
-        private string srvUserId;                               //id пользователя PACS    
-        private string srvTimeIn;                               //информация о первом входе PACS 
-        private string srvTimeOut;                              //информация о последнем выходе PACS
-        private int srvStatus;                                  //статус данных пришедших от СКУД
-        private int extStatus;                                  //статус данных пришедших из ранее сохраненных источников
+        private string respUserId;                          //id пользователя PACS    
+        private string respTimeIn;                          //информация о первом входе PACS 
+        private string respTimeOut;                         //информация о последнем выходе PACS
+        private int srvStatus;                              //статус данных пришедших от СКУД
+        private int extStatus;                              //статус данных пришедших из ранее сохраненных источников
 
+        public DateTime TimeIn;                             //итоговое время первого прохода SQL & PACS 
+        public DateTime TimeOut;                            //итоговое время последнего выхода SQL & PACS
+
+        public pacsProvider(string cs, string getDate, string crmId, string extId, string fio)
+        {
+            getConnectionString = cs;
+            getReguestDate = getDate;
+            getUserCrmId = crmId;
+            getUserExtId = extId;
+            getUserName = fio;
+
+            respUserId = "";
+            respTimeIn = "";
+            respTimeOut = "";
+            srvStatus = 0;
+            extStatus = 0;
+
+            TimeIn = DateTime.Now.Date;
+            TimeOut = DateTime.Now.Date;
+        }
         private int getStatus(string inTime, string outTime) 
         {
             int ret = 0;
@@ -44,6 +67,7 @@ namespace TimeWorkTracking
 
             return ret;
         }
+ /*
         public pacsProvider(Dictionary<string, string> date)
         {
             srvUserId = date["usersID"];
@@ -54,7 +78,7 @@ namespace TimeWorkTracking
             TimeIn = DateTime.Now.Date;
             TimeOut = DateTime.Now.Date;
         }
-
+*/
         /// <summary>
         /// проверить и обновить данные проходов по внешним (ранее сохраненным) источникам провайдера СКУД 
         /// </summary>
@@ -64,7 +88,7 @@ namespace TimeWorkTracking
         {
             DateTime dateSql;
             DateTime datePacs;
-            srvStatus = getStatus(srvTimeIn, srvTimeOut);       
+            srvStatus = getStatus(respTimeIn, respTimeOut);       
             extStatus = getStatus(extTimeIn, extTimeOut);       
 
             switch (srvStatus) 
@@ -75,34 +99,34 @@ namespace TimeWorkTracking
             }
 
             //время первого входа
-            if (extTimeIn != "" && srvTimeIn != "")
+            if (extTimeIn != "" && respTimeIn != "")
             {
                 dateSql = Convert.ToDateTime(extTimeIn);
-                datePacs = Convert.ToDateTime(srvTimeIn);
+                datePacs = Convert.ToDateTime(respTimeIn);
                 if (dateSql < datePacs)
                     TimeIn = dateSql;
                 else
                     TimeIn = datePacs;
             }
-            else if (extTimeIn != "" && srvTimeIn == "")
+            else if (extTimeIn != "" && respTimeIn == "")
                 TimeIn = Convert.ToDateTime(extTimeIn);
-            else if (extTimeIn == "" && srvTimeIn != "")
-                TimeIn = Convert.ToDateTime(srvTimeIn);
+            else if (extTimeIn == "" && respTimeIn != "")
+                TimeIn = Convert.ToDateTime(respTimeIn);
 
             //время последнего выхода
-            if (extTimeOut != "" && srvTimeOut != "")
+            if (extTimeOut != "" && respTimeOut != "")
             {
                 dateSql = Convert.ToDateTime(extTimeOut);
-                datePacs = Convert.ToDateTime(srvTimeOut);
+                datePacs = Convert.ToDateTime(respTimeOut);
                 if (dateSql > datePacs)
                     TimeOut = dateSql;
                 else
                     TimeOut = datePacs;
             }
-            else if (extTimeOut != "" && srvTimeOut == "")
+            else if (extTimeOut != "" && respTimeOut == "")
                 TimeOut = Convert.ToDateTime(extTimeOut);
-            else if (extTimeOut == "" && srvTimeOut != "")
-                TimeOut = Convert.ToDateTime(srvTimeOut);
+            else if (extTimeOut == "" && respTimeOut != "")
+                TimeOut = Convert.ToDateTime(respTimeOut);
         }
     }
 
@@ -309,14 +333,19 @@ namespace TimeWorkTracking
 
                 //загружаемся из СКУД
                 Pacs = new pacsProvider(
-                        clPacsWebDataBase.сheckPointPWTime(
-                            mcRegDate.SelectionStart.ToString("yyyy.MM.dd"),                //дата регистрации           
                             Properties.Settings.Default.pacsConnectionString,               //строка соединения
+                            mcRegDate.SelectionStart.ToString("yyyy.MM.dd"),                //дата регистрации           
                             "",                                                             //crmId табельный номер из Лоции
                             lstwDataBaseMain.Items[ind].SubItems[2].Text,                   //extId внешний код для синнхронизации
                             lstwDataBaseMain.Items[ind].SubItems[1].Text                    //фио сотрудника
-                    ));
+                    );
+             //   string cs, DateTime getDate, string crmId, string extId, string fio)
 
+/*
+                Pacs = new pacsProvider(
+                        clPacsWebDataBase.сheckPointPWTime(
+                    ));
+*/
                 //сверим время из БД и из СКУД
                 Pacs.updatePacsTime(lstwDataBaseMain.Items[ind].SubItems[15].Text, lstwDataBaseMain.Items[ind].SubItems[16].Text);
 
