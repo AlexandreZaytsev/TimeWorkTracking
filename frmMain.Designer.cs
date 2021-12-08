@@ -132,7 +132,7 @@ namespace TimeWorkTracking
             this.statusStripMain.ShowItemToolTips = true;
             this.statusStripMain.Size = new System.Drawing.Size(778, 26);
             this.statusStripMain.SizingGrip = false;
-            this.statusStripMain.TabIndex = 15;
+            this.statusStripMain.TabIndex = 30;
             this.statusStripMain.Text = "statusStrip1";
             // 
             // toolStripStatusLabel2
@@ -316,7 +316,7 @@ namespace TimeWorkTracking
             this.btInsertUpdate.Margin = new System.Windows.Forms.Padding(2);
             this.btInsertUpdate.Name = "btInsertUpdate";
             this.btInsertUpdate.Size = new System.Drawing.Size(112, 31);
-            this.btInsertUpdate.TabIndex = 32;
+            this.btInsertUpdate.TabIndex = 15;
             this.btInsertUpdate.Text = "Добавить";
             this.btInsertUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btInsertUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -349,7 +349,7 @@ namespace TimeWorkTracking
             this.btDelete.Margin = new System.Windows.Forms.Padding(2);
             this.btDelete.Name = "btDelete";
             this.btDelete.Size = new System.Drawing.Size(112, 31);
-            this.btDelete.TabIndex = 34;
+            this.btDelete.TabIndex = 21;
             this.btDelete.Text = "Удалить";
             this.btDelete.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -426,7 +426,7 @@ namespace TimeWorkTracking
             this.cbDirect.Margin = new System.Windows.Forms.Padding(2);
             this.cbDirect.Name = "cbDirect";
             this.cbDirect.Size = new System.Drawing.Size(134, 26);
-            this.cbDirect.TabIndex = 0;
+            this.cbDirect.TabIndex = 20;
             // 
             // lstwDataBaseMain
             // 
@@ -442,7 +442,7 @@ namespace TimeWorkTracking
             this.lstwDataBaseMain.Name = "lstwDataBaseMain";
             this.lstwDataBaseMain.Size = new System.Drawing.Size(356, 479);
             this.lstwDataBaseMain.StateImageList = this.imgListStatusMain;
-            this.lstwDataBaseMain.TabIndex = 36;
+            this.lstwDataBaseMain.TabIndex = 0;
             this.lstwDataBaseMain.UseCompatibleStateImageBehavior = false;
             this.lstwDataBaseMain.View = System.Windows.Forms.View.SmallIcon;
             this.lstwDataBaseMain.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstwDataBaseMain_ColumnClick);
@@ -487,7 +487,7 @@ namespace TimeWorkTracking
             this.grRegistrator.Name = "grRegistrator";
             this.grRegistrator.Padding = new System.Windows.Forms.Padding(2);
             this.grRegistrator.Size = new System.Drawing.Size(394, 310);
-            this.grRegistrator.TabIndex = 37;
+            this.grRegistrator.TabIndex = 0;
             this.grRegistrator.TabStop = false;
             this.grRegistrator.Text = "Регистратор";
             // 
@@ -518,7 +518,7 @@ namespace TimeWorkTracking
             this.cbSMarks.Location = new System.Drawing.Point(101, 5);
             this.cbSMarks.Name = "cbSMarks";
             this.cbSMarks.Size = new System.Drawing.Size(273, 26);
-            this.cbSMarks.TabIndex = 19;
+            this.cbSMarks.TabIndex = 9;
             this.cbSMarks.SelectedIndexChanged += new System.EventHandler(this.cbSMarks_SelectedIndexChanged);
             // 
             // label11
@@ -543,7 +543,7 @@ namespace TimeWorkTracking
             this.smTStop.Name = "smTStop";
             this.smTStop.ShowUpDown = true;
             this.smTStop.Size = new System.Drawing.Size(70, 26);
-            this.smTStop.TabIndex = 17;
+            this.smTStop.TabIndex = 14;
             this.smTStop.ValueChanged += new System.EventHandler(this.checkDateSpecialMarks);
             // 
             // lbSmarkStop
@@ -567,7 +567,7 @@ namespace TimeWorkTracking
             this.smDStop.Margin = new System.Windows.Forms.Padding(2);
             this.smDStop.Name = "smDStop";
             this.smDStop.Size = new System.Drawing.Size(199, 26);
-            this.smDStop.TabIndex = 15;
+            this.smDStop.TabIndex = 12;
             this.smDStop.ValueChanged += new System.EventHandler(this.checkDateSpecialMarks);
             // 
             // smTStart
@@ -581,7 +581,7 @@ namespace TimeWorkTracking
             this.smTStart.Name = "smTStart";
             this.smTStart.ShowUpDown = true;
             this.smTStart.Size = new System.Drawing.Size(70, 26);
-            this.smTStart.TabIndex = 14;
+            this.smTStart.TabIndex = 11;
             this.smTStart.ValueChanged += new System.EventHandler(this.checkDateSpecialMarks);
             // 
             // lbSmarkStart
@@ -606,7 +606,7 @@ namespace TimeWorkTracking
             this.smDStart.Margin = new System.Windows.Forms.Padding(2);
             this.smDStart.Name = "smDStart";
             this.smDStart.Size = new System.Drawing.Size(199, 26);
-            this.smDStart.TabIndex = 0;
+            this.smDStart.TabIndex = 10;
             this.smDStart.ValueChanged += new System.EventHandler(this.checkDateSpecialMarks);
             // 
             // pPacs
@@ -666,7 +666,7 @@ namespace TimeWorkTracking
             this.chPacsOut.Location = new System.Drawing.Point(293, 8);
             this.chPacsOut.Name = "chPacsOut";
             this.chPacsOut.Size = new System.Drawing.Size(71, 22);
-            this.chPacsOut.TabIndex = 1;
+            this.chPacsOut.TabIndex = 8;
             this.chPacsOut.Text = "выход";
             this.chPacsOut.UseVisualStyleBackColor = true;
             this.chPacsOut.CheckedChanged += new System.EventHandler(this.chPacsOut_CheckedChanged);
@@ -677,7 +677,7 @@ namespace TimeWorkTracking
             this.chPacsIn.Location = new System.Drawing.Point(13, 8);
             this.chPacsIn.Name = "chPacsIn";
             this.chPacsIn.Size = new System.Drawing.Size(60, 22);
-            this.chPacsIn.TabIndex = 0;
+            this.chPacsIn.TabIndex = 7;
             this.chPacsIn.Text = "вход";
             this.chPacsIn.UseVisualStyleBackColor = true;
             this.chPacsIn.CheckedChanged += new System.EventHandler(this.chPacsIn_CheckedChanged);
@@ -689,7 +689,7 @@ namespace TimeWorkTracking
             this.tbNote.Multiline = true;
             this.tbNote.Name = "tbNote";
             this.tbNote.Size = new System.Drawing.Size(382, 61);
-            this.tbNote.TabIndex = 26;
+            this.tbNote.TabIndex = 14;
             // 
             // tbName
             // 
@@ -702,7 +702,7 @@ namespace TimeWorkTracking
             this.tbName.Name = "tbName";
             this.tbName.ReadOnly = true;
             this.tbName.Size = new System.Drawing.Size(381, 26);
-            this.tbName.TabIndex = 21;
+            this.tbName.TabIndex = 25;
             this.tbName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // udBeforeH
@@ -718,7 +718,7 @@ namespace TimeWorkTracking
             this.udBeforeH.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.udBeforeH.ShowUpDown = true;
             this.udBeforeH.Size = new System.Drawing.Size(68, 44);
-            this.udBeforeH.TabIndex = 16;
+            this.udBeforeH.TabIndex = 3;
             this.udBeforeH.Value = new System.DateTime(2021, 10, 21, 9, 0, 0, 0);
             this.udBeforeH.ValueChanged += new System.EventHandler(this.checkBaseTimeWork);
             // 
@@ -733,7 +733,7 @@ namespace TimeWorkTracking
             this.udBeforeM.Name = "udBeforeM";
             this.udBeforeM.ShowUpDown = true;
             this.udBeforeM.Size = new System.Drawing.Size(67, 44);
-            this.udBeforeM.TabIndex = 17;
+            this.udBeforeM.TabIndex = 4;
             this.udBeforeM.Value = new System.DateTime(2021, 10, 21, 9, 0, 0, 0);
             this.udBeforeM.ValueChanged += new System.EventHandler(this.checkBaseTimeWork);
             // 
@@ -748,7 +748,7 @@ namespace TimeWorkTracking
             this.udAfterM.Name = "udAfterM";
             this.udAfterM.ShowUpDown = true;
             this.udAfterM.Size = new System.Drawing.Size(68, 44);
-            this.udAfterM.TabIndex = 19;
+            this.udAfterM.TabIndex = 6;
             this.udAfterM.Value = new System.DateTime(2021, 10, 21, 18, 0, 0, 0);
             this.udAfterM.ValueChanged += new System.EventHandler(this.checkBaseTimeWork);
             // 
@@ -763,7 +763,7 @@ namespace TimeWorkTracking
             this.udAfterH.Name = "udAfterH";
             this.udAfterH.ShowUpDown = true;
             this.udAfterH.Size = new System.Drawing.Size(68, 44);
-            this.udAfterH.TabIndex = 18;
+            this.udAfterH.TabIndex = 5;
             this.udAfterH.Value = new System.DateTime(2021, 10, 21, 18, 0, 0, 0);
             this.udAfterH.ValueChanged += new System.EventHandler(this.checkBaseTimeWork);
             // 
@@ -810,7 +810,7 @@ namespace TimeWorkTracking
             this.gbNavigator.Name = "gbNavigator";
             this.gbNavigator.Padding = new System.Windows.Forms.Padding(2);
             this.gbNavigator.Size = new System.Drawing.Size(394, 186);
-            this.gbNavigator.TabIndex = 36;
+            this.gbNavigator.TabIndex = 0;
             this.gbNavigator.TabStop = false;
             this.gbNavigator.Text = "Производственный каледнарь";
             // 
