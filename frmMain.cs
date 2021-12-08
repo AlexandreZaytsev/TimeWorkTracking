@@ -621,7 +621,8 @@ namespace TimeWorkTracking
                             (int)((DataRowView)cbSMarks.SelectedItem).Row["id"], 
                             "-", 
                             "-", 
-                            tbNote.Text.Trim());//добавить/обновить запись прохода
+                            tbNote.Text.Trim());                                    //добавить/обновить запись прохода
+                        WritePacsInfo(vDate);                                       //добавить/обновить информацию провайдера СКУД
                         break;
 
                     default:                                                        //спец отметки есть
@@ -661,7 +662,8 @@ namespace TimeWorkTracking
                                     (int)((DataRowView)cbSMarks.SelectedItem).Row["id"],
                                     vSpDateIn,
                                     vSpDateOut,
-                                    tbNote.Text.Trim());//добавить/обновить запись прохода
+                                    tbNote.Text.Trim());                            //добавить/обновить запись прохода
+                                WritePacsInfo(vDate);                               //добавить/обновить информацию провайдера СКУД
                         }
                         else                                                        //спец отметки более одного дня
                         {
@@ -743,7 +745,7 @@ namespace TimeWorkTracking
         }
         
         /// <summary>
-        /// Добавить/Обновить запись в БД
+        /// Добавить/Обновить запись проходов в БД
         /// </summary>
         /// <param name="regDate">дата регистрации</param>
         /// <param name="vDateIn">дата время первого прохода</param>
@@ -811,7 +813,7 @@ namespace TimeWorkTracking
 //            string specmarkTimeStop = cbSMarks.Text == "-" ? "" : smDStop.Value.ToString("yyyy-MM-dd") + " " + smTStop.Value.ToString("HH:mm");  //строка Дата окончания спец. отметок
             string specmarkTimeStart;   //строка Дата начала спец. отметок 
             string specmarkTimeStop;  //строка Дата окончания спец. отметок
-            string specmarkNote = vSpNote;// tbNote.Text.Trim();            //Комментарий спец отметок
+            string specmarkNote = vSpNote == "" ? "NULL" : "N'" + vSpNote + "'";            //Комментарий спец отметок
             //------------------------
             //формулы
             double totalHoursInWork;
@@ -859,10 +861,8 @@ namespace TimeWorkTracking
             string sql =
               "UPDATE EventsPass Set " +
                 "author = " + "N'" + Environment.UserName.ToString() + "', " +
-                "passTimeStart = " + "'" + vDateIn.ToString("yyyyMMdd") + "', " +
-                "passTimeStop = " + "'" + vDateOut.ToString("yyyyMMdd") + "', " +
-//                "pacsTimeStart = " + (pacsTimeStart == "" ? "NULL" : "'" + pacsTimeStart + "'") + ", " +
-//                "pacsTimeStop = " + (pacsTimeStop == "" ? "NULL" : "'" + pacsTimeStop + "'") + ", " +
+                "passTimeStart = " + "'" + vDateIn.ToString("yyyyMMdd HH:mm") + "', " +
+                "passTimeStop = " + "'" + vDateOut.ToString("yyyyMMdd HH:mm") + "', " +
                 "timeScheduleFact = " + timeScheduleFact + ", " +
                 "timeScheduleWithoutLunch = " + timeScheduleWithoutLunch + ", " +
                 "timeScheduleLess = " + timeScheduleLess + ", " +
@@ -870,7 +870,7 @@ namespace TimeWorkTracking
                 "specmarkId = " + specmarkId + ", " +
                 "specmarkTimeStart = " + specmarkTimeStart + ", " +
                 "specmarkTimeStop = " + specmarkTimeStop + ", " +
-                "specmarkNote = " + "N'" + specmarkNote + "', " +
+                "specmarkNote = " + specmarkNote + ", " +
                 "totalHoursInWork = " + totalHoursInWork + ", " +
                 "totalHoursOutsideWork = " + totalHoursOutsideWork + " " +
               "WHERE passDate = '" + regDate.ToString("yyyyMMdd") + "' " +                   //*дата прохода
@@ -896,8 +896,8 @@ namespace TimeWorkTracking
                     "N'" + Environment.UserName.ToString() + "', " +
                     "'" + regDate.ToString("yyyyMMdd") + "', " + // mcRegDate.SelectionStart.ToString("yyyyMMdd") + "', " +
                     "'" + keyUser + "', " +
-                    "'" + vDateIn.ToString("yyyyMMdd") + "', " +
-                    "'" + vDateOut.ToString("yyyyMMdd") + "', " +
+                    "'" + vDateIn.ToString("yyyyMMdd HH:mm") + "', " +
+                    "'" + vDateOut.ToString("yyyyMMdd HH:mm") + "', " +
                     timeScheduleFact + ", " +
                     timeScheduleWithoutLunch + ", " +
                     timeScheduleLess + ", " +
@@ -905,7 +905,7 @@ namespace TimeWorkTracking
                     specmarkId + ", " +
                     specmarkTimeStart + ", " +
                     specmarkTimeStop + ", " +
-                    "N'" + specmarkNote + "', " +
+                    specmarkNote + ", " +
                     totalHoursInWork + ", " +
                     totalHoursOutsideWork +
                   ")";
@@ -932,12 +932,44 @@ namespace TimeWorkTracking
             lstwDataBaseMain.EnsureVisible(index);                          //показать в области видимости окна
         }
 
-        //Добавить/Обновить информацию от провайдера СКУД в БД
-        void WritePacsInfo(DateTime regDate, DateTime vDateIn, DateTime vDateOut, int vSpID, string vSpDateIn, string vSpDateOut, string vSpNote)
+        /// <summary>
+        /// Добавить/Обновить информацию от провайдера СКУД в БД
+        /// </summary>
+        /// <param name="regDate">дата регистрации</param>
+        void WritePacsInfo(DateTime regDate)
         {
-
-            //                    (pacsTimeStart == "" ? "NULL" : "'" + pacsTimeStart + "'") + ", " +
-            //                    (pacsTimeStop == "" ? "NULL" : "'" + pacsTimeStop + "'") + ", " +
+            if (pacsStruct.respUserId !="" && (pacsStruct.respTimeIn != "" || pacsStruct.respTimeOut != "")) 
+            { 
+                string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+                string pacsInTime = pacsStruct.respTimeIn == "" ? "NULL" : "'" + Convert.ToDateTime(pacsStruct.respTimeIn).ToString("yyyyMMdd HH:mm") + "'";
+                string pacsOutTime = pacsStruct.respTimeOut == "" ? "NULL" : "'" + Convert.ToDateTime(pacsStruct.respTimeOut).ToString("yyyyMMdd HH:mm") + "'";
+                string pascProviderName = "ProxWay";
+                string sql =
+                  "UPDATE TimeProvider Set " +
+                    "pacsTimeStart = " + pacsInTime + ", " +
+                    "pacsTimeStop = " + pacsOutTime + " " +
+                  "WHERE passDate = '" + regDate.ToString("yyyyMMdd") + "' " +  //дата события
+                    "and passId = '" + pacsStruct.getUserExtId + "' " +         //*внешний id пользователя
+                    "and pacsName = '" + pascProviderName + "' " +              //наименование провайдера
+                    "and pacsUserId = '" + pacsStruct.respUserId + "' " +       //внутренний id пользователя у провайдера
+                  "IF @@ROWCOUNT = 0 " +
+                  "INSERT INTO TimeProvider(" +
+                        "passDate, " +                                          //дата события
+                        "passId, " +                                            //*внешний id пользователя
+                        "pacsName, " +                                          //наименование провайдера
+                        "pacsUserId, " +                                        //внутренний id пользователя у провайдера
+                        "pacsTimeStart, " +                                     //время первого входа 
+                        "pacsTimeStop) " +                                      //время последнего выхода 
+                      "VALUES (" +
+                        "'" + regDate.ToString("yyyyMMdd") + "', " +
+                        "N'" + pacsStruct.getUserExtId + "', " +
+                        "N'" + pascProviderName + "', " +
+                        "N'" + pacsStruct.respUserId + "', " +
+                        pacsInTime + ", " +
+                        pacsOutTime + 
+                      ")";
+                clMsSqlDatabase.RequestNonQuery(cs, sql, false);
+            }
         }
 
         /// <summary>
@@ -967,7 +999,7 @@ namespace TimeWorkTracking
         /// <summary>
         /// обновить имя главного окна
         /// </summary>
-        private void reloadCaption() 
+        private void formCaptionUpdate() 
         {
             if (userType)
                 this.Text = "Учет рабочего времени (Администратор) " + Properties.Settings.Default.companyName;
@@ -1088,7 +1120,7 @@ namespace TimeWorkTracking
         /// <param name="param"></param>
         private void CallbackSetting(string controlName, string controlParentName, Dictionary<String, String> param)
         {
-            reloadCaption();                            //Обновить имя главного окна
+            formCaptionUpdate();                            //Обновить имя главного окна
         }
 
         /// <summary>
@@ -1127,7 +1159,7 @@ namespace TimeWorkTracking
                     tsbtGuideMarks.Visible = false;
                     break;
             }
-            reloadCaption();                            //Обновить имя главного окна
+            formCaptionUpdate();                            //Обновить имя главного окна
         }
 
     }
