@@ -332,11 +332,11 @@ namespace TimeWorkTracking
             // 
             this.tbExtID.BackColor = System.Drawing.SystemColors.Control;
             this.tbExtID.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tbExtID.Enabled = false;
             this.tbExtID.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.tbExtID.Location = new System.Drawing.Point(260, 9);
             this.tbExtID.Margin = new System.Windows.Forms.Padding(2);
             this.tbExtID.Name = "tbExtID";
+            this.tbExtID.ReadOnly = true;
             this.tbExtID.Size = new System.Drawing.Size(104, 14);
             this.tbExtID.TabIndex = 22;
             // 
