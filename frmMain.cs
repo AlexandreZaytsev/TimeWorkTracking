@@ -89,8 +89,8 @@ namespace TimeWorkTracking
             LogIn();        //авторизация
 
             string msg = "";
-            msg += conSQL ? "" :  " - сервер БД SQL - недоступен";
-            msg += conPACS ? "" : " - сервер БД PACS - недоступен";
+            msg += conSQL ? "" :  "\r\n - сервер БД SQL - недоступен";
+            msg += conPACS ? "" : "\r\n - сервер БД PACS - недоступен";
             if (msg != "") 
             {
                 msg += "\r\n\r\nперейдите в настройки программы\r\n(под аминистратором)\r\nи настройте соединение";
@@ -959,6 +959,8 @@ namespace TimeWorkTracking
                 lstwDataBaseMain.Items[index].Selected = true;
                 lstwDataBaseMain.HideSelection = false;                             //оставить выделение строки при потере фокуса ListView
                 lstwDataBaseMain.EnsureVisible(index);                              //показать в области видимости окна
+
+                BringToFront();
             }
         }
 

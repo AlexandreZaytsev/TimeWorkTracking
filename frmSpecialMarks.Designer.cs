@@ -323,7 +323,8 @@ namespace TimeWorkTracking
             // num
             // 
             this.num.Text = "№";
-            this.num.Width = 30;
+            this.num.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.num.Width = 35;
             // 
             // code
             // 
