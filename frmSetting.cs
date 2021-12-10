@@ -576,6 +576,21 @@ namespace TimeWorkTracking
 
         }
 
+        /// <summary>
+        /// событие перерисуем цвет кнопок вкладок
+        /// </summary>
+        private void tabSetting_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            TabPage page = tabSetting.TabPages[e.Index];
+            //Color col = e.Index == 0 ? Color.Aqua : Color.Yellow;
+            Color col = e.Index == 2 ? Color.WhiteSmoke : SystemColors.Control;
+            e.Graphics.FillRectangle(new SolidBrush(col), e.Bounds);
+
+            Rectangle paddedBounds = e.Bounds;
+            int yOffset = (e.State == DrawItemState.Selected) ? -2 : 1;
+            paddedBounds.Offset(1, yOffset);
+            TextRenderer.DrawText(e.Graphics, page.Text, Font, paddedBounds, page.ForeColor);
+        }
         /*--------------------------------------------------------------------------------------------  
         CALLBACK InPut (подписка на внешние сообщения)
         --------------------------------------------------------------------------------------------*/
@@ -596,6 +611,8 @@ namespace TimeWorkTracking
             }
             */
         }
+
+
     }
     /*--------------------------------------------------------------------------------------------  
     CALLBACK OutPut (собственные сообщения)

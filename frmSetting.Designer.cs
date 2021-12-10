@@ -32,6 +32,8 @@ namespace TimeWorkTracking
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSetting));
             this.mainPanelSetting = new System.Windows.Forms.Panel();
+            this.tabSetting = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.nMinutesLunchBreakTime = new System.Windows.Forms.NumericUpDown();
@@ -44,6 +46,8 @@ namespace TimeWorkTracking
             this.label8 = new System.Windows.Forms.Label();
             this.tbCompanyName = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -68,12 +72,15 @@ namespace TimeWorkTracking
             this.toolTipMsgSetting = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorkerSetting = new System.ComponentModel.BackgroundWorker();
             this.mainPanelSetting.SuspendLayout();
+            this.tabSetting.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nMinutesLunchBreakTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nMinutesChangingFullWorkDay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nHoursInFullWorkDay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nDaysInWorkWeek)).BeginInit();
+            this.tabPage2.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.statusStripSetting.SuspendLayout();
@@ -81,25 +88,50 @@ namespace TimeWorkTracking
             // 
             // mainPanelSetting
             // 
-            this.mainPanelSetting.Controls.Add(this.groupBox3);
-            this.mainPanelSetting.Controls.Add(this.groupBox2);
+            this.mainPanelSetting.Controls.Add(this.tabSetting);
             this.mainPanelSetting.Controls.Add(this.statusStripSetting);
             this.mainPanelSetting.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanelSetting.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mainPanelSetting.Location = new System.Drawing.Point(0, 0);
             this.mainPanelSetting.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.mainPanelSetting.Name = "mainPanelSetting";
-            this.mainPanelSetting.Size = new System.Drawing.Size(710, 346);
+            this.mainPanelSetting.Size = new System.Drawing.Size(707, 217);
             this.mainPanelSetting.TabIndex = 16;
+            // 
+            // tabSetting
+            // 
+            this.tabSetting.Controls.Add(this.tabPage1);
+            this.tabSetting.Controls.Add(this.tabPage3);
+            this.tabSetting.Controls.Add(this.tabPage2);
+            this.tabSetting.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabSetting.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            this.tabSetting.Location = new System.Drawing.Point(0, 0);
+            this.tabSetting.Name = "tabSetting";
+            this.tabSetting.SelectedIndex = 0;
+            this.tabSetting.Size = new System.Drawing.Size(707, 187);
+            this.tabSetting.TabIndex = 32;
+            this.tabSetting.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabSetting_DrawItem);
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage1.Controls.Add(this.groupBox3);
+            this.tabPage1.Location = new System.Drawing.Point(4, 27);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(699, 156);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Настройки";
             // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.groupBox4);
             this.groupBox3.Controls.Add(this.tbCompanyName);
             this.groupBox3.Controls.Add(this.label7);
-            this.groupBox3.Location = new System.Drawing.Point(9, 8);
+            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox3.Location = new System.Drawing.Point(3, 3);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(694, 122);
+            this.groupBox3.Size = new System.Drawing.Size(693, 150);
             this.groupBox3.TabIndex = 31;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Общие настройки";
@@ -116,7 +148,7 @@ namespace TimeWorkTracking
             this.groupBox4.Controls.Add(this.label8);
             this.groupBox4.Location = new System.Drawing.Point(9, 55);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(675, 58);
+            this.groupBox4.Size = new System.Drawing.Size(675, 65);
             this.groupBox4.TabIndex = 38;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Настройки рабочего времени (дни часы минуты)";
@@ -283,15 +315,36 @@ namespace TimeWorkTracking
             this.label7.TabIndex = 11;
             this.label7.Text = "Имя компании";
             // 
+            // tabPage3
+            // 
+            this.tabPage3.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage3.Location = new System.Drawing.Point(4, 27);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(699, 156);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Экспорт Импорт";
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage2.Controls.Add(this.groupBox2);
+            this.tabPage2.Location = new System.Drawing.Point(4, 27);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(699, 156);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Начальное заполнение данных";
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.groupBox1);
             this.groupBox2.Controls.Add(this.btFileName);
             this.groupBox2.Controls.Add(this.tbPath);
-            this.groupBox2.Location = new System.Drawing.Point(9, 136);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox2.Location = new System.Drawing.Point(3, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(694, 166);
+            this.groupBox2.Size = new System.Drawing.Size(693, 150);
             this.groupBox2.TabIndex = 30;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Импорт данных";
@@ -324,14 +377,14 @@ namespace TimeWorkTracking
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox1.Size = new System.Drawing.Size(675, 100);
+            this.groupBox1.Size = new System.Drawing.Size(675, 89);
             this.groupBox1.TabIndex = 26;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Инициализация БД";
             // 
             // tbRangePass
             // 
-            this.tbRangePass.Location = new System.Drawing.Point(408, 60);
+            this.tbRangePass.Location = new System.Drawing.Point(408, 56);
             this.tbRangePass.Margin = new System.Windows.Forms.Padding(4);
             this.tbRangePass.Name = "tbRangePass";
             this.tbRangePass.Size = new System.Drawing.Size(132, 24);
@@ -342,7 +395,7 @@ namespace TimeWorkTracking
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(315, 64);
+            this.label5.Location = new System.Drawing.Point(315, 60);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(77, 18);
@@ -352,7 +405,7 @@ namespace TimeWorkTracking
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(115, 64);
+            this.label6.Location = new System.Drawing.Point(115, 60);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(42, 18);
@@ -362,7 +415,7 @@ namespace TimeWorkTracking
             // cbSheetPass
             // 
             this.cbSheetPass.FormattingEnabled = true;
-            this.cbSheetPass.Location = new System.Drawing.Point(169, 60);
+            this.cbSheetPass.Location = new System.Drawing.Point(169, 56);
             this.cbSheetPass.Margin = new System.Windows.Forms.Padding(4);
             this.cbSheetPass.Name = "cbSheetPass";
             this.cbSheetPass.Size = new System.Drawing.Size(136, 26);
@@ -410,7 +463,7 @@ namespace TimeWorkTracking
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 63);
+            this.label1.Location = new System.Drawing.Point(7, 59);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 18);
@@ -421,7 +474,7 @@ namespace TimeWorkTracking
             // 
             this.btImportPass.ImageIndex = 7;
             this.btImportPass.ImageList = this.imgListButtonSetting;
-            this.btImportPass.Location = new System.Drawing.Point(551, 57);
+            this.btImportPass.Location = new System.Drawing.Point(551, 53);
             this.btImportPass.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btImportPass.Name = "btImportPass";
             this.btImportPass.Size = new System.Drawing.Size(112, 32);
@@ -500,11 +553,11 @@ namespace TimeWorkTracking
             this.statusStripSetting.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelInfo,
             this.toolStripProgressBarImport});
-            this.statusStripSetting.Location = new System.Drawing.Point(0, 316);
+            this.statusStripSetting.Location = new System.Drawing.Point(0, 187);
             this.statusStripSetting.Name = "statusStripSetting";
             this.statusStripSetting.Padding = new System.Windows.Forms.Padding(1, 0, 13, 0);
             this.statusStripSetting.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStripSetting.Size = new System.Drawing.Size(710, 30);
+            this.statusStripSetting.Size = new System.Drawing.Size(707, 30);
             this.statusStripSetting.SizingGrip = false;
             this.statusStripSetting.TabIndex = 25;
             this.statusStripSetting.Text = "statusStripSetting";
@@ -512,7 +565,7 @@ namespace TimeWorkTracking
             // toolStripStatusLabelInfo
             // 
             this.toolStripStatusLabelInfo.Name = "toolStripStatusLabelInfo";
-            this.toolStripStatusLabelInfo.Size = new System.Drawing.Size(334, 24);
+            this.toolStripStatusLabelInfo.Size = new System.Drawing.Size(331, 24);
             this.toolStripStatusLabelInfo.Spring = true;
             this.toolStripStatusLabelInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -525,17 +578,19 @@ namespace TimeWorkTracking
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(710, 346);
+            this.ClientSize = new System.Drawing.Size(707, 217);
             this.Controls.Add(this.mainPanelSetting);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "frmSetting";
-            this.Text = "Импорт Экспорт";
+            this.Text = "Общиен настройки Импорт Экспорт данных";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSetting_FormClosing);
             this.Load += new System.EventHandler(this.frmSetting_Load);
             this.mainPanelSetting.ResumeLayout(false);
             this.mainPanelSetting.PerformLayout();
+            this.tabSetting.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -544,6 +599,7 @@ namespace TimeWorkTracking
             ((System.ComponentModel.ISupportInitialize)(this.nMinutesChangingFullWorkDay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nHoursInFullWorkDay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nDaysInWorkWeek)).EndInit();
+            this.tabPage2.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -592,5 +648,9 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.NumericUpDown nMinutesLunchBreakTime;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TabControl tabSetting;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabPage3;
     }
 }

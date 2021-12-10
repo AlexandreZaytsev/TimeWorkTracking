@@ -94,7 +94,7 @@ namespace TimeWorkTracking
             if (msg != "") 
             {
                 msg += "\r\n\r\nперейдите в настройки программы\r\n(под аминистратором)\r\nи настройте соединение";
-                MessageBox.Show(msg, "Ошибка соединения", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(this, msg, "Ошибка соединения", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
@@ -960,7 +960,7 @@ namespace TimeWorkTracking
                 lstwDataBaseMain.HideSelection = false;                             //оставить выделение строки при потере фокуса ListView
                 lstwDataBaseMain.EnsureVisible(index);                              //показать в области видимости окна
 
-                BringToFront();                                                     //вернуть форму на передний план по Z оси
+               // BringToFront();                                                     //вернуть форму на передний план по Z оси
             }
         }
 
