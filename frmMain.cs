@@ -91,9 +91,11 @@ namespace TimeWorkTracking
             string msg = "";
             msg += conSQL ? "" :  " - сервер БД SQL - недоступен";
             msg += conPACS ? "" : " - сервер БД PACS - недоступен";
-            if (msg != "")
-                msg += "\r\n\r\nперейдите в настройки программы (под аминистратором)\r\nи настройте соединение";
+            if (msg != "") 
+            {
+                msg += "\r\n\r\nперейдите в настройки программы\r\n(под аминистратором)\r\nи настройте соединение";
                 MessageBox.Show(msg, "Ошибка соединения", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
 
         /// <summary>
@@ -634,7 +636,8 @@ namespace TimeWorkTracking
                             "-", 
                             "-", 
                             tbNote.Text.Trim(),
-                            false);                                                 //добавить/обновить запись прохода
+                            false,
+                            mcRegDate.SelectionStart);                              //добавить/обновить запись прохода
                         WritePacsInfo(vDate);                                       //добавить/обновить информацию провайдера СКУД
                         break;
 
@@ -676,7 +679,8 @@ namespace TimeWorkTracking
                                     vSpDateIn,
                                     vSpDateOut,
                                     tbNote.Text.Trim(),
-                                    false);                                         //добавить/обновить запись прохода
+                                    false,
+                                    mcRegDate.SelectionStart);                      //добавить/обновить запись прохода
                                 WritePacsInfo(vDate);                               //добавить/обновить информацию провайдера СКУД
                         }
                         else                                                        //спец отметки более одного дня
@@ -725,7 +729,8 @@ namespace TimeWorkTracking
                                             vSpDateIn, 
                                             vSpDateOut,
                                             tbNote.Text.Trim(),
-                                            i==spCount);                                     //добавить/обновить запись прохода
+                                            i!=spCount,
+                                            mcRegDate.SelectionStart);                                     //добавить/обновить запись прохода
                                 }
                             }
                         }
@@ -771,12 +776,16 @@ namespace TimeWorkTracking
         /// <param name="vSpDateOut">дата время окончания действия спец отметок</param>
         /// <param name="vSpNote">комментарий к спец отметкам</param>
         /// <param name="writeOnly">false - записать в БД и тут же обновить форму true - только записать в бд</param>
-        void WritePassInfo(DateTime regDate, DateTime vDateIn, DateTime vDateOut, int vSpID, string vSpDateIn, string vSpDateOut, string vSpNote, bool writeOnly)
+        /// <param name="currentDate">текущая дата календаря регистрации (используется при обновлении диапазона - для возврата на исходную дату при обновлении списка ListView)</param>
+        void WritePassInfo(DateTime regDate, DateTime vDateIn, DateTime vDateOut, int vSpID, string vSpDateIn, string vSpDateOut, string vSpNote, bool writeOnly, DateTime currentDate)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
             string keyUser = lstwDataBaseMain.Items[index].SubItems[2].Text;//ключевое поле внешний id пользователя
-            string keyDate = regDate.ToString("yyyyMMdd");  //mcRegDate.SelectionStart.ToString("yyyyMMdd"); //ключевое поле дата прохода
+
+//            string keyDate = regDate.ToString("yyyyMMdd");  //mcRegDate.SelectionStart.ToString("yyyyMMdd"); //ключевое поле дата прохода
+            string keyDate = currentDate.ToString("yyyyMMdd");  //mcRegDate.SelectionStart.ToString("yyyyMMdd"); //ключевое поле дата прохода
+
             int chLunch = lstwDataBaseMain.Items[index].SubItems[11].Text == "1" ? 0 : Properties.Settings.Default.minutesLunchBreakTime;  //0 мин не обедает 60 мин обедает
             int wScheme = lstwDataBaseMain.Items[index].SubItems[12].Text == "1" ? 1 : 0;   //1 режим почасовой 0 режим поминутный
             double timeScheduleFact = (vDateOut - vDateIn).TotalMinutes;    //Всего минут по факту 
