@@ -960,7 +960,7 @@ namespace TimeWorkTracking
                 lstwDataBaseMain.HideSelection = false;                             //оставить выделение строки при потере фокуса ListView
                 lstwDataBaseMain.EnsureVisible(index);                              //показать в области видимости окна
 
-                BringToFront();
+                BringToFront();                                                     //вернуть форму на передний план по Z оси
             }
         }
 
