@@ -175,15 +175,15 @@ namespace TimeWorkTracking
                     captionData[0, lengthDays + 1 + 3] = pad + "переработка";
                     headerIndex.Add("over", lengthDays + 1 + 3);
 
-                    for (int i = 1; i < dtSpecialMarks.Rows.Count; i++)                         //Цикл по массиву спец отметок
+                    for (int i = 0; i <dtSpecialMarks.Rows.Count; i++)                          //Цикл по массиву спец отметок
                     {
                         DataRow drow = dtSpecialMarks.Rows[i]; 
                         if (drow.RowState != DataRowState.Deleted)                              //Only row that have not been deleted
                         {
                             if (drow["letterCode"].ToString() != "Я") 
                             {
-                                headerIndex.Add(drow["letterCode"].ToString(), lengthDays + 4 + i); //добавить значение словаря заголока
-                                captionData[0, lengthDays + 4 + i] = pad +
+                                headerIndex.Add(drow["letterCode"].ToString(), lengthDays + 4 + i + 1); //добавить значение словаря заголока
+                                captionData[0, lengthDays + 4 + i + 1] = pad +
                                     "+(" + drow["letterCode"].ToString() + ") " +
                                     drow["name"].ToString().Wrap(20, "\r\n" + pad);             //используем wrap перенос по словам
                             }
