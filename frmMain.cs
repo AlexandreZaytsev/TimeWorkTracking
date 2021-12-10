@@ -27,7 +27,7 @@ namespace TimeWorkTracking
         private readonly clCalendar pCalendar;                      //класс производственный календаоь
         public bool userType;                                       //текщий юзер false - пользователь true - админ
         private bool conSQL;                                        //статус соединения с серверов SQL
-        private bool conWeb;                                        //статус соединения с сервером СКУД
+        private bool conPACS;                                       //статус соединения с сервером СКУД
 
         //*используется при проверке диапазона ДатыВремени регистрации базового времени и времени специальных отметок
         private bool readType;                                      //true - чтение из списка/БД false - запись в БД  
@@ -87,6 +87,13 @@ namespace TimeWorkTracking
         private void frmMain_Shown(object sender, EventArgs e)
         {
             LogIn();        //авторизация
+
+            string msg = "";
+            msg += conSQL ? "" :  " - сервер БД SQL - недоступен";
+            msg += conPACS ? "" : " - сервер БД PACS - недоступен";
+            if (msg != "")
+                msg += "\r\n\r\nперейдите в настройки программы (под аминистратором)\r\nи настройте соединение";
+                MessageBox.Show(msg, "Ошибка соединения", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         /// <summary>
@@ -232,7 +239,7 @@ namespace TimeWorkTracking
                             lstwDataBaseMain.Items[ind].SubItems[2].Text,                   //extId внешний код для синнхронизации
                             lstwDataBaseMain.Items[ind].SubItems[1].Text                    //фио сотрудника
                     );
-                if (conWeb) 
+                if (conPACS) 
                 {
                     clPacsWebDataBase.сheckPointPWTime(ref pacsStruct);
                 }
@@ -364,11 +371,11 @@ namespace TimeWorkTracking
             string csPACS = Properties.Settings.Default.pacsConnectionString;
 //            bool pingPACS = csPACS != "" && clSystemSet.CheckHost(csPACS);            //здесь pacs сервер (внутри сети)
             bool pingPACS = csPACS != "" && clSystemSet.CheckPing(hostPACS);
-            conWeb = false;
+            conPACS = false;
             if (!pingPACS)
                 msg += "Cетевое имя сервера СКУД\r\n  " + csPACS + "- недоступено\r\n";
             else
-                conWeb = clPacsWebDataBase.pacsConnectSimple(csPACS);
+                conPACS = clPacsWebDataBase.pacsConnectSimple(csPACS);
             //                conWeb = clPacsWebDataBase.pacsConnectSimple(csPACS);
 
             this.tsbtDataBasePACS.Image = pingPACS ? Properties.Resources.ok : Properties.Resources.no;
