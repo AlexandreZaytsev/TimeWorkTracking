@@ -103,7 +103,11 @@ namespace TimeWorkTracking
         }
         #endregion
 
-        //двойное нажатие на тексте
+        /// <summary>
+        /// событие двойное нажатие на тексте комментария
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void textBoxDescription_DoubleClick(object sender, EventArgs e)
         {
             string txt = ((System.Windows.Forms.TextBoxBase)sender).SelectedText;

@@ -22,12 +22,15 @@ namespace TimeWorkTracking
 
     public partial class frmMain : Form
     {
+        public pacsProvider pacsStruct;                             //структура данных для работы с результатами запроса к СКУД(PACS)
         clListViewItemComparer _lvwItemComparer;                    //объект сортировки по колонкам
         private readonly clCalendar pCalendar;                      //класс производственный календаоь
-        public bool userType;                                       //false - пользователь true - админ
-        private bool readType;                                      //true - чтение из списка/БД false - запись в БД  
-        public pacsProvider pacsStruct;                             //структура данных для работы с результатами запроса к СКУД(PACS)
+        public bool userType;                                       //текщий юзер false - пользователь true - админ
+        private bool conSQL;                                        //статус соединения с серверов SQL
+        private bool conWeb;                                        //статус соединения с сервером СКУД
 
+        //*используется при проверке диапазона ДатыВремени регистрации базового времени и времени специальных отметок
+        private bool readType;                                      //true - чтение из списка/БД false - запись в БД  
         public frmMain()
         {
             //подписка события внешних форм 
@@ -50,8 +53,8 @@ namespace TimeWorkTracking
         private void frmMain_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-                                                                            //            webInfoDay.Visible = false;
-            if (CheckConnects())                                            //проверить соединение с базами
+            CheckConnects();                                                //проверить соединение с базами SQL и СКУД/PACS
+            if (conSQL)                                                     //проверить соединение с базами
             {
                 //                webInfoDay.Visible = true;
                 pCalendar.uploadCalendar(cs, "Select * From twt_GetDateInfo('', '') order by dWork");   //прочитаем данные производственного календаря
@@ -229,7 +232,10 @@ namespace TimeWorkTracking
                             lstwDataBaseMain.Items[ind].SubItems[2].Text,                   //extId внешний код для синнхронизации
                             lstwDataBaseMain.Items[ind].SubItems[1].Text                    //фио сотрудника
                     );
-                clPacsWebDataBase.сheckPointPWTime(ref pacsStruct);
+                if (conWeb) 
+                {
+                    clPacsWebDataBase.сheckPointPWTime(ref pacsStruct);
+                }
                 //сверим время из БД и из СКУД
                 pacsStruct.updatePacsTime(lstwDataBaseMain.Items[ind].SubItems[15].Text, lstwDataBaseMain.Items[ind].SubItems[16].Text);
                 dtpPacsIn.Value = pacsStruct.TimeIn;
@@ -332,14 +338,13 @@ namespace TimeWorkTracking
         /// <summary>
         /// проверить соединение с базами SQL и СКУД/PACS
         /// </summary>
-        /// <returns></returns>
-        private bool CheckConnects()
+        private void CheckConnects()
         {
             string msg = "";
             string hostSQL = Properties.Settings.Default.twtServerName;
             string csSQL = Properties.Settings.Default.twtConnectionSrting;
             bool pingSQL = csSQL != "" && clSystemSet.CheckPing(hostSQL);               //здесь sql сервер (внутри сети)
-            bool conSQL = false;
+            conSQL = false;
             if (!pingSQL)
                 msg += "Cетевое имя сервера SQL\r\n  " + hostSQL + "- недоступно\r\n\r\n";
             else
@@ -359,15 +364,14 @@ namespace TimeWorkTracking
             string csPACS = Properties.Settings.Default.pacsConnectionString;
 //            bool pingPACS = csPACS != "" && clSystemSet.CheckHost(csPACS);            //здесь pacs сервер (внутри сети)
             bool pingPACS = csPACS != "" && clSystemSet.CheckPing(hostPACS);
-            bool conWeb;// = false;
+            conWeb = false;
             if (!pingPACS)
                 msg += "Cетевое имя сервера СКУД\r\n  " + csPACS + "- недоступено\r\n";
             else
-                clPacsWebDataBase.pacsConnectSimple(csPACS);
+                conWeb = clPacsWebDataBase.pacsConnectSimple(csPACS);
             //                conWeb = clPacsWebDataBase.pacsConnectSimple(csPACS);
 
             this.tsbtDataBasePACS.Image = pingPACS ? Properties.Resources.ok : Properties.Resources.no;
-            return conSQL;
         }
 
         /// <summary>
@@ -388,7 +392,8 @@ namespace TimeWorkTracking
             return "обработано " + count.ToString() + " из " + lstwDataBaseMain.Items.Count.ToString();
         }
 
-//  STATUS STRIP 
+        #region Методы меню STATUS STRIP
+
         /// <summary>
         /// событие кнока help 
         /// </summary>
@@ -505,7 +510,7 @@ namespace TimeWorkTracking
             frm.ShowDialog();
         }
 
-//  STATUS STRIP 
+        #endregion
 
         /// <summary>
         /// событие изменение специальных отметок 
@@ -621,7 +626,8 @@ namespace TimeWorkTracking
                             (int)((DataRowView)cbSMarks.SelectedItem).Row["id"], 
                             "-", 
                             "-", 
-                            tbNote.Text.Trim());                                    //добавить/обновить запись прохода
+                            tbNote.Text.Trim(),
+                            false);                                                 //добавить/обновить запись прохода
                         WritePacsInfo(vDate);                                       //добавить/обновить информацию провайдера СКУД
                         break;
 
@@ -662,7 +668,8 @@ namespace TimeWorkTracking
                                     (int)((DataRowView)cbSMarks.SelectedItem).Row["id"],
                                     vSpDateIn,
                                     vSpDateOut,
-                                    tbNote.Text.Trim());                            //добавить/обновить запись прохода
+                                    tbNote.Text.Trim(),
+                                    false);                                         //добавить/обновить запись прохода
                                 WritePacsInfo(vDate);                               //добавить/обновить информацию провайдера СКУД
                         }
                         else                                                        //спец отметки более одного дня
@@ -701,7 +708,8 @@ namespace TimeWorkTracking
                                     vDate = DateTime.Parse(vSpDateIn).AddDays(i);           //смещение на день
                                     vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + DateTime.Parse(timeIn).ToString("HH:mm"));        //+ Время начала из графика
                                     vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + DateTime.Parse(timeOut).ToString("HH:mm"));      //+ Время окончания из графика
-                                    if (pCalendar.chechWorkDay(vDate))                  //если это рабочий день
+                                    if (pCalendar.chechWorkDay(vDate))                      //если это рабочий день
+                                        //на последнем шаге разрешить обновление данных в форме
                                         WritePassInfo(
                                             vDate,
                                             vDateIn,
@@ -709,7 +717,8 @@ namespace TimeWorkTracking
                                             (int)((DataRowView)cbSMarks.SelectedItem).Row["id"],
                                             vSpDateIn, 
                                             vSpDateOut,
-                                            tbNote.Text.Trim());//добавить/обновить запись прохода
+                                            tbNote.Text.Trim(),
+                                            i==spCount);                                     //добавить/обновить запись прохода
                                 }
                             }
                         }
@@ -743,7 +752,7 @@ namespace TimeWorkTracking
                 }
             }
         }
-        
+
         /// <summary>
         /// Добавить/Обновить запись проходов в БД
         /// </summary>
@@ -754,7 +763,8 @@ namespace TimeWorkTracking
         /// <param name="vSpDateIn">дата время начала действия спец отметок</param>
         /// <param name="vSpDateOut">дата время окончания действия спец отметок</param>
         /// <param name="vSpNote">комментарий к спец отметкам</param>
-        void WritePassInfo(DateTime regDate, DateTime vDateIn, DateTime vDateOut, int vSpID, string vSpDateIn, string vSpDateOut, string vSpNote)
+        /// <param name="writeOnly">false - записать в БД и тут же обновить форму true - только записать в бд</param>
+        void WritePassInfo(DateTime regDate, DateTime vDateIn, DateTime vDateOut, int vSpID, string vSpDateIn, string vSpDateOut, string vSpNote, bool writeOnly)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
@@ -925,11 +935,14 @@ namespace TimeWorkTracking
             sql = "UPDATE SpecialMarks Set rating = " + specialMarksRating + " Where id = " + specmarkId;
             clMsSqlDatabase.RequestNonQuery(cs, sql, false);
             
-            //обновление информации регистрации списка сотрудников
-            LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + keyDate + "','') order by fio"));
-            lstwDataBaseMain.Items[index].Selected = true;
-            lstwDataBaseMain.HideSelection = false;                         //оставить выделение строки при потере фокуса ListView
-            lstwDataBaseMain.EnsureVisible(index);                          //показать в области видимости окна
+            if (!writeOnly) 
+            {
+                //обновление информации регистрации списка сотрудников
+                LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + keyDate + "','') order by fio"));
+                lstwDataBaseMain.Items[index].Selected = true;
+                lstwDataBaseMain.HideSelection = false;                             //оставить выделение строки при потере фокуса ListView
+                lstwDataBaseMain.EnsureVisible(index);                              //показать в области видимости окна
+            }
         }
 
         /// <summary>
@@ -1024,7 +1037,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// событие (не)использование значения СКУД первый проход
+        /// событие использовать или не использовать значение времени СКУД при регистрации - первый проход
         /// </summary>
         private void chPacsIn_CheckedChanged(object sender, EventArgs e)
         {
@@ -1035,7 +1048,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// событие (не)использование значения СКУД последний выход
+        /// событие использовать или не использовать значение времени СКУД при регистрации - последний выход
         /// </summary>
         private void chPacsOut_CheckedChanged(object sender, EventArgs e)
         {
@@ -1101,7 +1114,7 @@ namespace TimeWorkTracking
         /// <param name="param">параметры ключ-значение.</param>
         private void CallbackReload(string controlName, string controlParentName, Dictionary<String, String> param)
         {
-            CheckConnects();        //проверить соединение с базами
+            CheckConnects();                                                //проверить соединение с базами SQL и СКУД/PACS
             /*
             if (param.Count() != 0)
             {
