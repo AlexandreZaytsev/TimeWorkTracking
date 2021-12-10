@@ -599,14 +599,15 @@ namespace TimeWorkTracking
         {
             DialogResult response = DialogResult.No;
             string msg;
-            DateTime vDate;
-            DateTime vDateIn;
-            DateTime vDateOut;
-            string vSpDateIn;
-            string vSpDateOut;
-            string timeIn;
-            string timeOut;
-            int spCount;
+            DateTime vDate;                                                 //дата регистрации
+            DateTime vDateIn;                                               //дата/время входа
+            DateTime vDateOut;                                              //дата/время выхода
+            string vSpDateIn;                                               //дата/время начала спец отметок
+            string vSpDateOut;                                              //дата/время окончания спец отметок
+            int spCount;                                                    //количество дней диапазона спец отметок
+            string timeIn;                                                  //Время начала работы по графику
+            string timeOut;                                                 //Время окончания работы по графику
+            bool move = btInsertUpdate.Text == "Добавить";                  //использовать перемещение по списку после добавления записи
 
             if (cbSMarks.Text == "") //спец отметок нет - возможно смотрим историю (и спецотметка отключена в настоящий момент)
             {
@@ -738,7 +739,7 @@ namespace TimeWorkTracking
                 }
             }
             //перемещение по списку
-            if (btInsertUpdate.Text != "Обновить")
+            if (move)
             {
                 int index = lstwDataBaseMain.extSelectedIndex();
                 if (cbDirect.Text == "слева направо")
