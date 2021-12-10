@@ -18,6 +18,9 @@ namespace TimeWorkTracking
             lMsg.Visible = false;               //погасить сообщение о записи в БД
         }
 
+        /// <summary>
+        /// событие загрузка главной формы 
+        /// </summary>
         private void frmUsers_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
@@ -48,7 +51,10 @@ namespace TimeWorkTracking
                     lstwDataBaseUsers.Items[0].Selected = true;     //выделить элемент по индексу
             }
         }
-        // Initialize ListView
+
+        /// <summary>
+        /// Initialize ListView  
+        /// </summary>
         private void InitializeListView()
         {
             lstwDataBaseUsers.View = View.Details;               // Set the view to show details.
@@ -71,7 +77,10 @@ namespace TimeWorkTracking
             lstwDataBaseUsers.ListViewItemSorter = _lvwItemComparer;
         }
 
-        //Загрузить Data из DataSet в ListView
+        /// <summary>
+        /// Загрузить Data из DataSet в ListView
+        /// </summary>
+        /// <param name="dtable"></param>
         private void LoadList(DataTable dtable)
         {
             lstwDataBaseUsers.Items.Clear();                // Clear the ListView control
@@ -106,7 +115,10 @@ namespace TimeWorkTracking
             //после загрузки списка установить авторазмер последней колонки
             lstwDataBaseUsers.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
         }
-        //сортировка по заголовке столбца
+
+        /// <summary>
+        /// событие сортировка по заголовке столбца ListView 
+        /// </summary>
         private void lstwDataBaseUsers_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             // Determine if clicked column is already the column that is being sorted.
@@ -128,7 +140,9 @@ namespace TimeWorkTracking
             this.lstwDataBaseUsers.Sort();
         }
 
-        //выбор значения из списка инициализация переменных формы
+        /// <summary>
+        /// событие выбор значения из списка ListView инициализация переменных формы
+        /// </summary>
         private void lstwDataBaseUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
             DateTime dt;
@@ -153,20 +167,27 @@ namespace TimeWorkTracking
                 tbCrmID.Text = lstwDataBaseUsers.Items[ind].SubItems[10].Text;                  //crmID
             }
         }
-        //запретить изменение размеров
+
+        /// <summary>
+        /// событие запретить изменение размеров колонок ListView
+        /// </summary>
         private void lstwDataBaseUsers_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             e.Cancel = true;
             e.NewWidth = lstwDataBaseUsers.Columns[e.ColumnIndex].Width;
         }
 
-        //чекбокс Сотрудник активен
+        /// <summary>
+        /// событие чекбокс Сотрудник активен
+        /// </summary>
         private void chUse_CheckedChanged(object sender, EventArgs e)
         {
             chUse.ImageIndex = chUse.Checked ? 1 : 0;
         }
 
-        //редактирование списка Департамент
+        /// <summary>
+        /// событие редактирование списка Департамент 
+        /// </summary>
         private void cbDepartment_TextChanged(object sender, EventArgs e)
         {
             if (cbDepartment.FindString(cbDepartment.Text) == -1)
@@ -174,7 +195,10 @@ namespace TimeWorkTracking
             else
                 cbDepartment.BackColor = System.Drawing.SystemColors.Control;
         }
-        //редактирование списка Должность
+
+        /// <summary>
+        /// событие редактирование списка Должность 
+        /// </summary>
         private void cbPost_TextChanged(object sender, EventArgs e)
         {
             if (cbPost.FindString(cbPost.Text) == -1)
@@ -182,7 +206,10 @@ namespace TimeWorkTracking
             else
                 cbPost.BackColor = System.Drawing.SystemColors.Control;
         }
-        //редактирование ключевого поля Имя 
+
+        /// <summary>
+        /// событие редактирование ключевого поля Имя сотрудника 
+        /// </summary>
         private void tbName_TextChanged(object sender, EventArgs e)
         {
             if (tbName.Text.Trim().Length == 0)                             //если поле пустое
@@ -223,7 +250,9 @@ namespace TimeWorkTracking
             }
         }
 
-        //кнопка Добавить запись в БД
+        /// <summary>
+        /// событие кнопка Добавить запись в БД 
+        /// </summary>
         private void btInsert_Click(object sender, EventArgs e)
         {
             string key = DateTime.Now.ToString("yyyyMMddHHmmss");               //ключевое поле
@@ -261,7 +290,9 @@ namespace TimeWorkTracking
             tbName_TextChanged(null, null);                                     //обновить поля и кнопки
         }
 
-        //кнопка Обновить запись в БД
+        /// <summary>
+        /// событие кнопка Обновить запись в БД
+        /// </summary>
         private void btUpdate_Click(object sender, EventArgs e)
         {
             string key = tbExtID.Text.Trim();                                   //ключевое поле
@@ -286,21 +317,29 @@ namespace TimeWorkTracking
             tbName_TextChanged(null, null);                                     //обновить поля и кнопки
         }
 
-        //наехали на кнопку Insert загасили id
+        /// <summary>
+        /// событие наехали на кнопку Insert загасили id 
+        /// </summary>
         private void btInsert_MouseHover(object sender, EventArgs e)
         {
             tbExtID.Visible = false;
             lMsg.Visible = true;
             btUpdate.Visible = false;
         }
-        //уехали с кнопки Insert показали id
+
+        /// <summary>
+        /// событие уехали с кнопки Insert показали id 
+        /// </summary>
         private void btInsert_MouseLeave(object sender, EventArgs e)
         {
             tbExtID.Visible = true;
             lMsg.Visible = false;
             btUpdate.Visible = true;
         }
-        //ввод только цифр
+
+        /// <summary>
+        /// событие ввод только цифр в поле crmId
+        /// </summary>
         private void tbCrmID_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
