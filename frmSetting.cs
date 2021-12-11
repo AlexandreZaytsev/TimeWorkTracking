@@ -329,9 +329,27 @@ namespace TimeWorkTracking
         /// </summary>
         private void checkPathExportImport()
         {
-            btMainImport.Enabled = tbMainImportPath.Text != "";
+            if (tbMainImportPath.Text != "") 
+            {
+                cbSheetTable.Items.Clear();
+                cbSheetTable.Items.AddRange(getnameSheetsExcel(tbMainImportPath.Text).ToArray());
+                cbSheetTable.Enabled = true;
+                btMainImport.Enabled = false;
+            }
+            else 
+            {
+                cbSheetTable.Items.Clear();
+                cbSheetTable.ResetText();
+                cbSheetTable.Enabled = false;
+                btMainImport.Enabled = false;
+            }
             btMainExport.Enabled = tbMainExportPath.Text != "";
         }
+        private void cbSheetTable_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btMainImport.Enabled = true;
+        }
+
         #endregion
 
         /// <summary>
@@ -1031,6 +1049,7 @@ namespace TimeWorkTracking
             }
             */
         }
+
 
 
 

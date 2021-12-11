@@ -54,6 +54,8 @@ namespace TimeWorkTracking
             this.btMainExportPathSave = new System.Windows.Forms.Button();
             this.tbMainExportPath = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.cbSheetTable = new System.Windows.Forms.ComboBox();
             this.label13 = new System.Windows.Forms.Label();
             this.btMainImport = new System.Windows.Forms.Button();
             this.btMainImportPathOpen = new System.Windows.Forms.Button();
@@ -349,9 +351,9 @@ namespace TimeWorkTracking
             this.groupBox6.Controls.Add(this.btMainExportPathSave);
             this.groupBox6.Controls.Add(this.tbMainExportPath);
             this.groupBox6.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox6.Location = new System.Drawing.Point(0, 79);
+            this.groupBox6.Location = new System.Drawing.Point(0, 97);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(699, 77);
+            this.groupBox6.Size = new System.Drawing.Size(699, 59);
             this.groupBox6.TabIndex = 32;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Экспорт данных";
@@ -420,6 +422,8 @@ namespace TimeWorkTracking
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.label15);
+            this.groupBox5.Controls.Add(this.cbSheetTable);
             this.groupBox5.Controls.Add(this.label13);
             this.groupBox5.Controls.Add(this.btMainImport);
             this.groupBox5.Controls.Add(this.btMainImportPathOpen);
@@ -427,10 +431,31 @@ namespace TimeWorkTracking
             this.groupBox5.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox5.Location = new System.Drawing.Point(0, 0);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(699, 73);
+            this.groupBox5.Size = new System.Drawing.Size(699, 91);
             this.groupBox5.TabIndex = 31;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Импорт данных";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(17, 59);
+            this.label15.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(42, 18);
+            this.label15.TabIndex = 33;
+            this.label15.Text = "Лист";
+            // 
+            // cbSheetTable
+            // 
+            this.cbSheetTable.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbSheetTable.FormattingEnabled = true;
+            this.cbSheetTable.Location = new System.Drawing.Point(84, 55);
+            this.cbSheetTable.Margin = new System.Windows.Forms.Padding(4);
+            this.cbSheetTable.Name = "cbSheetTable";
+            this.cbSheetTable.Size = new System.Drawing.Size(486, 26);
+            this.cbSheetTable.TabIndex = 32;
+            this.cbSheetTable.SelectedIndexChanged += new System.EventHandler(this.cbSheetTable_SelectedIndexChanged);
             // 
             // label13
             // 
@@ -446,7 +471,7 @@ namespace TimeWorkTracking
             // 
             this.btMainImport.ImageIndex = 6;
             this.btMainImport.ImageList = this.imgListButtonSetting;
-            this.btMainImport.Location = new System.Drawing.Point(577, 19);
+            this.btMainImport.Location = new System.Drawing.Point(577, 52);
             this.btMainImport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btMainImport.Name = "btMainImport";
             this.btMainImport.Size = new System.Drawing.Size(116, 32);
@@ -459,7 +484,7 @@ namespace TimeWorkTracking
             // btMainImportPathOpen
             // 
             this.btMainImportPathOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btMainImportPathOpen.Location = new System.Drawing.Point(531, 21);
+            this.btMainImportPathOpen.Location = new System.Drawing.Point(653, 21);
             this.btMainImportPathOpen.Margin = new System.Windows.Forms.Padding(4);
             this.btMainImportPathOpen.Name = "btMainImportPathOpen";
             this.btMainImportPathOpen.Size = new System.Drawing.Size(39, 28);
@@ -474,7 +499,7 @@ namespace TimeWorkTracking
             this.tbMainImportPath.Margin = new System.Windows.Forms.Padding(4);
             this.tbMainImportPath.Name = "tbMainImportPath";
             this.tbMainImportPath.ReadOnly = true;
-            this.tbMainImportPath.Size = new System.Drawing.Size(439, 24);
+            this.tbMainImportPath.Size = new System.Drawing.Size(561, 24);
             this.tbMainImportPath.TabIndex = 6;
             // 
             // tabPage2
@@ -702,7 +727,7 @@ namespace TimeWorkTracking
             // toolStripStatusLabelInfo
             // 
             this.toolStripStatusLabelInfo.Name = "toolStripStatusLabelInfo";
-            this.toolStripStatusLabelInfo.Size = new System.Drawing.Size(331, 24);
+            this.toolStripStatusLabelInfo.Size = new System.Drawing.Size(441, 24);
             this.toolStripStatusLabelInfo.Spring = true;
             this.toolStripStatusLabelInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -816,5 +841,7 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Button btMainExportPathSave;
         private System.Windows.Forms.TextBox tbMainExportPath;
         private System.Windows.Forms.Timer timerImportExport;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.ComboBox cbSheetTable;
     }
 }
