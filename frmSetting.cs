@@ -13,7 +13,10 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using System.Windows;
+using System.Runtime.InteropServices;
 using Excel = Microsoft.Office.Interop.Excel;
+using System.Diagnostics;
+
 
 
 
@@ -31,6 +34,18 @@ namespace TimeWorkTracking
         private Excel.Range workRange;
         readonly object mis = Type.Missing;
         private int timerSec = 4;                                       //количество секунд после выходв из потока
+
+        [DllImport("user32.dll")]
+        static extern int GetWindowThreadProcessId(int hWnd, out int lpdwProcessId);
+        Process GetExcelProcess(Excel.Application excelApp)
+        {
+            int id;
+            GetWindowThreadProcessId(excelApp.Hwnd, out id);
+            return Process.GetProcessById(id);
+        }
+
+
+
 
         /// <summary>
         /// конструктор
@@ -411,7 +426,6 @@ namespace TimeWorkTracking
             DataTable dt = new DataTable();
             string path = inArgument[1];
 
-           // dt.ExportToExcel(path);
             try
             {
                 int ColumnsCount;
@@ -472,32 +486,112 @@ namespace TimeWorkTracking
                         }
                         workSheet.get_Range((Excel.Range)(workSheet.Cells[2, 1]), (Excel.Range)(workSheet.Cells[RowsCount + 1, ColumnsCount])).Value = Cells;
                     }
-                }    
-
-                 // check fielpath
-                 if (path != null && path != "")
-                 {
-                     try
-                     {
-                        workSheet.SaveAs(path);
-                        excelApp.Quit();
-                     }
-                     catch (Exception ex)
-                     {
-                         throw new Exception("ExportToExcel: Excel file could not be saved! Check filepath.\n"
-                             + ex.Message);
-                     }
-                 }
-                 else    // no filepath is given
-                 {
-                    excelApp.Visible = true;
-                 }
+                }
             }
             catch (Exception ex)
             {
                 throw new Exception("ExportToExcel: \n" + ex.Message);
             }
+            finally
+            {
+
+               // GetWindowThreadProcessId((IntPtr)excelApp.Hwnd, out iProcessId);
+                try
+                {
+                    workBook.SaveAs(path, Excel.XlFileFormat.xlOpenXMLWorkbook, mis, mis, mis, mis, Excel.XlSaveAsAccessMode.xlNoChange, mis, mis, mis, mis, mis);
+                    //   workBook.SaveAs(path);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("ExportToExcel: Excel file could not be saved! Check filepath.\n"
+                        + ex.Message);
+                }
+                workBook.Close(true);// null, null, null);
+
+                while (Marshal.ReleaseComObject(workBook) > 0) { }
+                workBook = null;
+           //     while (Marshal.ReleaseComObject(sheets) > 0) { }
+           //     sheets = null;
+                while (Marshal.ReleaseComObject(workSheet) > 0) { }
+                workSheet = null;
+                if (workRange != null) 
+                {
+                    while (Marshal.ReleaseComObject(workRange) > 0) { }
+                    workRange = null;
+                }
+                GC();
+                
+                int iProcessId;
+                GetWindowThreadProcessId(excelApp.Hwnd, out iProcessId);
+
+                excelApp.Quit();
+                while (Marshal.ReleaseComObject(excelApp) > 0) { }
+                excelApp = null;
+                GC();
+
+                //контрольный выстрел в голову
+                System.Diagnostics.Process[] process = System.Diagnostics.Process.GetProcessesByName("Excel");
+                foreach (System.Diagnostics.Process p in process)
+                {
+                    if (p.Id == iProcessId)
+                    {
+                        try
+                        {
+                            p.Kill();
+                        }
+                        catch { }
+                    }
+                }
+                /*
+                                if (workRange != null) Marshal.ReleaseComObject(workRange);
+
+                                foreach (Excel.Worksheet sheet in excelApp.Worksheets)
+                                {
+                                    if (sheet != null) Marshal.ReleaseComObject(sheet);
+                                }
+                                workSheet = null;
+                                //                Marshal.ReleaseComObject(sheets);
+                                excelApp.DisplayAlerts = false;
+                                try
+                                {
+                                       workBook.SaveAs(path, Excel.XlFileFormat.xlOpenXMLWorkbook, mis, mis, mis, mis, Excel.XlSaveAsAccessMode.xlNoChange, mis, mis, mis, mis, mis);
+                                 //   workBook.SaveAs(path);
+                                }
+                                catch (Exception ex)
+                                {
+                                    throw new Exception("ExportToExcel: Excel file could not be saved! Check filepath.\n"
+                                        + ex.Message);
+                                }
+
+                                foreach (Excel.Workbook book in excelApp.Workbooks)
+                                {
+                                    book.Close(true);// null, null, null);
+                                    if (book != null) Marshal.ReleaseComObject(book);
+                                    //book = null;
+                                }
+                         //       workBook.Close(true);// null, null, null);
+                         //       if(workBook != null) Marshal.ReleaseComObject(workBook);
+                                workBook = null;
+                //
+                //
+                //              Marshal.ReleaseComObject(workbooks);
+                                excelApp.Quit();
+                                if (excelApp != null) Marshal.ReleaseComObject(excelApp);
+                                excelApp = null;
+
+                                GC.Collect();
+                */
+
+            }
             return "export";
+        }
+
+        public static void GC()
+        {
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
         }
 
         /// <summary>
