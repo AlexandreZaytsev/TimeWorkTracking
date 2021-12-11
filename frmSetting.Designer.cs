@@ -480,6 +480,7 @@ namespace TimeWorkTracking
             this.btMainImport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btMainImport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btMainImport.UseVisualStyleBackColor = true;
+            this.btMainImport.Click += new System.EventHandler(this.btMainImport_Click);
             // 
             // btMainImportPathOpen
             // 

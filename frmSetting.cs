@@ -142,7 +142,9 @@ namespace TimeWorkTracking
                 case "export":
                     e.Result = MainExportToExcel(worker, e);
                     break;
-
+                case "import":
+                    e.Result = MainImportFromExcel(worker, e);
+                    break;
             }
         }
 
@@ -187,6 +189,9 @@ namespace TimeWorkTracking
                         break;
                     case "export":                                                            //если завершился иморт проходов
                         toolStripStatusLabelInfo.Text = "Экспорт данных из БД завершен " + e.Result.ToString();
+                        break;
+                    case "import":                                                            //если завершился иморт проходов
+                        toolStripStatusLabelInfo.Text = "Импорт данных в таблицу БД завершен " + e.Result.ToString();
                         break;
                 }
                 timerImportExport.Start();
@@ -439,10 +444,133 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// кнопка экспорта
+        /// кнопка импорта таблицы со страницы Excel
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        private void btMainImport_Click(object sender, EventArgs e)
+        {
+            DialogResult response = MessageBox.Show(
+                "Внимание Таблица:\r\n" +
+                "  "+ cbSheetTable.Text + "\r\n" +
+                " будет перезаписана!!!" + "\r\n\r\n" +
+                "Продолжить?" + "\r\n",
+                "Импорт таблицы данных",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Information,
+                MessageBoxDefaultButton.Button2,
+                MessageBoxOptions.DefaultDesktopOnly
+                );
+            if (response == DialogResult.Yes)
+            {
+                List<string> arguments = new List<string>
+                {
+                    "import",                                       //для вызова нужного метода
+                    tbMainImportPath.Text,                          //путь к файлу импорта Excel
+                    cbSheetTable.Text + "$",                        //диапазон ячеек формата ИМЯ_ЛИСТА$ДИАПАЗОН
+                    Properties.Settings.Default.twtConnectionSrting,//connection string
+                    cbSheetTable.Text                               //имя таблицы
+                };
+
+                if (!backgroundWorkerSetting.IsBusy)            //Запустить фоновую операцию (поток)(с аргументами) вызвав событие DoWork
+                {
+                    backgroundWorkerSetting.RunWorkerAsync(arguments);
+                }
+            }
+        }
+
+        /// <summary>
+        /// импорт данных через OleDbDataAdapter & DataSet
+        /// </summary>
+        /// <param name="worker"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        public string MainImportFromExcel(BackgroundWorker worker, DoWorkEventArgs e)
+        {
+            List<string> inArgument = e.Argument as List<string>;   //распарсить входнык параметры
+            List<string> outArguments = new List<string>();         //возврат аргументов из потока на обработку
+            int countRows;                                          //общее количество строк в запросе
+            try
+            {
+                string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={inArgument[1]};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
+                using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
+                {
+                    cnExcel.Open();
+                    OleDbDataAdapter da = new OleDbDataAdapter();
+                    DataSet ds = new DataSet();
+                    using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
+                    {
+                        cmdExcel.CommandText = $"Select count(*) from [{inArgument[2]}]";
+                        countRows = (int)cmdExcel.ExecuteScalar();
+
+                        outArguments.Add("init");                       //init инициализация прогрессбара work отображение значения
+                        outArguments.Add("0");                          //минимальное значение
+                        outArguments.Add(countRows.ToString());         //максимальное значение
+                        outArguments.Add("1");                          //шаг
+                        outArguments.Add("импорт");                     //комментарий
+                        worker.ReportProgress(0, outArguments);         //отобразить (вызвать событие) результаты progressbar
+
+                        cmdExcel.CommandText = $"Select * from [{inArgument[2]}]";    //диапазон Data (без заголовка)
+                        //OleDbDataReader result = cmdExcel.ExecuteReader();
+                        da.SelectCommand = cmdExcel;
+                        da.Fill(ds);
+                        cnExcel.Close();
+
+                        DataTable Exceldt = ds.Tables[0];
+                        /*
+                for  ( int  i = Exceldt.Rows.Count - 1; i> = 0; i--)  
+                {  
+                    if  (Exceldt.Rows [i] [ "Имя сотрудника" ] == DBNull.Value || Exceldt.Rows [i] [ "Электронная почта" ] == DBNull.Value)  
+                    {  
+                        Exceldt.Rows [i] .Delete ();  
+                    }  
+                }                          */
+                        using (var sqlConnection = new SqlConnection(inArgument[3]))
+                        {
+                            var bulkCopy = new SqlBulkCopy(inArgument[3]);
+                            bulkCopy.DestinationTableName = inArgument[4];
+                            sqlConnection.Open();
+
+                            using (var sqlCommand = sqlConnection.CreateCommand())
+                            {
+                                sqlCommand.CommandText = "DELETE FROM " + inArgument[4];
+                                sqlCommand.ExecuteScalar();
+                            }
+
+                            var schema = sqlConnection.GetSchema("Columns", new[] { null, null, inArgument[4], null });
+                            foreach (DataColumn sourceColumn in Exceldt.Columns)
+                            {
+                                foreach (DataRow row in schema.Rows)
+                                {
+                                    if (string.Equals(sourceColumn.ColumnName, (string)row["COLUMN_NAME"], StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        bulkCopy.ColumnMappings.Add(sourceColumn.ColumnName, (string)row["COLUMN_NAME"]);
+                                        break;
+                                    }
+                                }
+                            }
+                            bulkCopy.WriteToServer(Exceldt);
+                            outArguments[0] = "work";                                          //init инициализация прогрессбара work отображение значения
+                            outArguments[1] = inArgument[4];                                         //init инициализация прогрессбара work отображение значения
+                            worker.ReportProgress((Exceldt.Rows.Count * 100) / Exceldt.Rows.Count, outArguments);  //отобразить (вызвать событие) результаты progressbar
+
+                            sqlConnection.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+            }
+            return "import";
+        }
+
+        /// <summary>
+            /// кнопка экспорта
+            /// </summary>
+            /// <param name="sender"></param>
+            /// <param name="e"></param>
         private void btMainExport_Click(object sender, EventArgs e)
         {
             DialogResult response = MessageBox.Show(
@@ -463,7 +591,7 @@ namespace TimeWorkTracking
                 {
                     "export",                                       //для вызова нужного метода
                     tbMainExportPath.Text,                          //путь к файлу импорта Excel
-                    Properties.Settings.Default.twtConnectionSrting //connection string
+                    Properties.Settings.Default.twtConnectionSrting //connection string SQL
                 };
 
                 if (!backgroundWorkerSetting.IsBusy)            //Запустить фоновую операцию (поток)(с аргументами) вызвав событие DoWork
@@ -636,7 +764,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// кнопка импорт пользователей
+        /// кнопка импорт сотрудников
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -658,15 +786,15 @@ namespace TimeWorkTracking
             {
                 List<string> arguments = new List<string>
                 {
-                    "users",                                    //для вызова нужного метода
-                    tbPathImport.Text,                          //путь к файлу импорта Excel
-                    cbSheetUser.Text + "$" + tbRangeUser.Text   //диапазон ячеек формата ИМЯ_ЛИСТА$ДИАПАЗОН
+                    "users",                                        //для вызова нужного метода
+                    tbPathImport.Text,                              //путь к файлу импорта Excel
+                    cbSheetUser.Text + "$" + tbRangeUser.Text,      //диапазон ячеек формата ИМЯ_ЛИСТА$ДИАПАЗОН
+                    Properties.Settings.Default.twtConnectionSrting //connection string SQL
                 };
 
                 if (!backgroundWorkerSetting.IsBusy)            //Запустить фоновую операцию (поток)(с аргументами) вызвав событие DoWork
                 {
                     backgroundWorkerSetting.RunWorkerAsync(arguments);
-//                    MessageBox.Show("Список сотрудников загружен в БД");
                 }    
             }
         }
@@ -709,7 +837,7 @@ namespace TimeWorkTracking
                     }
                     cnExcel.Close();
                     
-                    using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
+                    using (var sqlConnection = new SqlConnection(inArgument[3]))
                     {
                         sqlConnection.Open();
                         using (var sqlCommand = sqlConnection.CreateCommand())
@@ -807,9 +935,10 @@ namespace TimeWorkTracking
             {
                 List<string> arguments = new List<string>
                 {
-                    "pass",                                      //для вызова нужного метода
-                    tbPathImport.Text,                                 //путь к файлу импорта Excel
-                    cbSheetPass.Text + "$" + tbRangePass.Text   //диапазон ячеек формата ИМЯ_ЛИСТА$ДИАПАЗОН
+                    "pass",                                         //для вызова нужного метода
+                    tbPathImport.Text,                              //путь к файлу импорта Excel
+                    cbSheetPass.Text + "$" + tbRangePass.Text,      //диапазон ячеек формата ИМЯ_ЛИСТА$ДИАПАЗОН
+                    Properties.Settings.Default.twtConnectionSrting //connection string SQL
                 };
 
                 if (!backgroundWorkerSetting.IsBusy)                        //Запустить фоновую операцию (поток)(с аргументами) вызвав событие DoWork
@@ -849,7 +978,7 @@ namespace TimeWorkTracking
                         cmdExcel.CommandText = $"Select * from [{inArgument[2]}]";    //диапазон Data (без заголовка)
                         OleDbDataReader result = cmdExcel.ExecuteReader();
 
-                        using (var sqlConnection = new SqlConnection(Properties.Settings.Default.twtConnectionSrting))
+                        using (var sqlConnection = new SqlConnection(inArgument[3]))
                         {
                             sqlConnection.Open();
                             using (var sqlCommand = sqlConnection.CreateCommand())
@@ -1049,6 +1178,7 @@ namespace TimeWorkTracking
             }
             */
         }
+
 
 
 
