@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
+using System.Windows;
 using Excel = Microsoft.Office.Interop.Excel;
 
 
@@ -24,6 +25,16 @@ namespace TimeWorkTracking
 {
     public partial class frmSetting : Form
     {
+        private Excel.Application excelApp;
+        private Excel.Workbook workBook;
+        private Excel.Worksheet workSheet;
+        private Excel.Range workRange;
+        readonly object mis = Type.Missing;
+        private int timerSec = 4;                                       //количество секунд после выходв из потока
+
+        /// <summary>
+        /// конструктор
+        /// </summary>
         public frmSetting()
         {
             //подписка события внешних форм 
@@ -32,11 +43,32 @@ namespace TimeWorkTracking
             InitializeBackgroundWorker();
         }
 
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        //https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.backgroundworker?redirectedfrom=MSDN&view=net-5.0
-        //https://www.bestprog.net/ru/2021/03/28/c-control-component-backgroundworker-ru/
-        //https://www.bestprog.net/ru/2021/03/31/c-windows-forms-the-backgroundworker-control-displays-the-progress-of-completed-work-canceling-the-execution-of-a-thread-ru/
-        //Настройка объекта BackgroundWorker добавим свои события.
+        /// <summary>
+        /// события таймера очистить прогрессбар имя и значение
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void timerImportExport_Tick(object sender, EventArgs e)
+        {
+            if (timerSec >= 0) 
+            {
+                //toolStripProgressBarImport.Visible = false;
+                timerSec -= 1;
+            }
+            else
+            {
+                timerImportExport.Stop();
+                toolStripStatusLabelInfo.Text = ""; 
+                toolStripProgressBarImport.Value = 0;
+                //toolStripProgressBarImport.Visible = true;
+            }
+        }
+
+        #region BackgroundWorker (работа в фоне)
+
+        /// <summary>
+        /// Настройка объекта BackgroundWorker добавим свои события.
+        /// </summary>
         private void InitializeBackgroundWorker()
         {
             backgroundWorkerSetting.DoWork += new DoWorkEventHandler(backgroundWorkerSetting_DoWork);
@@ -47,8 +79,12 @@ namespace TimeWorkTracking
 //            backgroundWorkerSetting.GenerateMember = true;              
         }
 
-        //Событие возникает после запуска потока методом RunAsync()
-        //В обработчик этого события вписывается код выполнения потока.
+        /// <summary>
+        ///Событие возникает после запуска потока методом RunAsync()
+        ///В обработчик этого события вписывается код выполнения потока.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void backgroundWorkerSetting_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;           //передать объект (BackgroundWorker) вызвавший данное событие
@@ -64,11 +100,19 @@ namespace TimeWorkTracking
                 case "pass":
                     e.Result = ImportPassDataFromExcel(worker, e);
                     break;
+                case "export":
+                    e.Result = MainExportToExcel(worker, e);
+                    break;
+
             }
         }
 
-        //Событие возникает когда происходит завершение потока выполнения
-        //В обработчик этого события целесообразно вписывать код завершающих операций, вывод соответствующих сообщений и т.п.
+        /// <summary>
+        ///Событие возникает когда происходит завершение потока выполнения
+        ///В обработчик этого события целесообразно вписывать код завершающих операций, вывод соответствующих сообщений и т.п.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void backgroundWorkerSetting_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
         //    List<string> arg = e.Argument as List<string>;
@@ -91,22 +135,32 @@ namespace TimeWorkTracking
             {
                 // Finally, handle the case where the operation 
                 // succeeded.
-                toolStripStatusLabelInfo.Text = ""; //e.Result.ToString();
-                toolStripProgressBarImport.Value = 0;
+                //toolStripStatusLabelInfo.Text = ""; //e.Result.ToString();
+                //toolStripProgressBarImport.Value = 0;
                 switch (e.Result.ToString())                
                 {
                     case "users":                                                           //если завершился иморт пользователей
                         CallBack_FrmImport_outEvent.callbackEventHandler("", "", null);     //отправитьс ообщение главной форме что импрот произошел
+                        toolStripStatusLabelInfo.Text = "Список сотрудников загружен в БД " + e.Result.ToString(); 
                         break;
                     case "pass":                                                            //если завершился иморт проходов
+                        toolStripStatusLabelInfo.Text = "Список проходов загружен в БД " + e.Result.ToString();
+                        break;
+                    case "export":                                                            //если завершился иморт проходов
+                        toolStripStatusLabelInfo.Text = "Экспорт данных из БД завершен " + e.Result.ToString();
                         break;
                 }
+                timerImportExport.Start();
             }
         }
 
-        //Событие возникает, когда рабочий поток указывает на то, что был достигнут некоторый прогресс
-        //вызывается из DoWork запуском ReportProgress которое вызывает данное событие
-        //В обработчике события ProgressChanged указывается код визуализации прогресса с помощью известных компонент, таких как ProgressBar, Label и т.д.;
+        /// <summary>
+        ///Событие возникает, когда рабочий поток указывает на то, что был достигнут некоторый прогресс
+        ///вызывается из DoWork запуском ReportProgress которое вызывает данное событие
+        ///В обработчике события ProgressChanged указывается код визуализации прогресса с помощью известных компонент, таких как ProgressBar, Label и т.д.;
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void backgroundWorkerSetting_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             List<string> arg = e.UserState as List<string>;
@@ -124,14 +178,16 @@ namespace TimeWorkTracking
                     //toolStripProgressBarImport.Value = e.ProgressPercentage;
                     //            this.toolStripProgressBarImport.Value = e.ProgressPercentage;
                     //Отобразить процент и текст
-                    toolStripStatusLabelInfo.Text = "Обработано " +
+                    toolStripStatusLabelInfo.Text = "таблица "+ arg[1] + " Обработано " +
                                                     toolStripProgressBarImport.Value.ToString() + " из " +
                                                     toolStripProgressBarImport.Maximum.ToString() + " (" +
                                                     Convert.ToString(e.ProgressPercentage) + "%)";
                     break;
             }
         }
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        #endregion
+        //--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         private void frmSetting_Load(object sender, EventArgs e)
         {
@@ -145,24 +201,106 @@ namespace TimeWorkTracking
             nHoursInFullWorkDay.Value = Properties.Settings.Default.hoursInFullWorkDay;
             nMinutesChangingFullWorkDay.Value = Properties.Settings.Default.minutesChangingFullWorkDay;
             nMinutesLunchBreakTime.Value = Properties.Settings.Default.minutesLunchBreakTime;
-        }   
 
-        //диалог выбора имени файла
+            checkPathExportImport();                        // проверить существование путей экспорта импорта
+        }
+
+        #region Open Save Dialod ans Setting
+        /// <summary>
+        /// диалог выбора файла 
+        /// </summary>
+        /// <returns></returns>
+        private string getFileName(string name, string filter) 
+        {
+            openFileDialogSetting.Title = name;
+            openFileDialogSetting.Filter = filter;
+
+            DialogResult dr = openFileDialogSetting.ShowDialog();
+            if (dr == DialogResult.Abort)
+                return "";
+            if (dr == DialogResult.Cancel)
+                return "";
+
+            return openFileDialogSetting.FileName.ToString();
+        }
+
+        /// <summary>
+        /// диалог сохранения файла 
+        /// </summary>
+        /// <returns></returns>
+        private string setFileName(string name, string filter, string filename) 
+        {
+            saveFileDialogSetting.Title = name;
+            saveFileDialogSetting.Filter = filter;
+            saveFileDialogSetting.FileName = filename;
+
+            DialogResult dr = saveFileDialogSetting.ShowDialog();
+            if (dr == DialogResult.Abort)
+                return "";
+            if (dr == DialogResult.Cancel)
+                return "";
+
+            return saveFileDialogSetting.FileName.ToString();
+        }
+
+        /// <summary>
+        /// главный импорт
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btMainImportPathOpen_Click(object sender, EventArgs e)
+        {
+            tbMainImportPath.Text = getFileName(
+                "Выбор файла импорта",
+                "Excel 2010(*.xls; *.xlsx; *.xlsm) | *.xls; *.xlsx; *.xlsm | XML Documents(*.xml)|*.xml | All files (*.*)|*.*"
+                );
+            checkPathExportImport();                        // проверить существование путей экспорта импорта
+        }
+        /// <summary>
+        /// главный экспорт
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btMainExportPathSave_Click(object sender, EventArgs e)
+        {
+            tbMainExportPath.Text = setFileName(
+                "Выбор файла экспорта",
+                "Excel 2010(*.xlsx; *.xls) | *.xlsx; *.xls | XML Documents(*.xml)|*.xml | All files (*.*)|*.*",
+                "twt_" + DateTime.Now.ToString("yyyyMMddHHmm") + "_ExportData"
+                );
+            checkPathExportImport();                        // проверить существование путей экспорта импорта
+        }
+
+        /// <summary>
+        /// событие диалог выбора имени файла 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btFileName_Click(object sender, EventArgs e)
         {
-            OpenFileDialog od = new OpenFileDialog
-            {
-                //   Filter = "Excel 2010(*.xlsm) | *.xlsm|XML Documents(*.xml)|*.xml";
-                Filter = "Excel 2010(*.xlsm) | *.xlsm"//|XML Documents(*.xml)|*.xml";
-            };
-            DialogResult dr = od.ShowDialog();
-            if (dr == DialogResult.Abort)
-                tbPath.Text = "";
-            if (dr == DialogResult.Cancel)
-                tbPath.Text = "";
+            tbPathImport.Text = getFileName(
+                "Выбор файла импорта (...восстановление из истории)",
+                "Excel 2010(*.xlsm) | *.xlsm"
+            );
+            checkFileImport(tbPathImport.Text);
+        }
 
-            tbPath.Text = od.FileName.ToString();
-            checkFileImport(tbPath.Text);
+        /// <summary>
+        /// проверить существование путей экспорта импорта
+        /// </summary>
+        private void checkPathExportImport()
+        {
+            btMainImport.Enabled = tbMainImportPath.Text != "";
+            btMainExport.Enabled = tbMainExportPath.Text != "";
+        }
+        #endregion
+
+        //private DataTable dtSpecialMarks;               //специальные отметки
+
+        private void getDataTableSQL(string nameTabble, ref DataTable dTable) 
+        {
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            dTable = clMsSqlDatabase.TableRequest(cs, "select * from " + nameTabble);
         }
 
         //проверить файл импорта и настройка
@@ -180,7 +318,7 @@ namespace TimeWorkTracking
 
             if (newPath == "" || !(File.Exists(newPath))) 
             {
-                tbPath.Text = ""; 
+                tbPathImport.Text = ""; 
                 groupBox1.Enabled = false;
             }
             else
@@ -213,7 +351,7 @@ namespace TimeWorkTracking
 
                     Properties.Settings.Default.Save();
 
-                    tbPath.Text= newPath;
+                    tbPathImport.Text= newPath;
                     groupBox1.Enabled = true;
                 }
                 catch (Exception ex)
@@ -223,7 +361,150 @@ namespace TimeWorkTracking
             }
         }
 
-        //кнопка импорт пользователей
+        /// <summary>
+        /// кнопка экспорта
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btMainExport_Click(object sender, EventArgs e)
+        {
+            DialogResult response = MessageBox.Show(
+                "Экспортируем таблицы:\r\n" +
+                "  EventsPass (События проходов)\r\n" +
+                "  Users      (Список сотрудников)\r\n" +
+                " " + "\r\n\r\n" +
+                "Продолжить?" + "\r\n",
+                "Полная выгрузка данных",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Information,
+                MessageBoxDefaultButton.Button2,
+                MessageBoxOptions.DefaultDesktopOnly
+                );
+            if (response == DialogResult.Yes)
+            {
+                List<string> arguments = new List<string>
+                {
+                    "export",                                       //для вызова нужного метода
+                    tbMainExportPath.Text,                          //путь к файлу импорта Excel
+                    Properties.Settings.Default.twtConnectionSrting //connection string
+                };
+
+                if (!backgroundWorkerSetting.IsBusy)            //Запустить фоновую операцию (поток)(с аргументами) вызвав событие DoWork
+                {
+                    backgroundWorkerSetting.RunWorkerAsync(arguments);
+//                    MessageBox.Show("Экспорт данных из БД завершен");
+                }
+            }
+        }
+        /// <summary>
+        /// экспорт данных через OleDbDataAdapter & DataSet
+        /// </summary>
+        /// <param name="worker"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        public string MainExportToExcel(BackgroundWorker worker, DoWorkEventArgs e)
+        {
+            //https://question-it.com/questions/3902413/eksport-dannyh-sql-v-excel-ochen-medlenno
+            List<string> inArgument = e.Argument as List<string>;   //распарсить входнык параметры
+            List<string> outArguments = new List<string>();         //возврат аргументов из потока на обработку
+            int countRows;                                          //общее количество строк в запросе
+            DataTable dt = new DataTable();
+            string path = inArgument[1];
+
+           // dt.ExportToExcel(path);
+            try
+            {
+                int ColumnsCount;
+                //прочитать имена всех таблиц сортировка по времени ясоздания
+                DataTable tables = clMsSqlDatabase.TableRequest(inArgument[2], "SELECT name FROM sys.objects WHERE type in (N'U') order by create_date");
+
+                //Объявляем приложение
+                excelApp = new Excel.Application
+                {
+                    Visible = false,                                            //Отобразить Excel
+                    SheetsInNewWorkbook = tables.Rows.Count                     //Количество листов в рабочей книге    
+                };
+                workBook = excelApp.Workbooks.Add(mis);                         //Добавить рабочую книгу
+
+                //цикл по всем листам и заполнение их данными из таблиц (имя листа=имятаблицы)
+                for (int t = 0; t < tables.Rows.Count; t++)     //цикл по DataTable и заполнение ListView 
+                {
+                    DataRow drow = tables.Rows[t];
+                    if (drow.RowState != DataRowState.Deleted)  // Only row that have not been deleted
+                    {
+                        workSheet = (Excel.Worksheet)excelApp.Worksheets[t+1];   //Получаем первый лист документа (счет начинается с 1)
+                        workSheet.Name = drow[0].ToString();
+
+                        getDataTableSQL(drow[0].ToString(), ref dt);
+                        if (dt == null || (ColumnsCount = dt.Columns.Count) == 0)
+                            throw new Exception("ExportToExcel: Null or empty input table!\n");
+
+                        object[] Header = new object[ColumnsCount];
+
+                        // column headings               
+                        for (int i = 0; i < ColumnsCount; i++)
+                            Header[i] = dt.Columns[i].ColumnName;
+
+                        Excel.Range HeaderRange = workSheet.get_Range((Excel.Range)(workSheet.Cells[1, 1]), (Excel.Range)(workSheet.Cells[1, ColumnsCount]));
+                        HeaderRange.Value = Header;
+                        HeaderRange.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightGray);
+                        HeaderRange.Font.Bold = true;
+
+                        outArguments.Add("init");                       //init инициализация прогрессбара work отображение значения
+                        outArguments.Add("0");                          //минимальное значение
+                        outArguments.Add(dt.Rows.Count.ToString());     //максимальное значение
+                        outArguments.Add("1");                          //шаг
+                        outArguments.Add("импорт");                     //комментарий
+                        worker.ReportProgress(0, outArguments);         //отобразить (вызвать событие) результаты progressbar
+
+                        // DataCells
+                        int RowsCount = dt.Rows.Count;
+                        object[,] Cells = new object[RowsCount, ColumnsCount];
+
+                        for (int j = 0; j < RowsCount; j++)
+                        {
+                            for (int i = 0; i < ColumnsCount; i++)
+                                Cells[j, i] = dt.Rows[j][i];
+
+                            outArguments[0] = "work";                                        //init инициализация прогрессбара work отображение значения
+                            outArguments[1] = drow[0].ToString();                            //init инициализация прогрессбара work отображение значения
+                            worker.ReportProgress((j * 100) / dt.Rows.Count, outArguments);  //отобразить (вызвать событие) результаты progressbar
+                        }
+                        workSheet.get_Range((Excel.Range)(workSheet.Cells[2, 1]), (Excel.Range)(workSheet.Cells[RowsCount + 1, ColumnsCount])).Value = Cells;
+                    }
+                }    
+
+                 // check fielpath
+                 if (path != null && path != "")
+                 {
+                     try
+                     {
+                        workSheet.SaveAs(path);
+                        excelApp.Quit();
+                     }
+                     catch (Exception ex)
+                     {
+                         throw new Exception("ExportToExcel: Excel file could not be saved! Check filepath.\n"
+                             + ex.Message);
+                     }
+                 }
+                 else    // no filepath is given
+                 {
+                    excelApp.Visible = true;
+                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("ExportToExcel: \n" + ex.Message);
+            }
+            return "export";
+        }
+
+        /// <summary>
+        /// кнопка импорт пользователей
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btImportUsers_Click(object sender, EventArgs e)
         {
             DialogResult response = MessageBox.Show(
@@ -242,17 +523,25 @@ namespace TimeWorkTracking
             {
                 List<string> arguments = new List<string>
                 {
-                    "users",                                     //для вызова нужного метода
-                    tbPath.Text,                                 //путь к файлу импорта Excel
+                    "users",                                    //для вызова нужного метода
+                    tbPathImport.Text,                          //путь к файлу импорта Excel
                     cbSheetUser.Text + "$" + tbRangeUser.Text   //диапазон ячеек формата ИМЯ_ЛИСТА$ДИАПАЗОН
                 };
 
-                if (!backgroundWorkerSetting.IsBusy)                        //Запустить фоновую операцию (поток)(с аргументами) вызвав событие DoWork
+                if (!backgroundWorkerSetting.IsBusy)            //Запустить фоновую операцию (поток)(с аргументами) вызвав событие DoWork
+                {
                     backgroundWorkerSetting.RunWorkerAsync(arguments);
+//                    MessageBox.Show("Список сотрудников загружен в БД");
+                }    
             }
         }
 
-        //импорт сотрудников через OleDbDataAdapter & DataSet
+        /// <summary>
+        /// импорт сотрудников через OleDbDataAdapter & DataSet 
+        /// </summary>
+        /// <param name="worker"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
         public string ImportUserDataFromExcel(BackgroundWorker worker, DoWorkEventArgs e)
         {
             List<string> inArgument = e.Argument as List<string>;   //распарсить входнык параметры
@@ -343,6 +632,7 @@ namespace TimeWorkTracking
                                 currentRow += 1;
 
                                 outArguments[0] = "work";                                          //init инициализация прогрессбара work отображение значения
+                                outArguments[1] = "Users";                                         //init инициализация прогрессбара work отображение значения
                                 worker.ReportProgress((currentRow*100)/ countRows, outArguments);  //отобразить (вызвать событие) результаты progressbar
                             }
                         }
@@ -351,7 +641,7 @@ namespace TimeWorkTracking
                 }
                 CallBack_FrmSetting_outEvent.callbackEventHandler("", "", null);    //отправитьс ообщение главной форме что импрот произошел
                 System.Threading.Thread.Sleep(1000);    //пауза 1 сек чтобы главная форма успела обновить список юзеров
-                MessageBox.Show("Список сотрудников загружен в БД");
+//                MessageBox.Show("Список сотрудников загружен в БД");
             }
             catch (Exception ex)
             {
@@ -360,7 +650,11 @@ namespace TimeWorkTracking
             return "users";
         }
 
-        //кнопка импорт проходов 
+        /// <summary>
+        /// кнопка импорт проходов
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btImportPass_Click(object sender, EventArgs e) 
         {
             DialogResult response = MessageBox.Show(
@@ -379,7 +673,7 @@ namespace TimeWorkTracking
                 List<string> arguments = new List<string>
                 {
                     "pass",                                      //для вызова нужного метода
-                    tbPath.Text,                                 //путь к файлу импорта Excel
+                    tbPathImport.Text,                                 //путь к файлу импорта Excel
                     cbSheetPass.Text + "$" + tbRangePass.Text   //диапазон ячеек формата ИМЯ_ЛИСТА$ДИАПАЗОН
                 };
 
@@ -388,7 +682,12 @@ namespace TimeWorkTracking
             }
         }
 
-        //импорт сотрудников через OleDbDataAdapter & DataSet
+        /// <summary>
+        /// импорт сотрудников через OleDbDataAdapter & DataSet
+        /// </summary>
+        /// <param name="worker"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
         public string ImportPassDataFromExcel(BackgroundWorker worker, DoWorkEventArgs e)
         {
             List<string> inArgument = e.Argument as List<string>;   //распарсить входнык параметры
@@ -541,8 +840,9 @@ namespace TimeWorkTracking
                                         sqlCommand.ExecuteNonQuery();
                                         currentRow += 1;
 
-                                        outArguments[0] = "work";                                               //init инициализация прогрессбара work отображение значения
-                                        worker.ReportProgress((currentRow * 100) / countRows, outArguments);    //отобразить (вызвать событие) результаты progressbar
+                                        outArguments[0] = "work";                                           //init инициализация прогрессбара work отображение значения
+                                        outArguments[1] = "EventsPass";                                     //init инициализация прогрессбара work отображение значения
+                                    worker.ReportProgress((currentRow * 100) / countRows, outArguments);    //отобразить (вызвать событие) результаты progressbar
                                     }
                                 }
                                 sqlConnection.Close();
@@ -550,7 +850,7 @@ namespace TimeWorkTracking
                         }
                         cnExcel.Close();
                     }
-                    MessageBox.Show("Список проходов загружен в БД");
+//                    MessageBox.Show("Список проходов загружен в БД");
                 }
                 catch (Exception ex)
                 {
@@ -559,10 +859,14 @@ namespace TimeWorkTracking
             return "pass";
         }
 
-        //перед закрытием формы
+        /// <summary>
+        /// событие сохранить параметры перед закрытием формы 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frmSetting_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Properties.Settings.Default.importFilename = @tbPath.Text;
+            Properties.Settings.Default.importFilename = tbPathImport.Text;
             Properties.Settings.Default.importUserRange = @cbSheetUser.Text + "$" + tbRangeUser.Text;
             Properties.Settings.Default.importPassRange = @cbSheetPass.Text + "$" + tbRangePass.Text;
             Properties.Settings.Default.companyName = tbCompanyName.Text.Trim();
@@ -577,13 +881,12 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// событие перерисуем цвет кнопок вкладок
+        /// событие перерисуем цвет кнопок вкладок Tab
         /// </summary>
         private void tabSetting_DrawItem(object sender, DrawItemEventArgs e)
         {
             TabPage page = tabSetting.TabPages[e.Index];
-            //Color col = e.Index == 0 ? Color.Aqua : Color.Yellow;
-            Color col = e.Index == 2 ? Color.WhiteSmoke : SystemColors.Control;
+            Color col = e.Index == 0 ? SystemColors.Control : Color.WhiteSmoke;
             e.Graphics.FillRectangle(new SolidBrush(col), e.Bounds);
 
             Rectangle paddedBounds = e.Bounds;
@@ -591,9 +894,9 @@ namespace TimeWorkTracking
             paddedBounds.Offset(1, yOffset);
             TextRenderer.DrawText(e.Graphics, page.Text, Font, paddedBounds, page.ForeColor);
         }
-        /*--------------------------------------------------------------------------------------------  
-        CALLBACK InPut (подписка на внешние сообщения)
-        --------------------------------------------------------------------------------------------*/
+
+        #region CALLBACK InPut (подписка на внешние сообщения)
+
         /// <summary>
         /// Callbacks the reload.
         /// входящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров
@@ -613,44 +916,134 @@ namespace TimeWorkTracking
         }
 
 
+
+
+
+
+        #endregion
+
+
     }
-    /*--------------------------------------------------------------------------------------------  
-    CALLBACK OutPut (собственные сообщения)
-    --------------------------------------------------------------------------------------------*/
-    //general notification
+
+    #region CALLBACK OutPut (собственные сообщения)
+
     /// <summary>
-    /// CallBack_GetParam
-    /// исходящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров 
+    /// callbackEvent после импорта (первоначальное заполнение данных)
     /// </summary>
-    //после импорта
     public static class CallBack_FrmImport_outEvent
     {
         /// <summary>
-        /// Delegate callbackEvent
+        /// Delegate callbackEvent после импорта (первоначальное заполнение данных)
         /// </summary>
         /// <param name="controlName">имя CTRL</param>
         /// <param name="controlParentName">имя родителя CNTRL</param>
         /// <param name="parameterPairs">параметры ключ-значение</param>
         public delegate void callbackEvent(string controlName, string controlParentName, Dictionary<String, String> parameterPairs);
+ 
         /// <summary>
         /// The callback event handler
         /// </summary>
         public static callbackEvent callbackEventHandler;
     }
-    //изменение общих настроек
+
+    /// <summary>
+    /// callbackEvent изменение общих настроек
+    /// </summary>
     public static class CallBack_FrmSetting_outEvent
     {
         /// <summary>
-        /// Delegate callbackEvent
+        /// Delegate callbackEvent изменение общих настроек
         /// </summary>
         /// <param name="controlName">имя CTRL</param>
         /// <param name="controlParentName">имя родителя CNTRL</param>
         /// <param name="parameterPairs">параметры ключ-значение</param>
         public delegate void callbackEvent(string controlName, string controlParentName, Dictionary<String, String> parameterPairs);
+
         /// <summary>
         /// The callback event handler
         /// </summary>
         public static callbackEvent callbackEventHandler;
+    }
+
+    #endregion
+
+
+
+    public static class My_DataTable_Extensions
+    {
+        /// <summary>
+        /// Export DataTable to Excel file
+        /// </summary>
+        /// <param name="DataTable">Source DataTable</param>
+        /// <param name="ExcelFilePath">Path to result file name</param>
+        public static void ExportToExcel(this System.Data.DataTable DataTable, string ExcelFilePath = null)
+        {
+            try
+            {
+                int ColumnsCount;
+
+                if (DataTable == null || (ColumnsCount = DataTable.Columns.Count) == 0)
+                    throw new Exception("ExportToExcel: Null or empty input table!\n");
+
+                // load excel, and create a new workbook
+                Microsoft.Office.Interop.Excel.Application Excel = new Microsoft.Office.Interop.Excel.Application();
+                Excel.Workbooks.Add();
+
+                // single worksheet
+                Microsoft.Office.Interop.Excel._Worksheet Worksheet = (Excel._Worksheet)Excel.ActiveSheet;
+
+                object[] Header = new object[ColumnsCount];
+
+                // column headings               
+                for (int i = 0; i < ColumnsCount; i++)
+                    Header[i] = DataTable.Columns[i].ColumnName;
+
+                Microsoft.Office.Interop.Excel.Range HeaderRange = Worksheet.get_Range((Microsoft.Office.Interop.Excel.Range)(Worksheet.Cells[1, 1]), (Microsoft.Office.Interop.Excel.Range)(Worksheet.Cells[1, ColumnsCount]));
+                HeaderRange.Value = Header;
+                HeaderRange.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightGray);
+                HeaderRange.Font.Bold = true;
+
+                // DataCells
+                int RowsCount = DataTable.Rows.Count;
+                object[,] Cells = new object[RowsCount, ColumnsCount];
+
+                for (int j = 0; j < RowsCount; j++) 
+                {
+                    for (int i = 0; i < ColumnsCount; i++)
+                        Cells[j, i] = DataTable.Rows[j][i];
+
+ //                   outArguments[0] = "work";                                          //init инициализация прогрессбара work отображение значения
+ //                   worker.ReportProgress((j * 100) / RowsCount, outArguments);  //отобразить (вызвать событие) результаты progressbar
+
+                }
+
+                Worksheet.get_Range((Microsoft.Office.Interop.Excel.Range)(Worksheet.Cells[2, 1]), (Microsoft.Office.Interop.Excel.Range)(Worksheet.Cells[RowsCount + 1, ColumnsCount])).Value = Cells;
+
+                // check fielpath
+                if (ExcelFilePath != null && ExcelFilePath != "")
+                {
+                    try
+                    {
+                        Worksheet.SaveAs(ExcelFilePath);
+                        Excel.Quit();
+                        MessageBox.Show("Excel file saved!");
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("ExportToExcel: Excel file could not be saved! Check filepath.\n"
+                            + ex.Message);
+                    }
+                }
+                else    // no filepath is given
+                {
+                    Excel.Visible = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("ExportToExcel: \n" + ex.Message);
+            }
+        }
     }
 
 }
@@ -668,4 +1061,9 @@ namespace TimeWorkTracking
 //https://yoursandmyideas.com/2011/02/05/how-to-read-or-write-excel-file-using-ace-oledb-data-provider/
 //https://gist.github.com/maestrow/fd68246f6bca87891d2ace7a67d180e0
 //https://www.codeproject.com/Tips/705470/Read-and-Write-Excel-Documents-Using-OLEDB
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.backgroundworker?redirectedfrom=MSDN&view=net-5.0
+//https://www.bestprog.net/ru/2021/03/28/c-control-component-backgroundworker-ru/
+//https://www.bestprog.net/ru/2021/03/31/c-windows-forms-the-backgroundworker-control-displays-the-progress-of-completed-work-canceling-the-execution-of-a-thread-ru/
+//
 

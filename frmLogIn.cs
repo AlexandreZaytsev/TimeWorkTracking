@@ -71,7 +71,11 @@ namespace TimeWorkTracking
 
         //Вход Пользователя-----------------------------------------------------------------------------------
 
-        //события таймера
+        /// <summary>
+        /// события таймера
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void timerLogIn_Tick(object sender, EventArgs e)
         {
             if (timerSec >= 0)

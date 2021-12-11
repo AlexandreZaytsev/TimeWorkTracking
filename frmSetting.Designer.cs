@@ -47,6 +47,17 @@ namespace TimeWorkTracking
             this.tbCompanyName = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.btMainExport = new System.Windows.Forms.Button();
+            this.imgListButtonSetting = new System.Windows.Forms.ImageList(this.components);
+            this.btMainExportPathSave = new System.Windows.Forms.Button();
+            this.tbMainExportPath = new System.Windows.Forms.TextBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.btMainImport = new System.Windows.Forms.Button();
+            this.btMainImportPathOpen = new System.Windows.Forms.Button();
+            this.tbMainImportPath = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -61,16 +72,18 @@ namespace TimeWorkTracking
             this.cbSheetUser = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btImportPass = new System.Windows.Forms.Button();
-            this.imgListButtonSetting = new System.Windows.Forms.ImageList(this.components);
             this.label11 = new System.Windows.Forms.Label();
             this.btImportUsers = new System.Windows.Forms.Button();
-            this.btFileName = new System.Windows.Forms.Button();
-            this.tbPath = new System.Windows.Forms.TextBox();
+            this.btFileNameOpen = new System.Windows.Forms.Button();
+            this.tbPathImport = new System.Windows.Forms.TextBox();
             this.statusStripSetting = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBarImport = new System.Windows.Forms.ToolStripProgressBar();
             this.toolTipMsgSetting = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorkerSetting = new System.ComponentModel.BackgroundWorker();
+            this.openFileDialogSetting = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialogSetting = new System.Windows.Forms.SaveFileDialog();
+            this.timerImportExport = new System.Windows.Forms.Timer(this.components);
             this.mainPanelSetting.SuspendLayout();
             this.tabSetting.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -80,6 +93,9 @@ namespace TimeWorkTracking
             ((System.ComponentModel.ISupportInitialize)(this.nMinutesChangingFullWorkDay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nHoursInFullWorkDay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nDaysInWorkWeek)).BeginInit();
+            this.tabPage3.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -318,11 +334,148 @@ namespace TimeWorkTracking
             // tabPage3
             // 
             this.tabPage3.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage3.Controls.Add(this.groupBox6);
+            this.tabPage3.Controls.Add(this.groupBox5);
             this.tabPage3.Location = new System.Drawing.Point(4, 27);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(699, 156);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Экспорт Импорт";
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.label14);
+            this.groupBox6.Controls.Add(this.btMainExport);
+            this.groupBox6.Controls.Add(this.btMainExportPathSave);
+            this.groupBox6.Controls.Add(this.tbMainExportPath);
+            this.groupBox6.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.groupBox6.Location = new System.Drawing.Point(0, 79);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(699, 77);
+            this.groupBox6.TabIndex = 32;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Экспорт данных";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(17, 27);
+            this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(46, 18);
+            this.label14.TabIndex = 29;
+            this.label14.Text = "Файл";
+            // 
+            // btMainExport
+            // 
+            this.btMainExport.ImageIndex = 7;
+            this.btMainExport.ImageList = this.imgListButtonSetting;
+            this.btMainExport.Location = new System.Drawing.Point(577, 20);
+            this.btMainExport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btMainExport.Name = "btMainExport";
+            this.btMainExport.Size = new System.Drawing.Size(116, 32);
+            this.btMainExport.TabIndex = 10;
+            this.btMainExport.Text = "Экспорт";
+            this.btMainExport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btMainExport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btMainExport.UseVisualStyleBackColor = true;
+            this.btMainExport.Click += new System.EventHandler(this.btMainExport_Click);
+            // 
+            // imgListButtonSetting
+            // 
+            this.imgListButtonSetting.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgListButtonSetting.ImageStream")));
+            this.imgListButtonSetting.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgListButtonSetting.Images.SetKeyName(0, "db_48.png");
+            this.imgListButtonSetting.Images.SetKeyName(1, "db_add_48.png");
+            this.imgListButtonSetting.Images.SetKeyName(2, "db_edit_48.png");
+            this.imgListButtonSetting.Images.SetKeyName(3, "db_find_48.png");
+            this.imgListButtonSetting.Images.SetKeyName(4, "db_lock_48.png");
+            this.imgListButtonSetting.Images.SetKeyName(5, "db_unlock_48.png");
+            this.imgListButtonSetting.Images.SetKeyName(6, "db_upload_48.png");
+            this.imgListButtonSetting.Images.SetKeyName(7, "db_import_48.png");
+            this.imgListButtonSetting.Images.SetKeyName(8, "db_export_48.png");
+            this.imgListButtonSetting.Images.SetKeyName(9, "attention_48.png");
+            this.imgListButtonSetting.Images.SetKeyName(10, "info_48.png");
+            // 
+            // btMainExportPathSave
+            // 
+            this.btMainExportPathSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btMainExportPathSave.Location = new System.Drawing.Point(531, 22);
+            this.btMainExportPathSave.Margin = new System.Windows.Forms.Padding(4);
+            this.btMainExportPathSave.Name = "btMainExportPathSave";
+            this.btMainExportPathSave.Size = new System.Drawing.Size(39, 28);
+            this.btMainExportPathSave.TabIndex = 7;
+            this.btMainExportPathSave.Text = "...";
+            this.btMainExportPathSave.UseVisualStyleBackColor = true;
+            this.btMainExportPathSave.Click += new System.EventHandler(this.btMainExportPathSave_Click);
+            // 
+            // tbMainExportPath
+            // 
+            this.tbMainExportPath.Location = new System.Drawing.Point(84, 23);
+            this.tbMainExportPath.Margin = new System.Windows.Forms.Padding(4);
+            this.tbMainExportPath.Name = "tbMainExportPath";
+            this.tbMainExportPath.ReadOnly = true;
+            this.tbMainExportPath.Size = new System.Drawing.Size(439, 24);
+            this.tbMainExportPath.TabIndex = 6;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.label13);
+            this.groupBox5.Controls.Add(this.btMainImport);
+            this.groupBox5.Controls.Add(this.btMainImportPathOpen);
+            this.groupBox5.Controls.Add(this.tbMainImportPath);
+            this.groupBox5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox5.Location = new System.Drawing.Point(0, 0);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(699, 73);
+            this.groupBox5.TabIndex = 31;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Импорт данных";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(17, 27);
+            this.label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(46, 18);
+            this.label13.TabIndex = 29;
+            this.label13.Text = "Файл";
+            // 
+            // btMainImport
+            // 
+            this.btMainImport.ImageIndex = 6;
+            this.btMainImport.ImageList = this.imgListButtonSetting;
+            this.btMainImport.Location = new System.Drawing.Point(577, 19);
+            this.btMainImport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btMainImport.Name = "btMainImport";
+            this.btMainImport.Size = new System.Drawing.Size(116, 32);
+            this.btMainImport.TabIndex = 10;
+            this.btMainImport.Text = "Импорт";
+            this.btMainImport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btMainImport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btMainImport.UseVisualStyleBackColor = true;
+            // 
+            // btMainImportPathOpen
+            // 
+            this.btMainImportPathOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btMainImportPathOpen.Location = new System.Drawing.Point(531, 21);
+            this.btMainImportPathOpen.Margin = new System.Windows.Forms.Padding(4);
+            this.btMainImportPathOpen.Name = "btMainImportPathOpen";
+            this.btMainImportPathOpen.Size = new System.Drawing.Size(39, 28);
+            this.btMainImportPathOpen.TabIndex = 7;
+            this.btMainImportPathOpen.Text = "...";
+            this.btMainImportPathOpen.UseVisualStyleBackColor = true;
+            this.btMainImportPathOpen.Click += new System.EventHandler(this.btMainImportPathOpen_Click);
+            // 
+            // tbMainImportPath
+            // 
+            this.tbMainImportPath.Location = new System.Drawing.Point(84, 23);
+            this.tbMainImportPath.Margin = new System.Windows.Forms.Padding(4);
+            this.tbMainImportPath.Name = "tbMainImportPath";
+            this.tbMainImportPath.ReadOnly = true;
+            this.tbMainImportPath.Size = new System.Drawing.Size(439, 24);
+            this.tbMainImportPath.TabIndex = 6;
             // 
             // tabPage2
             // 
@@ -339,8 +492,8 @@ namespace TimeWorkTracking
             // 
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.groupBox1);
-            this.groupBox2.Controls.Add(this.btFileName);
-            this.groupBox2.Controls.Add(this.tbPath);
+            this.groupBox2.Controls.Add(this.btFileNameOpen);
+            this.groupBox2.Controls.Add(this.tbPathImport);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(3, 3);
             this.groupBox2.Name = "groupBox2";
@@ -485,22 +638,6 @@ namespace TimeWorkTracking
             this.btImportPass.UseVisualStyleBackColor = true;
             this.btImportPass.Click += new System.EventHandler(this.btImportPass_Click);
             // 
-            // imgListButtonSetting
-            // 
-            this.imgListButtonSetting.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgListButtonSetting.ImageStream")));
-            this.imgListButtonSetting.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgListButtonSetting.Images.SetKeyName(0, "db_48.png");
-            this.imgListButtonSetting.Images.SetKeyName(1, "db_add_48.png");
-            this.imgListButtonSetting.Images.SetKeyName(2, "db_edit_48.png");
-            this.imgListButtonSetting.Images.SetKeyName(3, "db_find_48.png");
-            this.imgListButtonSetting.Images.SetKeyName(4, "db_lock_48.png");
-            this.imgListButtonSetting.Images.SetKeyName(5, "db_unlock_48.png");
-            this.imgListButtonSetting.Images.SetKeyName(6, "db_upload_48.png");
-            this.imgListButtonSetting.Images.SetKeyName(7, "db_import_48.png");
-            this.imgListButtonSetting.Images.SetKeyName(8, "db_export_48.png");
-            this.imgListButtonSetting.Images.SetKeyName(9, "attention_48.png");
-            this.imgListButtonSetting.Images.SetKeyName(10, "info_48.png");
-            // 
             // label11
             // 
             this.label11.AutoSize = true;
@@ -526,26 +663,26 @@ namespace TimeWorkTracking
             this.btImportUsers.UseVisualStyleBackColor = true;
             this.btImportUsers.Click += new System.EventHandler(this.btImportUsers_Click);
             // 
-            // btFileName
+            // btFileNameOpen
             // 
-            this.btFileName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btFileName.Location = new System.Drawing.Point(642, 22);
-            this.btFileName.Margin = new System.Windows.Forms.Padding(4);
-            this.btFileName.Name = "btFileName";
-            this.btFileName.Size = new System.Drawing.Size(39, 28);
-            this.btFileName.TabIndex = 7;
-            this.btFileName.Text = "...";
-            this.btFileName.UseVisualStyleBackColor = true;
-            this.btFileName.Click += new System.EventHandler(this.btFileName_Click);
+            this.btFileNameOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btFileNameOpen.Location = new System.Drawing.Point(642, 22);
+            this.btFileNameOpen.Margin = new System.Windows.Forms.Padding(4);
+            this.btFileNameOpen.Name = "btFileNameOpen";
+            this.btFileNameOpen.Size = new System.Drawing.Size(39, 28);
+            this.btFileNameOpen.TabIndex = 7;
+            this.btFileNameOpen.Text = "...";
+            this.btFileNameOpen.UseVisualStyleBackColor = true;
+            this.btFileNameOpen.Click += new System.EventHandler(this.btFileName_Click);
             // 
-            // tbPath
+            // tbPathImport
             // 
-            this.tbPath.Location = new System.Drawing.Point(84, 23);
-            this.tbPath.Margin = new System.Windows.Forms.Padding(4);
-            this.tbPath.Name = "tbPath";
-            this.tbPath.ReadOnly = true;
-            this.tbPath.Size = new System.Drawing.Size(555, 24);
-            this.tbPath.TabIndex = 6;
+            this.tbPathImport.Location = new System.Drawing.Point(84, 23);
+            this.tbPathImport.Margin = new System.Windows.Forms.Padding(4);
+            this.tbPathImport.Name = "tbPathImport";
+            this.tbPathImport.ReadOnly = true;
+            this.tbPathImport.Size = new System.Drawing.Size(555, 24);
+            this.tbPathImport.TabIndex = 6;
             // 
             // statusStripSetting
             // 
@@ -572,7 +709,16 @@ namespace TimeWorkTracking
             // toolStripProgressBarImport
             // 
             this.toolStripProgressBarImport.Name = "toolStripProgressBarImport";
-            this.toolStripProgressBarImport.Size = new System.Drawing.Size(360, 22);
+            this.toolStripProgressBarImport.Size = new System.Drawing.Size(250, 22);
+            // 
+            // openFileDialogSetting
+            // 
+            this.openFileDialogSetting.FileName = "openFileDialog1";
+            // 
+            // timerImportExport
+            // 
+            this.timerImportExport.Interval = 1000;
+            this.timerImportExport.Tick += new System.EventHandler(this.timerImportExport_Tick);
             // 
             // frmSetting
             // 
@@ -599,6 +745,11 @@ namespace TimeWorkTracking
             ((System.ComponentModel.ISupportInitialize)(this.nMinutesChangingFullWorkDay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nHoursInFullWorkDay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nDaysInWorkWeek)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -623,8 +774,8 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btImportPass;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button btFileName;
-        private System.Windows.Forms.TextBox tbPath;
+        private System.Windows.Forms.Button btFileNameOpen;
+        private System.Windows.Forms.TextBox tbPathImport;
         private System.Windows.Forms.TextBox tbRangePass;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
@@ -652,5 +803,18 @@ namespace TimeWorkTracking
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.OpenFileDialog openFileDialogSetting;
+        private System.Windows.Forms.SaveFileDialog saveFileDialogSetting;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Button btMainImport;
+        private System.Windows.Forms.Button btMainImportPathOpen;
+        private System.Windows.Forms.TextBox tbMainImportPath;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Button btMainExport;
+        private System.Windows.Forms.Button btMainExportPathSave;
+        private System.Windows.Forms.TextBox tbMainExportPath;
+        private System.Windows.Forms.Timer timerImportExport;
     }
 }
