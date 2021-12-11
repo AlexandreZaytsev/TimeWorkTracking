@@ -35,6 +35,7 @@ namespace TimeWorkTracking
         readonly object mis = Type.Missing;
         private int timerSec = 4;                                       //количество секунд после выходв из потока
 
+        #region kill процесса Excel
         [DllImport("user32.dll")]
         static extern int GetWindowThreadProcessId(int hWnd, out int lpdwProcessId);
         Process GetExcelProcess(Excel.Application excelApp)
@@ -43,8 +44,31 @@ namespace TimeWorkTracking
             GetWindowThreadProcessId(excelApp.Hwnd, out id);
             return Process.GetProcessById(id);
         }
+        //контрольный выстрел в голову
+        public static void killExcek(int iProcessId)
+        {
 
-
+            System.Diagnostics.Process[] process = System.Diagnostics.Process.GetProcessesByName("Excel");
+            foreach (System.Diagnostics.Process p in process)
+            {
+                if (p.Id == iProcessId)
+                {
+                    try
+                    {
+                        p.Kill();
+                    }
+                    catch { }
+                }
+            }
+        }
+        public static void GC()
+        {
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
+        }
+        #endregion
 
 
         /// <summary>
@@ -310,15 +334,58 @@ namespace TimeWorkTracking
         }
         #endregion
 
-        //private DataTable dtSpecialMarks;               //специальные отметки
-
+        /// <summary>
+        /// получить DataTable из SQL по имени таблицы
+        /// </summary>
+        /// <param name="nameTabble"></param>
+        /// <param name="dTable"></param>
         private void getDataTableSQL(string nameTabble, ref DataTable dTable) 
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             dTable = clMsSqlDatabase.TableRequest(cs, "select * from " + nameTabble);
         }
 
-        //проверить файл импорта и настройка
+        /// <summary>
+        /// получить имена листов книги Excel
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private List<string> getnameSheetsExcel(string path) 
+        {
+            List<string> sh = new List<string>();
+            try
+            {
+                string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={path};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
+                using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
+                {
+                    cnExcel.Open();
+                    //прочитать имена листов
+                    DataTable dtTablesList = cnExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                    //Фактические имена листов заканчиваются на $ или $'
+                    foreach (DataRow drTable in dtTablesList.Rows)
+                    {
+                        if (drTable["Table_Name"].ToString().EndsWith("$") || drTable["Table_Name"].ToString().EndsWith("$'"))
+                        {
+                            string shName = drTable["Table_Name"].ToString();
+                            shName = shName.Substring(0, shName.IndexOf("$"));
+                            if (shName.Substring(0, 1) == "'") shName = shName.Substring(1, shName.Length - 1);
+                            sh.Add(shName);
+                        }
+                    }
+                    cnExcel.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+            }
+            return sh;
+        }
+
+        /// <summary>
+        /// проверить файл импорта и настройка
+        /// </summary>
+        /// <param name="newPath">путь к файлу с данными</param>
         private void checkFileImport(string newPath) 
         {
             string parse; 
@@ -338,41 +405,18 @@ namespace TimeWorkTracking
             }
             else
             {
-                try
-                {
-                    string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={newPath};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
-                    using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
-                    {
-                        cnExcel.Open();
-                        //прочитать имена листов
-                        DataTable dtTablesList = cnExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                        //Фактические имена листов заканчиваются на $ или $'
-                        foreach (DataRow drTable in dtTablesList.Rows)
-                        {
-                            if (drTable["Table_Name"].ToString().EndsWith("$") || drTable["Table_Name"].ToString().EndsWith("$'")) 
-                            {
-                                string shName = drTable["Table_Name"].ToString();
-                                shName = shName.Substring(0, shName.IndexOf("$"));
-                                if (shName.Substring(0, 1) == "'") shName = shName.Substring(1, shName.Length - 1);
-                                cbSheetUser.Items.Add(shName);
-                                cbSheetPass.Items.Add(shName);
-                            }
-                        }
-                        cnExcel.Close();
-                    }
-                    Properties.Settings.Default.importFilename = @newPath;
-                    Properties.Settings.Default.importUserRange = cbSheetUser.Text + "$" + tbRangeUser.Text;
-                    Properties.Settings.Default.importPassRange = cbSheetPass.Text + "$" + tbRangePass.Text;
+                string[] sName = getnameSheetsExcel(newPath).ToArray();
+                cbSheetUser.Items.AddRange(sName);
+                cbSheetPass.Items.AddRange(sName);
 
-                    Properties.Settings.Default.Save();
+                Properties.Settings.Default.importFilename = @newPath;
+                Properties.Settings.Default.importUserRange = cbSheetUser.Text + "$" + tbRangeUser.Text;
+                Properties.Settings.Default.importPassRange = cbSheetPass.Text + "$" + tbRangePass.Text;
 
-                    tbPathImport.Text= newPath;
-                    groupBox1.Enabled = true;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message.ToString());
-                }
+                Properties.Settings.Default.Save();
+
+                tbPathImport.Text= newPath;
+                groupBox1.Enabled = true;
             }
         }
 
@@ -411,6 +455,7 @@ namespace TimeWorkTracking
                 }
             }
         }
+
         /// <summary>
         /// экспорт данных через OleDbDataAdapter & DataSet
         /// </summary>
@@ -494,8 +539,7 @@ namespace TimeWorkTracking
             }
             finally
             {
-
-               // GetWindowThreadProcessId((IntPtr)excelApp.Hwnd, out iProcessId);
+                
                 try
                 {
                     workBook.SaveAs(path, Excel.XlFileFormat.xlOpenXMLWorkbook, mis, mis, mis, mis, Excel.XlSaveAsAccessMode.xlNoChange, mis, mis, mis, mis, mis);
@@ -507,7 +551,6 @@ namespace TimeWorkTracking
                         + ex.Message);
                 }
                 workBook.Close(true);// null, null, null);
-
                 while (Marshal.ReleaseComObject(workBook) > 0) { }
                 workBook = null;
            //     while (Marshal.ReleaseComObject(sheets) > 0) { }
@@ -519,29 +562,17 @@ namespace TimeWorkTracking
                     while (Marshal.ReleaseComObject(workRange) > 0) { }
                     workRange = null;
                 }
-                GC();
-                
-                int iProcessId;
-                GetWindowThreadProcessId(excelApp.Hwnd, out iProcessId);
+                //GC();
 
+                // int iProcessId;
+                // GetWindowThreadProcessId(excelApp.Hwnd, out iProcessId);
+                Process excelProcess = GetExcelProcess(excelApp);
                 excelApp.Quit();
                 while (Marshal.ReleaseComObject(excelApp) > 0) { }
                 excelApp = null;
-                GC();
+                //GC();
+                killExcek(excelProcess.Id);// iProcessId);
 
-                //контрольный выстрел в голову
-                System.Diagnostics.Process[] process = System.Diagnostics.Process.GetProcessesByName("Excel");
-                foreach (System.Diagnostics.Process p in process)
-                {
-                    if (p.Id == iProcessId)
-                    {
-                        try
-                        {
-                            p.Kill();
-                        }
-                        catch { }
-                    }
-                }
                 /*
                                 if (workRange != null) Marshal.ReleaseComObject(workRange);
 
@@ -584,14 +615,6 @@ namespace TimeWorkTracking
 
             }
             return "export";
-        }
-
-        public static void GC()
-        {
-            System.GC.Collect();
-            System.GC.WaitForPendingFinalizers();
-            System.GC.Collect();
-            System.GC.WaitForPendingFinalizers();
         }
 
         /// <summary>
@@ -1060,86 +1083,6 @@ namespace TimeWorkTracking
     }
 
     #endregion
-
-
-
-    public static class My_DataTable_Extensions
-    {
-        /// <summary>
-        /// Export DataTable to Excel file
-        /// </summary>
-        /// <param name="DataTable">Source DataTable</param>
-        /// <param name="ExcelFilePath">Path to result file name</param>
-        public static void ExportToExcel(this System.Data.DataTable DataTable, string ExcelFilePath = null)
-        {
-            try
-            {
-                int ColumnsCount;
-
-                if (DataTable == null || (ColumnsCount = DataTable.Columns.Count) == 0)
-                    throw new Exception("ExportToExcel: Null or empty input table!\n");
-
-                // load excel, and create a new workbook
-                Microsoft.Office.Interop.Excel.Application Excel = new Microsoft.Office.Interop.Excel.Application();
-                Excel.Workbooks.Add();
-
-                // single worksheet
-                Microsoft.Office.Interop.Excel._Worksheet Worksheet = (Excel._Worksheet)Excel.ActiveSheet;
-
-                object[] Header = new object[ColumnsCount];
-
-                // column headings               
-                for (int i = 0; i < ColumnsCount; i++)
-                    Header[i] = DataTable.Columns[i].ColumnName;
-
-                Microsoft.Office.Interop.Excel.Range HeaderRange = Worksheet.get_Range((Microsoft.Office.Interop.Excel.Range)(Worksheet.Cells[1, 1]), (Microsoft.Office.Interop.Excel.Range)(Worksheet.Cells[1, ColumnsCount]));
-                HeaderRange.Value = Header;
-                HeaderRange.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightGray);
-                HeaderRange.Font.Bold = true;
-
-                // DataCells
-                int RowsCount = DataTable.Rows.Count;
-                object[,] Cells = new object[RowsCount, ColumnsCount];
-
-                for (int j = 0; j < RowsCount; j++) 
-                {
-                    for (int i = 0; i < ColumnsCount; i++)
-                        Cells[j, i] = DataTable.Rows[j][i];
-
- //                   outArguments[0] = "work";                                          //init инициализация прогрессбара work отображение значения
- //                   worker.ReportProgress((j * 100) / RowsCount, outArguments);  //отобразить (вызвать событие) результаты progressbar
-
-                }
-
-                Worksheet.get_Range((Microsoft.Office.Interop.Excel.Range)(Worksheet.Cells[2, 1]), (Microsoft.Office.Interop.Excel.Range)(Worksheet.Cells[RowsCount + 1, ColumnsCount])).Value = Cells;
-
-                // check fielpath
-                if (ExcelFilePath != null && ExcelFilePath != "")
-                {
-                    try
-                    {
-                        Worksheet.SaveAs(ExcelFilePath);
-                        Excel.Quit();
-                        MessageBox.Show("Excel file saved!");
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("ExportToExcel: Excel file could not be saved! Check filepath.\n"
-                            + ex.Message);
-                    }
-                }
-                else    // no filepath is given
-                {
-                    Excel.Visible = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("ExportToExcel: \n" + ex.Message);
-            }
-        }
-    }
-
 }
 
 
