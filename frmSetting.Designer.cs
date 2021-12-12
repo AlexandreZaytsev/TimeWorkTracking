@@ -54,7 +54,8 @@ namespace TimeWorkTracking
             this.btMainExportPathSave = new System.Windows.Forms.Button();
             this.tbMainExportPath = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.label15 = new System.Windows.Forms.Label();
+            this.chAllData = new System.Windows.Forms.CheckBox();
+            this.chDeleteOnly = new System.Windows.Forms.CheckBox();
             this.cbSheetTable = new System.Windows.Forms.ComboBox();
             this.label13 = new System.Windows.Forms.Label();
             this.btMainImport = new System.Windows.Forms.Button();
@@ -372,10 +373,10 @@ namespace TimeWorkTracking
             // 
             this.btMainExport.ImageIndex = 7;
             this.btMainExport.ImageList = this.imgListButtonSetting;
-            this.btMainExport.Location = new System.Drawing.Point(577, 20);
+            this.btMainExport.Location = new System.Drawing.Point(569, 20);
             this.btMainExport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btMainExport.Name = "btMainExport";
-            this.btMainExport.Size = new System.Drawing.Size(116, 32);
+            this.btMainExport.Size = new System.Drawing.Size(124, 32);
             this.btMainExport.TabIndex = 10;
             this.btMainExport.Text = "Экспорт";
             this.btMainExport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -402,7 +403,7 @@ namespace TimeWorkTracking
             // btMainExportPathSave
             // 
             this.btMainExportPathSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btMainExportPathSave.Location = new System.Drawing.Point(531, 22);
+            this.btMainExportPathSave.Location = new System.Drawing.Point(519, 22);
             this.btMainExportPathSave.Margin = new System.Windows.Forms.Padding(4);
             this.btMainExportPathSave.Name = "btMainExportPathSave";
             this.btMainExportPathSave.Size = new System.Drawing.Size(39, 28);
@@ -417,12 +418,13 @@ namespace TimeWorkTracking
             this.tbMainExportPath.Margin = new System.Windows.Forms.Padding(4);
             this.tbMainExportPath.Name = "tbMainExportPath";
             this.tbMainExportPath.ReadOnly = true;
-            this.tbMainExportPath.Size = new System.Drawing.Size(439, 24);
+            this.tbMainExportPath.Size = new System.Drawing.Size(427, 24);
             this.tbMainExportPath.TabIndex = 6;
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.label15);
+            this.groupBox5.Controls.Add(this.chAllData);
+            this.groupBox5.Controls.Add(this.chDeleteOnly);
             this.groupBox5.Controls.Add(this.cbSheetTable);
             this.groupBox5.Controls.Add(this.label13);
             this.groupBox5.Controls.Add(this.btMainImport);
@@ -436,24 +438,35 @@ namespace TimeWorkTracking
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Импорт данных";
             // 
-            // label15
+            // chAllData
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(17, 59);
-            this.label15.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(42, 18);
-            this.label15.TabIndex = 33;
-            this.label15.Text = "Лист";
+            this.chAllData.AutoSize = true;
+            this.chAllData.Location = new System.Drawing.Point(20, 57);
+            this.chAllData.Name = "chAllData";
+            this.chAllData.Size = new System.Drawing.Size(118, 22);
+            this.chAllData.TabIndex = 35;
+            this.chAllData.Text = "все таблицы";
+            this.chAllData.UseVisualStyleBackColor = true;
+            this.chAllData.CheckedChanged += new System.EventHandler(this.chAllData_CheckedChanged);
+            // 
+            // chDeleteOnly
+            // 
+            this.chDeleteOnly.AutoSize = true;
+            this.chDeleteOnly.Location = new System.Drawing.Point(403, 58);
+            this.chDeleteOnly.Name = "chDeleteOnly";
+            this.chDeleteOnly.Size = new System.Drawing.Size(147, 22);
+            this.chDeleteOnly.TabIndex = 34;
+            this.chDeleteOnly.Text = "только очистить";
+            this.chDeleteOnly.UseVisualStyleBackColor = true;
             // 
             // cbSheetTable
             // 
             this.cbSheetTable.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbSheetTable.FormattingEnabled = true;
-            this.cbSheetTable.Location = new System.Drawing.Point(84, 55);
+            this.cbSheetTable.Location = new System.Drawing.Point(161, 55);
             this.cbSheetTable.Margin = new System.Windows.Forms.Padding(4);
             this.cbSheetTable.Name = "cbSheetTable";
-            this.cbSheetTable.Size = new System.Drawing.Size(486, 26);
+            this.cbSheetTable.Size = new System.Drawing.Size(218, 26);
             this.cbSheetTable.TabIndex = 32;
             this.cbSheetTable.SelectedIndexChanged += new System.EventHandler(this.cbSheetTable_SelectedIndexChanged);
             // 
@@ -471,12 +484,12 @@ namespace TimeWorkTracking
             // 
             this.btMainImport.ImageIndex = 6;
             this.btMainImport.ImageList = this.imgListButtonSetting;
-            this.btMainImport.Location = new System.Drawing.Point(577, 52);
+            this.btMainImport.Location = new System.Drawing.Point(569, 52);
             this.btMainImport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btMainImport.Name = "btMainImport";
-            this.btMainImport.Size = new System.Drawing.Size(116, 32);
+            this.btMainImport.Size = new System.Drawing.Size(124, 32);
             this.btMainImport.TabIndex = 10;
-            this.btMainImport.Text = "Импорт";
+            this.btMainImport.Text = "Обновить";
             this.btMainImport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btMainImport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btMainImport.UseVisualStyleBackColor = true;
@@ -842,7 +855,8 @@ namespace TimeWorkTracking
         private System.Windows.Forms.Button btMainExportPathSave;
         private System.Windows.Forms.TextBox tbMainExportPath;
         private System.Windows.Forms.Timer timerImportExport;
-        private System.Windows.Forms.Label label15;
         private System.Windows.Forms.ComboBox cbSheetTable;
+        private System.Windows.Forms.CheckBox chAllData;
+        private System.Windows.Forms.CheckBox chDeleteOnly;
     }
 }

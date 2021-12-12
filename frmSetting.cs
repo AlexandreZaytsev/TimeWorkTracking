@@ -231,7 +231,6 @@ namespace TimeWorkTracking
         }
 
         #endregion
-        //--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         private void frmSetting_Load(object sender, EventArgs e)
         {
@@ -249,7 +248,56 @@ namespace TimeWorkTracking
             checkPathExportImport();                        // проверить существование путей экспорта импорта
         }
 
-        #region Open Save Dialod ans Setting
+        /// <summary>
+        /// получить DataTable из SQL по имени таблицы
+        /// </summary>
+        /// <param name="nameTabble"></param>
+        /// <param name="dTable"></param>
+        private void getDataTableSQL(string nameTabble, ref DataTable dTable)
+        {
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            dTable = clMsSqlDatabase.TableRequest(cs, "select * from " + nameTabble);
+        }
+
+        /// <summary>
+        /// получить имена листов книги Excel
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private List<string> getnameSheetsExcel(string path)
+        {
+            List<string> sh = new List<string>();
+            try
+            {
+                string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={path};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
+                using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
+                {
+                    cnExcel.Open();
+                    //прочитать имена листов
+                    DataTable dtTablesList = cnExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                    //Фактические имена листов заканчиваются на $ или $'
+                    foreach (DataRow drTable in dtTablesList.Rows)
+                    {
+                        if (drTable["Table_Name"].ToString().EndsWith("$") || drTable["Table_Name"].ToString().EndsWith("$'"))
+                        {
+                            string shName = drTable["Table_Name"].ToString();
+                            shName = shName.Substring(0, shName.IndexOf("$"));
+                            if (shName.Substring(0, 1) == "'") shName = shName.Substring(1, shName.Length - 1);
+                            sh.Add(shName);
+                        }
+                    }
+                    cnExcel.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+            }
+            return sh;
+        }
+
+        #region Open Save Dialod and Setting
+
         /// <summary>
         /// диалог выбора файла 
         /// </summary>
@@ -300,6 +348,7 @@ namespace TimeWorkTracking
                 );
             checkPathExportImport();                        // проверить существование путей экспорта импорта
         }
+
         /// <summary>
         /// главный экспорт
         /// </summary>
@@ -316,7 +365,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// событие диалог выбора имени файла 
+        /// импрорт начального заполнения данных из истории
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -329,89 +378,17 @@ namespace TimeWorkTracking
             checkFileImport(tbPathImport.Text);
         }
 
-        /// <summary>
-        /// проверить существование путей экспорта импорта
-        /// </summary>
-        private void checkPathExportImport()
-        {
-            if (tbMainImportPath.Text != "") 
-            {
-                cbSheetTable.Items.Clear();
-                cbSheetTable.Items.AddRange(getnameSheetsExcel(tbMainImportPath.Text).ToArray());
-                cbSheetTable.Enabled = true;
-                btMainImport.Enabled = false;
-            }
-            else 
-            {
-                cbSheetTable.Items.Clear();
-                cbSheetTable.ResetText();
-                cbSheetTable.Enabled = false;
-                btMainImport.Enabled = false;
-            }
-            btMainExport.Enabled = tbMainExportPath.Text != "";
-        }
-        private void cbSheetTable_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            btMainImport.Enabled = true;
-        }
-
         #endregion
 
-        /// <summary>
-        /// получить DataTable из SQL по имени таблицы
-        /// </summary>
-        /// <param name="nameTabble"></param>
-        /// <param name="dTable"></param>
-        private void getDataTableSQL(string nameTabble, ref DataTable dTable) 
-        {
-            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            dTable = clMsSqlDatabase.TableRequest(cs, "select * from " + nameTabble);
-        }
+        #region Setting Import Export Interface
 
         /// <summary>
-        /// получить имена листов книги Excel
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        private List<string> getnameSheetsExcel(string path) 
-        {
-            List<string> sh = new List<string>();
-            try
-            {
-                string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={path};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
-                using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
-                {
-                    cnExcel.Open();
-                    //прочитать имена листов
-                    DataTable dtTablesList = cnExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                    //Фактические имена листов заканчиваются на $ или $'
-                    foreach (DataRow drTable in dtTablesList.Rows)
-                    {
-                        if (drTable["Table_Name"].ToString().EndsWith("$") || drTable["Table_Name"].ToString().EndsWith("$'"))
-                        {
-                            string shName = drTable["Table_Name"].ToString();
-                            shName = shName.Substring(0, shName.IndexOf("$"));
-                            if (shName.Substring(0, 1) == "'") shName = shName.Substring(1, shName.Length - 1);
-                            sh.Add(shName);
-                        }
-                    }
-                    cnExcel.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message.ToString());
-            }
-            return sh;
-        }
-
-        /// <summary>
-        /// проверить файл импорта и настройка
+        /// Импорт Истории проверить файл импорта и настройка
         /// </summary>
         /// <param name="newPath">путь к файлу с данными</param>
-        private void checkFileImport(string newPath) 
+        private void checkFileImport(string newPath)
         {
-            string parse; 
+            string parse;
 
             parse = Properties.Settings.Default.importUserRange;
             cbSheetUser.Text = parse.Substring(0, parse.IndexOf("$"));
@@ -421,9 +398,9 @@ namespace TimeWorkTracking
             cbSheetPass.Text = parse.Substring(0, parse.IndexOf("$"));
             tbRangePass.Text = parse.Substring(parse.IndexOf("$") + 1);
 
-            if (newPath == "" || !(File.Exists(newPath))) 
+            if (newPath == "" || !(File.Exists(newPath)))
             {
-                tbPathImport.Text = ""; 
+                tbPathImport.Text = "";
                 groupBox1.Enabled = false;
             }
             else
@@ -438,10 +415,64 @@ namespace TimeWorkTracking
 
                 Properties.Settings.Default.Save();
 
-                tbPathImport.Text= newPath;
+                tbPathImport.Text = newPath;
                 groupBox1.Enabled = true;
             }
         }
+
+        /// <summary>
+        /// Экспорт Импорт проверить существование путей 
+        /// </summary>
+        private void checkPathExportImport()
+        {
+            //импорт
+            cbSheetTable.Items.Clear();
+            cbSheetTable.ResetText();
+            if (tbMainImportPath.Text != "")
+            {
+                chAllData.Enabled = true;
+                cbSheetTable.Items.AddRange(getnameSheetsExcel(tbMainImportPath.Text).ToArray());
+                cbSheetTable.Enabled = true;
+                chDeleteOnly.Enabled = true;
+            }
+            else
+            {
+                cbSheetTable.Items.Clear();
+                chAllData.Enabled = false;
+                cbSheetTable.Enabled = false;
+                chDeleteOnly.Enabled = false;
+            }
+            chAllData_CheckedChanged(null, null);
+            cbSheetTable_SelectedIndexChanged(null, null);
+
+            //экспорт
+            btMainExport.Enabled = tbMainExportPath.Text != "";
+        }
+
+        /// <summary>
+        /// Флаг импортировать все таблицм или по одной
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void chAllData_CheckedChanged(object sender, EventArgs e)
+        {
+            cbSheetTable.Enabled = tbMainImportPath.Text != "" && !chAllData.Checked;
+            btMainImport.Enabled = chAllData.Checked;
+        }
+
+        /// <summary>
+        /// проверить выбрана таблица или нет
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cbSheetTable_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btMainImport.Enabled = tbMainImportPath.Text != "" && !chAllData.Checked && cbSheetTable.Text != "";
+        }
+
+        #endregion
+
+        #region Import Export Operation (кнопки и обработка)
 
         /// <summary>
         /// кнопка импорта таблицы со страницы Excel
@@ -463,13 +494,27 @@ namespace TimeWorkTracking
                 );
             if (response == DialogResult.Yes)
             {
+                string cs = Properties.Settings.Default.twtConnectionSrting;
+                List<string> tableNamesExcel = new List<string>();
+                if (!chAllData.Checked)
+                    tableNamesExcel.Add(cbSheetTable.Text);
+                else
+                    foreach (var item in cbSheetTable.Items)
+                    {
+                        tableNamesExcel.Add(item.ToString());
+                    }
+                //прочитать имена всех таблиц сортировка по времени ясоздания
+                DataTable dt = clMsSqlDatabase.TableRequest(cs, "SELECT name FROM sys.objects WHERE type in (N'U') order by create_date");
+                tableNamesExcel = dt.Rows.OfType<DataRow>().Select(k => k[0].ToString()).ToList();
+
                 List<string> arguments = new List<string>
                 {
                     "import",                                       //для вызова нужного метода
                     tbMainImportPath.Text,                          //путь к файлу импорта Excel
-                    cbSheetTable.Text + "$",                        //диапазон ячеек формата ИМЯ_ЛИСТА$ДИАПАЗОН
-                    Properties.Settings.Default.twtConnectionSrting,//connection string
-                    cbSheetTable.Text                               //имя таблицы
+                    cs,                                             //connection string
+                    string.Join("|", tableNamesExcel.ToArray()),    //имена таблиц
+                    string.Join("|", (string[])dt.Rows[0].ItemArray),
+                    chDeleteOnly.Checked.ToString()                 //флаг только удаление
                 };
 
                 if (!backgroundWorkerSetting.IsBusy)            //Запустить фоновую операцию (поток)(с аргументами) вызвав событие DoWork
@@ -1123,6 +1168,8 @@ namespace TimeWorkTracking
             return "pass";
         }
 
+        #endregion
+
         /// <summary>
         /// событие сохранить параметры перед закрытием формы 
         /// </summary>
@@ -1178,6 +1225,8 @@ namespace TimeWorkTracking
             }
             */
         }
+
+
 
 
 
