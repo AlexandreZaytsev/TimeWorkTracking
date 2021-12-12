@@ -601,6 +601,7 @@ namespace TimeWorkTracking
                                 da.Fill(ds);
 
                                 DataTable Exceldt = ds.Tables[0];
+
                                 /*
                                 for  ( int  i = Exceldt.Rows.Count - 1; i> = 0; i--)  
                                 {  
@@ -634,6 +635,8 @@ namespace TimeWorkTracking
                                     worker.ReportProgress((Exceldt.Rows.Count * 100) / Exceldt.Rows.Count, outArguments);  //отобразить (вызвать событие) результаты progressbar
 
                                     sqlConnection.Close();
+                                    ds.Tables[0].Clear();
+                                    ds.Tables.Remove(ds.Tables[0]);
                                 }    
                             }
                         }
