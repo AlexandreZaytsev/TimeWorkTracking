@@ -134,17 +134,33 @@ namespace TimeWorkTracking
 
 
 
-        //создать бд
+        /// <summary>
+        /// создать бд
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btCreateDBTwt_Click(object sender, EventArgs e)
         {
             string connectionString = GetFormConnectionString();        //полчить строку соединения по настройкам формы
             if (connectionString !="" && tbDatabaseTWT.Text != "")
             {
-                clMsSqlDatabase.CreateDataBase(connectionString);
-                System.Threading.Thread.Sleep(2000);    //пауза 2 сек чтобы база вписалась в сервер
+                bool mode = false;
+                DialogResult result = MessageBox.Show(
+                    "Загрузить минимальные настройки данных?",
+                    "Создание структуры Базы Данных",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Information,
+                    MessageBoxDefaultButton.Button2,
+                    MessageBoxOptions.DefaultDesktopOnly);
+
+                if (result == DialogResult.Yes)
+                    mode = true;
+
+                clMsSqlDatabase.CreateDataBase(connectionString, mode);
+                System.Threading.Thread.Sleep(2000);                    //пауза 2 сек чтобы база вписалась в сервер
 
                 if (TestFormConnectionTwt())                            //проверить соединение по настройкам формы
-                    this.Close();// Hide();                                        //закрыть форму
+                    this.Close();// Hide();                             //закрыть форму
             }
         }
 
