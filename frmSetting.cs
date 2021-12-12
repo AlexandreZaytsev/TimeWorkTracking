@@ -496,7 +496,7 @@ namespace TimeWorkTracking
             {
                 string cs = Properties.Settings.Default.twtConnectionSrting;
 
-                //прочитать имена всех таблиц БД сортировка по времени ясоздания
+                //прочитать имена всех таблиц БД (сортировка по времени создания)
                 DataTable dt = clMsSqlDatabase.TableRequest(cs, "SELECT name FROM sys.objects WHERE type in (N'U') order by create_date");
                 Dictionary<string, string> tableNames = dt.Rows.OfType<DataRow>().Select(k => k[0].ToString()).ToDictionary(k => k);
                 bool ok;
@@ -522,15 +522,15 @@ namespace TimeWorkTracking
                         tableNames[tb] = "";                            //если таблицы из Excel нет в БД - вычеркнем ее
                 }
 
-              //  tableNames = dt.Rows.OfType<DataRow>().Select(k => k[0].ToString()).ToList();
-               
-                List<string> arguments = new List<string>
+
+                //  tableNames = dt.Rows.OfType<DataRow>().Select(k => k[0].ToString()).ToList();
+
+                List<string> arguments = new List<string>()
                 {
                     "import",                                       //для вызова нужного метода
                     tbMainImportPath.Text,                          //путь к файлу импорта Excel
                     cs,                                             //connection string
-                  //  string.Join("|", tableNames.ToArray()),    //имена таблиц
-                    string.Join("|", (string[])dt.Rows[0].ItemArray),
+                    string.Join("|", tableNames.Values.Select(x => x).Where(x=>x.Length>0).ToList().ToArray()), //имена таблиц
                     chDeleteOnly.Checked.ToString()                 //флаг только удаление
                 };
 
