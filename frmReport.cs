@@ -174,7 +174,7 @@ namespace TimeWorkTracking
                     headerIndex.Add("Я", lengthDays + 1 + 2);                                   //добавить значение словаря заголока      
                     captionData[0, lengthDays + 1 + 3] = pad + "переработка";
                     headerIndex.Add("over", lengthDays + 1 + 3);
-
+                    int col = 1;
                     for (int i = 0; i <dtSpecialMarks.Rows.Count; i++)                          //Цикл по массиву спец отметок
                     {
                         DataRow drow = dtSpecialMarks.Rows[i]; 
@@ -182,10 +182,11 @@ namespace TimeWorkTracking
                         {
                             if (drow["letterCode"].ToString() != "Я") 
                             {
-                                headerIndex.Add(drow["letterCode"].ToString(), lengthDays + 4 + i + 1); //добавить значение словаря заголока
-                                captionData[0, lengthDays + 4 + i + 1] = pad +
+                                headerIndex.Add(drow["letterCode"].ToString(), lengthDays + 4 + col); //добавить значение словаря заголока
+                                captionData[0, lengthDays + 4 + col] = pad +
                                     "+(" + drow["letterCode"].ToString() + ") " +
                                     drow["name"].ToString().Wrap(20, "\r\n" + pad);             //используем wrap перенос по словам
+                                col++;
                             }
                         }
                     }
