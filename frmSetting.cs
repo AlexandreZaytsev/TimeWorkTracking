@@ -495,24 +495,41 @@ namespace TimeWorkTracking
             if (response == DialogResult.Yes)
             {
                 string cs = Properties.Settings.Default.twtConnectionSrting;
-                List<string> tableNamesExcel = new List<string>();
-                if (!chAllData.Checked)
-                    tableNamesExcel.Add(cbSheetTable.Text);
-                else
-                    foreach (var item in cbSheetTable.Items)
-                    {
-                        tableNamesExcel.Add(item.ToString());
-                    }
-                //прочитать имена всех таблиц сортировка по времени ясоздания
-                DataTable dt = clMsSqlDatabase.TableRequest(cs, "SELECT name FROM sys.objects WHERE type in (N'U') order by create_date");
-                tableNamesExcel = dt.Rows.OfType<DataRow>().Select(k => k[0].ToString()).ToList();
 
+                //прочитать имена всех таблиц БД сортировка по времени ясоздания
+                DataTable dt = clMsSqlDatabase.TableRequest(cs, "SELECT name FROM sys.objects WHERE type in (N'U') order by create_date");
+                Dictionary<string, string> tableNames = dt.Rows.OfType<DataRow>().Select(k => k[0].ToString()).ToDictionary(k => k);
+                bool ok;
+                foreach (string tb in tableNames.Keys.ToList())
+                {
+                    ok = false;
+                    if (chAllData.Checked)
+                    {
+                        for (int i = 0; i <= cbSheetTable.Items.Count; i++)
+                        {
+                            if (tb == cbSheetTable.Items[i].ToString()) //сравним имена из БД и листов Excel
+                            {
+                                ok = true;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                        if (tb == cbSheetTable.Text)                    //сравним имена из БД и листа Excel
+                            ok = true;
+
+                    if (!ok)
+                        tableNames[tb] = "";                            //если таблицы из Excel нет в БД - вычеркнем ее
+                }
+
+              //  tableNames = dt.Rows.OfType<DataRow>().Select(k => k[0].ToString()).ToList();
+               
                 List<string> arguments = new List<string>
                 {
                     "import",                                       //для вызова нужного метода
                     tbMainImportPath.Text,                          //путь к файлу импорта Excel
                     cs,                                             //connection string
-                    string.Join("|", tableNamesExcel.ToArray()),    //имена таблиц
+                  //  string.Join("|", tableNames.ToArray()),    //имена таблиц
                     string.Join("|", (string[])dt.Rows[0].ItemArray),
                     chDeleteOnly.Checked.ToString()                 //флаг только удаление
                 };
