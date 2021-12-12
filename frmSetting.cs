@@ -521,17 +521,17 @@ namespace TimeWorkTracking
                     if (!ok)
                         tableNames[tb] = "";                            //если таблицы из Excel нет в БД - вычеркнем ее
                 }
-
+                string tableItems = string.Join("|", tableNames.Values.Select(x => x).Where(x => x.Length > 0).ToList().ToArray());
 
                 //  tableNames = dt.Rows.OfType<DataRow>().Select(k => k[0].ToString()).ToList();
 
                 List<string> arguments = new List<string>()
                 {
-                    "import",                                       //для вызова нужного метода
-                    tbMainImportPath.Text,                          //путь к файлу импорта Excel
-                    cs,                                             //connection string
-                    string.Join("|", tableNames.Values.Select(x => x).Where(x=>x.Length>0).ToList().ToArray()), //имена таблиц
-                    chDeleteOnly.Checked.ToString()                 //флаг только удаление
+                    "import",                                   //для вызова нужного метода
+                    tbMainImportPath.Text,                      //путь к файлу импорта Excel
+                    cs,                                         //connection string
+                    tableItems,                                 //имена таблиц
+                    chDeleteOnly.Checked ? "1" : "0"            //флаг только удаление
                 };
 
                 if (!backgroundWorkerSetting.IsBusy)            //Запустить фоновую операцию (поток)(с аргументами) вызвав событие DoWork
@@ -554,78 +554,101 @@ namespace TimeWorkTracking
             int countRows;                                          //общее количество строк в запросе
             try
             {
-                string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={inArgument[1]};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
-                using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
+                //очистка таблиц
+                string[] clearTable = inArgument[3].Split('|');
+                Array.Reverse(clearTable);
+                using (var sqlConnection = new SqlConnection(inArgument[2]))
                 {
-                    cnExcel.Open();
-                    OleDbDataAdapter da = new OleDbDataAdapter();
-                    DataSet ds = new DataSet();
-                    using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
+                    sqlConnection.Open();
+                    using (var sqlCommand = sqlConnection.CreateCommand())
                     {
-                        cmdExcel.CommandText = $"Select count(*) from [{inArgument[2]}]";
-                        countRows = (int)cmdExcel.ExecuteScalar();
-
-                        outArguments.Add("init");                       //init инициализация прогрессбара work отображение значения
-                        outArguments.Add("0");                          //минимальное значение
-                        outArguments.Add(countRows.ToString());         //максимальное значение
-                        outArguments.Add("1");                          //шаг
-                        outArguments.Add("импорт");                     //комментарий
-                        worker.ReportProgress(0, outArguments);         //отобразить (вызвать событие) результаты progressbar
-
-                        cmdExcel.CommandText = $"Select * from [{inArgument[2]}]";    //диапазон Data (без заголовка)
-                        //OleDbDataReader result = cmdExcel.ExecuteReader();
-                        da.SelectCommand = cmdExcel;
-                        da.Fill(ds);
-                        cnExcel.Close();
-
-                        DataTable Exceldt = ds.Tables[0];
-                        /*
-                for  ( int  i = Exceldt.Rows.Count - 1; i> = 0; i--)  
-                {  
-                    if  (Exceldt.Rows [i] [ "Имя сотрудника" ] == DBNull.Value || Exceldt.Rows [i] [ "Электронная почта" ] == DBNull.Value)  
-                    {  
-                        Exceldt.Rows [i] .Delete ();  
-                    }  
-                }                          */
-                        using (var sqlConnection = new SqlConnection(inArgument[3]))
+                        for (int i = 0; i < clearTable.Length; i++)
                         {
-                            var bulkCopy = new SqlBulkCopy(inArgument[3]);
-                            bulkCopy.DestinationTableName = inArgument[4];
-                            sqlConnection.Open();
-
-                            using (var sqlCommand = sqlConnection.CreateCommand())
-                            {
-                                sqlCommand.CommandText = "DELETE FROM " + inArgument[4];
-                                sqlCommand.ExecuteScalar();
-                            }
-
-                            var schema = sqlConnection.GetSchema("Columns", new[] { null, null, inArgument[4], null });
-                            foreach (DataColumn sourceColumn in Exceldt.Columns)
-                            {
-                                foreach (DataRow row in schema.Rows)
-                                {
-                                    if (string.Equals(sourceColumn.ColumnName, (string)row["COLUMN_NAME"], StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        bulkCopy.ColumnMappings.Add(sourceColumn.ColumnName, (string)row["COLUMN_NAME"]);
-                                        break;
-                                    }
-                                }
-                            }
-                            bulkCopy.WriteToServer(Exceldt);
-                            outArguments[0] = "work";                                          //init инициализация прогрессбара work отображение значения
-                            outArguments[1] = inArgument[4];                                         //init инициализация прогрессбара work отображение значения
-                            worker.ReportProgress((Exceldt.Rows.Count * 100) / Exceldt.Rows.Count, outArguments);  //отобразить (вызвать событие) результаты progressbar
-
-                            sqlConnection.Close();
+                            sqlCommand.CommandText = "DELETE FROM " + clearTable[i];
+                            sqlCommand.ExecuteScalar();
                         }
+
                     }
+                    sqlConnection.Close();
+                }
+
+                if (inArgument[4] == "0")                           //если нужно только очистить и заполнить таблицы 
+                {
+                    string[] nameTable = inArgument[3].Split('|');
+                    string csExcel = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source ={inArgument[1]};Extended Properties = " + "\"Excel 12.0 Xml;HDR=YES; IMEX = 1\"";
+                    using (OleDbConnection cnExcel = new OleDbConnection(csExcel))
+                    {
+                        cnExcel.Open();
+                        OleDbDataAdapter da = new OleDbDataAdapter();
+                        DataSet ds = new DataSet();
+                        using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
+                        {
+                            for (int i = 0;i< nameTable.Length; i++)
+                            {
+                                cmdExcel.CommandText = $"Select count(*) from [{nameTable[i]+"$"}]";
+                                countRows = (int)cmdExcel.ExecuteScalar();
+
+                                outArguments.Add("init");                       //init инициализация прогрессбара work отображение значения
+                                outArguments.Add("0");                          //минимальное значение
+                                outArguments.Add(countRows.ToString());         //максимальное значение
+                                outArguments.Add("1");                          //шаг
+                                outArguments.Add("импорт");                     //комментарий
+                                worker.ReportProgress(0, outArguments);         //отобразить (вызвать событие) результаты progressbar
+
+                                cmdExcel.CommandText = $"Select * from [{nameTable[i] + "$"}]";    //диапазон Data (без заголовка)
+                              //OleDbDataReader result = cmdExcel.ExecuteReader();
+                                da.SelectCommand = cmdExcel;
+                                da.Fill(ds);
+
+                                DataTable Exceldt = ds.Tables[0];
+                                /*
+                                for  ( int  i = Exceldt.Rows.Count - 1; i> = 0; i--)  
+                                {  
+                                    if  (Exceldt.Rows [i] [ "Имя сотрудника" ] == DBNull.Value || Exceldt.Rows [i] [ "Электронная почта" ] == DBNull.Value)  
+                                    {  
+                                        Exceldt.Rows [i] .Delete ();  
+                                    }  
+                                }
+                                */
+                                using (var sqlConnection = new SqlConnection(inArgument[2]))
+                                {
+                                    var bulkCopy = new SqlBulkCopy(inArgument[2]);
+                                    bulkCopy.DestinationTableName = nameTable[i];
+                                    sqlConnection.Open();
+
+                                    var schema = sqlConnection.GetSchema("Columns", new[] { null, null, nameTable[i], null });
+                                    foreach (DataColumn sourceColumn in Exceldt.Columns)
+                                    {
+                                        foreach (DataRow row in schema.Rows)
+                                        {
+                                            if (string.Equals(sourceColumn.ColumnName, (string)row["COLUMN_NAME"], StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                bulkCopy.ColumnMappings.Add(sourceColumn.ColumnName, (string)row["COLUMN_NAME"]);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    bulkCopy.WriteToServer(Exceldt);
+                                    outArguments[0] = "work";                                          //init инициализация прогрессбара work отображение значения
+                                    outArguments[1] = nameTable[i];                                   //init инициализация прогрессбара work отображение значения
+                                    worker.ReportProgress((Exceldt.Rows.Count * 100) / Exceldt.Rows.Count, outArguments);  //отобразить (вызвать событие) результаты progressbar
+
+                                    sqlConnection.Close();
+                                }    
+                            }
+                        }
+                        cnExcel.Close();
+                    }
+                }
+                else 
+                {
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message.ToString());
             }
-            return "import";
+            return inArgument[0];// "import";
         }
 
         /// <summary>
