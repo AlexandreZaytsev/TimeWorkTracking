@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections;
 using System.Windows.Forms;
 
 namespace TimeWorkTracking
 {
     //https://www.akadia.com/services/dotnet_listview_sort_dataset.html
-    // Этот класс является реализацией интерфейса IComparer
+
+    #region//Класс для сортировки по столбцу ListView Этот класс является реализацией интерфейса IComparer
+    
     public class clListViewItemComparer : IComparer
     {
         private int ColumnToSort;                               //Определяет столбец для сортировки
@@ -91,4 +89,6 @@ namespace TimeWorkTracking
             }
         }
     }
+
+    #endregion
 }
