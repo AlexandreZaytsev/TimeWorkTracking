@@ -131,7 +131,6 @@
     <Compile Include="frmUsers.Designer.cs">
       <DependentUpon>frmUsers.cs</DependentUpon>
     </Compile>
-    <Compile Include="clImportFromExel.cs" />
     <Compile Include="clListViewItemComparer.cs" />
     <Compile Include="clMsSqlDatabase.cs" />
     <Compile Include="frmMain.cs">

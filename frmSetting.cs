@@ -12,10 +12,6 @@ using System.Runtime.InteropServices;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Diagnostics;
 
-//using DocumentFormat.OpenXml;
-//using DocumentFormat.OpenXml.Packaging;
-//using DocumentFormat.OpenXml.Spreadsheet;
-
 namespace TimeWorkTracking
 {
     public partial class frmSetting : Form
@@ -594,25 +590,27 @@ namespace TimeWorkTracking
                                     }  
                                 }
                                 */
-                                using (var sqlConnection = new SqlConnection(inArgument[2]))
+                                using (SqlConnection sqlConnection = new SqlConnection(inArgument[2]))
                                 {
-                                    var bulkCopy = new SqlBulkCopy(inArgument[2]);
-                                    bulkCopy.DestinationTableName = nameTable[i];
                                     sqlConnection.Open();
-
-                                    var schema = sqlConnection.GetSchema("Columns", new[] { null, null, nameTable[i], null });
-                                    foreach (DataColumn sourceColumn in Exceldt.Columns)
+                                    using (SqlBulkCopy bulkCopy = new SqlBulkCopy(sqlConnection))
                                     {
-                                        foreach (DataRow row in schema.Rows)
+                                        DataTable schema = sqlConnection.GetSchema("Columns", new[] { null, null, nameTable[i], null });
+                                        foreach (DataColumn sourceColumn in Exceldt.Columns)
                                         {
-                                            if (string.Equals(sourceColumn.ColumnName, (string)row["COLUMN_NAME"], StringComparison.OrdinalIgnoreCase))
+                                            foreach (DataRow row in schema.Rows)
                                             {
-                                                bulkCopy.ColumnMappings.Add(sourceColumn.ColumnName, (string)row["COLUMN_NAME"]);
-                                                break;
+                                                if (string.Equals(sourceColumn.ColumnName, (string)row["COLUMN_NAME"], StringComparison.OrdinalIgnoreCase))
+                                                {
+                                                    bulkCopy.ColumnMappings.Add(sourceColumn.ColumnName, (string)row["COLUMN_NAME"]);
+                                                    break;
+                                                }
                                             }
                                         }
+                                        bulkCopy.DestinationTableName = nameTable[i];
+                                        bulkCopy.WriteToServer(Exceldt);
                                     }
-                                    bulkCopy.WriteToServer(Exceldt);
+
                                     outArguments[0] = "work";                                          //init инициализация прогрессбара work отображение значения
                                     outArguments[1] = nameTable[i];                                   //init инициализация прогрессбара work отображение значения
                                     worker.ReportProgress((Exceldt.Rows.Count * 100) / Exceldt.Rows.Count, outArguments);  //отобразить (вызвать событие) результаты progressbar

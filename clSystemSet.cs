@@ -10,87 +10,12 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
 using System.Windows.Forms;
 
 namespace TimeWorkTracking
 {
     static class clSystemSet
     {
-        public const int utcOffset = 3;                     //'GMT смещение для Москвы +3 часа к UTC
-
-        /// <summary>
-        /// перевести локальное время в UTC формат с учетом заданного GMT смещения (для работы с запросами к серверу в формате JSON)
-        /// </summary>
-        /// <param name="input_datetime">локальная дата время в виде строки</param>
-        /// <param name="utc_offset">смещение по часовому поясу (число в часах)</param>
-        /// <returns>строка время UTC формат с учетом заданного GMT смещения</returns>
-        public static string convertToUnixTimeStamp(string input_datetime, double utc_offset) 
-        {
-            DateTime d = Convert.ToDateTime(input_datetime).AddHours(0 - utc_offset);   //' GMT offset Moskow (+3h)
-                                                                                        //            Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-//            int unixTime = (int)(d - new DateTime(1970, 1, 1)).TotalSeconds;
-            double unixTimestamp = d.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
-
-            return unixTimestamp.ToString();// d.AddSeconds(unixTimestamp).ToString();
-        }
-
-        /// <summary>
-        /// перевести UTC формат в локальное время (для работы с ответами сервера в формате JSON)
-        /// </summary>
-        /// <param name="input_unix_timestamp">дата время в UTC формате (строка, здесь в миллисекундах) включающая GMT смещение</param>
-        /// <returns></returns>
-        public static string convertUnixTimeStampToDateTime(double input_unix_timestamp) 
-        {
-            return Convert.ToDateTime("01/01/1970 00:00:00").AddSeconds(input_unix_timestamp).ToString();
-        }
-
-        /// <summary>
-        /// разбор даты пришедшей от сервера в формате JSON UTC содержащей смещение
-        /// </summary>
-        /// <param name="inDate">строка для расшифровки вида ("/ Date (1533416400000 + 0300) /", "/ Date (-2209172400000 + 0300) /" и т.д.)</param>
-        /// **для строк вида ("/ Date (1632715104000) /" (смещение уже влючено в число) - использую константу utc_offset +3h Moskow
-        /// <param name="utc_offset">смещение по часовому поясу (число в часах)</param>
-        /// <returns>дата в формате yyyy-mm-dd h:mm:ss</returns>
-        public static string parseJSONdate(string inDate, int utc_offset) 
-        {
-            string tmp;
-            string parseJSONdate;
-            double utc = 0;
-            double offsetFromString = 0;
-
-            if (inDate.IndexOf("(") > 0 && inDate.IndexOf(")") > 0)
-                tmp = inDate.Substring(inDate.IndexOf("(") + 1, inDate.IndexOf(")") - inDate.IndexOf("(") - 1).Trim();
-            else
-                tmp = inDate;
-
-            if (tmp.Substring(0, 1) == "-")
-                parseJSONdate = Convert.ToDateTime("01/01/1970 00:00:00").ToString("yyyy-MM-dd HHmm:mm:ss");
-            else 
-            {
-                if (tmp.IndexOf("+") > 0)
-                {
-                    utc = Convert.ToDouble(tmp.Substring(0, tmp.IndexOf("+") - 1));
-                    offsetFromString = Convert.ToDouble(tmp.Substring(tmp.Length - tmp.IndexOf("+"), tmp.IndexOf("+"))) / 100;
-                }
-                else if (tmp.IndexOf("-") > 0)
-                {
-                    utc = Convert.ToDouble(tmp.Substring(0, tmp.IndexOf("-") - 1));
-                    offsetFromString = 0 - Convert.ToDouble(tmp.Substring(tmp.Length - tmp.IndexOf("-"), tmp.IndexOf("-"))) / 100;
-                }
-                else 
-                {
-                    utc = Convert.ToDouble(tmp);
-                    offsetFromString = utc_offset;      //!!! возможно дата уже сожержит GMT offset в неявном виде
-                }
-            }
-
-            DateTime d = Convert.ToDateTime(convertUnixTimeStampToDateTime(utc/1000).ToString());
-            d = d.AddHours(0 + offsetFromString);       //GMT offset Moskow (+3h)
-
-            return d.ToString("yyyy-MM-dd HHmm:mm:ss");
-        }
-
 
         /// <summary>
         /// получить хеш строку MD5
