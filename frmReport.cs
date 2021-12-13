@@ -924,7 +924,7 @@ namespace TimeWorkTracking
             bool ret;// = false;
             string colsChar;
             int daysCount = (int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1;
-            int arrCount = uploadCaptionExcel(daysCount);                   
+            int arrCount = uploadCaptionExcel(daysCount);
             uploadTableExcel(daysCount);                                     //загрузить массив по данным сотрудников
 
             toolStripStatusLabelInfo.Text = "Подключение к Excel";

@@ -244,7 +244,7 @@ namespace TimeWorkTracking
         /// <returns></returns>
         private static string getRestData(Uri pacsUri, string jsonReq, int printMsg)
         {
-            string ret = "";
+            string ret;// = "";
             try
             {
                 ret = getDataFromURL(pacsUri, jsonReq);
@@ -256,18 +256,20 @@ namespace TimeWorkTracking
             return ret;
         }
 
+        /*
         //напечатать отладочную информацию
         private static void printDebug(string name, string req, string ret) 
         {
-/*
+
             Dim page
                                  page = vbLf 'vbCr 'vbLf ' vbCrLf
                                  Debug.Print "  Host: " & name & page
                                  Debug.Print "  Requesr: " & page & req & page
                                  Debug.Print "  Response: " & page & ret & page
                               End Sub
-*/
+
         }
+        */
 
         /// <summary>
         /// проверить по настройкам формы что соединение есть в принципе
@@ -319,8 +321,8 @@ namespace TimeWorkTracking
         private static string connectRestApi(UriBuilder pacsUri, bool logout) 
         {
             string ret = "";
-            string res = "";
-            string jsonReq = "";
+            string res;// = "";
+            string jsonReq;// = "";
             UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
 
             jsonReq =
@@ -337,7 +339,7 @@ namespace TimeWorkTracking
             if (jsonRet != null) 
             {
                 ret = jsonRet.UserSID;
-                jsonRet = null;                                     //очистить объект
+                //jsonRet = null;                                     //очистить объект
 
                 if (logout)                                         //разлогитится
                 {
@@ -346,7 +348,7 @@ namespace TimeWorkTracking
                             "\"UserSID\":\"" + ret + "\"" +
                             "}";
                     pacsUriLite.Path = "json/Logout";
-                    res = getRestData(pacsUriLite.Uri, jsonReq, 0);
+                    getRestData(pacsUriLite.Uri, jsonReq, 0);
                     }
             }
             return ret;
@@ -359,8 +361,8 @@ namespace TimeWorkTracking
         /// <param name="pacsStruct">ref структура взаимодейстивия с сервисом Pacs ProxWay</param>
         private static void getUserIdProxWayByName(UriBuilder pacsUri, ref pacsProvider pacsStruct)
         {
-            string jsonReq = "";
-            string res = "";
+            string jsonReq;// = "";
+            string res;// = "";
             string msg = "";
 
             string UserSID = connectRestApi(pacsUri, false);   //получить внутренний id пользователя СКУД ProxWay
@@ -447,7 +449,7 @@ namespace TimeWorkTracking
                             }
                             break;
                     }
-                    jsonRet = null;                                     //очистить объект
+                    //jsonRet = null;                                     //очистить объект
                 }
                 if (msg.Length > 0) 
                 {
@@ -472,7 +474,7 @@ namespace TimeWorkTracking
                     "\"UserSID\":\"" + UserSID + "\"" + 
                     "}";
                 pacsUriLite.Path = "json/Logout";
-                res = getRestData(pacsUriLite.Uri, jsonReq, 0);
+                getRestData(pacsUriLite.Uri, jsonReq, 0);
                 //jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
             }
         }
@@ -484,8 +486,8 @@ namespace TimeWorkTracking
         /// <param name="pacsStruct">ref структура взаимодейстивия с сервисом Pacs ProxWay</param>
         private static void checkPointPWTime(UriBuilder pacsUri, ref pacsProvider pacsStruct) 
         {
-            string jsonReq = "";
-            string res = "";
+            string jsonReq;// = "";
+            string res;// = "";
             DateTime pwDataTime;
 
             //            DateTime now = DateTime.Now;//локальное/универсальное время
@@ -528,8 +530,8 @@ namespace TimeWorkTracking
                 pacsEventGetList jsonRet = new JavaScriptSerializer().Deserialize<pacsEventGetList>(res);
                 if (jsonRet != null)
                 {
-                    string[] cultureNames = { "en-US", "ru-RU", "ja-JP" };
-                    CultureInfo culture = new CultureInfo(cultureNames[1]);
+                    //string[] cultureNames = { "en-US", "ru-RU", "ja-JP" };
+                    //CultureInfo culture = new CultureInfo(cultureNames[1]);
 
                     for (int i = 0; i < jsonRet.Event.GetLength(0); i++)
                     {
@@ -554,7 +556,7 @@ namespace TimeWorkTracking
                             }
                         }
                     }
-                    jsonRet = null;                                     //очистить объект
+                    //jsonRet = null;                                     //очистить объект
                 }
                 //-------------выход
                 //pointHostName = "Logout"
@@ -563,7 +565,7 @@ namespace TimeWorkTracking
                     "\"UserSID\":\"" + UserSID + "\"" +
                     "}";
                 pacsUriLite.Path = "json/Logout";
-                res = getRestData(pacsUriLite.Uri, jsonReq, 0);
+                getRestData(pacsUriLite.Uri, jsonReq, 0);
                     //jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
             }
         }

@@ -30,8 +30,7 @@ namespace TimeWorkTracking
         /// <returns></returns>
         static public Process GetExcelProcess(Excel.Application excelApp)
         {
-            int id;
-            GetWindowThreadProcessId(excelApp.Hwnd, out id);
+            GetWindowThreadProcessId(excelApp.Hwnd, out int id);
             return Process.GetProcessById(id);
         }
         
@@ -108,7 +107,7 @@ namespace TimeWorkTracking
                 else
                     return false;
             }
-            catch (PingException e)
+            catch (PingException)// e)
             {
                 return false;
             }
@@ -141,9 +140,11 @@ namespace TimeWorkTracking
             //проверим наличие провайдера
             OleDbEnumerator enumerator = new OleDbEnumerator();
             DataTable table1 = enumerator.GetElements();
-            bool jetOleDb = false, aceOleDb = false, excel = false;
+            bool aceOleDb = false;
+            bool excel = false;
             foreach (DataRow row in table1.Rows)
             {
+                bool jetOleDb;
                 if (row["SOURCES_NAME"].ToString() == "Microsoft.Jet.OLEDB.4.0") jetOleDb = true;
                 if (row["SOURCES_NAME"].ToString() == "Microsoft.ACE.OLEDB.12.0") aceOleDb = true;
             }

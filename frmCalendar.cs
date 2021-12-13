@@ -433,7 +433,7 @@ namespace TimeWorkTracking
         /// <param name="e"></param>
         private void btDelete_Click(object sender, EventArgs e)
         {
-            string key = dtWork.Value.ToString("yyyy-MM-dd");               //ключевое поле
+            //string key = dtWork.Value.ToString("yyyy-MM-dd");               //ключевое поле
             string keySQL = dtWork.Value.ToString("yyyyMMdd");              //ключевое поле для БД
 
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string

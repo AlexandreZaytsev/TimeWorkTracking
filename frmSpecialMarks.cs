@@ -133,8 +133,8 @@ namespace TimeWorkTracking
         private void lstwDataBaseSpecialMarks_SelectedIndexChanged(object sender, EventArgs e)
         {
             //string sql;
-            string key = tbName.Text.Trim();                                    //ключевое поле
-            string cs = Properties.Settings.Default.twtConnectionSrting;        //connection string
+            //string key = tbName.Text.Trim();                                    //ключевое поле
+            //string cs = Properties.Settings.Default.twtConnectionSrting;        //connection string
 
             int ind = lstwDataBaseSpecialMarks.extSelectedIndex();
             if (ind >= 0)
