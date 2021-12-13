@@ -5,20 +5,12 @@ using System.Data;
 using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
-using System.Xml;
-using System.Windows;
 using System.Runtime.InteropServices;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Diagnostics;
-
-
-
 
 //using DocumentFormat.OpenXml;
 //using DocumentFormat.OpenXml.Packaging;
@@ -837,7 +829,7 @@ namespace TimeWorkTracking
                 */
 
             }
-            return "export";
+            return inArgument[0];// "export";
         }
 
         /// <summary>
@@ -851,7 +843,7 @@ namespace TimeWorkTracking
                 "Внимание Таблицы:\r\n" +
                 "  EventsPass (События проходов)\r\n" +
                 "  Users      (Список сотрудников)\r\n" +
-                " будут ОЧИЩЕНЫ!!!" + "\r\n\r\n" +
+                " будут перезаписаны!!!" + "\r\n\r\n" +
                 "Продолжить?" + "\r\n",
                 "Начальное заполнение данных",
                 MessageBoxButtons.YesNo,
@@ -877,7 +869,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// импорт сотрудников через OleDbDataAdapter & DataSet 
+        /// импорт таблицы проходов через OleDbDataAdapter & DataSet 
         /// </summary>
         /// <param name="worker"></param>
         /// <param name="e"></param>
@@ -983,7 +975,7 @@ namespace TimeWorkTracking
             {
                 MessageBox.Show(ex.Message.ToString());
             }
-            return "users";
+            return inArgument[0];// "users";
         }
 
         /// <summary>
@@ -996,7 +988,7 @@ namespace TimeWorkTracking
             DialogResult response = MessageBox.Show(
                 "Внимание Таблица:\r\n" +
                 "  EventsPass (События проходов)\r\n" +
-                " будет ОЧИЩЕНА!!!" + "\r\n\r\n" +
+                "  будет перезаписана!!!" + "\r\n\r\n" +
                 "Продолжить?" + "\r\n",
                 "Начальное заполнение данных",
             MessageBoxButtons.YesNo,
@@ -1020,7 +1012,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// импорт сотрудников через OleDbDataAdapter & DataSet
+        /// импорт таблицы проходов через OleDbDataAdapter & DataSet
         /// </summary>
         /// <param name="worker"></param>
         /// <param name="e"></param>
@@ -1193,7 +1185,7 @@ namespace TimeWorkTracking
                 {
                     MessageBox.Show(ex.Message.ToString());
                 }
-            return "pass";
+            return inArgument[0];// "pass";
         }
 
         #endregion
@@ -1216,7 +1208,6 @@ namespace TimeWorkTracking
 
             Properties.Settings.Default.Save();
             CallBack_FrmSetting_outEvent.callbackEventHandler("", "", null);    //отправитьс ообщение главной форме что импрот произошел
-
         }
 
         /// <summary>
@@ -1253,19 +1244,7 @@ namespace TimeWorkTracking
             }
             */
         }
-
-
-
-
-
-
-
-
-
-
         #endregion
-
-
     }
 
     #region CALLBACK OutPut (собственные сообщения)
