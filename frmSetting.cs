@@ -9,8 +9,8 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using Excel = Microsoft.Office.Interop.Excel;
 using System.Diagnostics;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace TimeWorkTracking
 {
@@ -22,41 +22,6 @@ namespace TimeWorkTracking
         private Excel.Range workRange;
         readonly object mis = Type.Missing;
         private int timerSec = 4;                                       //количество секунд после выходв из потока
-
-        #region kill процесса Excel
-        [DllImport("user32.dll")]
-        static extern int GetWindowThreadProcessId(int hWnd, out int lpdwProcessId);
-        Process GetExcelProcess(Excel.Application excelApp)
-        {
-            int id;
-            GetWindowThreadProcessId(excelApp.Hwnd, out id);
-            return Process.GetProcessById(id);
-        }
-        //контрольный выстрел в голову
-        public static void killExcek(int iProcessId)
-        {
-
-            System.Diagnostics.Process[] process = System.Diagnostics.Process.GetProcessesByName("Excel");
-            foreach (System.Diagnostics.Process p in process)
-            {
-                if (p.Id == iProcessId)
-                {
-                    try
-                    {
-                        p.Kill();
-                    }
-                    catch { }
-                }
-            }
-        }
-        public static void GC()
-        {
-            System.GC.Collect();
-            System.GC.WaitForPendingFinalizers();
-            System.GC.Collect();
-            System.GC.WaitForPendingFinalizers();
-        }
-        #endregion
 
         /// <summary>
         /// конструктор
@@ -779,12 +744,12 @@ namespace TimeWorkTracking
 
                 // int iProcessId;
                 // GetWindowThreadProcessId(excelApp.Hwnd, out iProcessId);
-                Process excelProcess = GetExcelProcess(excelApp);
+                Process excelProcess = clSystemSet.GetExcelProcess(excelApp);
                 excelApp.Quit();
                 while (Marshal.ReleaseComObject(excelApp) > 0) { }
                 excelApp = null;
                 //GC();
-                killExcek(excelProcess.Id);// iProcessId);
+                clSystemSet.killExcel(excelProcess.Id);// iProcessId);
 
                 /*
                                 if (workRange != null) Marshal.ReleaseComObject(workRange);

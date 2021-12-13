@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
@@ -11,11 +10,60 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace TimeWorkTracking
 {
     static class clSystemSet
     {
+        #region kill процесса Excel
+
+        [DllImport("user32.dll")]
+        static extern int GetWindowThreadProcessId(int hWnd, out int lpdwProcessId);
+
+        /// <summary>
+        /// получить ID процесса Excel 
+        /// </summary>
+        /// <param name="excelApp"></param>
+        /// <returns></returns>
+        static public Process GetExcelProcess(Excel.Application excelApp)
+        {
+            int id;
+            GetWindowThreadProcessId(excelApp.Hwnd, out id);
+            return Process.GetProcessById(id);
+        }
+        
+        /// <summary>
+        /// закрыть процесс Excel
+        /// </summary>
+        /// <param name="iProcessId"></param>
+        public static void killExcel(int iProcessId)
+        {
+
+            System.Diagnostics.Process[] process = System.Diagnostics.Process.GetProcessesByName("Excel");
+            foreach (System.Diagnostics.Process p in process)
+            {
+                if (p.Id == iProcessId)
+                {
+                    try
+                    {
+                        p.Kill();
+                    }
+                    catch { }
+                }
+            }
+        }
+        public static void GC()
+        {
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
+        }
+
+        #endregion
 
         /// <summary>
         /// получить хеш строку MD5
