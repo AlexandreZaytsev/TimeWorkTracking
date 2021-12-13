@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-//using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 using System.Data;
@@ -788,7 +785,7 @@ namespace TimeWorkTracking
                 sqlConnection.Open();
                 using (var sqlCommand = sqlConnection.CreateCommand())
                 {
-                    sqlCommand.CommandText = "DELETE FROM " + tableName +
+                    sqlCommand.CommandText = "DELETE FROM " + tableName + ";\r\n" +
                                              "DBCC CHECKIDENT('" + tableName + "', RESEED, 0)";
                     sqlCommand.ExecuteScalar();
                 }
