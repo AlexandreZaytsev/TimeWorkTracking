@@ -28,7 +28,10 @@ namespace TimeWorkTracking
                     lstwDataBaseSpecialMarks.Items[0].Selected = true;     //выделить элемент по индексу
             }
         }
-        // Initialize ListView
+
+        /// <summary>
+        /// Инициализация списка(таблицы) данных
+        /// </summary>
         private void InitializeListView()
         {
             lstwDataBaseSpecialMarks.View = View.Details;               // Set the view to show details.
@@ -50,7 +53,10 @@ namespace TimeWorkTracking
             lstwDataBaseSpecialMarks.ListViewItemSorter = _lvwItemComparer;
         }
 
-        //Загрузить Data из DataSet в ListView
+        /// <summary>
+        /// Загрузка списка(таблицы) данных (Data из DataSet в ListView)
+        /// </summary>
+        /// <param name="dtable"></param>
         private void LoadList(DataTable dtable)
         {
             lstwDataBaseSpecialMarks.Items.Clear();         // Clear the ListView control
@@ -85,7 +91,11 @@ namespace TimeWorkTracking
             lstwDataBaseSpecialMarks.AutoResizeColumn(3, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
         }
 
-        //сортировка по заголовке столбца
+        /// <summary>
+        /// Сортировка списка(таблицы) данных по заголовкам столбцов
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lstwDataBaseSpecialMarks_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             // Determine if clicked column is already the column that is being sorted.
@@ -108,7 +118,11 @@ namespace TimeWorkTracking
             this.lstwDataBaseSpecialMarks.Sort();
         }
 
-        //выбор значения из списка
+        /// <summary>
+        /// Выбор значения в списке(таблице) данных
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lstwDataBaseSpecialMarks_SelectedIndexChanged(object sender, EventArgs e)
         {
             //string sql;
@@ -146,7 +160,11 @@ namespace TimeWorkTracking
             }
         }
 
-        //запретить изменение размеров
+        /// <summary>
+        /// Запрет изменения размеров ширины колонок списка(таблицы) данных
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lstwDataBaseSpecialMarks_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             e.Cancel = true;
