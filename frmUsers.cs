@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace TimeWorkTracking
@@ -52,8 +48,10 @@ namespace TimeWorkTracking
             }
         }
 
+        #region//Список(Таблица) данных СОТРУДНИКИ (ПОЛЬЗОВАТЕЛИ) (данные)
+
         /// <summary>
-        /// Initialize ListView  
+        /// Инициализация списка(таблицы) данных
         /// </summary>
         private void InitializeListView()
         {
@@ -78,7 +76,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// Загрузить Data из DataSet в ListView
+        /// Загрузка списка(таблицы) данных (Data из DataSet в ListView)
         /// </summary>
         /// <param name="dtable"></param>
         private void LoadList(DataTable dtable)
@@ -117,7 +115,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// событие сортировка по заголовке столбца ListView 
+        /// Сортировка списка(таблицы) данных по заголовкам столбцов
         /// </summary>
         private void lstwDataBaseUsers_ColumnClick(object sender, ColumnClickEventArgs e)
         {
@@ -141,7 +139,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// событие выбор значения из списка ListView инициализация переменных формы
+        /// Выбор значения в списке(таблице) данных
         /// </summary>
         private void lstwDataBaseUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -169,7 +167,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// событие запретить изменение размеров колонок ListView
+        /// Запрет изменения размеров ширины колонок списка(таблицы) данных
         /// </summary>
         private void lstwDataBaseUsers_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
@@ -177,8 +175,10 @@ namespace TimeWorkTracking
             e.NewWidth = lstwDataBaseUsers.Columns[e.ColumnIndex].Width;
         }
 
+        #endregion
+
         /// <summary>
-        /// событие чекбокс Сотрудник активен
+        /// запись доступна для использования (чекбокс)
         /// </summary>
         private void chUse_CheckedChanged(object sender, EventArgs e)
         {
@@ -208,7 +208,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// событие редактирование ключевого поля Имя сотрудника 
+        /// Редактирование ключевого поля Имя сотрудника 
         /// </summary>
         private void tbName_TextChanged(object sender, EventArgs e)
         {
@@ -250,8 +250,10 @@ namespace TimeWorkTracking
             }
         }
 
+        #region//Запись в БД 
+
         /// <summary>
-        /// событие кнопка Добавить запись в БД 
+        /// кнопка Добавить запись в БД 
         /// </summary>
         private void btInsert_Click(object sender, EventArgs e)
         {
@@ -291,7 +293,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// событие кнопка Обновить запись в БД
+        /// кнопка Обновить запись в БД
         /// </summary>
         private void btUpdate_Click(object sender, EventArgs e)
         {
@@ -316,6 +318,10 @@ namespace TimeWorkTracking
             lstwDataBaseUsers.extFindListByColValue(2, key);                   //найти и выделить позицию
             tbName_TextChanged(null, null);                                     //обновить поля и кнопки
         }
+
+        #endregion
+
+        #region//Interface
 
         /// <summary>
         /// событие наехали на кнопку Insert загасили id 
@@ -344,5 +350,7 @@ namespace TimeWorkTracking
         {
             e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
         }
+
+        #endregion
     }
 }

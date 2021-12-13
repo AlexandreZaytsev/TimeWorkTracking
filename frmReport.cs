@@ -43,6 +43,11 @@ namespace TimeWorkTracking
             pCalendar = new clCalendar();               //создать экземпляр класса Производственный календарь
         }
 
+        /// <summary>
+        /// загрузка формы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frmReport_Load(object sender, EventArgs e)
         {
             if (!clSystemSet.checkProvider()) this.Close();
@@ -64,7 +69,40 @@ namespace TimeWorkTracking
             }
         }
 
-        //изменение даты календаря
+        #region//Работа с Календарем
+
+        /// <summary>
+        /// проверить соединение с базами
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckConnects()
+        {
+            //проверка соединения с SQL
+            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+            bool conSQL = clMsSqlDatabase.sqlConnectSimple(cs);
+            mainPanelReport.Enabled = conSQL;
+            return conSQL;
+        }
+
+        /// <summary>
+        /// Загрузить Производственный календарь Data из DataSet в Calendar (Data из DataSet в ListView)
+        /// </summary>
+        /// <param name="dList"></param>
+        private void LoadBoldedDatesCalendar(List<DateTime> dList)
+        {
+            mcReport.RemoveAllBoldedDates();                           //Сбросить все непериодические даты
+            foreach (DateTime dt in dList)
+            {
+                mcReport.AddBoldedDate(dt);
+            }
+            mcReport.UpdateBoldedDates();
+        }
+
+        /// <summary>
+        /// событие изменение даты календаря
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void mcReport_DateChanged(object sender, DateRangeEventArgs e)
         {
             if (updateCalendar)         //проверка чтобы не срабатывало два раза
@@ -74,13 +112,20 @@ namespace TimeWorkTracking
 //                uploadCaptionExel((int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1);
             } 
         }
-        //обновить длину диапазона при изменении
+
+        /// <summary>
+        /// обновить длину диапазона при изменении
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void mcReport_DateSelected(object sender, DateRangeEventArgs e)
         {
 //            uploadCaptionExel((int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1);
         }
 
-        //вычислить границы диапазона в зависимости от типа формы
+        /// <summary>
+        /// вычислить границы диапазона (неделя или месяц) в зависимости от типа формы
+        /// </summary>
         private void getRangeFromType() 
         {
             DateTime dt = mcReport.SelectionStart;
@@ -99,7 +144,10 @@ namespace TimeWorkTracking
                     break;
             }
         }
-        //обновить диапазон в зависимости от текущей даты
+
+        /// <summary>
+        /// обновить (перерисовать) диапазон в зависимости от текущей даты
+        /// </summary>
         private void updateRange()
         {
             mcReport.MaxSelectionCount = chRange.Checked ? lengthRangeDays : 365;   //!!!Обязательно задать вначале (инача будет резать диапазон)
@@ -111,16 +159,26 @@ namespace TimeWorkTracking
             updateCalendar = true;
         }
 
-        //проверка флага использования диапазона дат по умолчанию
+        /// <summary>
+        /// проверка флага использования диапазона дат по умолчанию
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void chRange_CheckedChanged(object sender, EventArgs e)
         {
             getRangeFromType();     //вычислить границы диапазона в зависимости от типа формы
             updateRange();          //проверка использования диапазона дат по умолчанию
         }
 
-        //------------------------------------------------------------------------------------------------------
+        #endregion
 
-        //Загрузить массив данных для заголовка Excel (с учетом объединенных ячеек - спользуем первое значение)
+        #region//Подготовка данных для отчетов
+
+        /// <summary>
+        /// Загрузить массив данных для заголовка Excel (с учетом объединенных ячеек - спользуем первое значение)
+        /// </summary>
+        /// <param name="lengthDays"></param>
+        /// <returns></returns>
         private int uploadCaptionExcel(int lengthDays) 
         {
             DateTime tDate;
@@ -202,7 +260,11 @@ namespace TimeWorkTracking
             return captionData.GetUpperBound(1);
         }
 
-        //Загрузить массив данных для таблицы Excel (с учетом объединенных ячеек - спользуем первое значение)
+        /// <summary>
+        /// Загрузить массив данных для таблицы Excel (с учетом объединенных ячеек - спользуем первое значение)
+        /// </summary>
+        /// <param name="lenDays"></param>
+        /// <returns></returns>
         private int uploadTableExcel(int lenDays)
         {
             int j;// = 0;
@@ -371,29 +433,15 @@ namespace TimeWorkTracking
             return usersData.Rows.Count;
         }
 
-        //Загрузить Производственный календарь Data из DataSet в Calendar
-        private void LoadBoldedDatesCalendar(List<DateTime> dList)
-        {
-            mcReport.RemoveAllBoldedDates();                           //Сбросить все непериодические даты
-            foreach (DateTime dt in dList)
-            {
-                mcReport.AddBoldedDate(dt);
-            }
-            mcReport.UpdateBoldedDates();
-        }
+        #endregion
 
-        //проверить соединение с базами
-        private bool CheckConnects()
-        {
-            //проверка соединения с SQL
-            string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            bool conSQL = clMsSqlDatabase.sqlConnectSimple(cs);
-            mainPanelReport.Enabled = conSQL;
-            return conSQL;
-        }
+        #region//Отчеты
 
-        //--------------------------------------------------------------------------------------------------------------------------------------------
-        //напечатать бланк температуры
+        /// <summary>
+        /// кнопка напечатать бланк температуры
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btFormHeatPrint_Click(object sender, EventArgs e)
         {
             toolStripStatusLabelInfo.Text = "";
@@ -409,8 +457,12 @@ namespace TimeWorkTracking
             toolStripStatusLabelInfo.Text = "Выберите диапазон";
             System.Threading.Thread.Sleep(1000);    //пауза 1 сек
             this.Close();                           //закрыть форму
-
         }
+
+        /// <summary>
+        /// печать бланка температуры 
+        /// </summary>
+        /// <returns></returns>
         private bool FormHeatPrint()
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -608,7 +660,12 @@ namespace TimeWorkTracking
 
             return ret;
         }
-        //напечатать бланк проходов
+
+        /// <summary>
+        /// кнопка напечатать бланк проходов
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btFormTimePrint_Click(object sender, EventArgs e)
         {
             toolStripStatusLabelInfo.Text = "";
@@ -625,6 +682,11 @@ namespace TimeWorkTracking
             System.Threading.Thread.Sleep(1000);    //пауза 1 сек
             this.Close();                           //закрыть форму
         }
+
+        /// <summary>
+        /// печать бланка проходов
+        /// </summary>
+        /// <returns></returns>
         private bool FormTimePrint()
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -820,7 +882,11 @@ namespace TimeWorkTracking
             return ret;
         }
 
-        //напечатать итоговый отчет
+        /// <summary>
+        /// кнопка напечатать итоговый отчет
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btReportTotalPrint_Click(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
@@ -848,6 +914,10 @@ namespace TimeWorkTracking
             this.Close();                           //закрыть форму
         }
 
+        /// <summary>
+        /// печать итогового отчета
+        /// </summary>
+        /// <returns></returns>
         private bool ReportTotalPrint() 
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -1174,6 +1244,11 @@ namespace TimeWorkTracking
 
             return ret;
         }
+
+        #endregion
+
+        #region//Interface
+
         //преобразовать индекс столбца в букву
         /// <summary>
         /// Возвращает буквенный символ столбца Microsoft Excel, соответствующий заданному порядковому номеру.
@@ -1287,9 +1362,10 @@ namespace TimeWorkTracking
         }
         */
 
-    /*--------------------------------------------------------------------------------------------  
-    CALLBACK InPut (подписка на внешние сообщения)
-    --------------------------------------------------------------------------------------------*/
+        #endregion
+
+        #region//CALLBACK InPut (подписка на внешние сообщения)
+
         /// <summary>
         /// Callbacks the reload.
         /// входящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров
@@ -1318,10 +1394,11 @@ namespace TimeWorkTracking
             }
         }
 
+        #endregion
+
     }
-    /*----------------------------------------------------------------------------------------------------------
-        РАСШИРЕНИЯ
-    -----------------------------------------------------------------------------------------------------------*/
+
+    #region//РАСШИРЕНИЯ для работы с датами
 
     public static class DateTimeDayOfMonthExtensions
     {
@@ -1352,4 +1429,6 @@ namespace TimeWorkTracking
 
         }
     }
+
+    #endregion
 }
