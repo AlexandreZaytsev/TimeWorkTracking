@@ -70,7 +70,6 @@ namespace TimeWorkTracking
         }
         #endregion
 
-
         /// <summary>
         /// конструктор
         /// </summary>
@@ -182,16 +181,16 @@ namespace TimeWorkTracking
                 {
                     case "users":                                                           //если завершился иморт пользователей
                         CallBack_FrmImport_outEvent.callbackEventHandler("", "", null);     //отправитьс ообщение главной форме что импрот произошел
-                        toolStripStatusLabelInfo.Text = "Список сотрудников загружен в БД " + e.Result.ToString(); 
+                        toolStripStatusLabelInfo.Text = "Список сотрудников загружен в БД ";// + e.Result.ToString(); 
                         break;
                     case "pass":                                                            //если завершился иморт проходов
-                        toolStripStatusLabelInfo.Text = "Список проходов загружен в БД " + e.Result.ToString();
+                        toolStripStatusLabelInfo.Text = "Список проходов загружен в БД ";// + e.Result.ToString();
                         break;
                     case "export":                                                            //если завершился иморт проходов
-                        toolStripStatusLabelInfo.Text = "Экспорт данных из БД завершен " + e.Result.ToString();
+                        toolStripStatusLabelInfo.Text = "Экспорт данных из БД завершен ";// + e.Result.ToString();
                         break;
                     case "import":                                                            //если завершился иморт проходов
-                        toolStripStatusLabelInfo.Text = "Импорт данных в таблицу БД завершен " + e.Result.ToString();
+                        toolStripStatusLabelInfo.Text = "Импорт данных в таблицу БД завершен ";// + e.Result.ToString();
                         break;
                 }
                 timerImportExport.Start();
@@ -482,11 +481,13 @@ namespace TimeWorkTracking
         private void btMainImport_Click(object sender, EventArgs e)
         {
             DialogResult response = MessageBox.Show(
-                "Внимание Таблица:\r\n" +
-                "  "+ cbSheetTable.Text + "\r\n" +
-                " будет перезаписана!!!" + "\r\n\r\n" +
+                "Данные выбранных листов Excel" + "\r\n" +
+                "будут сопоставлены с таблицами БД" + "\r\n" +
+                "таблицы будут очищены и перезаписаны!!!" + "\r\n\r\n" +
+                "*при активации флага - только очистка" + "\r\n" +
+                "таблицы будут просто очищены" + "\r\n\r\n" +
                 "Продолжить?" + "\r\n",
-                "Импорт таблицы данных",
+                "Импорт данных из Excel",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Information,
                 MessageBoxDefaultButton.Button2,
@@ -652,12 +653,10 @@ namespace TimeWorkTracking
         private void btMainExport_Click(object sender, EventArgs e)
         {
             DialogResult response = MessageBox.Show(
-                "Экспортируем таблицы:\r\n" +
-                "  EventsPass (События проходов)\r\n" +
-                "  Users      (Список сотрудников)\r\n" +
-                " " + "\r\n\r\n" +
+                "Все данные всех Таблиц БД\r\n" +
+                "будут экспортированы в файл Excel" + "\r\n\r\n" +
                 "Продолжить?" + "\r\n",
-                "Полная выгрузка данных",
+                "Экспорт данных в Excel",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Information,
                 MessageBoxDefaultButton.Button2,

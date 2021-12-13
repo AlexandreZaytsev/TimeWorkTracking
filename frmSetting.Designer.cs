@@ -112,9 +112,9 @@ namespace TimeWorkTracking
             this.mainPanelSetting.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanelSetting.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mainPanelSetting.Location = new System.Drawing.Point(0, 0);
-            this.mainPanelSetting.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.mainPanelSetting.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.mainPanelSetting.Name = "mainPanelSetting";
-            this.mainPanelSetting.Size = new System.Drawing.Size(707, 217);
+            this.mainPanelSetting.Size = new System.Drawing.Size(530, 176);
             this.mainPanelSetting.TabIndex = 16;
             // 
             // tabSetting
@@ -125,9 +125,10 @@ namespace TimeWorkTracking
             this.tabSetting.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabSetting.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
             this.tabSetting.Location = new System.Drawing.Point(0, 0);
+            this.tabSetting.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabSetting.Name = "tabSetting";
             this.tabSetting.SelectedIndex = 0;
-            this.tabSetting.Size = new System.Drawing.Size(707, 187);
+            this.tabSetting.Size = new System.Drawing.Size(530, 152);
             this.tabSetting.TabIndex = 32;
             this.tabSetting.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabSetting_DrawItem);
             // 
@@ -135,10 +136,11 @@ namespace TimeWorkTracking
             // 
             this.tabPage1.BackColor = System.Drawing.Color.Transparent;
             this.tabPage1.Controls.Add(this.groupBox3);
-            this.tabPage1.Location = new System.Drawing.Point(4, 27);
+            this.tabPage1.Location = new System.Drawing.Point(4, 24);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(699, 156);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Size = new System.Drawing.Size(522, 124);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Настройки";
             // 
@@ -148,9 +150,11 @@ namespace TimeWorkTracking
             this.groupBox3.Controls.Add(this.tbCompanyName);
             this.groupBox3.Controls.Add(this.label7);
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox3.Location = new System.Drawing.Point(3, 3);
+            this.groupBox3.Location = new System.Drawing.Point(2, 2);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(693, 150);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox3.Size = new System.Drawing.Size(518, 120);
             this.groupBox3.TabIndex = 31;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Общие настройки";
@@ -165,9 +169,11 @@ namespace TimeWorkTracking
             this.groupBox4.Controls.Add(this.label9);
             this.groupBox4.Controls.Add(this.nDaysInWorkWeek);
             this.groupBox4.Controls.Add(this.label8);
-            this.groupBox4.Location = new System.Drawing.Point(9, 55);
+            this.groupBox4.Location = new System.Drawing.Point(7, 45);
+            this.groupBox4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(675, 65);
+            this.groupBox4.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox4.Size = new System.Drawing.Size(506, 53);
             this.groupBox4.TabIndex = 38;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Настройки рабочего времени (дни часы минуты)";
@@ -179,7 +185,8 @@ namespace TimeWorkTracking
             0,
             0,
             0});
-            this.nMinutesLunchBreakTime.Location = new System.Drawing.Point(612, 27);
+            this.nMinutesLunchBreakTime.Location = new System.Drawing.Point(459, 22);
+            this.nMinutesLunchBreakTime.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.nMinutesLunchBreakTime.Maximum = new decimal(new int[] {
             60,
             0,
@@ -191,7 +198,7 @@ namespace TimeWorkTracking
             0,
             0});
             this.nMinutesLunchBreakTime.Name = "nMinutesLunchBreakTime";
-            this.nMinutesLunchBreakTime.Size = new System.Drawing.Size(51, 24);
+            this.nMinutesLunchBreakTime.Size = new System.Drawing.Size(38, 21);
             this.nMinutesLunchBreakTime.TabIndex = 5;
             this.toolTipMsgSetting.SetToolTip(this.nMinutesLunchBreakTime, "Количество минут на обед");
             this.nMinutesLunchBreakTime.Value = new decimal(new int[] {
@@ -203,10 +210,9 @@ namespace TimeWorkTracking
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(519, 30);
-            this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label12.Location = new System.Drawing.Point(389, 24);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(87, 18);
+            this.label12.Size = new System.Drawing.Size(71, 15);
             this.label12.TabIndex = 43;
             this.label12.Text = "Обед (мин)";
             // 
@@ -217,7 +223,8 @@ namespace TimeWorkTracking
             0,
             0,
             0});
-            this.nMinutesChangingFullWorkDay.Location = new System.Drawing.Point(457, 28);
+            this.nMinutesChangingFullWorkDay.Location = new System.Drawing.Point(343, 23);
+            this.nMinutesChangingFullWorkDay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.nMinutesChangingFullWorkDay.Maximum = new decimal(new int[] {
             120,
             0,
@@ -229,7 +236,7 @@ namespace TimeWorkTracking
             0,
             0});
             this.nMinutesChangingFullWorkDay.Name = "nMinutesChangingFullWorkDay";
-            this.nMinutesChangingFullWorkDay.Size = new System.Drawing.Size(56, 24);
+            this.nMinutesChangingFullWorkDay.Size = new System.Drawing.Size(42, 21);
             this.nMinutesChangingFullWorkDay.TabIndex = 4;
             this.toolTipMsgSetting.SetToolTip(this.nMinutesChangingFullWorkDay, "Количество минут сокращения и(или) увеличения полного рабочего дня");
             this.nMinutesChangingFullWorkDay.Value = new decimal(new int[] {
@@ -241,16 +248,16 @@ namespace TimeWorkTracking
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(385, 30);
-            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label10.Location = new System.Drawing.Point(289, 24);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(67, 18);
+            this.label10.Size = new System.Drawing.Size(55, 15);
             this.label10.TabIndex = 41;
             this.label10.Text = "+/- (мин)";
             // 
             // nHoursInFullWorkDay
             // 
-            this.nHoursInFullWorkDay.Location = new System.Drawing.Point(332, 27);
+            this.nHoursInFullWorkDay.Location = new System.Drawing.Point(249, 22);
+            this.nHoursInFullWorkDay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.nHoursInFullWorkDay.Maximum = new decimal(new int[] {
             8,
             0,
@@ -262,7 +269,7 @@ namespace TimeWorkTracking
             0,
             0});
             this.nHoursInFullWorkDay.Name = "nHoursInFullWorkDay";
-            this.nHoursInFullWorkDay.Size = new System.Drawing.Size(40, 24);
+            this.nHoursInFullWorkDay.Size = new System.Drawing.Size(30, 21);
             this.nHoursInFullWorkDay.TabIndex = 3;
             this.toolTipMsgSetting.SetToolTip(this.nHoursInFullWorkDay, "Количество часов в полном рабочем дне");
             this.nHoursInFullWorkDay.Value = new decimal(new int[] {
@@ -274,16 +281,16 @@ namespace TimeWorkTracking
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(179, 30);
-            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label9.Location = new System.Drawing.Point(134, 24);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(139, 18);
+            this.label9.Size = new System.Drawing.Size(114, 15);
             this.label9.TabIndex = 39;
             this.label9.Text = "Полный день (час)";
             // 
             // nDaysInWorkWeek
             // 
-            this.nDaysInWorkWeek.Location = new System.Drawing.Point(128, 27);
+            this.nDaysInWorkWeek.Location = new System.Drawing.Point(96, 22);
+            this.nDaysInWorkWeek.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.nDaysInWorkWeek.Maximum = new decimal(new int[] {
             7,
             0,
@@ -295,7 +302,7 @@ namespace TimeWorkTracking
             0,
             0});
             this.nDaysInWorkWeek.Name = "nDaysInWorkWeek";
-            this.nDaysInWorkWeek.Size = new System.Drawing.Size(41, 24);
+            this.nDaysInWorkWeek.Size = new System.Drawing.Size(31, 21);
             this.nDaysInWorkWeek.TabIndex = 2;
             this.toolTipMsgSetting.SetToolTip(this.nDaysInWorkWeek, "Количество дней в рабочей неделе");
             this.nDaysInWorkWeek.Value = new decimal(new int[] {
@@ -307,19 +314,17 @@ namespace TimeWorkTracking
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(7, 30);
-            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label8.Location = new System.Drawing.Point(5, 24);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(110, 18);
+            this.label8.Size = new System.Drawing.Size(92, 15);
             this.label8.TabIndex = 37;
             this.label8.Text = "Дней в неделе";
             // 
             // tbCompanyName
             // 
-            this.tbCompanyName.Location = new System.Drawing.Point(137, 24);
-            this.tbCompanyName.Margin = new System.Windows.Forms.Padding(4);
+            this.tbCompanyName.Location = new System.Drawing.Point(103, 20);
             this.tbCompanyName.Name = "tbCompanyName";
-            this.tbCompanyName.Size = new System.Drawing.Size(544, 24);
+            this.tbCompanyName.Size = new System.Drawing.Size(409, 21);
             this.tbCompanyName.TabIndex = 1;
             this.toolTipMsgSetting.SetToolTip(this.tbCompanyName, "укажите диапазон НА ОДНУ СТРОЧКУ ВЫШЕ\r\nв формате -  Имя столбца : Номер строки\r\n(" +
         "без использования абсрлютной адресации $))");
@@ -327,10 +332,9 @@ namespace TimeWorkTracking
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(16, 27);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Location = new System.Drawing.Point(12, 22);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(110, 18);
+            this.label7.Size = new System.Drawing.Size(92, 15);
             this.label7.TabIndex = 11;
             this.label7.Text = "Имя компании";
             // 
@@ -339,9 +343,10 @@ namespace TimeWorkTracking
             this.tabPage3.BackColor = System.Drawing.Color.Transparent;
             this.tabPage3.Controls.Add(this.groupBox6);
             this.tabPage3.Controls.Add(this.groupBox5);
-            this.tabPage3.Location = new System.Drawing.Point(4, 27);
+            this.tabPage3.Location = new System.Drawing.Point(4, 24);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(699, 156);
+            this.tabPage3.Size = new System.Drawing.Size(522, 124);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Экспорт Импорт";
             // 
@@ -352,9 +357,11 @@ namespace TimeWorkTracking
             this.groupBox6.Controls.Add(this.btMainExportPathSave);
             this.groupBox6.Controls.Add(this.tbMainExportPath);
             this.groupBox6.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox6.Location = new System.Drawing.Point(0, 97);
+            this.groupBox6.Location = new System.Drawing.Point(0, 76);
+            this.groupBox6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(699, 59);
+            this.groupBox6.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox6.Size = new System.Drawing.Size(522, 48);
             this.groupBox6.TabIndex = 32;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Экспорт данных";
@@ -362,10 +369,9 @@ namespace TimeWorkTracking
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(17, 27);
-            this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label14.Location = new System.Drawing.Point(13, 22);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(46, 18);
+            this.label14.Size = new System.Drawing.Size(39, 15);
             this.label14.TabIndex = 29;
             this.label14.Text = "Файл";
             // 
@@ -373,10 +379,10 @@ namespace TimeWorkTracking
             // 
             this.btMainExport.ImageIndex = 7;
             this.btMainExport.ImageList = this.imgListButtonSetting;
-            this.btMainExport.Location = new System.Drawing.Point(569, 20);
-            this.btMainExport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btMainExport.Location = new System.Drawing.Point(427, 16);
+            this.btMainExport.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btMainExport.Name = "btMainExport";
-            this.btMainExport.Size = new System.Drawing.Size(124, 32);
+            this.btMainExport.Size = new System.Drawing.Size(93, 26);
             this.btMainExport.TabIndex = 10;
             this.btMainExport.Text = "Экспорт";
             this.btMainExport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -403,10 +409,9 @@ namespace TimeWorkTracking
             // btMainExportPathSave
             // 
             this.btMainExportPathSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btMainExportPathSave.Location = new System.Drawing.Point(519, 22);
-            this.btMainExportPathSave.Margin = new System.Windows.Forms.Padding(4);
+            this.btMainExportPathSave.Location = new System.Drawing.Point(389, 18);
             this.btMainExportPathSave.Name = "btMainExportPathSave";
-            this.btMainExportPathSave.Size = new System.Drawing.Size(39, 28);
+            this.btMainExportPathSave.Size = new System.Drawing.Size(29, 23);
             this.btMainExportPathSave.TabIndex = 7;
             this.btMainExportPathSave.Text = "...";
             this.btMainExportPathSave.UseVisualStyleBackColor = true;
@@ -414,11 +419,10 @@ namespace TimeWorkTracking
             // 
             // tbMainExportPath
             // 
-            this.tbMainExportPath.Location = new System.Drawing.Point(84, 23);
-            this.tbMainExportPath.Margin = new System.Windows.Forms.Padding(4);
+            this.tbMainExportPath.Location = new System.Drawing.Point(63, 19);
             this.tbMainExportPath.Name = "tbMainExportPath";
             this.tbMainExportPath.ReadOnly = true;
-            this.tbMainExportPath.Size = new System.Drawing.Size(427, 24);
+            this.tbMainExportPath.Size = new System.Drawing.Size(321, 21);
             this.tbMainExportPath.TabIndex = 6;
             // 
             // groupBox5
@@ -432,8 +436,10 @@ namespace TimeWorkTracking
             this.groupBox5.Controls.Add(this.tbMainImportPath);
             this.groupBox5.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox5.Location = new System.Drawing.Point(0, 0);
+            this.groupBox5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(699, 91);
+            this.groupBox5.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox5.Size = new System.Drawing.Size(522, 74);
             this.groupBox5.TabIndex = 31;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Импорт данных";
@@ -441,9 +447,10 @@ namespace TimeWorkTracking
             // chAllData
             // 
             this.chAllData.AutoSize = true;
-            this.chAllData.Location = new System.Drawing.Point(20, 57);
+            this.chAllData.Location = new System.Drawing.Point(15, 46);
+            this.chAllData.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.chAllData.Name = "chAllData";
-            this.chAllData.Size = new System.Drawing.Size(118, 22);
+            this.chAllData.Size = new System.Drawing.Size(100, 19);
             this.chAllData.TabIndex = 35;
             this.chAllData.Text = "все таблицы";
             this.chAllData.UseVisualStyleBackColor = true;
@@ -452,9 +459,10 @@ namespace TimeWorkTracking
             // chDeleteOnly
             // 
             this.chDeleteOnly.AutoSize = true;
-            this.chDeleteOnly.Location = new System.Drawing.Point(403, 58);
+            this.chDeleteOnly.Location = new System.Drawing.Point(302, 47);
+            this.chDeleteOnly.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.chDeleteOnly.Name = "chDeleteOnly";
-            this.chDeleteOnly.Size = new System.Drawing.Size(147, 22);
+            this.chDeleteOnly.Size = new System.Drawing.Size(124, 19);
             this.chDeleteOnly.TabIndex = 34;
             this.chDeleteOnly.Text = "только очистить";
             this.chDeleteOnly.UseVisualStyleBackColor = true;
@@ -463,20 +471,18 @@ namespace TimeWorkTracking
             // 
             this.cbSheetTable.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbSheetTable.FormattingEnabled = true;
-            this.cbSheetTable.Location = new System.Drawing.Point(161, 55);
-            this.cbSheetTable.Margin = new System.Windows.Forms.Padding(4);
+            this.cbSheetTable.Location = new System.Drawing.Point(121, 45);
             this.cbSheetTable.Name = "cbSheetTable";
-            this.cbSheetTable.Size = new System.Drawing.Size(218, 26);
+            this.cbSheetTable.Size = new System.Drawing.Size(164, 23);
             this.cbSheetTable.TabIndex = 32;
             this.cbSheetTable.SelectedIndexChanged += new System.EventHandler(this.cbSheetTable_SelectedIndexChanged);
             // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(17, 27);
-            this.label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label13.Location = new System.Drawing.Point(13, 22);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(46, 18);
+            this.label13.Size = new System.Drawing.Size(39, 15);
             this.label13.TabIndex = 29;
             this.label13.Text = "Файл";
             // 
@@ -484,10 +490,10 @@ namespace TimeWorkTracking
             // 
             this.btMainImport.ImageIndex = 6;
             this.btMainImport.ImageList = this.imgListButtonSetting;
-            this.btMainImport.Location = new System.Drawing.Point(569, 52);
-            this.btMainImport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btMainImport.Location = new System.Drawing.Point(427, 42);
+            this.btMainImport.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btMainImport.Name = "btMainImport";
-            this.btMainImport.Size = new System.Drawing.Size(124, 32);
+            this.btMainImport.Size = new System.Drawing.Size(93, 26);
             this.btMainImport.TabIndex = 10;
             this.btMainImport.Text = "Обновить";
             this.btMainImport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -498,10 +504,9 @@ namespace TimeWorkTracking
             // btMainImportPathOpen
             // 
             this.btMainImportPathOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btMainImportPathOpen.Location = new System.Drawing.Point(653, 21);
-            this.btMainImportPathOpen.Margin = new System.Windows.Forms.Padding(4);
+            this.btMainImportPathOpen.Location = new System.Drawing.Point(490, 17);
             this.btMainImportPathOpen.Name = "btMainImportPathOpen";
-            this.btMainImportPathOpen.Size = new System.Drawing.Size(39, 28);
+            this.btMainImportPathOpen.Size = new System.Drawing.Size(29, 23);
             this.btMainImportPathOpen.TabIndex = 7;
             this.btMainImportPathOpen.Text = "...";
             this.btMainImportPathOpen.UseVisualStyleBackColor = true;
@@ -509,21 +514,21 @@ namespace TimeWorkTracking
             // 
             // tbMainImportPath
             // 
-            this.tbMainImportPath.Location = new System.Drawing.Point(84, 23);
-            this.tbMainImportPath.Margin = new System.Windows.Forms.Padding(4);
+            this.tbMainImportPath.Location = new System.Drawing.Point(63, 19);
             this.tbMainImportPath.Name = "tbMainImportPath";
             this.tbMainImportPath.ReadOnly = true;
-            this.tbMainImportPath.Size = new System.Drawing.Size(561, 24);
+            this.tbMainImportPath.Size = new System.Drawing.Size(422, 21);
             this.tbMainImportPath.TabIndex = 6;
             // 
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Transparent;
             this.tabPage2.Controls.Add(this.groupBox2);
-            this.tabPage2.Location = new System.Drawing.Point(4, 27);
+            this.tabPage2.Location = new System.Drawing.Point(4, 24);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(699, 156);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Size = new System.Drawing.Size(522, 126);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Начальное заполнение данных";
             // 
@@ -534,9 +539,11 @@ namespace TimeWorkTracking
             this.groupBox2.Controls.Add(this.btFileNameOpen);
             this.groupBox2.Controls.Add(this.tbPathImport);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox2.Location = new System.Drawing.Point(3, 3);
+            this.groupBox2.Location = new System.Drawing.Point(2, 2);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(693, 150);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Size = new System.Drawing.Size(518, 122);
             this.groupBox2.TabIndex = 30;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Импорт данных";
@@ -544,10 +551,9 @@ namespace TimeWorkTracking
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(17, 27);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(13, 22);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(46, 18);
+            this.label2.Size = new System.Drawing.Size(39, 15);
             this.label2.TabIndex = 29;
             this.label2.Text = "Файл";
             // 
@@ -565,21 +571,20 @@ namespace TimeWorkTracking
             this.groupBox1.Controls.Add(this.btImportPass);
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.btImportUsers);
-            this.groupBox1.Location = new System.Drawing.Point(9, 57);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox1.Location = new System.Drawing.Point(7, 46);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox1.Size = new System.Drawing.Size(675, 89);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Size = new System.Drawing.Size(506, 72);
             this.groupBox1.TabIndex = 26;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Инициализация БД";
             // 
             // tbRangePass
             // 
-            this.tbRangePass.Location = new System.Drawing.Point(408, 56);
-            this.tbRangePass.Margin = new System.Windows.Forms.Padding(4);
+            this.tbRangePass.Location = new System.Drawing.Point(306, 46);
             this.tbRangePass.Name = "tbRangePass";
-            this.tbRangePass.Size = new System.Drawing.Size(132, 24);
+            this.tbRangePass.Size = new System.Drawing.Size(100, 21);
             this.tbRangePass.TabIndex = 12;
             this.toolTipMsgSetting.SetToolTip(this.tbRangePass, "укажите диапазон НА ОДНУ СТРОЧКУ ВЫШЕ\r\nв формате -  Имя столбца : Номер строки\r\n(" +
         "без использования абсрлютной адресации $))\r\n");
@@ -587,38 +592,34 @@ namespace TimeWorkTracking
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(315, 60);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Location = new System.Drawing.Point(236, 49);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(77, 18);
+            this.label5.Size = new System.Drawing.Size(64, 15);
             this.label5.TabIndex = 36;
             this.label5.Text = "Диапазон";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(115, 60);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Location = new System.Drawing.Point(86, 49);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(42, 18);
+            this.label6.Size = new System.Drawing.Size(35, 15);
             this.label6.TabIndex = 35;
             this.label6.Text = "Лист";
             // 
             // cbSheetPass
             // 
             this.cbSheetPass.FormattingEnabled = true;
-            this.cbSheetPass.Location = new System.Drawing.Point(169, 56);
-            this.cbSheetPass.Margin = new System.Windows.Forms.Padding(4);
+            this.cbSheetPass.Location = new System.Drawing.Point(127, 46);
             this.cbSheetPass.Name = "cbSheetPass";
-            this.cbSheetPass.Size = new System.Drawing.Size(136, 26);
+            this.cbSheetPass.Size = new System.Drawing.Size(103, 23);
             this.cbSheetPass.TabIndex = 11;
             // 
             // tbRangeUser
             // 
-            this.tbRangeUser.Location = new System.Drawing.Point(408, 23);
-            this.tbRangeUser.Margin = new System.Windows.Forms.Padding(4);
+            this.tbRangeUser.Location = new System.Drawing.Point(306, 19);
             this.tbRangeUser.Name = "tbRangeUser";
-            this.tbRangeUser.Size = new System.Drawing.Size(132, 24);
+            this.tbRangeUser.Size = new System.Drawing.Size(100, 21);
             this.tbRangeUser.TabIndex = 9;
             this.toolTipMsgSetting.SetToolTip(this.tbRangeUser, "укажите диапазон НА ОДНУ СТРОЧКУ ВЫШЕ\r\nв формате -  Имя столбца : Номер строки\r\n(" +
         "без использования абсрлютной адресации $))");
@@ -626,39 +627,35 @@ namespace TimeWorkTracking
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(315, 27);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Location = new System.Drawing.Point(236, 22);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(77, 18);
+            this.label4.Size = new System.Drawing.Size(64, 15);
             this.label4.TabIndex = 32;
             this.label4.Text = "Диапазон";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(115, 27);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(86, 22);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(42, 18);
+            this.label3.Size = new System.Drawing.Size(35, 15);
             this.label3.TabIndex = 31;
             this.label3.Text = "Лист";
             // 
             // cbSheetUser
             // 
             this.cbSheetUser.FormattingEnabled = true;
-            this.cbSheetUser.Location = new System.Drawing.Point(169, 23);
-            this.cbSheetUser.Margin = new System.Windows.Forms.Padding(4);
+            this.cbSheetUser.Location = new System.Drawing.Point(127, 19);
             this.cbSheetUser.Name = "cbSheetUser";
-            this.cbSheetUser.Size = new System.Drawing.Size(136, 26);
+            this.cbSheetUser.Size = new System.Drawing.Size(103, 23);
             this.cbSheetUser.TabIndex = 8;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 59);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(5, 48);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(72, 18);
+            this.label1.Size = new System.Drawing.Size(59, 15);
             this.label1.TabIndex = 25;
             this.label1.Text = "Проходы";
             // 
@@ -666,10 +663,10 @@ namespace TimeWorkTracking
             // 
             this.btImportPass.ImageIndex = 7;
             this.btImportPass.ImageList = this.imgListButtonSetting;
-            this.btImportPass.Location = new System.Drawing.Point(551, 53);
-            this.btImportPass.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btImportPass.Location = new System.Drawing.Point(413, 43);
+            this.btImportPass.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btImportPass.Name = "btImportPass";
-            this.btImportPass.Size = new System.Drawing.Size(112, 32);
+            this.btImportPass.Size = new System.Drawing.Size(84, 26);
             this.btImportPass.TabIndex = 13;
             this.btImportPass.Text = "Импорт";
             this.btImportPass.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -680,10 +677,9 @@ namespace TimeWorkTracking
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(7, 27);
-            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label11.Location = new System.Drawing.Point(5, 22);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(91, 18);
+            this.label11.Size = new System.Drawing.Size(75, 15);
             this.label11.TabIndex = 10;
             this.label11.Text = "Сотрудники";
             // 
@@ -691,10 +687,10 @@ namespace TimeWorkTracking
             // 
             this.btImportUsers.ImageIndex = 7;
             this.btImportUsers.ImageList = this.imgListButtonSetting;
-            this.btImportUsers.Location = new System.Drawing.Point(551, 20);
-            this.btImportUsers.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btImportUsers.Location = new System.Drawing.Point(413, 16);
+            this.btImportUsers.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btImportUsers.Name = "btImportUsers";
-            this.btImportUsers.Size = new System.Drawing.Size(112, 32);
+            this.btImportUsers.Size = new System.Drawing.Size(84, 26);
             this.btImportUsers.TabIndex = 10;
             this.btImportUsers.Text = "Импорт";
             this.btImportUsers.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -705,10 +701,9 @@ namespace TimeWorkTracking
             // btFileNameOpen
             // 
             this.btFileNameOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btFileNameOpen.Location = new System.Drawing.Point(642, 22);
-            this.btFileNameOpen.Margin = new System.Windows.Forms.Padding(4);
+            this.btFileNameOpen.Location = new System.Drawing.Point(482, 18);
             this.btFileNameOpen.Name = "btFileNameOpen";
-            this.btFileNameOpen.Size = new System.Drawing.Size(39, 28);
+            this.btFileNameOpen.Size = new System.Drawing.Size(29, 23);
             this.btFileNameOpen.TabIndex = 7;
             this.btFileNameOpen.Text = "...";
             this.btFileNameOpen.UseVisualStyleBackColor = true;
@@ -716,11 +711,10 @@ namespace TimeWorkTracking
             // 
             // tbPathImport
             // 
-            this.tbPathImport.Location = new System.Drawing.Point(84, 23);
-            this.tbPathImport.Margin = new System.Windows.Forms.Padding(4);
+            this.tbPathImport.Location = new System.Drawing.Point(63, 19);
             this.tbPathImport.Name = "tbPathImport";
             this.tbPathImport.ReadOnly = true;
-            this.tbPathImport.Size = new System.Drawing.Size(555, 24);
+            this.tbPathImport.Size = new System.Drawing.Size(417, 21);
             this.tbPathImport.TabIndex = 6;
             // 
             // statusStripSetting
@@ -729,11 +723,11 @@ namespace TimeWorkTracking
             this.statusStripSetting.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelInfo,
             this.toolStripProgressBarImport});
-            this.statusStripSetting.Location = new System.Drawing.Point(0, 187);
+            this.statusStripSetting.Location = new System.Drawing.Point(0, 152);
             this.statusStripSetting.Name = "statusStripSetting";
-            this.statusStripSetting.Padding = new System.Windows.Forms.Padding(1, 0, 13, 0);
+            this.statusStripSetting.Padding = new System.Windows.Forms.Padding(1, 0, 10, 0);
             this.statusStripSetting.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStripSetting.Size = new System.Drawing.Size(707, 30);
+            this.statusStripSetting.Size = new System.Drawing.Size(530, 24);
             this.statusStripSetting.SizingGrip = false;
             this.statusStripSetting.TabIndex = 25;
             this.statusStripSetting.Text = "statusStripSetting";
@@ -741,14 +735,14 @@ namespace TimeWorkTracking
             // toolStripStatusLabelInfo
             // 
             this.toolStripStatusLabelInfo.Name = "toolStripStatusLabelInfo";
-            this.toolStripStatusLabelInfo.Size = new System.Drawing.Size(441, 24);
+            this.toolStripStatusLabelInfo.Size = new System.Drawing.Size(329, 19);
             this.toolStripStatusLabelInfo.Spring = true;
             this.toolStripStatusLabelInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // toolStripProgressBarImport
             // 
             this.toolStripProgressBarImport.Name = "toolStripProgressBarImport";
-            this.toolStripProgressBarImport.Size = new System.Drawing.Size(250, 22);
+            this.toolStripProgressBarImport.Size = new System.Drawing.Size(188, 18);
             // 
             // openFileDialogSetting
             // 
@@ -761,13 +755,13 @@ namespace TimeWorkTracking
             // 
             // frmSetting
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(707, 217);
+            this.ClientSize = new System.Drawing.Size(530, 176);
             this.Controls.Add(this.mainPanelSetting);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "frmSetting";
             this.Text = "Общиен настройки Импорт Экспорт данных";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSetting_FormClosing);
