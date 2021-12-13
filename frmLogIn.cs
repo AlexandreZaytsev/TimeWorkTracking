@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace TimeWorkTracking
@@ -41,7 +36,11 @@ namespace TimeWorkTracking
             cbTypeAccount.SelectedIndex = 0;
         }
 
-        //выбор учетной записи
+        /// <summary>
+        /// выбор учетной записи
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cbTypeAccount_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (cbTypeAccount.Text) 
@@ -69,7 +68,28 @@ namespace TimeWorkTracking
             checkLoginAndSendEvent();                                   //проинформировать родителя
         }
 
-        //Вход Пользователя-----------------------------------------------------------------------------------
+        /// <summary>
+        /// кнопка Вход
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btOk_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        /// <summary>
+        /// проверим кто входит откорректируем если нужно и пошлем сообщение главному 
+        /// </summary>
+        private void checkLoginAndSendEvent()
+        {
+            string login = cbTypeAccount.Text;
+            if (!pass)
+                login = "Пользователь";                                         //если доступ не прошел проверку работаем в режиме регистратора
+            CallBack_FrmLogIn_outEvent.callbackEventHandler(login, "", null);   //send a general notification
+        }
+
+        #region //Вход Пользователя
 
         /// <summary>
         /// события таймера
@@ -91,9 +111,15 @@ namespace TimeWorkTracking
             }
         }
 
-        //Вход Администратора---------------------------------------------------------------------------------
+        #endregion
 
-        //включить изменение пароля
+        #region //Вход Администратора
+
+        /// <summary>
+        /// включить изменение пароля
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void chChangePassword_CheckedChanged(object sender, EventArgs e)
         {
             if (chChangePassword.Checked)                               //сбросим поле с рабочим паролем
@@ -102,38 +128,34 @@ namespace TimeWorkTracking
             checkBasePassword();                                        //проверить пароль
             checkLoginAndSendEvent();                                   //проинформировать родителя
         }
-        //ввод рабочего пароля
+
+        /// <summary>
+        /// ввод рабочего пароля
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tbPassword_TextChanged(object sender, EventArgs e)
         {
             checkBasePassword();                                        //проверить пароль
             checkLoginAndSendEvent();                                   //проинформировать родителя
         }
-        //ввод старого пароля при изменении 
+
+        /// <summary>
+        /// ввод старого пароля при изменении
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tbOldPassword_TextChanged(object sender, EventArgs e)
         {
             checkBasePassword();                                        //проверить пароль
         }
-        //проверка вводимых симолов нового пароля
-        private void tbNewPassword_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (clSystemSet.checkChar(e.KeyChar))       //проверить допустимые символы
-                e.Handled = true;
-        }
-        //показать пароль при наезде на кнопку
-        private void btSave_MouseHover(object sender, EventArgs e)
-        {
-            tbNewPassword.PasswordChar = '\0';
-        }
-        //скрыть пароль при съезде с кнопки
-        private void btSave_MouseLeave(object sender, EventArgs e)
-        {
-            tbNewPassword.PasswordChar = '*';//Convert.ToChar("*");//'\u25CF';
-        }
 
-        //проверим корректность введенного пароля
+        /// <summary>
+        /// проверим корректность введенного пароля
+        /// </summary>
         private void checkBasePassword()
         {
-            if (!chChangePassword.Checked) 
+            if (!chChangePassword.Checked)
             {                                                           //работаем с главным паролем
                 this.Text = "Авторизация";
                 panelAdmin.Visible = true;                              //панель администратора
@@ -181,7 +203,12 @@ namespace TimeWorkTracking
                 }
             }
         }
-        //сохранить новый пароль
+
+        /// <summary>
+        /// сохранить новый пароль
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btSave_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.adminPass = tbNewPassword.Text;
@@ -189,22 +216,57 @@ namespace TimeWorkTracking
             adminPassword = tbNewPassword.Text;                         //сохраним его в глобальной переменной
             chChangePassword.Checked = false;                           //вернемся на ввод главного пароля      
         }
-        //отказ от нового пароля
+
+        /// <summary>
+        /// отказ от нового пароля
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btCancel_Click(object sender, EventArgs e)
         {
             chChangePassword.Checked = false;                           //вернемся на ввод главного пароля      
         }
 
-        //проверим корректность данный и пошлем сообщение главному
-        private void checkLoginAndSendEvent()
+        #endregion
+
+        #region //Interface
+
+        /// <summary>
+        /// проверка вводимых симолов нового пароля
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tbNewPassword_KeyPress(object sender, KeyPressEventArgs e)
         {
-            string login = cbTypeAccount.Text;
-            if (!pass)                                                      
-                login = "Пользователь";                                         //если доступ не прошел проверку работаем в режиме регистратора
-            CallBack_FrmLogIn_outEvent.callbackEventHandler(login, "", null);   //send a general notification
+            if (clSystemSet.checkChar(e.KeyChar))       //проверить допустимые символы
+                e.Handled = true;
         }
 
-        //закрыть диалог по Enter
+        /// <summary>
+        /// Hover показать пароль при наезде на кнопку
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btSave_MouseHover(object sender, EventArgs e)
+        {
+            tbNewPassword.PasswordChar = '\0';
+        }
+
+        /// <summary>
+        /// Leave скрыть пароль при съезде с кнопки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btSave_MouseLeave(object sender, EventArgs e)
+        {
+            tbNewPassword.PasswordChar = '*';//Convert.ToChar("*");//'\u25CF';
+        }
+
+        /// <summary>
+        /// закрыть диалог по Enter
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frmLogIn_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
@@ -213,21 +275,20 @@ namespace TimeWorkTracking
                 this.Close();
         }
 
-        //Кнопка Вход
-        private void btOk_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        //при закрытии формы    
+        /// <summary>
+        /// при закрытии формы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frmLogIn_FormClosing(object sender, FormClosingEventArgs e)
         {
             checkLoginAndSendEvent();                   //проинформировать родителя
         }
 
-        /*--------------------------------------------------------------------------------------------  
-        CALLBACK InPut (подписка на внешние сообщения)
-        --------------------------------------------------------------------------------------------*/
+        #endregion
+
+        #region //CALLBACK InPut (подписка на внешние сообщения)
+
         /// <summary>
         /// Callbacks the reload.
         /// входящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров
@@ -245,12 +306,12 @@ namespace TimeWorkTracking
             }
             */
         }
+
+        #endregion
     }
 
-    /*--------------------------------------------------------------------------------------------  
-    CALLBACK OutPut (собственные сообщения)
-    --------------------------------------------------------------------------------------------*/
-    //general notification
+    #region //CALLBACK OutPut (собственные сообщения)
+
     /// <summary>
     /// CallBack_GetParam
     /// исходящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров 
@@ -269,4 +330,6 @@ namespace TimeWorkTracking
         /// </summary>
         public static callbackEvent callbackEventHandler;
     }
+
+    #endregion
 }
