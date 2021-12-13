@@ -112,7 +112,7 @@ namespace TimeWorkTracking
             this.mainPanelSetting.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanelSetting.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mainPanelSetting.Location = new System.Drawing.Point(0, 0);
-            this.mainPanelSetting.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.mainPanelSetting.Margin = new System.Windows.Forms.Padding(2);
             this.mainPanelSetting.Name = "mainPanelSetting";
             this.mainPanelSetting.Size = new System.Drawing.Size(530, 176);
             this.mainPanelSetting.TabIndex = 16;
@@ -125,7 +125,7 @@ namespace TimeWorkTracking
             this.tabSetting.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabSetting.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
             this.tabSetting.Location = new System.Drawing.Point(0, 0);
-            this.tabSetting.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabSetting.Margin = new System.Windows.Forms.Padding(2);
             this.tabSetting.Name = "tabSetting";
             this.tabSetting.SelectedIndex = 0;
             this.tabSetting.Size = new System.Drawing.Size(530, 152);
@@ -137,9 +137,9 @@ namespace TimeWorkTracking
             this.tabPage1.BackColor = System.Drawing.Color.Transparent;
             this.tabPage1.Controls.Add(this.groupBox3);
             this.tabPage1.Location = new System.Drawing.Point(4, 24);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
             this.tabPage1.Size = new System.Drawing.Size(522, 124);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Настройки";
@@ -151,9 +151,9 @@ namespace TimeWorkTracking
             this.groupBox3.Controls.Add(this.label7);
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox3.Location = new System.Drawing.Point(2, 2);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox3.Size = new System.Drawing.Size(518, 120);
             this.groupBox3.TabIndex = 31;
             this.groupBox3.TabStop = false;
@@ -170,9 +170,9 @@ namespace TimeWorkTracking
             this.groupBox4.Controls.Add(this.nDaysInWorkWeek);
             this.groupBox4.Controls.Add(this.label8);
             this.groupBox4.Location = new System.Drawing.Point(7, 45);
-            this.groupBox4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox4.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox4.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox4.Size = new System.Drawing.Size(506, 53);
             this.groupBox4.TabIndex = 38;
             this.groupBox4.TabStop = false;
@@ -186,7 +186,7 @@ namespace TimeWorkTracking
             0,
             0});
             this.nMinutesLunchBreakTime.Location = new System.Drawing.Point(459, 22);
-            this.nMinutesLunchBreakTime.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nMinutesLunchBreakTime.Margin = new System.Windows.Forms.Padding(2);
             this.nMinutesLunchBreakTime.Maximum = new decimal(new int[] {
             60,
             0,
@@ -224,7 +224,7 @@ namespace TimeWorkTracking
             0,
             0});
             this.nMinutesChangingFullWorkDay.Location = new System.Drawing.Point(343, 23);
-            this.nMinutesChangingFullWorkDay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nMinutesChangingFullWorkDay.Margin = new System.Windows.Forms.Padding(2);
             this.nMinutesChangingFullWorkDay.Maximum = new decimal(new int[] {
             120,
             0,
@@ -257,7 +257,7 @@ namespace TimeWorkTracking
             // nHoursInFullWorkDay
             // 
             this.nHoursInFullWorkDay.Location = new System.Drawing.Point(249, 22);
-            this.nHoursInFullWorkDay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nHoursInFullWorkDay.Margin = new System.Windows.Forms.Padding(2);
             this.nHoursInFullWorkDay.Maximum = new decimal(new int[] {
             8,
             0,
@@ -290,7 +290,7 @@ namespace TimeWorkTracking
             // nDaysInWorkWeek
             // 
             this.nDaysInWorkWeek.Location = new System.Drawing.Point(96, 22);
-            this.nDaysInWorkWeek.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nDaysInWorkWeek.Margin = new System.Windows.Forms.Padding(2);
             this.nDaysInWorkWeek.Maximum = new decimal(new int[] {
             7,
             0,
@@ -326,8 +326,7 @@ namespace TimeWorkTracking
             this.tbCompanyName.Name = "tbCompanyName";
             this.tbCompanyName.Size = new System.Drawing.Size(409, 21);
             this.tbCompanyName.TabIndex = 1;
-            this.toolTipMsgSetting.SetToolTip(this.tbCompanyName, "укажите диапазон НА ОДНУ СТРОЧКУ ВЫШЕ\r\nв формате -  Имя столбца : Номер строки\r\n(" +
-        "без использования абсрлютной адресации $))");
+            this.toolTipMsgSetting.SetToolTip(this.tbCompanyName, "используется в отчетвх");
             // 
             // label7
             // 
@@ -344,7 +343,7 @@ namespace TimeWorkTracking
             this.tabPage3.Controls.Add(this.groupBox6);
             this.tabPage3.Controls.Add(this.groupBox5);
             this.tabPage3.Location = new System.Drawing.Point(4, 24);
-            this.tabPage3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(522, 124);
             this.tabPage3.TabIndex = 2;
@@ -358,9 +357,9 @@ namespace TimeWorkTracking
             this.groupBox6.Controls.Add(this.tbMainExportPath);
             this.groupBox6.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.groupBox6.Location = new System.Drawing.Point(0, 76);
-            this.groupBox6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox6.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox6.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox6.Size = new System.Drawing.Size(522, 48);
             this.groupBox6.TabIndex = 32;
             this.groupBox6.TabStop = false;
@@ -380,7 +379,7 @@ namespace TimeWorkTracking
             this.btMainExport.ImageIndex = 7;
             this.btMainExport.ImageList = this.imgListButtonSetting;
             this.btMainExport.Location = new System.Drawing.Point(427, 16);
-            this.btMainExport.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btMainExport.Margin = new System.Windows.Forms.Padding(2);
             this.btMainExport.Name = "btMainExport";
             this.btMainExport.Size = new System.Drawing.Size(93, 26);
             this.btMainExport.TabIndex = 10;
@@ -424,6 +423,7 @@ namespace TimeWorkTracking
             this.tbMainExportPath.ReadOnly = true;
             this.tbMainExportPath.Size = new System.Drawing.Size(321, 21);
             this.tbMainExportPath.TabIndex = 6;
+            this.toolTipMsgSetting.SetToolTip(this.tbMainExportPath, "путь к файлу данных для экспорта");
             // 
             // groupBox5
             // 
@@ -436,9 +436,9 @@ namespace TimeWorkTracking
             this.groupBox5.Controls.Add(this.tbMainImportPath);
             this.groupBox5.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox5.Location = new System.Drawing.Point(0, 0);
-            this.groupBox5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox5.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox5.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox5.Size = new System.Drawing.Size(522, 74);
             this.groupBox5.TabIndex = 31;
             this.groupBox5.TabStop = false;
@@ -448,11 +448,12 @@ namespace TimeWorkTracking
             // 
             this.chAllData.AutoSize = true;
             this.chAllData.Location = new System.Drawing.Point(15, 46);
-            this.chAllData.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chAllData.Margin = new System.Windows.Forms.Padding(2);
             this.chAllData.Name = "chAllData";
             this.chAllData.Size = new System.Drawing.Size(100, 19);
             this.chAllData.TabIndex = 35;
             this.chAllData.Text = "все таблицы";
+            this.toolTipMsgSetting.SetToolTip(this.chAllData, "обработать все таблицы");
             this.chAllData.UseVisualStyleBackColor = true;
             this.chAllData.CheckedChanged += new System.EventHandler(this.chAllData_CheckedChanged);
             // 
@@ -460,7 +461,7 @@ namespace TimeWorkTracking
             // 
             this.chDeleteOnly.AutoSize = true;
             this.chDeleteOnly.Location = new System.Drawing.Point(302, 47);
-            this.chDeleteOnly.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chDeleteOnly.Margin = new System.Windows.Forms.Padding(2);
             this.chDeleteOnly.Name = "chDeleteOnly";
             this.chDeleteOnly.Size = new System.Drawing.Size(124, 19);
             this.chDeleteOnly.TabIndex = 34;
@@ -475,6 +476,7 @@ namespace TimeWorkTracking
             this.cbSheetTable.Name = "cbSheetTable";
             this.cbSheetTable.Size = new System.Drawing.Size(164, 23);
             this.cbSheetTable.TabIndex = 32;
+            this.toolTipMsgSetting.SetToolTip(this.cbSheetTable, "имена листов(таблиц) в файле импорта");
             this.cbSheetTable.SelectedIndexChanged += new System.EventHandler(this.cbSheetTable_SelectedIndexChanged);
             // 
             // label13
@@ -491,7 +493,7 @@ namespace TimeWorkTracking
             this.btMainImport.ImageIndex = 6;
             this.btMainImport.ImageList = this.imgListButtonSetting;
             this.btMainImport.Location = new System.Drawing.Point(427, 42);
-            this.btMainImport.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btMainImport.Margin = new System.Windows.Forms.Padding(2);
             this.btMainImport.Name = "btMainImport";
             this.btMainImport.Size = new System.Drawing.Size(93, 26);
             this.btMainImport.TabIndex = 10;
@@ -519,16 +521,17 @@ namespace TimeWorkTracking
             this.tbMainImportPath.ReadOnly = true;
             this.tbMainImportPath.Size = new System.Drawing.Size(422, 21);
             this.tbMainImportPath.TabIndex = 6;
+            this.toolTipMsgSetting.SetToolTip(this.tbMainImportPath, "путь к файлу данных для импорта");
             // 
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Transparent;
             this.tabPage2.Controls.Add(this.groupBox2);
             this.tabPage2.Location = new System.Drawing.Point(4, 24);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.tabPage2.Size = new System.Drawing.Size(522, 126);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
+            this.tabPage2.Size = new System.Drawing.Size(522, 124);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Начальное заполнение данных";
             // 
@@ -540,10 +543,10 @@ namespace TimeWorkTracking
             this.groupBox2.Controls.Add(this.tbPathImport);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(2, 2);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupBox2.Size = new System.Drawing.Size(518, 122);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox2.Size = new System.Drawing.Size(518, 120);
             this.groupBox2.TabIndex = 30;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Импорт данных";
@@ -572,9 +575,9 @@ namespace TimeWorkTracking
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.btImportUsers);
             this.groupBox1.Location = new System.Drawing.Point(7, 46);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox1.Size = new System.Drawing.Size(506, 72);
             this.groupBox1.TabIndex = 26;
             this.groupBox1.TabStop = false;
@@ -614,6 +617,7 @@ namespace TimeWorkTracking
             this.cbSheetPass.Name = "cbSheetPass";
             this.cbSheetPass.Size = new System.Drawing.Size(103, 23);
             this.cbSheetPass.TabIndex = 11;
+            this.toolTipMsgSetting.SetToolTip(this.cbSheetPass, "имена листов(таблиц) в файле импорта");
             // 
             // tbRangeUser
             // 
@@ -649,6 +653,7 @@ namespace TimeWorkTracking
             this.cbSheetUser.Name = "cbSheetUser";
             this.cbSheetUser.Size = new System.Drawing.Size(103, 23);
             this.cbSheetUser.TabIndex = 8;
+            this.toolTipMsgSetting.SetToolTip(this.cbSheetUser, "имена листов(таблиц) в файле импорта");
             // 
             // label1
             // 
@@ -664,7 +669,7 @@ namespace TimeWorkTracking
             this.btImportPass.ImageIndex = 7;
             this.btImportPass.ImageList = this.imgListButtonSetting;
             this.btImportPass.Location = new System.Drawing.Point(413, 43);
-            this.btImportPass.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btImportPass.Margin = new System.Windows.Forms.Padding(2);
             this.btImportPass.Name = "btImportPass";
             this.btImportPass.Size = new System.Drawing.Size(84, 26);
             this.btImportPass.TabIndex = 13;
@@ -688,7 +693,7 @@ namespace TimeWorkTracking
             this.btImportUsers.ImageIndex = 7;
             this.btImportUsers.ImageList = this.imgListButtonSetting;
             this.btImportUsers.Location = new System.Drawing.Point(413, 16);
-            this.btImportUsers.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btImportUsers.Margin = new System.Windows.Forms.Padding(2);
             this.btImportUsers.Name = "btImportUsers";
             this.btImportUsers.Size = new System.Drawing.Size(84, 26);
             this.btImportUsers.TabIndex = 10;
@@ -716,6 +721,7 @@ namespace TimeWorkTracking
             this.tbPathImport.ReadOnly = true;
             this.tbPathImport.Size = new System.Drawing.Size(417, 21);
             this.tbPathImport.TabIndex = 6;
+            this.tbPathImport.Text = "путь к файлу данных для импорта";
             // 
             // statusStripSetting
             // 
@@ -761,7 +767,7 @@ namespace TimeWorkTracking
             this.Controls.Add(this.mainPanelSetting);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "frmSetting";
             this.Text = "Общиен настройки Импорт Экспорт данных";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSetting_FormClosing);
