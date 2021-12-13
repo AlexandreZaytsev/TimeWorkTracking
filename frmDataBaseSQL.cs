@@ -14,6 +14,11 @@ namespace TimeWorkTracking
             InitializeComponent();
         }
 
+        /// <summary>
+        /// загрузить данные формы из параметров
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frmDataBaseSQL_Load(object sender, EventArgs e)
         {
             //Read Setting
@@ -35,6 +40,13 @@ namespace TimeWorkTracking
             // btTestConnectionTwt_Click(null, null);
         }
 
+        #region //Подключения и проверки
+
+        /// <summary>
+        /// выбор метода аутентификации
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cbAutentificationTWT_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -43,8 +55,11 @@ namespace TimeWorkTracking
             tbPasswordTWT.Enabled = auth;
         }
 
-
-        //test Connrection TWT (TimeWorkTracking database )
+        /// <summary>
+        /// попытка подключения к SQL Базе Данных (TimeWorkTracking)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btTestConnectionTwt_Click(object sender, EventArgs e)
         {
             if (!clSystemSet.CheckPing(tbServerTWT.Text))
@@ -56,7 +71,10 @@ namespace TimeWorkTracking
                 TestFormConnectionTwt();        //проверить соединение по настройкам формы
         }
 
-        //полчить строку соединения SQL по настройкам формы
+        /// <summary>
+        /// полчить строку соединения SQL по настройкам формы
+        /// </summary>
+        /// <returns></returns>
         private string GetFormConnectionString() 
         {
             string connectionString;
@@ -75,7 +93,10 @@ namespace TimeWorkTracking
             return connectionString;
         }
 
-        //проверить соединение по настройкам формы
+        /// <summary>
+        /// проверить соединение c БД SQL по настройкам формы
+        /// </summary>
+        /// <returns></returns>
         private Boolean TestFormConnectionTwt()
         {
             bool ret = false;
@@ -132,7 +153,34 @@ namespace TimeWorkTracking
             return ret;
         }
 
+        /// <summary>
+        /// проверить соединение с базой SQL
+        /// </summary>
+        private void CheckConnects()
+        {
+            if (!clSystemSet.CheckPing(tbServerTWT.Text))
+            {
+                this.picStatusTWT.Image = Properties.Resources.no;
+                /*
+                   MessageBox.Show("Cетевое имя сервера SQL\r\n  " +
+                                   tbServerTWT.Text +
+                                   "- недоступно\r\n",
+                                   "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+               */
+            }
+            else
+            {
+                if (clMsSqlDatabase.sqlConnectSimple(Properties.Settings.Default.twtConnectionSrting))
+                    this.picStatusTWT.Image = Properties.Resources.ok;
+                else
+                    this.picStatusTWT.Image = Properties.Resources.no;
 
+            }
+        }
+
+        #endregion
+
+        #region //Работа с Базой Данных
 
         /// <summary>
         /// создать бд
@@ -164,39 +212,25 @@ namespace TimeWorkTracking
             }
         }
 
-        //проверить соединение с базами
-        private void CheckConnects()
-        {
-            if (!clSystemSet.CheckPing(tbServerTWT.Text)) 
-            {
-                this.picStatusTWT.Image = Properties.Resources.no;
-             /*
-                MessageBox.Show("Cетевое имя сервера SQL\r\n  " +
-                                tbServerTWT.Text +
-                                "- недоступно\r\n",
-                                "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            */
-            }
-            else 
-            {
-                if (clMsSqlDatabase.sqlConnectSimple(Properties.Settings.Default.twtConnectionSrting))
-                    this.picStatusTWT.Image = Properties.Resources.ok;
-                else
-                    this.picStatusTWT.Image = Properties.Resources.no;
+        #endregion
 
-            }
-        }
+        #region //Interface
 
-        //проверка вводимых симолов нового пароля логина
+        /// <summary>
+        /// проверка вводимых симолов нового пароля логина 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tb_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (clSystemSet.checkChar(e.KeyChar))       //проверить допустимые символы
                 e.Handled = true;
         }
 
-        /*--------------------------------------------------------------------------------------------  
-        CALLBACK InPut (подписка на внешние сообщения)
-        --------------------------------------------------------------------------------------------*/
+        #endregion
+
+        #region //CALLBACK InPut (подписка на внешние сообщения)
+
         /// <summary>
         /// Callbacks the reload.
         /// входящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров
@@ -214,13 +248,12 @@ namespace TimeWorkTracking
             }
             */
         }
+
+        #endregion
     }
 
+    #region //CALLBACK OutPut (собственные сообщения)
 
-    /*--------------------------------------------------------------------------------------------  
-    CALLBACK OutPut (собственные сообщения)
-    --------------------------------------------------------------------------------------------*/
-    //general notification
     /// <summary>
     /// CallBack_GetParam
     /// исходящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров 
@@ -239,4 +272,6 @@ namespace TimeWorkTracking
         /// </summary>
         public static callbackEvent callbackEventHandler;
     }
+
+    #endregion
 }

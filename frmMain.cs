@@ -31,6 +31,7 @@ namespace TimeWorkTracking
 
         //*используется при проверке диапазона ДатыВремени регистрации базового времени и времени специальных отметок
         private bool readType;                                      //true - чтение из списка/БД false - запись в БД  
+      
         public frmMain()
         {
             //подписка события внешних форм 
@@ -48,7 +49,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// событие загругка формы 
+        /// событие загрузка формы 
         /// </summary>
         private void frmMain_Load(object sender, EventArgs e)
         {
@@ -98,6 +99,126 @@ namespace TimeWorkTracking
             }
         }
 
+        #region//Методы меню STATUS STRIP
+
+        /// <summary>
+        /// событие кнока help 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void frmMain_HelpButtonClicked(object sender, CancelEventArgs e)
+        {
+            frmAbout aboutBox = new frmAbout();
+            aboutBox.ShowDialog(this);
+        }
+
+        /// <summary>
+        /// событие кнопка настройки базы SQL 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tsbtDataBaseSQL_Click(object sender, EventArgs e)
+        {
+            if (userType)
+            {
+                frmDataBaseSQL frm = new frmDataBaseSQL { Owner = this };
+                CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
+                frm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// событие кнопка настройки базы СКУД
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tsbtDataBasePACS_Click(object sender, EventArgs e)
+        {
+            if (userType)
+            {
+                frmDataBasePACS frm = new frmDataBasePACS { Owner = this };
+                CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
+                frm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// событие кнопка настрект программы (Импорт Экспорт) 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolSetting_Click(object sender, EventArgs e)
+        {
+            frmSetting frm = new frmSetting { Owner = this };
+            CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
+            frm.ShowDialog();
+        }
+
+        /// <summary>
+        /// событие кнопка настройки специальныз отметок 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tsbtGuideMarks_Click(object sender, EventArgs e)
+        {
+            frmSpecialMarks frm = new frmSpecialMarks { Owner = this };
+            frm.ShowDialog();
+        }
+
+        /// <summary>
+        /// событие кнопка настройки сотрудников 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TsbtGuideUsers_Click(object sender, EventArgs e)
+        {
+            frmUsers frm = new frmUsers { Owner = this };
+            frm.ShowDialog();
+        }
+
+        /// <summary>
+        /// событие кнопка настройки календаря
+        /// </summary>
+        private void tsbtGuideCalendar_Click(object sender, EventArgs e)
+        {
+            frmCalendar frm = new frmCalendar { Owner = this };
+            frm.ShowDialog();
+        }
+
+        /// <summary>
+        /// событие кнопка Бланк Учета температуры
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tsbtFormHeatCheck_Click(object sender, EventArgs e)
+        {
+            frmReport frm = new frmReport { Owner = this };
+            CallBack_FrmMain_outEvent.callbackEventHandler("FormHeatCheck", "Бланк Учета температуры", null);  //send a general notification
+            frm.ShowDialog();
+        }
+
+        /// <summary>
+        /// событие кнопка Бланк Учета рабочего времени
+        /// </summary>
+        private void tsbtFormTimeCheck_Click(object sender, EventArgs e)
+        {
+            frmReport frm = new frmReport { Owner = this };
+            CallBack_FrmMain_outEvent.callbackEventHandler("FormTimeCheck", "Бланк Учета рабочего времени", null);  //send a general notification
+            frm.ShowDialog();
+        }
+
+        /// <summary>
+        /// событие кнопка Итоговый отчет
+        /// </summary>
+        private void tsbtReportTotal_Click(object sender, EventArgs e)
+        {
+            frmReport frm = new frmReport { Owner = this };
+            CallBack_FrmMain_outEvent.callbackEventHandler("ReportTotal", "Итоговый отчет", null);  //send a general notification
+            frm.ShowDialog();
+        }
+
+        #endregion
+
         /// <summary>
         /// показать Диалог Авторизации 
         /// </summary>
@@ -108,8 +229,10 @@ namespace TimeWorkTracking
             frm.ShowDialog();
         }
 
+        #region//Список(Таблица) данных РЕГИСТРАЦИЯ СОТРУДНИКОВ (данные)
+
         /// <summary>
-        /// инициализация элемента ListView 
+        /// Инициализация списка(таблицы) данных
         /// </summary>
         private void InitializeListView()
         {
@@ -134,7 +257,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// Загрузить данные Data из DataSet в ListViewUser
+        /// Загрузка списка(таблицы) данных (Data из DataSet в ListView)
         /// </summary>
         /// <param name="dtable">источник данных</param>
         private void LoadListUser(DataTable dtable)
@@ -182,7 +305,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// событие сортировка по заголовку столбца 
+        /// Сортировка списка(таблицы) данных по заголовкам столбцов
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -208,16 +331,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// событие запретить изменение размеров столбцов
-        /// </summary>
-        private void lstwDataBaseMain_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
-        {
-            e.Cancel = true;
-            e.NewWidth = lstwDataBaseMain.Columns[e.ColumnIndex].Width;
-        }
-
-        /// <summary>
-        /// событие выбор значения из списка активных сотрудников и инициализировать переменные формы
+        /// Выбор значения в списке(таблице) данных
         /// </summary>
         private void lstwDataBaseMain_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -331,244 +445,30 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
+        /// Запрет изменения размеров ширины колонок списка(таблицы) данных
+        /// </summary>
+        private void lstwDataBaseMain_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            e.Cancel = true;
+            e.NewWidth = lstwDataBaseMain.Columns[e.ColumnIndex].Width;
+        }
+
+        #endregion
+
+        #region//Календарь
+
+        /// <summary>
         /// Загрузить Производственный календарь Data из DataSet в Calendar
         /// </summary>
         /// <param name="dList">источник данных</param>
         private void LoadBoldedDatesCalendar(List<DateTime> dList)
         {
             mcRegDate.RemoveAllBoldedDates();                           //Сбросить все непериодические даты
-            foreach (DateTime dt in dList) 
+            foreach (DateTime dt in dList)
             {
                 mcRegDate.AddBoldedDate(dt);
             }
             mcRegDate.UpdateBoldedDates();
-        }
-
-        /// <summary>
-        /// проверить соединение с базами SQL и СКУД/PACS
-        /// </summary>
-        private void CheckConnects()
-        {
-            string msg = "";
-            string hostSQL = Properties.Settings.Default.twtServerName;
-            string csSQL = Properties.Settings.Default.twtConnectionSrting;
-            bool pingSQL = csSQL != "" && clSystemSet.CheckPing(hostSQL);               //здесь sql сервер (внутри сети)
-            conSQL = false;
-            if (!pingSQL)
-                msg += "Cетевое имя сервера SQL\r\n  " + hostSQL + "- недоступно\r\n\r\n";
-            else
-                conSQL = clMsSqlDatabase.sqlConnectSimple(csSQL);
-
-            this.tsbtDataBaseSQL.Image = conSQL ? Properties.Resources.ok : Properties.Resources.no;
-            mainPanelRegistration.Enabled = conSQL && lstwDataBaseMain.Items.Count > 0;
-            tsbtGuideUsers.Enabled = conSQL;                                            //справочник пользователей
-            tsbtGuideMarks.Enabled = conSQL;                                            //справочник спец отметок    
-            tsbtGuideCalendar.Enabled = conSQL;                                         //справочник производственного календаря
-            tsbtFormHeatCheck.Enabled = conSQL;                                         //печать бланка температуры
-            tsbtFormTimeCheck.Enabled = conSQL;                                         //печать блака проходов
-            tsbtReportTotal.Enabled = conSQL;                                           //печать итогового отчета
-            toolSetting.Enabled = conSQL;                                               //кнопка настроек экспорт импорт
-
-            string hostPACS = Properties.Settings.Default.pacsHost;
-            string csPACS = Properties.Settings.Default.pacsConnectionString;
-//            bool pingPACS = csPACS != "" && clSystemSet.CheckHost(csPACS);            //здесь pacs сервер (внутри сети)
-            bool pingPACS = csPACS != "" && clSystemSet.CheckPing(hostPACS);
-            conPACS = false;
-            if (!pingPACS)
-                msg += "Cетевое имя сервера СКУД\r\n  " + csPACS + "- недоступено\r\n";
-            else
-                conPACS = clPacsWebDataBase.pacsConnectSimple(csPACS);
-            //                conWeb = clPacsWebDataBase.pacsConnectSimple(csPACS);
-
-            this.tsbtDataBasePACS.Image = pingPACS ? Properties.Resources.ok : Properties.Resources.no;
-        }
-
-        /// <summary>
-        /// прочитать количество обработанных строк
-        /// </summary>
-        /// <returns></returns>
-        private string getPassCount()
-        {
-            int count = 0;
-            if (lstwDataBaseMain.Items.Count > 0)
-            {
-                for (int index = 0; index <= lstwDataBaseMain.Items.Count - 1; index++)
-                {
-                    if (lstwDataBaseMain.Items[index].Text == "1")
-                        count++;
-                }
-            }
-            return "обработано " + count.ToString() + " из " + lstwDataBaseMain.Items.Count.ToString();
-        }
-
-        #region Методы меню STATUS STRIP
-
-        /// <summary>
-        /// событие кнока help 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void frmMain_HelpButtonClicked(object sender, CancelEventArgs e)
-        {
-            frmAbout aboutBox = new frmAbout();
-            aboutBox.ShowDialog(this);
-        }
-
-        /// <summary>
-        /// событие кнопка настройки базы SQL 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void tsbtDataBaseSQL_Click(object sender, EventArgs e)
-        {
-            if (userType) 
-            { 
-                frmDataBaseSQL frm = new frmDataBaseSQL { Owner = this };
-                CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
-                frm.ShowDialog();
-            }
-        }
-
-        /// <summary>
-        /// событие кнопка настройки базы СКУД
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void tsbtDataBasePACS_Click(object sender, EventArgs e)
-        {
-            if (userType)
-            {
-                frmDataBasePACS frm = new frmDataBasePACS { Owner = this };
-                CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
-                frm.ShowDialog();
-            }
-        }
-
-        /// <summary>
-        /// событие кнопка настрект программы (Импорт Экспорт) 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void toolSetting_Click(object sender, EventArgs e)
-        {
-            frmSetting frm = new frmSetting { Owner = this };
-            CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
-            frm.ShowDialog();
-        }
-
-        /// <summary>
-        /// событие кнопка настройки специальныз отметок 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void tsbtGuideMarks_Click(object sender, EventArgs e)
-        {
-            frmSpecialMarks frm = new frmSpecialMarks { Owner = this };
-            frm.ShowDialog();
-        }
-
-        /// <summary>
-        /// событие кнопка настройки сотрудников 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TsbtGuideUsers_Click(object sender, EventArgs e)
-        {
-            frmUsers frm = new frmUsers { Owner = this };
-            frm.ShowDialog();
-        }
-
-        /// <summary>
-        /// событие кнопка настройки календаря
-        /// </summary>
-        private void tsbtGuideCalendar_Click(object sender, EventArgs e)
-        {
-            frmCalendar frm = new frmCalendar { Owner = this };
-            frm.ShowDialog();
-        }
-
-        /// <summary>
-        /// событие кнопка Бланк Учета температуры
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void tsbtFormHeatCheck_Click(object sender, EventArgs e)
-        {
-            frmReport frm = new frmReport { Owner = this };
-            CallBack_FrmMain_outEvent.callbackEventHandler("FormHeatCheck", "Бланк Учета температуры", null);  //send a general notification
-            frm.ShowDialog();
-        }
-
-        /// <summary>
-        /// событие кнопка Бланк Учета рабочего времени
-        /// </summary>
-        private void tsbtFormTimeCheck_Click(object sender, EventArgs e)
-        {
-            frmReport frm = new frmReport { Owner = this };
-            CallBack_FrmMain_outEvent.callbackEventHandler("FormTimeCheck", "Бланк Учета рабочего времени", null);  //send a general notification
-            frm.ShowDialog();
-        }
-
-        /// <summary>
-        /// событие кнопка Итоговый отчет
-        /// </summary>
-        private void tsbtReportTotal_Click(object sender, EventArgs e)
-        {
-            frmReport frm = new frmReport { Owner = this };
-            CallBack_FrmMain_outEvent.callbackEventHandler("ReportTotal", "Итоговый отчет", null);  //send a general notification
-            frm.ShowDialog();
-        }
-
-        #endregion
-
-        /// <summary>
-        /// событие изменение специальных отметок 
-        /// </summary>
-        private void cbSMarks_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            smDStart.Enabled = (int)cbSMarks.SelectedValue != 1;//   cbSMarks.Text != "-";
-            smTStart.Enabled = (int)cbSMarks.SelectedValue != 1;//   cbSMarks.Text != "-";
-            smDStop.Enabled = (int)cbSMarks.SelectedValue != 1;//   cbSMarks.Text != "-";
-            smTStop.Enabled = (int)cbSMarks.SelectedValue != 1;//   cbSMarks.Text != "-";
-        }
-
-        /// <summary>
-        /// событие проверка даты времени ('от' меньше 'до') в специальных отметках
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void checkDateSpecialMarks(object sender, EventArgs e)
-        {
-            if (((int)cbSMarks.SelectedValue != 1 && cbSMarks.Text != "") && mainPanelRegistration.Enabled && !readType)
-                {
-                    if (DateTime.Compare(DateTime.Parse(smDStart.Value.ToString("yyyy-MM-dd ") + smTStart.Value.ToString("HH:mm ")),
-                                     DateTime.Parse(smDStop.Value.ToString("yyyy-MM-dd ") + smTStop.Value.ToString("HH:mm "))) > 0)
-                {
-                                        MessageBox.Show("Дата/Время окончания периода должно быть больше Даты/Времени начала периода","Ошибка установки диапазона дат",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
-                    btPanel.Enabled = false;
-                }
-                else
-                    btPanel.Enabled = true;
-            }
-        }
-
-        /// <summary>
-        /// событие проверка даты времени ('от' меньше 'до') в регистрируемом (базового) времени
-        /// </summary>
-        private void checkBaseTimeWork(object sender, EventArgs e)
-        {
-            if (!readType)
-            {
-                if (DateTime.Compare(DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")),
-                                     DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"))) > 0)
-                {
-                    MessageBox.Show("Время Входа должно быть меньше времени Выхода", "Ошибка установки времени", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    btPanel.Enabled = false;
-                }
-                else
-                    btPanel.Enabled = true;
-            }
-
         }
 
         /// <summary>
@@ -579,12 +479,12 @@ namespace TimeWorkTracking
         private void mcRegDate_DateChanged(object sender, DateRangeEventArgs e)
         {
             int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
-                
+
             webInfoDay.DocumentText = pCalendar.getDateInfoHTML(e.Start);
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
 
-            if (index != -1) 
+            if (index != -1)
             {                                                               //выделить строку по индексу
                 lstwDataBaseMain.Items[index].Selected = true;
                 lstwDataBaseMain.HideSelection = false;                     //оставить выделение строки при потере фокуса ListView
@@ -592,8 +492,12 @@ namespace TimeWorkTracking
             }
         }
 
+        #endregion
+
+        #region//Запись в БД 
+
         /// <summary>
-        /// событие кнопка Добавить/Обновить запись в БД
+        /// кнопка Добавить/Обновить запись в БД
         /// </summary>
         private void btInsertUpdate_Click(object sender, EventArgs e)
         {
@@ -1005,7 +909,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// событие кнопка удалить запись в БД
+        /// кнопка Удалить запись в БД
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1026,6 +930,117 @@ namespace TimeWorkTracking
             lstwDataBaseMain.Items[index].Selected = true;
             lstwDataBaseMain.HideSelection = false;                         //оставить выделение строки при потере фокуса ListView
             lstwDataBaseMain.EnsureVisible(index);                          //показать в области видимости окна
+        }
+
+        #endregion
+
+        #region//Interface
+
+        /// <summary>
+        /// проверить соединение с базами SQL и СКУД/PACS
+        /// </summary>
+        private void CheckConnects()
+        {
+            string msg = "";
+            string hostSQL = Properties.Settings.Default.twtServerName;
+            string csSQL = Properties.Settings.Default.twtConnectionSrting;
+            bool pingSQL = csSQL != "" && clSystemSet.CheckPing(hostSQL);               //здесь sql сервер (внутри сети)
+            conSQL = false;
+            if (!pingSQL)
+                msg += "Cетевое имя сервера SQL\r\n  " + hostSQL + "- недоступно\r\n\r\n";
+            else
+                conSQL = clMsSqlDatabase.sqlConnectSimple(csSQL);
+
+            this.tsbtDataBaseSQL.Image = conSQL ? Properties.Resources.ok : Properties.Resources.no;
+            mainPanelRegistration.Enabled = conSQL && lstwDataBaseMain.Items.Count > 0;
+            tsbtGuideUsers.Enabled = conSQL;                                            //справочник пользователей
+            tsbtGuideMarks.Enabled = conSQL;                                            //справочник спец отметок    
+            tsbtGuideCalendar.Enabled = conSQL;                                         //справочник производственного календаря
+            tsbtFormHeatCheck.Enabled = conSQL;                                         //печать бланка температуры
+            tsbtFormTimeCheck.Enabled = conSQL;                                         //печать блака проходов
+            tsbtReportTotal.Enabled = conSQL;                                           //печать итогового отчета
+            toolSetting.Enabled = conSQL;                                               //кнопка настроек экспорт импорт
+
+            string hostPACS = Properties.Settings.Default.pacsHost;
+            string csPACS = Properties.Settings.Default.pacsConnectionString;
+            //            bool pingPACS = csPACS != "" && clSystemSet.CheckHost(csPACS);            //здесь pacs сервер (внутри сети)
+            bool pingPACS = csPACS != "" && clSystemSet.CheckPing(hostPACS);
+            conPACS = false;
+            if (!pingPACS)
+                msg += "Cетевое имя сервера СКУД\r\n  " + csPACS + "- недоступено\r\n";
+            else
+                conPACS = clPacsWebDataBase.pacsConnectSimple(csPACS);
+            //                conWeb = clPacsWebDataBase.pacsConnectSimple(csPACS);
+
+            this.tsbtDataBasePACS.Image = pingPACS ? Properties.Resources.ok : Properties.Resources.no;
+        }
+
+        /// <summary>
+        /// прочитать количество обработанных строк
+        /// </summary>
+        /// <returns></returns>
+        private string getPassCount()
+        {
+            int count = 0;
+            if (lstwDataBaseMain.Items.Count > 0)
+            {
+                for (int index = 0; index <= lstwDataBaseMain.Items.Count - 1; index++)
+                {
+                    if (lstwDataBaseMain.Items[index].Text == "1")
+                        count++;
+                }
+            }
+            return "обработано " + count.ToString() + " из " + lstwDataBaseMain.Items.Count.ToString();
+        }
+
+        /// <summary>
+        /// событие изменение специальных отметок 
+        /// </summary>
+        private void cbSMarks_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            smDStart.Enabled = (int)cbSMarks.SelectedValue != 1;//   cbSMarks.Text != "-";
+            smTStart.Enabled = (int)cbSMarks.SelectedValue != 1;//   cbSMarks.Text != "-";
+            smDStop.Enabled = (int)cbSMarks.SelectedValue != 1;//   cbSMarks.Text != "-";
+            smTStop.Enabled = (int)cbSMarks.SelectedValue != 1;//   cbSMarks.Text != "-";
+        }
+
+        /// <summary>
+        /// событие проверка даты времени ('от' меньше 'до') в специальных отметках
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void checkDateSpecialMarks(object sender, EventArgs e)
+        {
+            if (((int)cbSMarks.SelectedValue != 1 && cbSMarks.Text != "") && mainPanelRegistration.Enabled && !readType)
+            {
+                if (DateTime.Compare(DateTime.Parse(smDStart.Value.ToString("yyyy-MM-dd ") + smTStart.Value.ToString("HH:mm ")),
+                                 DateTime.Parse(smDStop.Value.ToString("yyyy-MM-dd ") + smTStop.Value.ToString("HH:mm "))) > 0)
+                {
+                    MessageBox.Show("Дата/Время окончания периода должно быть больше Даты/Времени начала периода", "Ошибка установки диапазона дат", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    btPanel.Enabled = false;
+                }
+                else
+                    btPanel.Enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// событие проверка даты времени ('от' меньше 'до') в регистрируемом (базового) времени
+        /// </summary>
+        private void checkBaseTimeWork(object sender, EventArgs e)
+        {
+            if (!readType)
+            {
+                if (DateTime.Compare(DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")),
+                                     DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"))) > 0)
+                {
+                    MessageBox.Show("Время Входа должно быть меньше времени Выхода", "Ошибка установки времени", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    btPanel.Enabled = false;
+                }
+                else
+                    btPanel.Enabled = true;
+            }
+
         }
 
         /// <summary>
@@ -1122,7 +1137,9 @@ namespace TimeWorkTracking
             }
         }
 
-//  CALLBACK InPut (подписка на внешние сообщения)
+        #endregion
+
+        #region //CALLBACK InPut (подписка на внешние сообщения)
 
         /// <summary>
         /// inCallBack
@@ -1194,9 +1211,10 @@ namespace TimeWorkTracking
             formCaptionUpdate();                            //Обновить имя главного окна
         }
 
+        #endregion
     }
 
-//  CALLBACK OutPut (собственные сообщения)
+    #region //CALLBACK OutPut (собственные сообщения)
 
     /// <summary>
     /// outCallBack
@@ -1216,4 +1234,6 @@ namespace TimeWorkTracking
         /// </summary>
         public static callbackEvent callbackEventHandler;
     }
+
+    #endregion
 }

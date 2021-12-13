@@ -15,7 +15,30 @@ namespace TimeWorkTracking
             InitializeComponent();
         }
 
-        //test Connrection СКУД (web сервис PACS)
+        /// <summary>
+        /// загрузить данные формы из параметров
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void frmDataBasePACS_Load(object sender, EventArgs e)
+        {
+            //PACS DataBase
+            cbHostSchemePACS.Text = Properties.Settings.Default.pacsScheme;
+            nHostPortPACS.Text = Properties.Settings.Default.pacsPort.ToString();
+            tbHostNamePACS.Text = Properties.Settings.Default.pacsHost;
+            tbUserNamePACS.Text = Properties.Settings.Default.pascLogin;
+            tbPasswordPASC.Text = Properties.Settings.Default.pacsPassword;
+
+            CheckConnects();        //проверить соединение с базами
+        }
+
+        #region //Подключения и проверки
+
+        /// <summary>
+        /// попытка подключения к СКУД (web сервис PACS) 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btTestConnectionPacs_Click(object sender, EventArgs e)
         {
             UriBuilder uriPacs = GetFormConnectionString();
@@ -27,7 +50,11 @@ namespace TimeWorkTracking
             else
                 TestFormConnectionPACS(uriPacs);        //проверить соединение по настройкам формы
         }
-        //полчить строку соединения PACS по настройкам формы
+
+        /// <summary>
+        /// получить строку соединения PACS по настройкам формы
+        /// </summary>
+        /// <returns></returns>
         private UriBuilder GetFormConnectionString()
         {
             UriBuilder uriPacs = new UriBuilder
@@ -43,7 +70,11 @@ namespace TimeWorkTracking
             return uriPacs;// uriPacs.Uri.AbsoluteUri.Replace(uriPacs.Uri.UserInfo + "@", "");     //вернуть строку без логина и пароля
         }
 
-        //проверить соединение по настройкам формы
+        /// <summary>
+        /// проверить подключение к PACS по настройкам формы
+        /// </summary>
+        /// <param name="uriPacs"></param>
+        /// <returns></returns>
         private Boolean TestFormConnectionPACS(UriBuilder uriPacs)
         {
             bool ret = false;
@@ -89,18 +120,9 @@ namespace TimeWorkTracking
             return ret;
         }
 
-        private void frmDataBasePACS_Load(object sender, EventArgs e)
-        {
-            //PACS DataBase
-            cbHostSchemePACS.Text = Properties.Settings.Default.pacsScheme;
-            nHostPortPACS.Text = Properties.Settings.Default.pacsPort.ToString();
-            tbHostNamePACS.Text = Properties.Settings.Default.pacsHost;
-            tbUserNamePACS.Text = Properties.Settings.Default.pascLogin;
-            tbPasswordPASC.Text = Properties.Settings.Default.pacsPassword;
-
-            CheckConnects();        //проверить соединение с базами
-        }
-        //проверить соединение с базами
+        /// <summary>
+        /// проверить соединение с базой PACS
+        /// </summary>
         private void CheckConnects()
         {
 
@@ -123,16 +145,26 @@ namespace TimeWorkTracking
 
             }
         }
-        //проверка вводимых симолов нового пароля логина
+
+        #endregion
+
+        #region //Interface
+
+        /// <summary>
+        /// проверка вводимых симолов нового пароля логина 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tb_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (clSystemSet.checkChar(e.KeyChar))       //проверить допустимые символы
                 e.Handled = true;
         }
 
-        /*--------------------------------------------------------------------------------------------  
-        CALLBACK InPut (подписка на внешние сообщения)
-        --------------------------------------------------------------------------------------------*/
+        #endregion
+
+        #region //CALLBACK InPut (подписка на внешние сообщения)
+
         /// <summary>
         /// Callbacks the reload.
         /// входящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров
@@ -150,13 +182,12 @@ namespace TimeWorkTracking
             }
             */
         }
+
+        #endregion
     }
 
+    #region //CALLBACK OutPut (собственные сообщения)
 
-    /*--------------------------------------------------------------------------------------------  
-      CALLBACK OutPut (собственные сообщения)
-    --------------------------------------------------------------------------------------------*/
-    //general notification
     /// <summary>
     /// CallBack_GetParam
     /// исходящее асинхронное сообщение для подписанных слушателей с передачей текущих параметров 
@@ -175,5 +206,5 @@ namespace TimeWorkTracking
         /// </summary>
         public static callbackEvent callbackEventHandler;
     }
-
+    #endregion
 }
