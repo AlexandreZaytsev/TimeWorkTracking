@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace TimeWorkTracking
@@ -18,7 +14,12 @@ namespace TimeWorkTracking
             lMsg.Visible = false;               //погасить сообщение о записи в БД
  //           tbID.Visible = false;
         }
-        //загрузка формы
+
+        /// <summary>
+        /// загрузка формы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frmCalendar_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
@@ -50,8 +51,11 @@ namespace TimeWorkTracking
             }
         }
 
-        //LIST CALENDAR ---------------------------------------------------------------------------------------------------
-        // Initialize ListView календаря
+        #region//Список(Таблица) данных ПРОИЗВОДСТВЕННЫЕ КАЛЕНДАРИ (данные)
+
+        /// <summary>
+        /// Инициализация списка(таблицы) данных
+        /// </summary>
         private void InitializeListViewCalendar()
         {
             lstwDataBaseCalendar.View = View.Details;               // Set the view to show details.
@@ -76,7 +80,11 @@ namespace TimeWorkTracking
             };
             lstwDataBaseCalendar.ListViewItemSorter = _lvwItemComparer;
         }
-        //Загрузить Data из DataSet в ListView календаря
+
+        /// <summary>
+        /// Загрузка списка(таблицы) данных (Data из DataSet в ListView)
+        /// </summary>
+        /// <param name="dtable"></param>
         private void LoadListCalendar(DataTable dtable)
         {
             lstwDataBaseCalendar.Items.Clear();             //очистить коллекцию элементов
@@ -125,7 +133,12 @@ namespace TimeWorkTracking
             //после загрузки списка установить авторазмер последней колонки
             lstwDataBaseCalendar.AutoResizeColumn(4, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
         }
-        //сортировка по заголовку столбца
+
+        /// <summary>
+        /// Сортировка списка(таблицы) данных по заголовкам столбцов
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lstwDataBaseCalendar_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             // Determine if clicked column is already the column that is being sorted.
@@ -147,8 +160,12 @@ namespace TimeWorkTracking
             // Perform the sort with these new sort options.
             this.lstwDataBaseCalendar.Sort();
         }
-      
-        //выбор значения из списка
+
+        /// <summary>
+        /// Выбор значения в списке(таблице) данных
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lstwDataBaseCalendar_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lstwDataBaseCalendar.Focused || lstwDataBaseCalendar.SelectedItems.Count>0)                      //если календарь активен (в фокусе)
@@ -177,15 +194,25 @@ namespace TimeWorkTracking
                 }
             }
         }
-        //запретить изменение размеров
+
+        /// <summary>
+        /// Запрет изменения размеров ширины колонок списка(таблицы) данных
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lstwDataBaseCalendar_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             e.Cancel = true;
             e.NewWidth = lstwDataBaseCalendar.Columns[e.ColumnIndex].Width;
         }
 
-        //LIST DAYS CALENDAR ---------------------------------------------------------------------------------------------------
-        // Initialize ListView дней календаря
+        #endregion
+
+        #region//Список(Таблица) данных ПРОИЗВОДСТВЕННЫЙ КАЛЕНДАРЬ (настройка)
+
+        /// <summary>
+        /// Инициализация списка(таблицы) данных
+        /// </summary>
         private void InitializeListViewDaysCalendar()
         {
             lstwDataBaseDaysCalendar.View = View.Details;               // Set the view to show details.
@@ -196,7 +223,11 @@ namespace TimeWorkTracking
 
             //            lstwDataBaseDaysCalendar.Sorting = SortOrder.Ascending;     // Sort the items in the list in ascending order.
         }
-        //Загрузить Data из DataSet в ListView дней календаря
+
+        /// <summary>
+        /// Загрузка списка(таблицы) данных (Data из DataSet в ListView)
+        /// </summary>
+        /// <param name="dtable"></param>
         private void LoadListDaysCalendar(DataTable dtable)
         {
             lstwDataBaseDaysCalendar.Items.Clear();         // Clear the ListView control
@@ -229,7 +260,11 @@ namespace TimeWorkTracking
             lstwDataBaseDaysCalendar.AutoResizeColumn(2, ColumnHeaderAutoResizeStyle.HeaderSize);      //растягиваем последний столбец
         }
 
-        //выбор дня из списка ListView дней
+        /// <summary>
+        /// Выбор значения в списке(таблице) данных
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lstwDataBaseDaysCalendar_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lstwDataBaseDaysCalendar.Focused)                      //если календарь дат активен (в фокусе)
@@ -251,16 +286,25 @@ namespace TimeWorkTracking
             }
         }
 
-        //запретить изменение размеров
+        /// <summary>
+        /// Запрет изменения размеров ширины колонок списка(таблицы) данных
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lstwDataBaseDaysCalendar_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             e.Cancel = true;
             e.NewWidth = lstwDataBaseDaysCalendar.Columns[e.ColumnIndex].Width;
         }
 
+        #endregion
         //---------------------------------------------------------------------------------------------------------------------
 
-        //редактирование поля Исходная дата
+        /// <summary>
+        /// редактирование поля Исходная дата
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dtSource_ValueChanged(object sender, EventArgs e)
         {
             lbDirect.Text = dtWork.Value != dtSource.Value ? "ï" : "ó";
@@ -288,7 +332,11 @@ namespace TimeWorkTracking
             }
         }
 
-        //редактирование ключевого поля (Реальная дата)
+        /// <summary>
+        /// Редактирование ключевого поля (Реальная дата)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dtWork_ValueChanged(object sender, EventArgs e)
         {
             lbDirect.Text = dtWork.Value != dtSource.Value ? "ï" : "ó";
@@ -308,13 +356,23 @@ namespace TimeWorkTracking
             }
         }
 
-        //чекбокс запись активна
+        /// <summary>
+        /// запись доступна для использования (чекбокс)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void chUse_CheckedChanged_1(object sender, EventArgs e)
         {
             chUse.ImageIndex = chUse.Checked ? 1 : 0;
         }
 
-        //кнопка добавить запись в БД
+        #region//Запись в БД 
+
+        /// <summary>
+        /// кнопка Добавить запись в БД
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btInsert_Click(object sender, EventArgs e)
         {
             string key = dtWork.Value.ToString("yyyy-MM-dd");               //ключевое поле
@@ -342,7 +400,11 @@ namespace TimeWorkTracking
             dtWork_ValueChanged(null,null);                                 //обновить статус кнопок
         }
 
-        //кнопка обновить запись в БД
+        /// <summary>
+        /// кнопка Обновить запись в БД
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btUpdate_Click(object sender, EventArgs e)
         {
             string key = dtWork.Value.ToString("yyyy-MM-dd");               //ключевое поле
@@ -364,7 +426,11 @@ namespace TimeWorkTracking
             dtWork_ValueChanged(null, null);                                //обновить статус кнопок
         }
 
-        //кнопка удалить запись в БД
+        /// <summary>
+        /// кнопка Удалить запись в БД
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btDelete_Click(object sender, EventArgs e)
         {
             string key = dtWork.Value.ToString("yyyy-MM-dd");               //ключевое поле
@@ -382,7 +448,15 @@ namespace TimeWorkTracking
             dtWork_ValueChanged(null, null);                                //обновить статус кнопок
         }
 
-        //наехали на кнопку Insert загасили id
+        #endregion
+
+        #region//Interface
+
+        /// <summary>
+        /// Hover наехали на кнопку Insert загасили id
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btInsert_MouseHover(object sender, EventArgs e)
         {
             tbID.Visible = false;
@@ -391,7 +465,11 @@ namespace TimeWorkTracking
             btDelete.Visible = false;
         }
 
-        //уехали с кнопки Insert показали id
+        /// <summary>
+        /// Leave уехали с кнопки Insert показали id 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btInsert_MouseLeave(object sender, EventArgs e)
         {
             tbID.Visible = true;
@@ -399,5 +477,7 @@ namespace TimeWorkTracking
             btUpdate.Visible = true;
             btDelete.Visible = true;
         }
+
+        #endregion
     }
 }

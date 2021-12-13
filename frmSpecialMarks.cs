@@ -15,7 +15,12 @@ namespace TimeWorkTracking
             lMsg.Visible = false;               //погасить сообщение о записи в БД
                                                 //           tbID.Visible = false;
         }
-        //загрузка формы
+
+        /// <summary>
+        /// загрузка формы 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frmSpecialMarks_Load(object sender, EventArgs e)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
@@ -28,6 +33,8 @@ namespace TimeWorkTracking
                     lstwDataBaseSpecialMarks.Items[0].Selected = true;     //выделить элемент по индексу
             }
         }
+
+        #region//Список(Таблица) данных СПЕЦИАЛЬНЫЕ ОТМЕТКИ (данные)
 
         /// <summary>
         /// Инициализация списка(таблицы) данных
@@ -171,13 +178,23 @@ namespace TimeWorkTracking
             e.NewWidth = lstwDataBaseSpecialMarks.Columns[e.ColumnIndex].Width;
         }
 
-        //чекбокс запись активна
+        #endregion
+
+        /// <summary>
+        /// запись доступна для использования (чекбокс)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void chUse_CheckedChanged(object sender, EventArgs e)
         {
             chUse.ImageIndex = chUse.Checked ? 1 : 0;
         }
 
-        //редактирование ключевого поля Имя
+        /// <summary>
+        /// Редактирование ключевого поля Имя
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tbName_TextChanged(object sender, EventArgs e)
         {
             if (tbName.Text.Trim() == "-") 
@@ -219,7 +236,14 @@ namespace TimeWorkTracking
                 }
             }
         }
-        //кнопка добавить запись в БД
+
+        #region//Запись в БД 
+
+        /// <summary>
+        /// кнопка Добавить запись в БД
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btInsert_Click(object sender, EventArgs e)
         {
             string key = tbName.Text.Trim();                                //ключевое поле
@@ -244,7 +268,12 @@ namespace TimeWorkTracking
             lstwDataBaseSpecialMarks.extFindListByColValue(3, key);            //найти и выделить позицию
             tbName_TextChanged(null, null);                                     //обновить поля и кнопки
         }
-        //кнопка обновить запись в БД
+
+        /// <summary>
+        /// кнопка Обновить запись в БД
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btUpdate_Click(object sender, EventArgs e)
         {
             string key = tbName.Text.Trim();                                    //ключевое поле
@@ -264,19 +293,34 @@ namespace TimeWorkTracking
             tbName_TextChanged(null, null);                                     //обновить поля и кнопки
         }
 
-        //наехали на кнопку Insert загасили id
+        #endregion
+
+        #region//Interface
+
+        /// <summary>
+        /// Hover наехали на кнопку Insert загасили id
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btInsert_MouseHover(object sender, EventArgs e)
         {
             tbID.Visible = false;
             lMsg.Visible = true;
             btUpdate.Visible = false;
         }
-        //уехали с кнопки Insert показали id
+
+        /// <summary>
+        /// Leave уехали с кнопки Insert показали id 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btInsert_MouseLeave(object sender, EventArgs e)
         {
             tbID.Visible = true;
             lMsg.Visible = false;
             btUpdate.Visible = true;
         }
+
+        #endregion
     }
 }
