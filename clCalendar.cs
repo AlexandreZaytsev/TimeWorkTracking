@@ -16,12 +16,20 @@ namespace TimeWorkTracking
             dtWorkCalendar = null;
         }                                      
 
+        /// <summary>
+        /// конструктор загрузить производственный календарь из БД БД
+        /// </summary>
+        /// <param name="cs">строка соединения</param>
+        /// <param name="sql">sql запрос</param>
         public void uploadCalendar(string cs, string sql)               //конструктор
         {
             dtWorkCalendar = clMsSqlDatabase.TableRequest(cs, sql);
         }
 
-        //получить все даты праздников (перенос)
+        /// <summary>
+        /// получить все даты праздников (перенос)
+        /// </summary>
+        /// <returns>List DateTime всех праздников</returns>
         public List<DateTime> getListWorkHoliday()
         {
             List<DateTime> dateList = new List<DateTime>();
@@ -39,7 +47,11 @@ namespace TimeWorkTracking
             return dateList;
         }
 
-        //проверить дату на длину (по производственному календарю)
+        /// <summary>
+        /// проверить дату на продолжительность рабочего дня (по производственному календарю)
+        /// </summary>
+        /// <param name="chDate">запрашиваемая дата</param>
+        /// <returns>количество минут в дне</returns>
         public int getLengthWorkHoliday(DateTime chDate)
         {
             int ret = 0;
@@ -74,7 +86,11 @@ namespace TimeWorkTracking
             return ret;
         }
 
-        //проdерить дату на праздник (перенос)
+        /// <summary>
+        /// проверить дату на праздник (перенос)
+        /// </summary>
+        /// <param name="chDate">запрашиваемая дата</param>
+        /// <returns>да/нет</returns>
         public bool chechWorkHoliday(DateTime chDate)
         {
             bool ret = false;
@@ -95,7 +111,11 @@ namespace TimeWorkTracking
             return ret;
         }
 
-        //проdерить дату на рабочий день
+        /// <summary>
+        /// проверить дату на рабочий день
+        /// </summary>
+        /// <param name="chDate">запрашиваемая дата</param>
+        /// <returns>да/нет</returns>
         public bool chechWorkDay(DateTime chDate)
         {
             KeyValuePair<int, DataRow> infoDate = checkDay(chDate.Date);
@@ -109,7 +129,11 @@ namespace TimeWorkTracking
             }
         }
 
-        //проверить день на предмет что это праздникне праздник, выходной или рабочий
+        /// <summary>
+        /// проверить день на предмет что это праздникне праздник, выходной или рабочий
+        /// </summary>
+        /// <param name="dayInfo">запрашиваемая дата</param>
+        /// <returns>пара номер + расшифровка</returns>
         public KeyValuePair<int, DataRow> checkDay(DateTime dayInfo)
         {
             bool check = false;
@@ -152,7 +176,11 @@ namespace TimeWorkTracking
             return new KeyValuePair<int, DataRow>(-1, null);
         }
 
-        //прочитать описание дня по производственному календарю 
+        /// <summary>
+        /// прочитать описание дня (в строковом формате) по производственному календарю
+        /// </summary>
+        /// <param name="dayInfo">запрашиваемая дата</param>
+        /// <returns>расширенное описание дня</returns>
         public string getDateDescription(DateTime dayInfo)
         {
             string ret;// = "";
@@ -191,8 +219,11 @@ namespace TimeWorkTracking
             return ret;
         }
 
-        //прочитать харектеристики дня по производственному календарю
-        //вернуть страницу HTML
+        /// <summary>
+        /// прочитать описание дня (в формате HTML) по производственному календарю
+        /// </summary>
+        /// <param name="dayInfo">запрашиваемая дата</param>
+        /// <returns>вернуть страницу HTML</returns>
         public string getDateInfoHTML(DateTime dayInfo)
         {
             string WORK_AREA = "";
