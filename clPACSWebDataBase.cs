@@ -8,6 +8,8 @@ using System.Globalization;
 
 namespace TimeWorkTracking
 {
+    #region //Дополнительные структуры данных
+
     /// <summary>
     /// структура ответа от сервиса СКУД
     /// </summary>
@@ -69,6 +71,8 @@ namespace TimeWorkTracking
                    TimeOut = DateTime.Now.Date;
                }
        */
+
+
         /// <summary>
         /// проверить и обновить данные проходов по внешним (ранее сохраненным) источникам провайдера СКУД 
         /// </summary>
@@ -120,10 +124,9 @@ namespace TimeWorkTracking
         }
     }
 
-    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    //Структуры для парсинга Json ответов
-
+    #region //Структуры для парсинга Json ответов
     //http://localhost:40001/json/help/operations/Authenticate
+
     public class pacsAuthenticate
     {
         public string UserSID { get; set; }
@@ -156,7 +159,6 @@ namespace TimeWorkTracking
         public pacsEvent[] Event { get; set; }
  //       public pacsEventColumns[] EventColumns { get; set; }
 }
-
     public class pacsEvent 
     {
         public string CardCode { get; set; }
@@ -177,19 +179,22 @@ namespace TimeWorkTracking
         public string EmployeeNumber { get; set; }
     }
 
-/*    public class pacsEventColumns
-    {
-        public string Name { get; set; }
+    /*    public class pacsEventColumns
+        {
+            public string Name { get; set; }
 
-    }
-*/
-    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        }
+    */
+    #endregion
 
-
-
+    #endregion
 
     class clPacsWebDataBase
 {
+        #region //Private
+
+        #region //Подключения и проверки
+
         /// <summary>
         /// Отправка POST запроса на хост
         /// </summary>
@@ -299,6 +304,10 @@ namespace TimeWorkTracking
             return ret;
         }
 
+        #endregion
+
+        #region //Запросы
+
         /// <summary>
         /// авторизации на сервере СКУД
         /// </summary>
@@ -307,7 +316,6 @@ namespace TimeWorkTracking
         /// <returns>строка UserSID или если неудачно - пустая строка</returns>
         /// https://streletzcoder.ru/rabotaem-s-json-v-c-serializatsiya-i-deserializatsiya/
         /// https://coderoad.wiki/36674888/%D0%9A%D0%B0%D0%BA-%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D1%8C-%D0%B2%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D1%83%D1%8E-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D1%8C-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81-JavascriptSerializer-%D0%B2-C
-
         private static string connectRestApi(UriBuilder pacsUri, bool logout) 
         {
             string ret = "";
@@ -343,7 +351,6 @@ namespace TimeWorkTracking
             }
             return ret;
         }
-
 
         /// <summary>
         /// получить внутренний id пользователя СКУД ProxWay
@@ -561,9 +568,12 @@ namespace TimeWorkTracking
             }
         }
 
-        //PUBLIC------------------------------------------------------------------------
+        #endregion
+        #endregion
 
-        //Подключения и проверки
+        #region //PUBLIC
+
+        #region //Подключения и проверки
 
         /// <summary>
         /// проверить соединение отдельно по соединению (на базе master) и по имени базы в списке баз
@@ -592,7 +602,9 @@ namespace TimeWorkTracking
             return CheckConnectSimple(connectionString);
         }
 
-        //Запросы
+        #endregion
+
+        #region //Запросы
 
         /// <summary>
         /// запрос к серверу на счет входа выхода конкретного сотрудника в/из офиса, и получение ответа
@@ -605,6 +617,9 @@ namespace TimeWorkTracking
             if (pacsStruct.respUserId != "")
                 checkPointPWTime(pacsUri, ref pacsStruct);          //получить события прохода на дату
         }
+
+        #endregion
+        #endregion
     }
 }
 
