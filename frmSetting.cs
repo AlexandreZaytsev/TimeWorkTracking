@@ -4,12 +4,12 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using System.Diagnostics;
+using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace TimeWorkTracking
@@ -41,7 +41,7 @@ namespace TimeWorkTracking
         /// <param name="e"></param>
         private void timerImportExport_Tick(object sender, EventArgs e)
         {
-            if (timerSec >= 0) 
+            if (timerSec >= 0)
             {
                 //toolStripProgressBarImport.Visible = false;
                 timerSec -= 1;
@@ -49,7 +49,7 @@ namespace TimeWorkTracking
             else
             {
                 timerImportExport.Stop();
-                toolStripStatusLabelInfo.Text = ""; 
+                toolStripStatusLabelInfo.Text = "";
                 toolStripProgressBarImport.Value = 0;
                 //toolStripProgressBarImport.Visible = true;
             }
@@ -67,7 +67,7 @@ namespace TimeWorkTracking
             backgroundWorkerSetting.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorkerSetting_RunWorkerCompleted);
             backgroundWorkerSetting.WorkerReportsProgress = true;       //Разрешить использовать событие по отображению прогресса
             backgroundWorkerSetting.WorkerSupportsCancellation = true;  //Разрешить использовать средства остановки(отмены выполнения) потока.
-//            backgroundWorkerSetting.GenerateMember = true;              
+                                                                        //            backgroundWorkerSetting.GenerateMember = true;              
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace TimeWorkTracking
         /// <param name="e"></param>
         private void backgroundWorkerSetting_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-        //    List<string> arg = e.Argument as List<string>;
+            //    List<string> arg = e.Argument as List<string>;
             // Проверить как завершился поток с ошибками или без
             if (e.Error != null)
             {
@@ -130,7 +130,7 @@ namespace TimeWorkTracking
                 // succeeded.
                 //toolStripStatusLabelInfo.Text = ""; //e.Result.ToString();
                 //toolStripProgressBarImport.Value = 0;
-                switch (e.Result.ToString())                
+                switch (e.Result.ToString())
                 {
                     case "users":                                                           //если завершился иморт пользователей
                         CallBack_FrmImport_outEvent.callbackEventHandler("", "", null);     //отправитьс ообщение главной форме что импрот произошел
@@ -174,7 +174,7 @@ namespace TimeWorkTracking
                     //toolStripProgressBarImport.Value = e.ProgressPercentage;
                     //            this.toolStripProgressBarImport.Value = e.ProgressPercentage;
                     //Отобразить процент и текст
-                    toolStripStatusLabelInfo.Text = "таблица "+ arg[1] + " Обработано " +
+                    toolStripStatusLabelInfo.Text = "таблица " + arg[1] + " Обработано " +
                                                     toolStripProgressBarImport.Value.ToString() + " из " +
                                                     toolStripProgressBarImport.Maximum.ToString() + " (" +
                                                     Convert.ToString(e.ProgressPercentage) + "%)";
@@ -254,7 +254,7 @@ namespace TimeWorkTracking
         /// диалог выбора файла 
         /// </summary>
         /// <returns></returns>
-        private string getFileName(string name, string filter) 
+        private string getFileName(string name, string filter)
         {
             openFileDialogSetting.Title = name;
             openFileDialogSetting.Filter = filter;
@@ -272,7 +272,7 @@ namespace TimeWorkTracking
         /// диалог сохранения файла 
         /// </summary>
         /// <returns></returns>
-        private string setFileName(string name, string filter, string filename) 
+        private string setFileName(string name, string filter, string filename)
         {
             saveFileDialogSetting.Title = name;
             saveFileDialogSetting.Filter = filter;
@@ -470,7 +470,7 @@ namespace TimeWorkTracking
                     }
                     else
                         if (tb == cbSheetTable.Text)                    //сравним имена из БД и листа Excel
-                            ok = true;
+                        ok = true;
 
                     if (!ok)
                         tableNames[tb] = "";                            //если таблицы из Excel нет в БД - вычеркнем ее
@@ -496,7 +496,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// импорт данных через OleDbDataAdapter & DataSet
+        /// импорт данных через OleDbDataAdapter и DataSet
         /// </summary>
         /// <param name="worker"></param>
         /// <param name="e"></param>
@@ -527,9 +527,9 @@ namespace TimeWorkTracking
                         DataSet ds = new DataSet();
                         using (OleDbCommand cmdExcel = cnExcel.CreateCommand())
                         {
-                            for (int i = 0;i< nameTable.Length; i++)
+                            for (int i = 0; i < nameTable.Length; i++)
                             {
-                                cmdExcel.CommandText = $"Select count(*) from [{nameTable[i]+"$"}]";
+                                cmdExcel.CommandText = $"Select count(*) from [{nameTable[i] + "$"}]";
                                 countRows = (int)cmdExcel.ExecuteScalar();
 
                                 outArguments.Add("init");                       //init инициализация прогрессбара work отображение значения
@@ -540,7 +540,7 @@ namespace TimeWorkTracking
                                 worker.ReportProgress(0, outArguments);         //отобразить (вызвать событие) результаты progressbar
 
                                 cmdExcel.CommandText = $"Select * from [{nameTable[i] + "$"}]";    //диапазон Data (без заголовка)
-                              //OleDbDataReader result = cmdExcel.ExecuteReader();
+                                                                                                   //OleDbDataReader result = cmdExcel.ExecuteReader();
                                 da.SelectCommand = cmdExcel;
                                 da.Fill(ds);
 
@@ -583,13 +583,13 @@ namespace TimeWorkTracking
                                     sqlConnection.Close();
                                     ds.Tables[0].Clear();
                                     ds.Tables.Remove(ds.Tables[0]);
-                                }    
+                                }
                             }
                         }
                         cnExcel.Close();
                     }
                 }
-                else 
+                else
                 {
                 }
             }
@@ -601,10 +601,10 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-            /// кнопка экспорта
-            /// </summary>
-            /// <param name="sender"></param>
-            /// <param name="e"></param>
+        /// кнопка экспорта
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btMainExport_Click(object sender, EventArgs e)
         {
             DialogResult response = MessageBox.Show(
@@ -629,13 +629,13 @@ namespace TimeWorkTracking
                 if (!backgroundWorkerSetting.IsBusy)            //Запустить фоновую операцию (поток)(с аргументами) вызвав событие DoWork
                 {
                     backgroundWorkerSetting.RunWorkerAsync(arguments);
-//                    MessageBox.Show("Экспорт данных из БД завершен");
+                    //                    MessageBox.Show("Экспорт данных из БД завершен");
                 }
             }
         }
 
         /// <summary>
-        /// экспорт данных через OleDbDataAdapter & DataSet
+        /// экспорт данных через OleDbDataAdapter и DataSet
         /// </summary>
         /// <param name="worker"></param>
         /// <param name="e"></param>
@@ -645,7 +645,7 @@ namespace TimeWorkTracking
             //https://question-it.com/questions/3902413/eksport-dannyh-sql-v-excel-ochen-medlenno
             List<string> inArgument = e.Argument as List<string>;   //распарсить входнык параметры
             List<string> outArguments = new List<string>();         //возврат аргументов из потока на обработку
-            int countRows;                                          //общее количество строк в запросе
+            //int countRows;                                          //общее количество строк в запросе
             DataTable dt = new DataTable();
             string path = inArgument[1];
 
@@ -669,7 +669,7 @@ namespace TimeWorkTracking
                     DataRow drow = tables.Rows[t];
                     if (drow.RowState != DataRowState.Deleted)  // Only row that have not been deleted
                     {
-                        workSheet = (Excel.Worksheet)excelApp.Worksheets[t+1];   //Получаем первый лист документа (счет начинается с 1)
+                        workSheet = (Excel.Worksheet)excelApp.Worksheets[t + 1];   //Получаем первый лист документа (счет начинается с 1)
                         workSheet.Name = drow[0].ToString();
 
                         getDataTableSQL(drow[0].ToString(), ref dt);
@@ -717,7 +717,7 @@ namespace TimeWorkTracking
             }
             finally
             {
-                
+
                 try
                 {
                     workBook.SaveAs(path, Excel.XlFileFormat.xlOpenXMLWorkbook, mis, mis, mis, mis, Excel.XlSaveAsAccessMode.xlNoChange, mis, mis, mis, mis, mis);
@@ -731,11 +731,11 @@ namespace TimeWorkTracking
                 workBook.Close(true);// null, null, null);
                 while (Marshal.ReleaseComObject(workBook) > 0) { }
                 workBook = null;
-           //     while (Marshal.ReleaseComObject(sheets) > 0) { }
-           //     sheets = null;
+                //     while (Marshal.ReleaseComObject(sheets) > 0) { }
+                //     sheets = null;
                 while (Marshal.ReleaseComObject(workSheet) > 0) { }
                 workSheet = null;
-                if (workRange != null) 
+                if (workRange != null)
                 {
                     while (Marshal.ReleaseComObject(workRange) > 0) { }
                     workRange = null;
@@ -827,12 +827,12 @@ namespace TimeWorkTracking
                 if (!backgroundWorkerSetting.IsBusy)            //Запустить фоновую операцию (поток)(с аргументами) вызвав событие DoWork
                 {
                     backgroundWorkerSetting.RunWorkerAsync(arguments);
-                }    
+                }
             }
         }
 
         /// <summary>
-        /// импорт таблицы проходов через OleDbDataAdapter & DataSet 
+        /// импорт таблицы проходов через OleDbDataAdapter и DataSet 
         /// </summary>
         /// <param name="worker"></param>
         /// <param name="e"></param>
@@ -924,7 +924,7 @@ namespace TimeWorkTracking
 
                                 outArguments[0] = "work";                                          //init инициализация прогрессбара work отображение значения
                                 outArguments[1] = "Users";                                         //init инициализация прогрессбара work отображение значения
-                                worker.ReportProgress((currentRow*100)/ countRows, outArguments);  //отобразить (вызвать событие) результаты progressbar
+                                worker.ReportProgress((currentRow * 100) / countRows, outArguments);  //отобразить (вызвать событие) результаты progressbar
                             }
                         }
                         sqlConnection.Close();
@@ -932,7 +932,7 @@ namespace TimeWorkTracking
                 }
                 CallBack_FrmSetting_outEvent.callbackEventHandler("", "", null);    //отправитьс ообщение главной форме что импрот произошел
                 System.Threading.Thread.Sleep(1000);    //пауза 1 сек чтобы главная форма успела обновить список юзеров
-//                MessageBox.Show("Список сотрудников загружен в БД");
+                                                        //                MessageBox.Show("Список сотрудников загружен в БД");
             }
             catch (Exception ex)
             {
@@ -946,7 +946,7 @@ namespace TimeWorkTracking
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btImportPass_Click(object sender, EventArgs e) 
+        private void btImportPass_Click(object sender, EventArgs e)
         {
             DialogResult response = MessageBox.Show(
                 "Внимание Таблица:\r\n" +
@@ -975,7 +975,7 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// импорт таблицы проходов через OleDbDataAdapter & DataSet
+        /// импорт таблицы проходов через OleDbDataAdapter и DataSet
         /// </summary>
         /// <param name="worker"></param>
         /// <param name="e"></param>
@@ -1012,7 +1012,7 @@ namespace TimeWorkTracking
                         {
                             sqlConnection.Open();
                             using (var sqlCommand = sqlConnection.CreateCommand())
-                            { 
+                            {
                                 //sqlCommand.CommandTimeout = 10;
                                 int currentRow = 0;
                                 while (result.Read())
@@ -1050,11 +1050,11 @@ namespace TimeWorkTracking
                                                 break;
                                         }
 
-                                        sqlCommand.CommandText = "SELECT id FROM SpecialMarks Where name='" + sp + "'";         
+                                        sqlCommand.CommandText = "SELECT id FROM SpecialMarks Where name='" + sp + "'";
                                         int specialMarksId = (int)sqlCommand.ExecuteScalar();               //получить  id спец отметки                                   
 
                                         //поднять рейтинг спец отметки
-                                        sqlCommand.CommandText = "SELECT rating FROM SpecialMarks Where id=" + specialMarksId;        
+                                        sqlCommand.CommandText = "SELECT rating FROM SpecialMarks Where id=" + specialMarksId;
                                         int specialMarksRating = (int)sqlCommand.ExecuteScalar();           //прочитать рейтинг
                                         specialMarksRating++;                                               //поднять рейтинг                        
                                         sqlCommand.CommandText = "UPDATE SpecialMarks Set rating = " + specialMarksRating + ", uses = 1 Where id=" + specialMarksId;
@@ -1062,7 +1062,7 @@ namespace TimeWorkTracking
 
                                         string specmarkTimeStart = specialMarksId == 1 ? "NULL" : "'" + Convert.ToDateTime(result.GetValue(14)).ToString("yyyyMMdd HH:mm") + "'";
                                         string specmarkTimeStop = specialMarksId == 1 ? "NULL" : "'" + Convert.ToDateTime(result.GetValue(15)).ToString("yyyyMMdd HH:mm") + "'";
-                                        string specmarkNote = result.GetValue(16) == DBNull.Value ? "NULL" : "N'" + Convert.ToString(result.GetValue(16)).Replace("'","''") + "'";
+                                        string specmarkNote = result.GetValue(16) == DBNull.Value ? "NULL" : "N'" + Convert.ToString(result.GetValue(16)).Replace("'", "''") + "'";
                                         int totalHoursInWork = Convert.ToInt32(result.GetValue(17));
                                         int totalHoursOutsideWork = result.GetValue(18) == DBNull.Value ? 0 : Convert.ToInt32(result.GetValue(18));
 
@@ -1092,8 +1092,8 @@ namespace TimeWorkTracking
                                                 "passId, " +                                    //*внешний id пользователя
                                                 "passTimeStart, " +                             //время первого входа (без даты)
                                                 "passTimeStop, " +                              //время последнего выхода (без даты)
-                                                //"pacsTimeStart, " +                             //время первого входа по СКУД (без даты)
-                                                //"pacsTimeStop, " +                              //время последнего выхода по СКУД (без даты)
+                                                                                                //"pacsTimeStart, " +                             //время первого входа по СКУД (без даты)
+                                                                                                //"pacsTimeStop, " +                              //время последнего выхода по СКУД (без даты)
                                                 "timeScheduleFact, " +                          //отработанное время (мин)
                                                 "timeScheduleWithoutLunch, " +                  //отработанное время без обеда (мин)
                                                 "timeScheduleLess, " +                          //время недоработки (мин)
@@ -1106,7 +1106,7 @@ namespace TimeWorkTracking
                                                 "totalHoursOutsideWork) " +                     //итог рабочего времени вне графика (мин)
                                             "VALUES (" +
                                                 "N'" + author + "', " +
-                                                "'" + passDate + "', " + 
+                                                "'" + passDate + "', " +
                                                 "'" + passId + "', " +
                                                 "'" + passTimeStart + "', " +
                                                 "'" + passTimeStop + "', " +
@@ -1123,31 +1123,31 @@ namespace TimeWorkTracking
                                                 totalHoursInWork + ", " +
                                                 totalHoursOutsideWork +
                                                 ")";
-                                            sqlCommand.CommandText = sql;
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            MessageBox.Show(ex.Message.ToString());
-                                        }
-                                        sqlCommand.ExecuteNonQuery();
-                                        currentRow += 1;
-
-                                        outArguments[0] = "work";                                           //init инициализация прогрессбара work отображение значения
-                                        outArguments[1] = "EventsPass";                                     //init инициализация прогрессбара work отображение значения
-                                    worker.ReportProgress((currentRow * 100) / countRows, outArguments);    //отобразить (вызвать событие) результаты progressbar
+                                        sqlCommand.CommandText = sql;
                                     }
+                                    catch (Exception ex)
+                                    {
+                                        MessageBox.Show(ex.Message.ToString());
+                                    }
+                                    sqlCommand.ExecuteNonQuery();
+                                    currentRow += 1;
+
+                                    outArguments[0] = "work";                                           //init инициализация прогрессбара work отображение значения
+                                    outArguments[1] = "EventsPass";                                     //init инициализация прогрессбара work отображение значения
+                                    worker.ReportProgress((currentRow * 100) / countRows, outArguments);    //отобразить (вызвать событие) результаты progressbar
                                 }
-                                sqlConnection.Close();
                             }
+                            sqlConnection.Close();
                         }
-                        cnExcel.Close();
                     }
-//                    MessageBox.Show("Список проходов загружен в БД");
+                    cnExcel.Close();
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message.ToString());
-                }
+                //                    MessageBox.Show("Список проходов загружен в БД");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+            }
             return inArgument[0];// "pass";
         }
 
@@ -1224,7 +1224,7 @@ namespace TimeWorkTracking
         /// <param name="controlParentName">имя родителя CNTRL</param>
         /// <param name="parameterPairs">параметры ключ-значение</param>
         public delegate void callbackEvent(string controlName, string controlParentName, Dictionary<String, String> parameterPairs);
- 
+
         /// <summary>
         /// The callback event handler
         /// </summary>

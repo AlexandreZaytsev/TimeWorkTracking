@@ -63,10 +63,10 @@ namespace TimeWorkTracking
         private void btTestConnectionTwt_Click(object sender, EventArgs e)
         {
             if (!clSystemSet.CheckPing(tbServerTWT.Text))
-            MessageBox.Show("Cетевое имя сервера SQL\r\n  " + 
-                            tbServerTWT.Text + 
-                            "- недоступно\r\n", 
-                            "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Cетевое имя сервера SQL\r\n  " +
+                                tbServerTWT.Text +
+                                "- недоступно\r\n",
+                                "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
                 TestFormConnectionTwt();        //проверить соединение по настройкам формы
         }
@@ -75,7 +75,7 @@ namespace TimeWorkTracking
         /// полчить строку соединения SQL по настройкам формы
         /// </summary>
         /// <returns></returns>
-        private string GetFormConnectionString() 
+        private string GetFormConnectionString()
         {
             string connectionString;
             switch (cbAutentificationTWT.Text)
@@ -190,7 +190,7 @@ namespace TimeWorkTracking
         private void btCreateDBTwt_Click(object sender, EventArgs e)
         {
             string connectionString = GetFormConnectionString();        //полчить строку соединения по настройкам формы
-            if (connectionString !="" && tbDatabaseTWT.Text != "")
+            if (connectionString != "" && tbDatabaseTWT.Text != "")
             {
                 bool mode = false;
                 DialogResult result = MessageBox.Show(

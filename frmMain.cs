@@ -3,11 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
 using System.Windows.Forms;
 
 /*
@@ -31,7 +26,7 @@ namespace TimeWorkTracking
 
         //*используется при проверке диапазона ДатыВремени регистрации базового времени и времени специальных отметок
         private bool readType;                                      //true - чтение из списка/БД false - запись в БД  
-      
+
         public frmMain()
         {
             //подписка события внешних форм 
@@ -66,7 +61,7 @@ namespace TimeWorkTracking
 
                 cbSMarks.DisplayMember = "Name";
                 cbSMarks.ValueMember = "id";
-//                cbSMarks.DataSource = clMsSqlDatabase.TableRequest(cs, "Select id, name From SpecialMarks where uses=1");
+                //                cbSMarks.DataSource = clMsSqlDatabase.TableRequest(cs, "Select id, name From SpecialMarks where uses=1");
                 cbSMarks.DataSource = clMsSqlDatabase.TableRequest(cs, "Select id, name From SpecialMarks where uses=1 order by rating desc, name , digitalCode");      //здесь показываем все отметки из справочника отметок  
                 cbSMarks.SelectedValue = 1;                                 //встать на первый элемент   
 
@@ -74,7 +69,7 @@ namespace TimeWorkTracking
                 LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
                 mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
             }
-            else 
+            else
             {
                 webInfoDay.DocumentText = pCalendar.getDateInfoHTML(DateTime.Today);
             }
@@ -90,9 +85,9 @@ namespace TimeWorkTracking
             LogIn();        //авторизация
 
             string msg = "";
-            msg += conSQL ? "" :  "\r\n - сервер БД SQL - недоступен";
+            msg += conSQL ? "" : "\r\n - сервер БД SQL - недоступен";
             msg += conPACS ? "" : "\r\n - сервер БД PACS - недоступен";
-            if (msg != "") 
+            if (msg != "")
             {
                 msg += "\r\n\r\nперейдите в настройки программы\r\n(под аминистратором)\r\nи настройте соединение";
                 MessageBox.Show(this, msg, "Ошибка соединения", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -222,7 +217,7 @@ namespace TimeWorkTracking
         /// <summary>
         /// показать Диалог Авторизации 
         /// </summary>
-        private void LogIn() 
+        private void LogIn()
         {
             frmLogIn frm = new frmLogIn { Owner = this };
             CallBack_FrmMain_outEvent.callbackEventHandler("", "", null);  //send a general notification
@@ -342,9 +337,9 @@ namespace TimeWorkTracking
             if (ind >= 0)
             {
                 grRegistrator.Enabled = true;
-//               tbExtID.Text = lstwDataBaseUsers.Items[ind].SubItems[2].Text;              //extID
+                //               tbExtID.Text = lstwDataBaseUsers.Items[ind].SubItems[2].Text;              //extID
                 //crmId
-//               chUse.Checked = lstwDataBaseUsers.Items[ind].Text == "True";               //access    
+                //               chUse.Checked = lstwDataBaseUsers.Items[ind].Text == "True";               //access    
                 tbName.Text = lstwDataBaseMain.Items[ind].SubItems[1].Text;                 //fio
 
                 //загружаемся из СКУД
@@ -355,7 +350,7 @@ namespace TimeWorkTracking
                             lstwDataBaseMain.Items[ind].SubItems[2].Text,                   //extId внешний код для синнхронизации
                             lstwDataBaseMain.Items[ind].SubItems[1].Text                    //фио сотрудника
                     );
-                if (conPACS) 
+                if (conPACS)
                 {
                     clPacsWebDataBase.сheckPointPWTime(ref pacsStruct);
                 }
@@ -365,7 +360,7 @@ namespace TimeWorkTracking
                 dtpPacsOut.Value = pacsStruct.TimeOut;
 
                 if (lstwDataBaseMain.Items[ind].Text == "0")                                //данных о проходе нет
-                {                                                                                      
+                {
                     dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[3].Text);  //время начала работы по графику
                     udBeforeH.Value = dt;
                     udBeforeM.Value = dt;
@@ -406,7 +401,7 @@ namespace TimeWorkTracking
                     btInsertUpdate.Enabled = true;                                          //заблокировать кнопку UPDATE  
                 }
                 else                                                                        //данные о проходе есть
-                {                                                                           
+                {
                     dt = Convert.ToDateTime(lstwDataBaseMain.Items[ind].SubItems[9].Text);  //время первого прохода
                     udBeforeH.Value = dt;
                     udBeforeM.Value = dt;
@@ -525,21 +520,21 @@ namespace TimeWorkTracking
                     MessageBoxIcon.Warning
                     );
             }
-            else 
-            { 
-                switch ((int)cbSMarks.SelectedValue) 
+            else
+            {
+                switch ((int)cbSMarks.SelectedValue)
                 {
                     case 1:                                                         //спец отметка Явка
                         vDate = mcRegDate.SelectionStart;                           //дата из формы + время их формы
                         vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //Время прихода
                         vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
                         WritePassInfo(
-                            vDate, 
-                            vDateIn, 
-                            vDateOut, 
-                            (int)((DataRowView)cbSMarks.SelectedItem).Row["id"], 
-                            "-", 
-                            "-", 
+                            vDate,
+                            vDateIn,
+                            vDateOut,
+                            (int)((DataRowView)cbSMarks.SelectedItem).Row["id"],
+                            "-",
+                            "-",
                             tbNote.Text.Trim(),
                             false,
                             mcRegDate.SelectionStart);                              //добавить/обновить запись прохода
@@ -586,7 +581,7 @@ namespace TimeWorkTracking
                                     tbNote.Text.Trim(),
                                     false,
                                     mcRegDate.SelectionStart);                      //добавить/обновить запись прохода
-                                WritePacsInfo(vDate);                               //добавить/обновить информацию провайдера СКУД
+                            WritePacsInfo(vDate);                               //добавить/обновить информацию провайдера СКУД
                         }
                         else                                                        //спец отметки более одного дня
                         {
@@ -631,15 +626,15 @@ namespace TimeWorkTracking
                                             vDateIn,
                                             vDateOut,
                                             (int)((DataRowView)cbSMarks.SelectedItem).Row["id"],
-                                            vSpDateIn, 
+                                            vSpDateIn,
                                             vSpDateOut,
                                             tbNote.Text.Trim(),
-                                            i!=spCount,
+                                            i != spCount,
                                             mcRegDate.SelectionStart);                                     //добавить/обновить запись прохода
                                 }
                             }
                         }
-                    break;
+                        break;
                 }
             }
             //перемещение по списку
@@ -688,7 +683,7 @@ namespace TimeWorkTracking
             int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
             string keyUser = lstwDataBaseMain.Items[index].SubItems[2].Text;//ключевое поле внешний id пользователя
 
-//            string keyDate = regDate.ToString("yyyyMMdd");  //mcRegDate.SelectionStart.ToString("yyyyMMdd"); //ключевое поле дата прохода
+            //            string keyDate = regDate.ToString("yyyyMMdd");  //mcRegDate.SelectionStart.ToString("yyyyMMdd"); //ключевое поле дата прохода
             string keyDate = currentDate.ToString("yyyyMMdd");  //mcRegDate.SelectionStart.ToString("yyyyMMdd"); //ключевое поле дата прохода
 
             int chLunch = lstwDataBaseMain.Items[index].SubItems[11].Text == "1" ? 0 : Properties.Settings.Default.minutesLunchBreakTime;  //0 мин не обедает 60 мин обедает
@@ -740,21 +735,21 @@ namespace TimeWorkTracking
             }
             //------------------------
             int specmarkId = vSpID;// (int)((DataRowView)cbSMarks.SelectedItem).Row["id"];   //код спец отметок
-//            string specmarkTimeStart = cbSMarks.Text == "-" ? "" : smDStart.Value.ToString("yyyy-MM-dd") + " " + smTStart.Value.ToString("HH:mm"); //строка Дата начала спец. отметок 
-//            string specmarkTimeStop = cbSMarks.Text == "-" ? "" : smDStop.Value.ToString("yyyy-MM-dd") + " " + smTStop.Value.ToString("HH:mm");  //строка Дата окончания спец. отметок
+                                   //            string specmarkTimeStart = cbSMarks.Text == "-" ? "" : smDStart.Value.ToString("yyyy-MM-dd") + " " + smTStart.Value.ToString("HH:mm"); //строка Дата начала спец. отметок 
+                                   //            string specmarkTimeStop = cbSMarks.Text == "-" ? "" : smDStop.Value.ToString("yyyy-MM-dd") + " " + smTStop.Value.ToString("HH:mm");  //строка Дата окончания спец. отметок
             string specmarkTimeStart;   //строка Дата начала спец. отметок 
             string specmarkTimeStop;  //строка Дата окончания спец. отметок
             string specmarkNote = vSpNote == "" ? "NULL" : "N'" + vSpNote + "'";            //Комментарий спец отметок
             //------------------------
             //формулы
             double totalHoursInWork;
-            double totalHoursOutsideWork=0;
+            double totalHoursOutsideWork = 0;
             DateTime dMainBg;
-            DateTime dMainEn; 
+            DateTime dMainEn;
             DateTime dSpecBg;
             DateTime dSpecEn;
 
-            if (vSpID == 1) 
+            if (vSpID == 1)
             {
                 specmarkTimeStart = "NULL";
                 specmarkTimeStop = "NULL";
@@ -785,9 +780,9 @@ namespace TimeWorkTracking
                 if ((dSpecBg >= dMainBg && dSpecBg < dMainEn) && dSpecEn > dMainEn)
                     totalHoursOutsideWork = Math.Abs((dSpecEn - dMainEn).TotalMinutes);  //разница между концами диапазонов
                 //если диапазон внутри основного времени - не считаем
-                if (dSpecBg >= dMainBg && dSpecEn <= dMainEn) 
+                if (dSpecBg >= dMainBg && dSpecEn <= dMainEn)
                     totalHoursOutsideWork = 0;                                      //спец диапазон входит в фактический диапазон
-              }
+            }
             //------------------------
             string sql =
               "UPDATE EventsPass Set " +
@@ -851,12 +846,12 @@ namespace TimeWorkTracking
             }
             //увеличиение рейтинга специальной отметки
             sql = "SELECT rating FROM SpecialMarks Where id=" + specmarkId;
-            int specialMarksRating = Convert.ToInt32(clMsSqlDatabase.RequesScalar(cs,sql,false));  //прочитать рейтинг
+            int specialMarksRating = Convert.ToInt32(clMsSqlDatabase.RequesScalar(cs, sql, false));  //прочитать рейтинг
             specialMarksRating++;                                                   //поднять рейтинг                        
             sql = "UPDATE SpecialMarks Set rating = " + specialMarksRating + " Where id = " + specmarkId;
             clMsSqlDatabase.RequestNonQuery(cs, sql, false);
-            
-            if (!writeOnly) 
+
+            if (!writeOnly)
             {
                 //обновление информации регистрации списка сотрудников
                 LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + keyDate + "','') order by fio"));
@@ -864,7 +859,7 @@ namespace TimeWorkTracking
                 lstwDataBaseMain.HideSelection = false;                             //оставить выделение строки при потере фокуса ListView
                 lstwDataBaseMain.EnsureVisible(index);                              //показать в области видимости окна
 
-               // BringToFront();                                                     //вернуть форму на передний план по Z оси
+                // BringToFront();                                                     //вернуть форму на передний план по Z оси
             }
         }
 
@@ -874,8 +869,8 @@ namespace TimeWorkTracking
         /// <param name="regDate">дата регистрации</param>
         void WritePacsInfo(DateTime regDate)
         {
-            if (pacsStruct.respUserId !="" && (pacsStruct.respTimeIn != "" || pacsStruct.respTimeOut != "")) 
-            { 
+            if (pacsStruct.respUserId != "" && (pacsStruct.respTimeIn != "" || pacsStruct.respTimeOut != ""))
+            {
                 string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
                 string pacsInTime = pacsStruct.respTimeIn == "" ? "NULL" : "'" + Convert.ToDateTime(pacsStruct.respTimeIn).ToString("yyyyMMdd HH:mm") + "'";
                 string pacsOutTime = pacsStruct.respTimeOut == "" ? "NULL" : "'" + Convert.ToDateTime(pacsStruct.respTimeOut).ToString("yyyyMMdd HH:mm") + "'";
@@ -902,7 +897,7 @@ namespace TimeWorkTracking
                         "N'" + pascProviderName + "', " +
                         "N'" + pacsStruct.respUserId + "', " +
                         pacsInTime + ", " +
-                        pacsOutTime + 
+                        pacsOutTime +
                       ")";
                 clMsSqlDatabase.RequestNonQuery(cs, sql, false);
             }
@@ -1046,7 +1041,7 @@ namespace TimeWorkTracking
         /// <summary>
         /// обновить имя главного окна
         /// </summary>
-        private void formCaptionUpdate() 
+        private void formCaptionUpdate()
         {
             if (userType)
                 this.Text = "Учет рабочего времени (Администратор) " + Properties.Settings.Default.companyName;
@@ -1097,21 +1092,21 @@ namespace TimeWorkTracking
         /// </summary>
         /// <param name="direct">0 - работаем с блоком входа, 1 - работаем с блоком выхода</param>
         /// <param name="src">0 - работаем с данными из справочника или базы сотрудника, 1 - работаем с данными из СКУД</param>
-        private void restoreDateFromUserList(int direct, int src) 
+        private void restoreDateFromUserList(int direct, int src)
         {
             int index = lstwDataBaseMain.extSelectedIndex();                //сохранить индекс текущей строки
             DateTime timeIn;
             DateTime timeOut;
 
-            switch (src) 
+            switch (src)
             {
                 case 1:                                                     //данные из скуд
                     timeIn = pacsStruct.TimeIn;
                     timeOut = pacsStruct.TimeOut;
                     break;
                 default://               case 0:                                             //данные из истории проходов или из график сотрудника
-                   // readType
-                    if (lstwDataBaseMain.Items[index].SubItems[9].Text!="" && lstwDataBaseMain.Items[index].SubItems[10].Text != "")
+                        // readType
+                    if (lstwDataBaseMain.Items[index].SubItems[9].Text != "" && lstwDataBaseMain.Items[index].SubItems[10].Text != "")
                     {                                                       //данные из истории проходов 
                         timeIn = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[9].Text);    //пришел
                         timeOut = Convert.ToDateTime(lstwDataBaseMain.Items[index].SubItems[10].Text);  //ушел
@@ -1124,7 +1119,7 @@ namespace TimeWorkTracking
                     break;
             }
 
-            switch (direct) 
+            switch (direct)
             {
                 case 0:                                                     //вход
                     udBeforeH.Value = timeIn;
@@ -1185,7 +1180,7 @@ namespace TimeWorkTracking
             LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
             mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
         }
- 
+
         /// <summary>
         /// inCallBack
         /// проверить кто будет работать с программой

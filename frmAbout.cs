@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
-using System.Net.Mail;
 using System.Reflection;
 //using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,7 +15,7 @@ namespace TimeWorkTracking
             this.lbVersion.Text = String.Format("Версия {0}", AssemblyVersion);
             this.lbCopyright.Text = AssemblyCopyright;
             this.lbCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription + "\r\n\r\n"+Properties.Resources.about;
+            this.textBoxDescription.Text = AssemblyDescription + "\r\n\r\n" + Properties.Resources.about;
         }
 
         #region Методы доступа к атрибутам сборки
@@ -111,14 +106,14 @@ namespace TimeWorkTracking
         private void textBoxDescription_DoubleClick(object sender, EventArgs e)
         {
             string txt = ((System.Windows.Forms.TextBoxBase)sender).SelectedText;
-            switch (txt.Trim()) 
+            switch (txt.Trim())
             {
-                case "ric": 
+                case "ric":
                     System.Diagnostics.Process.Start(@"https://cad.ru");
                     break;
                 case "github":
                     System.Diagnostics.Process.Start(@"https://github.com/AlexandreZaytsev/TimeWorkTracking");
-                    break; 
+                    break;
                 default:
                     if (txt.IndexOf('@') > 0)
                     {

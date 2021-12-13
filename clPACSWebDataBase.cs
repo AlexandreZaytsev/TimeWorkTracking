@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Net;
+using System.Text;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
-using System.Globalization;
 
 namespace TimeWorkTracking
 {
@@ -85,12 +83,12 @@ namespace TimeWorkTracking
             statusSrv = getStatus(respTimeIn, respTimeOut);
             statusExt = getStatus(extTimeIn, extTimeOut);
 
-    //        switch (statusSrv)
-    //        {
-    //            case 1:
+            //        switch (statusSrv)
+            //        {
+            //            case 1:
 
-    //                return;
-    //        }
+            //                return;
+            //        }
 
             //время первого входа
             if (extTimeIn != "" && respTimeIn != "")
@@ -153,13 +151,13 @@ namespace TimeWorkTracking
     }
 
     //http://localhost:40001/json/help/operations/EventGetList
-    public class pacsEventGetList 
+    public class pacsEventGetList
     {
         public string UserSID { get; set; }
         public pacsEvent[] Event { get; set; }
- //       public pacsEventColumns[] EventColumns { get; set; }
-}
-    public class pacsEvent 
+        //       public pacsEventColumns[] EventColumns { get; set; }
+    }
+    public class pacsEvent
     {
         public string CardCode { get; set; }
         public DateTime Issued { get; set; }
@@ -167,7 +165,7 @@ namespace TimeWorkTracking
         public pacsUser User { get; set; }
     }
 
-    public class pacsMessage 
+    public class pacsMessage
     {
         public string Name { get; set; }
     }
@@ -190,7 +188,7 @@ namespace TimeWorkTracking
     #endregion
 
     class clPacsWebDataBase
-{
+    {
         #region //Private
 
         #region //Подключения и проверки
@@ -203,7 +201,7 @@ namespace TimeWorkTracking
         /// <returns>json строка ответа</returns>
         private static string getDataFromURL(Uri pacsUri, string request)
         {
-            string ret="";
+            string ret = "";
             try
             {
                 using (var wc = new WebClient())
@@ -212,12 +210,12 @@ namespace TimeWorkTracking
                     wc.Encoding = Encoding.UTF8;
                     wc.Headers[HttpRequestHeader.ContentType] = "application/json"; // Is about the payload/content of the current request or response. Do not use it if the request doesn't have a payload/ body.
                     wc.Headers[HttpRequestHeader.Accept] = "application/json"; // Tells the server the kind of response the client will accept.
-//                    wc.Headers[HttpRequestHeader.UserAgent] = "PostmanRuntime/7.28.3";
-//                    wc.Headers[HttpRequestHeader.Authorization] = "yourKey"; // Can be Bearer token, API Key etc.....
-//                    wc.Headers.Add("Content-Type", "application/json");
+                                                                               //                    wc.Headers[HttpRequestHeader.UserAgent] = "PostmanRuntime/7.28.3";
+                                                                               //                    wc.Headers[HttpRequestHeader.Authorization] = "yourKey"; // Can be Bearer token, API Key etc.....
+                                                                               //                    wc.Headers.Add("Content-Type", "application/json");
 
                     ret = wc.UploadString(pacsUri, request);
-//                    pacsAuthenticate jsonRet = new JavaScriptSerializer().Deserialize<pacsAuthenticate>(res);
+                    //                    pacsAuthenticate jsonRet = new JavaScriptSerializer().Deserialize<pacsAuthenticate>(res);
                 }
             }
             catch (WebException ex)
@@ -237,8 +235,7 @@ namespace TimeWorkTracking
         /// <summary>
         /// запрос к серверу и получение ответа
         /// </summary>
-        /// <param name="pacsUriStr">connectionstring</param>
-        /// <param name="extPath">адрес rest</param>
+        /// <param name="pacsUri">connectionstring</param>
         /// <param name="jsonReq">запрос формата Json</param>
         /// <param name="printMsg">печатать или нет отладку</param>
         /// <returns></returns>
@@ -281,7 +278,7 @@ namespace TimeWorkTracking
             bool ret = false;
             if (connectRestApi(pacsUri, true) != "")
                 ret = true;
-            else 
+            else
             {
                 //описание ошибко подключения
                 //   StringBuilder errorMessages = new StringBuilder();
@@ -318,7 +315,7 @@ namespace TimeWorkTracking
         /// <returns>строка UserSID или если неудачно - пустая строка</returns>
         /// https://streletzcoder.ru/rabotaem-s-json-v-c-serializatsiya-i-deserializatsiya/
         /// https://coderoad.wiki/36674888/%D0%9A%D0%B0%D0%BA-%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D1%8C-%D0%B2%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D1%83%D1%8E-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D1%8C-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81-JavascriptSerializer-%D0%B2-C
-        private static string connectRestApi(UriBuilder pacsUri, bool logout) 
+        private static string connectRestApi(UriBuilder pacsUri, bool logout)
         {
             string ret = "";
             string res;// = "";
@@ -336,7 +333,7 @@ namespace TimeWorkTracking
             //dynamic usr = new JavaScriptSerializer().DeserializeObject(res);
             //Dictionary<string, object> company = (Dictionary<string, object>)new JavaScriptSerializer().DeserializeObject(res);
 
-            if (jsonRet != null) 
+            if (jsonRet != null)
             {
                 ret = jsonRet.UserSID;
                 //jsonRet = null;                                     //очистить объект
@@ -349,7 +346,7 @@ namespace TimeWorkTracking
                             "}";
                     pacsUriLite.Path = "json/Logout";
                     getRestData(pacsUriLite.Uri, jsonReq, 0);
-                    }
+                }
             }
             return ret;
         }
@@ -369,9 +366,9 @@ namespace TimeWorkTracking
             UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
 
             //userName = "%" + "ле" + "%";
-            if (UserSID.Length > 0) 
+            if (UserSID.Length > 0)
             {
-               //  pointHostName = "EmployeeGetList"
+                //  pointHostName = "EmployeeGetList"
                 jsonReq =    //-------------список пользователей
                     "{" +
                     "\"Language\":\"ru\", " +
@@ -383,10 +380,10 @@ namespace TimeWorkTracking
                     "\"Name\":\"" + pacsStruct.getUserName + "\", " +
                     "}";
 
-           // '           """DepartmentToken"":0, "
-           // '           """DepartmentUsed"":true, " &
-           // '           """HideDismissed"":true, " &
-               // UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
+                // '           """DepartmentToken"":0, "
+                // '           """DepartmentUsed"":true, " &
+                // '           """HideDismissed"":true, " &
+                // UriBuilder pacsUriLite = new UriBuilder(pacsUri.Scheme, pacsUri.Host, pacsUri.Port);    //пересоберем инфу без логина и пароля
                 pacsUriLite.Path = "json/EmployeeGetList";
                 res = getRestData(pacsUriLite.Uri, jsonReq, 0);//,
                 pacsEmployeeGetList jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
@@ -410,9 +407,9 @@ namespace TimeWorkTracking
                                 pacsStruct.respUserId = jsonRet.Employee[i].Token;   //id юзера
 
                                 //если нужна проверка на id сотрудника из Лоции (табельный номер в ProxWay)
-                                if (pacsStruct.getUserCrmId.Length> 0)                    
+                                if (pacsStruct.getUserCrmId.Length > 0)
                                 {
-                                    if(pacsStruct.getUserCrmId != jsonRet.Employee[i].EmployeeNumber)
+                                    if (pacsStruct.getUserCrmId != jsonRet.Employee[i].EmployeeNumber)
                                     {
                                         pacsStruct.respUserId = "";
                                         msg = "совпадений по табельному номеру сотрудника" + "\r\n" + "не обнаружено";
@@ -421,15 +418,15 @@ namespace TimeWorkTracking
                                 }
 
                                 //если нужна проверка на idExcel сотрудника из Excel базы учета рабочего времени (доп поля в ProxWay)
-                                if (pacsStruct.getUserExtId.Length > 0) 
+                                if (pacsStruct.getUserExtId.Length > 0)
                                 {
-                                    if (jsonRet.Employee[i].AdditionalFields.GetLength(0) > 0) 
+                                    if (jsonRet.Employee[i].AdditionalFields.GetLength(0) > 0)
                                     {
-                                        for(int j=0;j< jsonRet.Employee[i].AdditionalFields.GetLength(0); i++) 
+                                        for (int j = 0; j < jsonRet.Employee[i].AdditionalFields.GetLength(0); i++)
                                         {
-                                            if(jsonRet.Employee[i].AdditionalFields[j].Name== "id базы учета рабочего времени (Excel)") 
-                                            { 
-                                                if(pacsStruct.getUserExtId != jsonRet.Employee[i].AdditionalFields[j].Value) 
+                                            if (jsonRet.Employee[i].AdditionalFields[j].Name == "id базы учета рабочего времени (Excel)")
+                                            {
+                                                if (pacsStruct.getUserExtId != jsonRet.Employee[i].AdditionalFields[j].Value)
                                                 {
                                                     pacsStruct.respUserId = "";
                                                     msg = "совпадений не обнаружено";
@@ -439,10 +436,10 @@ namespace TimeWorkTracking
                                         }
                                     }
                                 }
-                                else 
+                                else
                                 {
                                     pacsStruct.respUserId = "";
-                                    msg = "совпадений не обнаружено" + "\r\n" + 
+                                    msg = "совпадений не обнаружено" + "\r\n" +
                                         "в базе ProxWay не настроены дополнительные поля сотрудника";
                                     break;
                                 }
@@ -451,7 +448,7 @@ namespace TimeWorkTracking
                     }
                     //jsonRet = null;                                     //очистить объект
                 }
-                if (msg.Length > 0) 
+                if (msg.Length > 0)
                 {
                     MessageBox.Show(
                         "Ошибка сопоставления пользователя" + "\r\n\r\n" +
@@ -459,19 +456,19 @@ namespace TimeWorkTracking
                         "   ФИО сотрудника        : '" + pacsStruct.getUserName + "'" + "\r\n" +
                         "   id сотрудника из Лоции: '" + pacsStruct.getUserCrmId + "'" + "\r\n" +
                         "   id сотрудника из Excel: '" + pacsStruct.getUserExtId + "'" + "\r\n" +
-                        "\r\n" + msg, "Пользователи СКУД ProwWay", 
-                        MessageBoxButtons.OK, 
+                        "\r\n" + msg, "Пользователи СКУД ProwWay",
+                        MessageBoxButtons.OK,
                         MessageBoxIcon.Warning,
                         MessageBoxDefaultButton.Button1,
-                        MessageBoxOptions.ServiceNotification 
+                        MessageBoxOptions.ServiceNotification
                         );
                 }
 
                 //-------------выход
                 //pointHostName = "Logout"
-                jsonReq = 
+                jsonReq =
                     "{" +
-                    "\"UserSID\":\"" + UserSID + "\"" + 
+                    "\"UserSID\":\"" + UserSID + "\"" +
                     "}";
                 pacsUriLite.Path = "json/Logout";
                 getRestData(pacsUriLite.Uri, jsonReq, 0);
@@ -484,7 +481,7 @@ namespace TimeWorkTracking
         /// </summary>
         /// <param name="pacsUri">строка подключения uriBuilder</param>
         /// <param name="pacsStruct">ref структура взаимодейстивия с сервисом Pacs ProxWay</param>
-        private static void checkPointPWTime(UriBuilder pacsUri, ref pacsProvider pacsStruct) 
+        private static void checkPointPWTime(UriBuilder pacsUri, ref pacsProvider pacsStruct)
         {
             string jsonReq;// = "";
             string res;// = "";
@@ -495,10 +492,10 @@ namespace TimeWorkTracking
 
             //передача с преобразованием в универсальное время (с учетом смещения GMT)
             DateTime utcFrom = DateTime.Parse(pacsStruct.getReguestDate + " 00:00:00");
-//            utcFrom = utcFrom.ToUniversalTime();                                                    //с учетом часового пояса (-3 часа для Москвы)
+            //            utcFrom = utcFrom.ToUniversalTime();                                                    //с учетом часового пояса (-3 часа для Москвы)
             double unixFrom = utcFrom.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
             DateTime utcTo = DateTime.Parse(pacsStruct.getReguestDate + " 23:59:59");
-//            utcTo = utcTo.ToUniversalTime();                                                        //с учетом часового пояса (-3 часа для Москвы)
+            //            utcTo = utcTo.ToUniversalTime();                                                        //с учетом часового пояса (-3 часа для Москвы)
             double unixTo = utcTo.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
 
             //            DateTime utcTo = DateTime.Parse(findDateTime + " 23:59:59");
@@ -521,11 +518,11 @@ namespace TimeWorkTracking
                     "\"IssuedFrom\":\"" + @"\/Date(" + unixFrom.ToString() + @")\/" + "\", " +
                     "\"IssuedTo\":\"" + @"\/Date(" + unixTo.ToString() + @")\/" + "\", " +
                     "}";
-//                "\"IssuedFrom\":\"" + @"\/Date(" + clSystemSet.convertToUnixTimeStamp(findDateTime + " 00:00:00", 3) + @")\/" + "\", " +
-//                "\"IssuedTo\":\"" + @"\/Date(" + clSystemSet.convertToUnixTimeStamp(findDateTime + " 23:59:59", 3) + @")\/" + "\", " +
-            //"""Employees"":[], "  'массив id сотрудников [1785, 1809] Ечина и Зайцев
+                //                "\"IssuedFrom\":\"" + @"\/Date(" + clSystemSet.convertToUnixTimeStamp(findDateTime + " 00:00:00", 3) + @")\/" + "\", " +
+                //                "\"IssuedTo\":\"" + @"\/Date(" + clSystemSet.convertToUnixTimeStamp(findDateTime + " 23:59:59", 3) + @")\/" + "\", " +
+                //"""Employees"":[], "  'массив id сотрудников [1785, 1809] Ечина и Зайцев
 
-            pacsUriLite.Path = "json/EventGetList";
+                pacsUriLite.Path = "json/EventGetList";
                 res = getRestData(pacsUriLite.Uri, jsonReq, 0);//,
                 pacsEventGetList jsonRet = new JavaScriptSerializer().Deserialize<pacsEventGetList>(res);
                 if (jsonRet != null)
@@ -537,7 +534,7 @@ namespace TimeWorkTracking
                     {
                         if (jsonRet.Event[i].CardCode.Length > 0 && jsonRet.Event[i].User.Token == pacsStruct.respUserId) //!!!если чела небыло есть проход от юзера 0??? jsonRet.Event[i].User.Token == pwIdUser
                         {
-                            switch (jsonRet.Event[i].Message.Name) 
+                            switch (jsonRet.Event[i].Message.Name)
                             {
                                 case "Вход совершен":
                                     pwDataTime = jsonRet.Event[i].Issued.ToLocalTime();     //прием с преобразованием в локальное время (с учетом смещения GMT)
@@ -566,7 +563,7 @@ namespace TimeWorkTracking
                     "}";
                 pacsUriLite.Path = "json/Logout";
                 getRestData(pacsUriLite.Uri, jsonReq, 0);
-                    //jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
+                //jsonRet = new JavaScriptSerializer().Deserialize<pacsEmployeeGetList>(res);
             }
         }
 

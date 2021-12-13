@@ -6,7 +6,7 @@ namespace TimeWorkTracking
     //https://www.akadia.com/services/dotnet_listview_sort_dataset.html
 
     #region//Класс для сортировки по столбцу ListView Этот класс является реализацией интерфейса IComparer
-    
+
     public class clListViewItemComparer : IComparer
     {
         private int ColumnToSort;                               //Определяет столбец для сортировки

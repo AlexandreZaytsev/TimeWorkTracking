@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 //using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.ComponentModel;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 
 
 
@@ -23,7 +16,7 @@ namespace TimeWorkTracking
         {
             //поработаем с командной строкой на предмет сброса админского пароля
             string[] arguments = Environment.GetCommandLineArgs();
-            if (arguments.Length >1)
+            if (arguments.Length > 1)
             {
                 switch (arguments[1])
                 {

@@ -2,16 +2,16 @@
 using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace TimeWorkTracking
@@ -33,7 +33,7 @@ namespace TimeWorkTracking
             GetWindowThreadProcessId(excelApp.Hwnd, out int id);
             return Process.GetProcessById(id);
         }
-        
+
         /// <summary>
         /// закрыть процесс Excel
         /// </summary>
@@ -144,8 +144,8 @@ namespace TimeWorkTracking
             bool excel = false;
             foreach (DataRow row in table1.Rows)
             {
-                bool jetOleDb;
-                if (row["SOURCES_NAME"].ToString() == "Microsoft.Jet.OLEDB.4.0") jetOleDb = true;
+                //bool jetOleDb;
+                //if (row["SOURCES_NAME"].ToString() == "Microsoft.Jet.OLEDB.4.0") jetOleDb = true;
                 if (row["SOURCES_NAME"].ToString() == "Microsoft.ACE.OLEDB.12.0") aceOleDb = true;
             }
 
@@ -173,7 +173,7 @@ namespace TimeWorkTracking
         /// </summary>
         /// <param name="chr">входящий символ</param>
         /// <returns>true в случае успеха</returns>
-        static public bool checkChar(Char chr) 
+        static public bool checkChar(Char chr)
         {
             //http://website-lab.ru/article/regexp/shpargalka_po_regulyarnyim_vyirajeniyam/
             string input = chr.ToString();
@@ -184,16 +184,16 @@ namespace TimeWorkTracking
             //            var hasNumber = new Regex(@"[0-9]+");
             //            var hasUpperChar = new Regex(@"[A-Z]+");
             //            var hasMinimum8Chars = new Regex(@".{8,}");
-            bool isValidated = regexOk.IsMatch(input) && regexExc.IsMatch(input) ;
+            bool isValidated = regexOk.IsMatch(input) && regexExc.IsMatch(input);
 
             return isValidated;
-/*
-            char val = e.KeyChar;
-            if (!Char.IsLetterOrDigit(val) && !Char.IsDigit(val) && val != 8 && (val <= 39 || val >= 46) && val != 47 && val != 61) //калькулятор
-            {
-                e.Handled = true;
-            }
-*/
+            /*
+                        char val = e.KeyChar;
+                        if (!Char.IsLetterOrDigit(val) && !Char.IsDigit(val) && val != 8 && (val <= 39 || val >= 46) && val != 47 && val != 61) //калькулятор
+                        {
+                            e.Handled = true;
+                        }
+            */
         }
     }
 

@@ -7,7 +7,7 @@ namespace TimeWorkTracking
 {
     public partial class frmLogIn : Form
     {
-        private bool pass=true;                                         //регистрация одобрена
+        private bool pass = true;                                         //регистрация одобрена
         private string adminPassword = Properties.Settings.Default.adminPass;
         private int timerSec = 5;                                       //количество секунд до входа
         public frmLogIn()
@@ -30,7 +30,7 @@ namespace TimeWorkTracking
 
             this.KeyPreview = false;                                    //обрабатывать нажатия на форме      
 
-//            cbTypeAccount.Text = "Пользователь";
+            //            cbTypeAccount.Text = "Пользователь";
             //tbNewPassword.PasswordChar = '\u25CF';
             chChangePassword.Visible = false;
             cbTypeAccount.SelectedIndex = 0;
@@ -43,7 +43,7 @@ namespace TimeWorkTracking
         /// <param name="e"></param>
         private void cbTypeAccount_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (cbTypeAccount.Text) 
+            switch (cbTypeAccount.Text)
             {
                 case "Администратор":
                     panelUser.Visible = false;                          //панель пользователя
@@ -64,7 +64,7 @@ namespace TimeWorkTracking
                     pass = true;                                        //доступ разрешен в любом случае
                     break;
             }
-//            lbInfo.Text = "";
+            //            lbInfo.Text = "";
             checkLoginAndSendEvent();                                   //проинформировать родителя
         }
 
@@ -124,7 +124,7 @@ namespace TimeWorkTracking
         {
             if (chChangePassword.Checked)                               //сбросим поле с рабочим паролем
                 tbPassword.Text = "";
-            
+
             checkBasePassword();                                        //проверить пароль
             checkLoginAndSendEvent();                                   //проинформировать родителя
         }

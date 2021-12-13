@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 
 namespace TimeWorkTracking
-{ 
+{
     public partial class frmUsers : Form
     {
         clListViewItemComparer _lvwItemComparer;
@@ -22,7 +22,7 @@ namespace TimeWorkTracking
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
             mainPanelUsers.Enabled = clMsSqlDatabase.sqlConnectSimple(cs);
             if (mainPanelUsers.Enabled)
-            { 
+            {
                 cbDepartment.DisplayMember = "Name";
                 cbDepartment.ValueMember = "id";
                 cbDepartment.DataSource = clMsSqlDatabase.TableRequest(cs, "Select id, name From UserDepartment where uses=1");
@@ -88,13 +88,15 @@ namespace TimeWorkTracking
                 if (drow.RowState != DataRowState.Deleted)  // Only row that have not been deleted
                 {
                     // Define the list items
-                    lstwDataBaseUsers.LabelEdit=false;      //запрет редактирования item
+                    lstwDataBaseUsers.LabelEdit = false;      //запрет редактирования item
                     ListViewItem lvi = new ListViewItem(drow["access"].ToString(), 0) //имя для сортировки
                     {
                         ImageIndex = (Boolean)drow["access"] ? 1 : 0
-                        , StateImageIndex = (Boolean)drow["access"] ? 1 : 0
-                        , Checked = (Boolean)drow["access"]
-//                        , UseItemStyleForSubItems = true
+                        ,
+                        StateImageIndex = (Boolean)drow["access"] ? 1 : 0
+                        ,
+                        Checked = (Boolean)drow["access"]
+                        //                        , UseItemStyleForSubItems = true
                     };
                     lvi.SubItems.Add(drow["fio"].ToString());
                     lvi.SubItems.Add(drow["extId"].ToString());
@@ -154,7 +156,7 @@ namespace TimeWorkTracking
                 tbNote.Text = lstwDataBaseUsers.Items[ind].SubItems[9].Text;                    //note
                 cbDepartment.Text = lstwDataBaseUsers.Items[ind].SubItems[3].Text;              //department    
                 cbPost.Text = lstwDataBaseUsers.Items[ind].SubItems[4].Text;                    //post
-                dt= Convert.ToDateTime(lstwDataBaseUsers.Items[ind].SubItems[5].Text);          //date start
+                dt = Convert.ToDateTime(lstwDataBaseUsers.Items[ind].SubItems[5].Text);          //date start
                 udBeforeH.Value = dt;
                 udBeforeM.Value = dt;
                 dt = Convert.ToDateTime(lstwDataBaseUsers.Items[ind].SubItems[6].Text);         //date stop
@@ -191,7 +193,7 @@ namespace TimeWorkTracking
         private void cbDepartment_TextChanged(object sender, EventArgs e)
         {
             if (cbDepartment.FindString(cbDepartment.Text) == -1)
-                cbDepartment.BackColor=System.Drawing.SystemColors.Window;
+                cbDepartment.BackColor = System.Drawing.SystemColors.Window;
             else
                 cbDepartment.BackColor = System.Drawing.SystemColors.Control;
         }
@@ -223,7 +225,7 @@ namespace TimeWorkTracking
             {
                 btUpdate.Enabled = true;                                    //разблокировать кнопку записи в БД    
                 if (lstwDataBaseUsers.Items.Cast<ListViewItem>()            //попробовать найти значение ключевого поля (name) в списке ListView
-                    .Where(x => (x.SubItems[1].Text == tbName.Text.Trim()))         
+                    .Where(x => (x.SubItems[1].Text == tbName.Text.Trim()))
                     .FirstOrDefault() != null)
                 {                                                           //значение есть
                     tbName.BackColor = System.Drawing.SystemColors.Control; //серый фон
@@ -241,7 +243,7 @@ namespace TimeWorkTracking
                         btInsert.Enabled = true;                            //разблокировать кнопку INSERT    
                         btUpdate.Enabled = false;                           //заблокировать кнопку UPDATE    
                     }
-                    else 
+                    else
                     {
                         btInsert.Enabled = true;                            //разблокировать кнопку INSERT    
                         btUpdate.Enabled = true;                            //разблокировать кнопку UPDATE    
@@ -301,7 +303,7 @@ namespace TimeWorkTracking
             string cs = Properties.Settings.Default.twtConnectionSrting;        //connection string
             string sql =
               "UPDATE Users Set " +
-                "crmId = " + Convert.ToUInt64(tbCrmID.Text.Trim().PadLeft(18,'0')) + ", " +
+                "crmId = " + Convert.ToUInt64(tbCrmID.Text.Trim().PadLeft(18, '0')) + ", " +
                 "name = N'" + tbName.Text.Trim() + "', " +
                 "note = N'" + tbNote.Text.Trim().Replace("'", "''") + "', " +   //экранировать одинарную кавычку задвоив ее
                 "departmentId = " + ((DataRowView)cbDepartment.SelectedItem).Row["id"] + ", " +

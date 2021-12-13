@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Text;
-using System.Data.SqlClient;
-using System.Windows.Forms;
 using System.Data;
+using System.Data.SqlClient;
+using System.Text;
+using System.Windows.Forms;
 
 namespace TimeWorkTracking
 {
@@ -73,7 +73,7 @@ namespace TimeWorkTracking
             bool ret = false;
             if (connectionString != "")
             {
-         //       StringBuilder errorMessages = new StringBuilder();
+                //       StringBuilder errorMessages = new StringBuilder();
                 var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
                 using (var sqlConnection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString))
                 {
@@ -278,7 +278,7 @@ namespace TimeWorkTracking
                             sql + "(N'Общее руководство') " +
                             sql + "(N'Представительство Академия САПР и ГИС') ";
                         sqlCommand.ExecuteNonQuery();
-                    }    
+                    }
 
                     //Должность (таблица для списка)
                     sqlCommand.CommandText = "CREATE TABLE UserPost (" +
@@ -842,7 +842,7 @@ namespace TimeWorkTracking
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
- 
+
                 using (var sqlCommand = connection.CreateCommand())
                 {
                     sqlCommand.CommandText = sqlRequest;
@@ -874,7 +874,7 @@ namespace TimeWorkTracking
         /// <returns>результаты в DataSet</returns>
         private static DataTable GetTableRequest(string connectionString, string sqlRequest)
         {
-            DataSet ds= new DataSet();  // Создаем объект Dataset
+            DataSet ds = new DataSet();  // Создаем объект Dataset
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -882,7 +882,7 @@ namespace TimeWorkTracking
                 SqlDataAdapter adapter = new SqlDataAdapter(sqlRequest, connectionString);
                 // Создаем объект Dataset
                 //DataSet ds = new DataSet();
-                
+
                 adapter.Fill(ds);       // Заполняем Dataset
             }
             return ds.Tables[0]; //ds.Tables[tableName];    // Возвращаем первую таблицу из набора Dataset
@@ -903,7 +903,7 @@ namespace TimeWorkTracking
         /// </summary>
         /// <param name="connectionString">строка соединения</param>
         /// <returns>строка с каким то номером ошибки</returns>
-        public static string sqlConnectBase(string connectionString) 
+        public static string sqlConnectBase(string connectionString)
         {
             if (CheckConnectBase(connectionString))
             {
@@ -951,7 +951,7 @@ namespace TimeWorkTracking
         /// </summary>
         /// <param name="connectionstring">строка соединения</param>
         /// <param name="tableName">имя таблицы</param>
-        public static void ClearTableDataBase(string connectionstring, string tableName) 
+        public static void ClearTableDataBase(string connectionstring, string tableName)
         {
             ClearTableDB(connectionstring, tableName);
         }

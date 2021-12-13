@@ -197,12 +197,12 @@ namespace TimeWorkTracking
         /// <param name="e"></param>
         private void tbName_TextChanged(object sender, EventArgs e)
         {
-            if (tbName.Text.Trim() == "-") 
+            if (tbName.Text.Trim() == "-")
             {
                 panel1.Enabled = false;                                         //значение не радактируется
                 btPanel.Enabled = false;
             }
-            else 
+            else
             {
                 panel1.Enabled = true;
                 btPanel.Enabled = true;
@@ -263,7 +263,7 @@ namespace TimeWorkTracking
                 (chUse.Checked ? 1 : 0) +
                 ")";
             clMsSqlDatabase.RequestNonQuery(cs, sql, false);
- 
+
             LoadList(clMsSqlDatabase.TableRequest(cs, "Select * From SpecialMarks order by id"));// order by extId desc"));
             lstwDataBaseSpecialMarks.extFindListByColValue(3, key);            //найти и выделить позицию
             tbName_TextChanged(null, null);                                     //обновить поля и кнопки
