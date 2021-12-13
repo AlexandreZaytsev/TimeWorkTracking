@@ -359,7 +359,7 @@ namespace TimeWorkTracking
             tbMainExportPath.Text = setFileName(
                 "Выбор файла экспорта",
                 "Excel 2010(*.xlsx; *.xls) | *.xlsx; *.xls | XML Documents(*.xml)|*.xml | All files (*.*)|*.*",
-                "twt_" + DateTime.Now.ToString("yyyyMMddHHmm") + "_ExportData"
+                "TimeWorkTracking_export_" + DateTime.Now.ToString("yyyyMMddHHmm")
                 );
             checkPathExportImport();                        // проверить существование путей экспорта импорта
         }
@@ -557,19 +557,9 @@ namespace TimeWorkTracking
                 //очистка таблиц
                 string[] clearTable = inArgument[3].Split('|');
                 Array.Reverse(clearTable);
-                using (var sqlConnection = new SqlConnection(inArgument[2]))
+                for (int i = 0; i < clearTable.Length; i++)
                 {
-                    sqlConnection.Open();
-                    using (var sqlCommand = sqlConnection.CreateCommand())
-                    {
-                        for (int i = 0; i < clearTable.Length; i++)
-                        {
-                            sqlCommand.CommandText = "DELETE FROM " + clearTable[i];
-                            sqlCommand.ExecuteScalar();
-                        }
-
-                    }
-                    sqlConnection.Close();
+                    clMsSqlDatabase.ClearTableDB(inArgument[2], clearTable[i]); //очистить таблицу
                 }
 
                 if (inArgument[4] == "0")                           //если нужно только очистить и заполнить таблицы 
@@ -924,18 +914,14 @@ namespace TimeWorkTracking
                         da.Fill(ds);
                     }
                     cnExcel.Close();
-                    
+
+                    clMsSqlDatabase.ClearTableDB(inArgument[3], "EventsPass");  //очистить таблицу
+                    clMsSqlDatabase.ClearTableDB(inArgument[3], "Users");       //очистить таблицу
                     using (var sqlConnection = new SqlConnection(inArgument[3]))
                     {
                         sqlConnection.Open();
                         using (var sqlCommand = sqlConnection.CreateCommand())
                         {
-                            sqlCommand.CommandText = "DELETE FROM EventsPass";
-                            sqlCommand.ExecuteScalar();
-                            
-                            sqlCommand.CommandText = "DELETE FROM Users";
-                            sqlCommand.ExecuteScalar();
-
                             int currentRow = 0;
                             foreach (DataRow row in ds.Tables[0].Rows)
                             {
@@ -1066,14 +1052,14 @@ namespace TimeWorkTracking
                         cmdExcel.CommandText = $"Select * from [{inArgument[2]}]";    //диапазон Data (без заголовка)
                         OleDbDataReader result = cmdExcel.ExecuteReader();
 
+
+                        clMsSqlDatabase.ClearTableDB(inArgument[3], "EventsPass");      //очистить таблицу
                         using (var sqlConnection = new SqlConnection(inArgument[3]))
                         {
                             sqlConnection.Open();
                             using (var sqlCommand = sqlConnection.CreateCommand())
                             { 
                                 //sqlCommand.CommandTimeout = 10;
-                                sqlCommand.CommandText = "DELETE FROM EventsPass";
-                                sqlCommand.ExecuteScalar();
                                 int currentRow = 0;
                                 while (result.Read())
                                 {

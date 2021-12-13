@@ -11,9 +11,15 @@ namespace TimeWorkTracking
 {
     class clMsSqlDatabase
     {
-    //Подключения и проверки
+        #region //Private
 
-        //проверить что соединение есть в принципе на базе master
+        #region //Подключения и проверки
+
+        /// <summary>
+        /// проверить что соединение есть в принципе на базе master
+        /// </summary>
+        /// <param name="connectionString">строка соединения</param>
+        /// <returns></returns>
         private static bool CheckConnectBase(string connectionString)
         {
             bool ret = false;
@@ -45,7 +51,9 @@ namespace TimeWorkTracking
                     MessageBox.Show(errorMessages.ToString(),
                                    "Подключение к Базе Данных",
                                     MessageBoxButtons.OK,
-                                    MessageBoxIcon.Exclamation);
+                                    MessageBoxIcon.Exclamation,
+                                    MessageBoxDefaultButton.Button1,
+                                    MessageBoxOptions.ServiceNotification);
                 }
                 finally
                 {
@@ -58,7 +66,11 @@ namespace TimeWorkTracking
             }
         }
 
-        //проверить что и соединение и бд существует 
+        /// <summary>
+        /// проверить что и соединение и бд существует
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
         private static bool CheckConnectSimple(string connectionString)
         {
             bool ret = false;
@@ -87,7 +99,11 @@ namespace TimeWorkTracking
             return ret;
         }
 
-        //проверить что бд существует
+        /// <summary>
+        /// проверить что бд существует
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
         private static bool CheckDatabaseExists(string connectionString)
         {
             var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
@@ -111,10 +127,16 @@ namespace TimeWorkTracking
             }
         }
 
-    //Действия
+        #endregion
 
-        //создать БД по строке подключения
-        private static void CreateDatabase(string connectionString, bool mode)
+        #region //Действия с базой данных
+
+        /// <summary>
+        /// создать БД по строке подключения
+        /// </summary>
+        /// <param name="connectionString">строка соединения</param>
+        /// <param name="mode">режим инициализации</param>
+        private static void CreateDB(string connectionString, bool mode)
         {
             //https://metanit.com/sharp/adonetcore/2.4.php
             var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
@@ -130,11 +152,15 @@ namespace TimeWorkTracking
                 }
                 sqlConnection.Close();
             }
-            InitDataBase(connectionString, mode);
+            InitDB(connectionString, mode);
         }
 
-        //инициализировать БД по строке подключения
-        private static void InitDataBase(string connectionString, bool mode)
+        /// <summary>
+        /// инициализировать БД по строке подключения
+        /// </summary>
+        /// <param name="connectionString">строка подключения</param>
+        /// <param name="mode">режим инициализации false- не заполнять начальные данные true- заполнять</param>
+        private static void InitDB(string connectionString, bool mode)
         {
             using (var sqlConnection = new SqlConnection(connectionString))
             {
@@ -725,8 +751,11 @@ namespace TimeWorkTracking
             }
         }
 
-        //удалить бд
-        private static void DropDatabase(string connectionString)
+        /// <summary>
+        /// удалить бд
+        /// </summary>
+        /// <param name="connectionString">строка подключения</param>
+        private static void DropDB(string connectionString)
         {
             var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
             var databaseName = sqlConnectionStringBuilder.InitialCatalog;
@@ -747,13 +776,37 @@ namespace TimeWorkTracking
             }
         }
 
-    //Запросы
+        /// <summary>
+        /// очистить таблицу Базы Данных со сбросом счетчика столбца identy
+        /// </summary>
+        /// <param name="connectionstring">строка соединения</param>
+        /// <param name="tableName">имя таблицы</param>
+        public static void ClearTableDB(string connectionstring, string tableName)
+        {
+            using (var sqlConnection = new SqlConnection(connectionstring))
+            {
+                sqlConnection.Open();
+                using (var sqlCommand = sqlConnection.CreateCommand())
+                {
+                    sqlCommand.CommandText = "DELETE FROM " + tableName +
+                                             "DBCC CHECKIDENT('" + tableName + "', RESEED, 0)";
+                    sqlCommand.ExecuteScalar();
+                }
+                sqlConnection.Close();
+            }
+        }
 
-        //выполнить запрос на обновление создание и удаление
-        // connectionString - строка соединения
-        // sqlRequest - запрос
-        // errMode - false- не показывать ошибки true- показывать ошибки
-        //возврат - количество обработанных строк
+        #endregion
+
+        #region //Запросы
+
+        /// <summary>
+        /// выполнить запрос на обновление создание и удаление
+        /// </summary>
+        /// <param name="connectionString">строка соединения</param>
+        /// <param name="sqlRequest">запрос</param>
+        /// <param name="errMode">false- не показывать ошибки true- показывать ошибки</param>
+        /// <returns>количество обработанных строк</returns>
         private static int GetRequestNonQuery(string connectionString, string sqlRequest, Boolean errMode)
         {
             int ret = 0;
@@ -779,11 +832,13 @@ namespace TimeWorkTracking
             return ret;
         }
 
-        //выполнить запрос возвращающий одно значение
-        // connectionString - строка соединения
-        // sqlRequest - запрос
-        // errMode - false- не показывать ошибки true- показывать ошибки
-        //возврат - количество обработанных строк
+        /// <summary>
+        /// выполнить запрос возвращающий одно значение
+        /// </summary>
+        /// <param name="connectionString">строка соединения</param>
+        /// <param name="sqlRequest">запрос</param>
+        /// <param name="errMode">false- не показывать ошибки true- показывать ошибки</param>
+        /// <returns>количество обработанных строк</returns>
         private static string GetRequesScalar(string connectionString, string sqlRequest, Boolean errMode)
         {
             string ret = "";
@@ -814,7 +869,12 @@ namespace TimeWorkTracking
             return ret;
         }
 
-        //выполнить запрос и вернуть DataSet
+        /// <summary>
+        /// выполнить запрос и вернуть DataSet
+        /// </summary>
+        /// <param name="connectionString">строка соединения</param>
+        /// <param name="sqlRequest">запрос</param>
+        /// <returns>результаты в DataSet</returns>
         private static DataTable GetTableRequest(string connectionString, string sqlRequest)
         {
             DataSet ds= new DataSet();  // Создаем объект Dataset
@@ -831,13 +891,21 @@ namespace TimeWorkTracking
             return ds.Tables[0]; //ds.Tables[tableName];    // Возвращаем первую таблицу из набора Dataset
         }
 
+        #endregion
 
-        //PUBLIC------------------------------------------------------------------------
+        #endregion
 
-    //Подключения и проверки
-        //проверить соединение отдельно по соединению (на базе master) и по имени базы в списке баз
-        //выдать расшифровку ошибок
-        //(проверка только из формы настроек соединения)
+        #region//PUBLIC
+
+        #region //Подключения и проверки
+
+        /// <summary>
+        ///проверить соединение отдельно по соединению (на базе master) и по имени базы в списке баз
+        ///выдать расшифровку ошибок
+        ///(проверка только из формы настроек соединения)
+        /// </summary>
+        /// <param name="connectionString">строка соединения</param>
+        /// <returns>строка с каким то номером ошибки</returns>
         public static string sqlConnectBase(string connectionString) 
         {
             if (CheckConnectBase(connectionString))
@@ -851,45 +919,89 @@ namespace TimeWorkTracking
                 return "-9";            //соединение установить не удалось
         }
 
-        //проверить соединение сразу по строке подключения
-        //без выдачи ошибок
-        //(проверки из всех модулей)
+        /// <summary>
+        ///проверить соединение сразу по строке подключения
+        ///без выдачи ошибок
+        ///(проверки из всех модулей)
+        /// </summary>
+        /// <param name="connectionString">строка соединения</param>
+        /// <returns></returns>
         public static bool sqlConnectSimple(string connectionString)
         {
             return CheckConnectSimple(connectionString);
         }
 
-    //Действия
+        #endregion
 
-        //пересоздать БД 
+        #region //Действия с базой данных
+
+        /// <summary>
+        /// создать БД по строке подключения
+        /// </summary>
+        /// <param name="connectionString">строка соединения</param>
+        /// <param name="mode">режим инициализации</param>
         public static void CreateDataBase(string connectionstring, bool mode)
         {
             if (CheckDatabaseExists(connectionstring))
             {
-                DropDatabase(connectionstring);
+                DropDB(connectionstring);
             }
-            CreateDatabase(connectionstring, mode);
+            CreateDB(connectionstring, mode);
         }
 
-    //Запросы
-
-        //выполнить запрос и вернуть DataSet
-        public static DataTable TableRequest(string connectionString, string sqlRequest)
+        /// <summary>
+        /// очиститбь таблицу Базы Данных 
+        /// </summary>
+        /// <param name="connectionstring">строка соединения</param>
+        /// <param name="tableName">имя таблицы</param>
+        public static void ClearTableDataBase(string connectionstring, string tableName) 
         {
-            return GetTableRequest(connectionString, sqlRequest);
+            ClearTableDB(connectionstring, tableName);
         }
- 
-        //выполнить запрос на создание удаление обновление и вернуть true или false
+
+        #endregion
+
+        //Запросы
+        #region //Запросы
+
+        /// <summary>
+        /// выполнить запрос на обновление создание и удаление
+        /// </summary>
+        /// <param name="connectionString">строка соединения</param>
+        /// <param name="sqlRequest">запрос</param>
+        /// <param name="errMode">false- не показывать ошибки true- показывать ошибки</param>
+        /// <returns>вернуть true или false</returns>
         public static bool RequestNonQuery(string connectionString, string sqlRequest, Boolean errMode)
         {
             return GetRequestNonQuery(connectionString, sqlRequest, errMode) > 0;
         }
 
-        //выполнить скалярный запрос и вернуть строку
+        /// <summary>
+        /// выполнить запрос возвращающий одно значение
+        /// </summary>
+        /// <param name="connectionString">строка соединения</param>
+        /// <param name="sqlRequest">запрос</param>
+        /// <param name="errMode">false- не показывать ошибки true- показывать ошибки</param>
+        /// <returns>количество обработанных строк</returns>
         public static string RequesScalar(string connectionString, string sqlRequest, Boolean errMode)
         {
             return GetRequesScalar(connectionString, sqlRequest, errMode);
         }
+
+        /// <summary>
+        /// выполнить запрос и вернуть DataSet
+        /// </summary>
+        /// <param name="connectionString">строка соединения</param>
+        /// <param name="sqlRequest">запрос</param>
+        /// <returns>результаты в DataSet</returns>
+        public static DataTable TableRequest(string connectionString, string sqlRequest)
+        {
+            return GetTableRequest(connectionString, sqlRequest);
+        }
+
+
+        #endregion
+        #endregion
 
     }
 }

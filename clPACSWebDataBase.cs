@@ -217,7 +217,14 @@ namespace TimeWorkTracking
             }
             catch (WebException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(
+                    ex.Message,
+                    "Ошибка ответа сервера",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning,
+                    MessageBoxDefaultButton.Button1,
+                    MessageBoxOptions.ServiceNotification
+                    );
             }
             return ret;
         }
@@ -443,7 +450,11 @@ namespace TimeWorkTracking
                         "   ФИО сотрудника        : '" + pacsStruct.getUserName + "'" + "\r\n" +
                         "   id сотрудника из Лоции: '" + pacsStruct.getUserCrmId + "'" + "\r\n" +
                         "   id сотрудника из Excel: '" + pacsStruct.getUserExtId + "'" + "\r\n" +
-                        "\r\n" + msg, "Пользователи СКУД ProwWay", MessageBoxButtons.OK, MessageBoxIcon.Warning 
+                        "\r\n" + msg, "Пользователи СКУД ProwWay", 
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Warning,
+                        MessageBoxDefaultButton.Button1,
+                        MessageBoxOptions.ServiceNotification 
                         );
                 }
 
