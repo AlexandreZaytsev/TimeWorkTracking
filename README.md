@@ -62,4 +62,5 @@ TimeWorkTracking простое клиент серверное приложен
 * при использованиих [мультиформатных считывателей](https://proxway-ble.ru/oborudovanie/schityvateli/mifare/pw-mini-multi-ble) можете запускать сотрудников по мобильным меткам (Android IOS), обычным картам доступа, пропускам в бассейн и картам ТРОЙКА!!! (до сих пор тащимся)    
 * * *
 ![image](https://user-images.githubusercontent.com/16114000/145944184-9c648405-451f-4c5d-a4d9-cc8059a75f93.png)
-![image](https://user-images.githubusercontent.com/16114000/145951140-8ee5985e-de00-47b3-a85b-e89476cda3f0.png)
+![image](https://user-images.githubusercontent.com/16114000/145951604-26e5a05a-0b3d-46b6-8580-1665ccdc877b.png)
+
