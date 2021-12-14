@@ -935,7 +935,7 @@ namespace TimeWorkTracking
         /// <summary>
         /// создать БД по строке подключения
         /// </summary>
-        /// <param name="connectionString">строка соединения</param>
+        /// <param name="connectionstring">строка соединения</param>
         /// <param name="mode">режим инициализации</param>
         public static void CreateDataBase(string connectionstring, bool mode)
         {
