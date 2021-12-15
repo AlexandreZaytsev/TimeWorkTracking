@@ -175,12 +175,12 @@ namespace TimeWorkTracking
         /// </summary>
         /// <param name="lengthDays"></param>
         /// <returns></returns>
-        private int uploadCaptionExcel(int lengthDays)
+        private int uploadCaptionExcel(int lengthDays, string name)
         {
             DateTime tDate;
             captionData = null;
             int j = 2;
-            switch (this.AccessibleName)
+            switch (name)// this.AccessibleName)
             {
                 case "FormHeatCheck":
                     captionData = new string[2, lengthDays * 2 + 2];  //Создаём новый двумерный массив
@@ -209,7 +209,7 @@ namespace TimeWorkTracking
                         j += 1;
                     }
                     break;
-                case "ReportTotal":
+                case "ReportTotal_Data":    //"ReportTotal":
                     headerIndex = new Dictionary<string, int>();    //подготовим словарь для хранения индексов колонок
                     captionData = new string[1, lengthDays + 2 + 3 + dtSpecialMarks.Rows.Count - 1 + 2 + 1];  //Создаём новый двумерный массив
                     captionData[0, 0] = "№";
@@ -261,10 +261,10 @@ namespace TimeWorkTracking
         /// </summary>
         /// <param name="lenDays"></param>
         /// <returns></returns>
-        private int uploadTableExcel(int lenDays)
+        private int uploadTableExcel(int lenDays, string name)
         {
             int j;// = 0;
-            switch (this.AccessibleName)
+            switch (name)// this.AccessibleName)
             {
                 case "FormHeatCheck":
                     tableData = new string[usersData.Rows.Count, 2];   //Создаём новый двумерный массив
@@ -297,7 +297,7 @@ namespace TimeWorkTracking
                         }
                     }
                     break;
-                case "ReportTotal":
+                case "ReportTotal_Data":    //ReportTotal":
                     string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
                     //Загрузить массив сводных данных для тотального
                     totalReportData = clMsSqlDatabase.TableRequest(cs, "EXEC twt_TotalReport '" + mcReport.SelectionStart.ToString("yyyyMMdd") + "','" + mcReport.SelectionEnd.ToString("yyyyMMdd") + "'");
@@ -464,8 +464,8 @@ namespace TimeWorkTracking
             Cursor.Current = Cursors.WaitCursor;
             bool ret;// = false;
             int daysCount = (int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1;
-            int arrCount = uploadCaptionExcel(daysCount);
-            uploadTableExcel(arrCount);                                     //загрузить массив по данным сотрудников
+            int arrCount = uploadCaptionExcel(daysCount, this.AccessibleName);  //FormHeatCheck загрузить данные заголовка      
+            uploadTableExcel(arrCount, this.AccessibleName);                    //FormHeatCheck загрузить данные сотрудников из БД
 
             toolStripStatusLabelInfo.Text = "Подключение к Excel";
             //Объявляем приложение
@@ -688,8 +688,8 @@ namespace TimeWorkTracking
             Cursor.Current = Cursors.WaitCursor;
             bool ret;// = false;
             int daysCount = (int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1;
-            int arrCount = uploadCaptionExcel(daysCount);
-            uploadTableExcel(arrCount);                                     //загрузить массив по данным сотрудников
+            int arrCount = uploadCaptionExcel(daysCount, this.AccessibleName);  //FormTimeCheck загрузить данные заголовка
+            uploadTableExcel(arrCount, this.AccessibleName);                    //FormTimeCheck загрузить данные сотрудников из БД
 
             toolStripStatusLabelInfo.Text = "Подключение к Excel";
             //Объявляем приложение
@@ -920,15 +920,15 @@ namespace TimeWorkTracking
             bool ret;// = false;
             string colsChar;
             int daysCount = (int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1;
-            int arrCount = uploadCaptionExcel(daysCount);
-            uploadTableExcel(daysCount);                                     //загрузить массив по данным сотрудников
+            int arrCount = uploadCaptionExcel(daysCount, this.AccessibleName + "_Data");    //ReportTotal_Data загрузить данные заголовка 
+            uploadTableExcel(daysCount, this.AccessibleName + "_Data");                     //ReportTotal_Data загрузить данные проходов из БД
 
             toolStripStatusLabelInfo.Text = "Подключение к Excel";
             //Объявляем приложение
             excelApp = new Excel.Application
             {
                 Visible = false,                                            //Отобразить Excel
-                SheetsInNewWorkbook = 1                                     //Количество листов в рабочей книге    
+                SheetsInNewWorkbook = 2                                     //Количество листов в рабочей книге    
             };
             workBook = excelApp.Workbooks.Add(mis);                         //Добавить рабочую книгу
 
@@ -938,10 +938,13 @@ namespace TimeWorkTracking
             excelApp.ScreenUpdating = false;                                //Запретить перерисовку экрана    
             excelApp.ActiveWindow.Zoom = 80;                                //Масштаб листа
                                                                             //           excelApp.ActiveWindow.View = Excel.XlWindowView.xlPageBreakPreview;
+            //Переименовать листы
+            ((Excel.Worksheet)excelApp.Worksheets[1]).Name = "Data";
+            ((Excel.Worksheet)excelApp.Worksheets[2]).Name = "Time";
 
-            //Переименовать лист
-            workSheet = (Excel.Worksheet)excelApp.Worksheets.get_Item(1);   //Получаем первый лист документа (счет начинается с 1)
-            workSheet.Name = "Report";                                      //Название листа (вкладки снизу)
+            //работаем с первым листом данные Т13 
+            workSheet = (Excel.Worksheet)excelApp.Worksheets[1];//.get_Item(1);   //Получаем первый лист документа (счет начинается с 1)
+
             //RebuildSheet(workBook, "Journal", 3);                         // удалить все листы кроме текущего
             ((Excel.Range)workSheet.Cells).FormatConditions.Delete();       //удалить все форматы с листа
             //((Excel.Range)workSheet.Cells).NumberFormat = "0;[Red]0";
