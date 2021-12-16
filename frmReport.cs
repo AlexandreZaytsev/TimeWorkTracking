@@ -1130,7 +1130,7 @@ namespace TimeWorkTracking
             cfDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderNone;//.xlDataBarBorderSolid;
             ((Excel.FormatColor)cfDatabar.BarColor).Color = 15698432;
 
-            //Работа в рабочем граяике формат значением
+            //Работа в рабочем графике формат значением
             cfDatabar = (Excel.Databar)tbSmartReport.ListColumns[headerIndex["sum"] + 1].DataBodyRange.FormatConditions.AddDatabar();
             cfDatabar.MinPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMin);
             cfDatabar.MaxPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMax);
@@ -1139,7 +1139,7 @@ namespace TimeWorkTracking
             cfDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderNone;//.xlDataBarBorderSolid;
             ((Excel.FormatColor)cfDatabar.BarColor).Color = 8700771;
 
-            //Работа вне рабочем граяике формат значением
+            //Работа вне рабочем графике формат значением
             cfDatabar = (Excel.Databar)tbSmartReport.ListColumns[headerIndex["ext"] + 1].DataBodyRange.FormatConditions.AddDatabar();
             cfDatabar.MinPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMin);
             cfDatabar.MaxPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMax);
@@ -1321,8 +1321,8 @@ namespace TimeWorkTracking
             workRange.Cells[2, 1] = "Период: " + mcReport.SelectionStart.ToString("dd.MM.yyyy") + " - " + mcReport.SelectionEnd.ToString("dd.MM.yyyy");
 
             toolStripStatusLabelInfo.Text = "Создание шапки таблицы и строк данных";
-            //диапазон для шапки таблицы и 3х первых строк данных
-            workRange = workSheet.Range[workSheet.Cells[8, 2], workSheet.Cells[10, 1 + captionData.GetUpperBound(1) + 1]];    //+1 на строку данных
+            //диапазон для шапки таблицы 3 строки и 3х первых строк данных
+            workRange = workSheet.Range[workSheet.Cells[8, 2], workSheet.Cells[13, 1 + captionData.GetUpperBound(1) + 1]];    //+1 на строку данных
                                                                                                                               //                ((Excel.Range)workRange.Rows).AutoFit();                                                    //автоувеличение строк в заголовке
             workRange.Font.Name = "Times New Roman";
             workRange.Font.Size = 11;
@@ -1330,19 +1330,19 @@ namespace TimeWorkTracking
             workRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
             workRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
             workRange.WrapText = true;
-            workRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;                               //нарисуем все рамки
+            ((Excel.Range)workRange.Rows["1:3"]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;                         //нарисуем все рамки на первых трех строчках
 
             //настройка ширины колонок и высоты строк диапазона 
             ((Excel.Range)workRange.Columns[1]).ColumnWidth = 3.5;          //ширина колонки с номером
             ((Excel.Range)workRange.Columns[2]).ColumnWidth = 38.5;         //ширина колонки ФИО 
             ((Excel.Range)workRange.Columns[3]).ColumnWidth = 12.5;         //ширина колонки контроллер времени 
+
             ((Excel.Range)workRange.Rows[1]).RowHeight = 28.5;              //высота первой строки
-//                ((Excel.Range)workRange.Rows[5]).RowHeight = 20;                //высота строки данных
-//                ((Excel.Range)workRange.Rows[6]).RowHeight = 20;                //высота строки данных
+//            ((Excel.Range)workRange.Rows[5]).RowHeight = 20;                //высота строки данных
+//            ((Excel.Range)workRange.Rows[6]).RowHeight = 20;                //высота строки данных
             colsChar =
                 NumberToLetters(((Excel.Range)workRange.Columns[4]).Column) + ":" +
                 NumberToLetters(((Excel.Range)workRange.Columns[4 + daysCount * 2 - 1]).Column);
-
             ((Excel.Range)workSheet.Columns[colsChar]).ColumnWidth = 7;// 8.5;   //ширина колонок с датами 
             //управление шрифтами и выравниванием
             ((Excel.Range)workRange.Rows[1]).Font.Bold = true;              //первая строка шапки
@@ -1367,20 +1367,16 @@ namespace TimeWorkTracking
             workRange.Rows[4] = "00:00";
             workRange.Rows[5] = "00:00";
             workRange.Rows[6] = "00:00";
+
             toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
             //условное форматирование диапазона 
-            fcs = ((Excel.Range)workRange.Rows[1]).EntireRow.FormatConditions;
-            Excel.FormatCondition fc = (Excel.FormatCondition)fcs.Add(
-            Type: Excel.XlFormatConditionType.xlExpression,
-                  mis, //Excel.XlFormatConditionOperator.xlEqual,
-                  Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A9))",
-                  mis, mis, mis, mis, mis);
-
-                  fc.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
-                  fc.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
-                        //              fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
-                  fc.Interior.TintAndShade = 0.599963377788629;
-                  fc.StopIfTrue = false;
+            Excel.FormatConditions fcs1 = ((Excel.Range)workSheet.Range[workRange.Cells[1, 4], workRange.Cells[1, 4 + daysCount * 2 - 1]]).EntireRow.FormatConditions;
+            Excel.FormatCondition fc = (Excel.FormatCondition)fcs1.Add(Type: Excel.XlFormatConditionType.xlExpression, mis, Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A9))", mis, mis, mis, mis, mis);
+            fc.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
+            fc.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
+//              fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
+            fc.Interior.TintAndShade = 0.599963377788629;
+            fc.StopIfTrue = false;
 
             toolStripStatusLabelInfo.Text = "Настройка объединения ячеек";
             //настройка ширины колонок и объединение ячеек диапазона
