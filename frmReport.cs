@@ -1373,7 +1373,7 @@ namespace TimeWorkTracking
             workRange.Rows[6] = "00:00";
             workRange.Cells[4, 3] = "График";
             workRange.Cells[5, 3] = "Регистратор";
-            workRange.Cells[6, 3] = "СКУД";
+            workRange.Cells[6, 3] = "СКУД"; 
 
             toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
             //условное форматирование диапазона 
