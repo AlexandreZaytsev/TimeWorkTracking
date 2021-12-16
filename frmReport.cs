@@ -1330,7 +1330,8 @@ namespace TimeWorkTracking
             workRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
             workRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
             workRange.WrapText = true;
-            ((Excel.Range)workRange.Rows["1:3"]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;                         //нарисуем все рамки на первых трех строчках
+            ((Excel.Range)workRange.Rows["1:6"]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;                         //нарисуем все рамки на первых трех строчках
+            ((Excel.Range)workRange.Rows["4:6"]).Borders[Excel.XlBordersIndex.xlInsideHorizontal].LineStyle = Excel.XlLineStyle.xlLineStyleNone;                         //нарисуем все рамки на первых трех строчках
 
             //настройка ширины колонок и высоты строк диапазона 
             ((Excel.Range)workRange.Columns[1]).ColumnWidth = 3.5;          //ширина колонки с номером
@@ -1359,10 +1360,12 @@ namespace TimeWorkTracking
 //            ((Excel.Range)workSheet.Range[workRange.Cells[5, 3], workRange.Cells[5, workRange.Columns.Count]]).Font.Size = 16;
  
             //заливка цветом
-            ((Excel.Range)workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1, 2]]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);   //заливка первой строки цветом
-            ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, workRange.Columns.Count]]).Interior.Color = ColorTranslator.ToOle(Color.LightGreen);
-            ((Excel.Range)workRange.Rows["3:4"]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);
- //           ((Excel.Range)workSheet.Range[workRange.Cells[5, 3], workRange.Cells[5, workRange.Columns.Count]]).Font.Color = ColorTranslator.ToOle(Color.Gainsboro);//.WhiteSmoke);//.LightGray);
+            ((Excel.Range)workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1, 3]]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);   //заливка первой строки цветом
+            ((Excel.Range)workSheet.Range[workRange.Cells[1, 4], workRange.Cells[1, workRange.Columns.Count]]).Interior.Color = ColorTranslator.ToOle(Color.LightGreen);
+//            ((Excel.Range)workRange.Rows["3:4"]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);
+            ((Excel.Range)workRange.Rows[3]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);
+            ((Excel.Range)workRange.Rows[5]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);
+            //           ((Excel.Range)workSheet.Range[workRange.Cells[5, 3], workRange.Cells[5, workRange.Columns.Count]]).Font.Color = ColorTranslator.ToOle(Color.Gainsboro);//.WhiteSmoke);//.LightGray);
             //строка данных значения по умолчанию
             workRange.Rows[4] = "00:00";
             workRange.Rows[5] = "00:00";
@@ -1392,8 +1395,6 @@ namespace TimeWorkTracking
             {
                 workSheet.Range[workRange.Cells[1, i + j], workRange.Cells[1, i + j + 1]].Merge(mis);
                 workSheet.Range[workRange.Cells[2, i + j], workRange.Cells[2, i + j + 1]].Merge(mis);
-//                workSheet.Range[workRange.Cells[4, i + j], workRange.Cells[4, i + j + 1]].Merge(mis);
-//                workSheet.Range[workRange.Cells[6, i + j], workRange.Cells[6, i + j + 1]].Merge(mis);
                 j += 1;
             }
 
