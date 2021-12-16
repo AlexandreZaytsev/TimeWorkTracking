@@ -1314,7 +1314,7 @@ namespace TimeWorkTracking
             ((Excel.Range)workRange.Rows[2]).Merge(mis);                        //объединить строку диапазона
             workRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
             workRange.VerticalAlignment = Excel.XlHAlign.xlHAlignCenter;
-//            workRange.Font.Bold = true;
+            workRange.Font.Bold = true;
             workRange.Font.Name = "Times New Roman";
             workRange.Font.Size = 14;
             workRange.Cells[1, 1] = "Контроль рабочего времени сотрудников " + Properties.Settings.Default.companyName;   //наименование компании
@@ -1331,7 +1331,7 @@ namespace TimeWorkTracking
             workRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
             workRange.WrapText = true;
             ((Excel.Range)workRange.Rows["1:6"]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;                         //нарисуем все рамки на первых трех строчках
-            ((Excel.Range)workRange.Rows["4:6"]).Borders[Excel.XlBordersIndex.xlInsideHorizontal].LineStyle = Excel.XlLineStyle.xlLineStyleNone;                         //нарисуем все рамки на первых трех строчках
+            ((Excel.Range)workRange.Rows["4:6"]).Borders[Excel.XlBordersIndex.xlInsideHorizontal].LineStyle = Excel.XlLineStyle.xlLineStyleNone;    //уберем горизонтальные линии
 
             //настройка ширины колонок и высоты строк диапазона 
             ((Excel.Range)workRange.Columns[1]).ColumnWidth = 3.5;          //ширина колонки с номером
@@ -1345,16 +1345,16 @@ namespace TimeWorkTracking
                 NumberToLetters(((Excel.Range)workRange.Columns[4]).Column) + ":" +
                 NumberToLetters(((Excel.Range)workRange.Columns[4 + daysCount * 2 - 1]).Column);
             ((Excel.Range)workSheet.Columns[colsChar]).ColumnWidth = 7;// 8.5;   //ширина колонок с датами 
+
             //управление шрифтами и выравниванием
             ((Excel.Range)workRange.Rows[1]).Font.Bold = true;              //первая строка шапки
             ((Excel.Range)workRange.Rows[2]).Font.Size = 9;                 //вторая строка шапки
             ((Excel.Range)workRange.Rows[3]).Font.Size = 9;                 //третья строка шапки
 
-
             //            ((Excel.Range)workRange.Rows[3]).Font.Bold = true;              //третья строка шапки
             ((Excel.Range)workSheet.Range[workRange.Cells[3, 3], workRange.Cells[3, workRange.Columns.Count]]).VerticalAlignment = Excel.XlVAlign.xlVAlignTop;
 
-            ((Excel.Range)workRange.Rows[5]).Font.Size = 11;                                            //пятая строка шапки (строка данных)
+            ((Excel.Range)workRange.Rows[5]).Font.Size = 11;                //пятая строка шапки (строка данных)
             ((Excel.Range)workRange.Range[workSheet.Cells[5, 1], workSheet.Cells[6, 2]]).Font.Bold = true;
 //            ((Excel.Range)workRange.Cells[5, 2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
 //            ((Excel.Range)workSheet.Range[workRange.Cells[5, 3], workRange.Cells[5, workRange.Columns.Count]]).Font.Size = 16;
@@ -1367,9 +1367,13 @@ namespace TimeWorkTracking
             ((Excel.Range)workRange.Rows[5]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);
             //           ((Excel.Range)workSheet.Range[workRange.Cells[5, 3], workRange.Cells[5, workRange.Columns.Count]]).Font.Color = ColorTranslator.ToOle(Color.Gainsboro);//.WhiteSmoke);//.LightGray);
             //строка данных значения по умолчанию
+            ((Excel.Range)workRange.Rows["4:6"]).NumberFormat = "@";
             workRange.Rows[4] = "00:00";
             workRange.Rows[5] = "00:00";
             workRange.Rows[6] = "00:00";
+            workRange.Cells[4, 3] = "График";
+            workRange.Cells[5, 3] = "Регистратор";
+            workRange.Cells[6, 3] = "СКУД";
 
             toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
             //условное форматирование диапазона 
