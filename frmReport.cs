@@ -250,7 +250,21 @@ namespace TimeWorkTracking
                     headerIndex.Add("ext", lengthDays + 3 + dtSpecialMarks.Rows.Count + 2);
                     captionData[0, lengthDays + 3 + dtSpecialMarks.Rows.Count + 3] = "Сумма фактически отработаного РАБОЧЕГО ВРЕМЕНИ + CЛУЖЕБНЫЕ ЗАДАНИЯ задания вне его";
                     headerIndex.Add("total", lengthDays + 3 + dtSpecialMarks.Rows.Count + 3);
-
+                    break;
+                case "ReportTotal_Time":    //"ReportTotal":
+                    captionData = new string[3, lengthDays * 2 + 3];  //Создаём новый двумерный массив
+                    captionData[0, 0] = "№";
+                    captionData[0, 1] = "Фамилия Имя Отчество";
+                    captionData[0, 1] = "контроллер";
+                    for (int i = 0; i < lengthDays; i++)           //циклом перебираем даты в созданный двумерный массив
+                    {
+                        tDate = mcReport.SelectionStart.AddDays(i);
+                        captionData[0, i + j] = tDate.ToString("dddd\r\ndd MMMM yyyy г.");
+                        captionData[1, i + j] = pCalendar.getDateDescription(tDate);
+                        captionData[2, i + j] = "Пришел";
+                        captionData[2, i + 1 + j] = "Ушел";
+                        j += 1;
+                    }
                     break;
             }
             return captionData.GetUpperBound(1);
@@ -424,6 +438,9 @@ namespace TimeWorkTracking
                             j += 1;
                         }
                     }
+                    break;
+                case "ReportTotal_Time":    //ReportTotal":
+
                     break;
             }
             return usersData.Rows.Count;
@@ -920,8 +937,6 @@ namespace TimeWorkTracking
             bool ret;// = false;
             string colsChar;
             int daysCount = (int)(mcReport.SelectionRange.End - mcReport.SelectionRange.Start).TotalDays + 1;
-            int arrCount = uploadCaptionExcel(daysCount, this.AccessibleName + "_Data");    //ReportTotal_Data загрузить данные заголовка 
-            uploadTableExcel(daysCount, this.AccessibleName + "_Data");                     //ReportTotal_Data загрузить данные проходов из БД
 
             toolStripStatusLabelInfo.Text = "Подключение к Excel";
             //Объявляем приложение
@@ -930,20 +945,25 @@ namespace TimeWorkTracking
                 Visible = false,                                            //Отобразить Excel
                 SheetsInNewWorkbook = 2                                     //Количество листов в рабочей книге    
             };
-            workBook = excelApp.Workbooks.Add(mis);                         //Добавить рабочую книгу
 
             toolStripStatusLabelInfo.Text = "Создание рабочей книги";
             //Настройки Application установить
             excelApp.DisplayAlerts = false;                                 //Запретить отображение окон с сообщениями
             excelApp.ScreenUpdating = false;                                //Запретить перерисовку экрана    
-            excelApp.ActiveWindow.Zoom = 80;                                //Масштаб листа
-                                                                            //           excelApp.ActiveWindow.View = Excel.XlWindowView.xlPageBreakPreview;
+
+            workBook = excelApp.Workbooks.Add(mis);                         //Добавить рабочую книгу
             //Переименовать листы
             ((Excel.Worksheet)excelApp.Worksheets[1]).Name = "Data";
             ((Excel.Worksheet)excelApp.Worksheets[2]).Name = "Time";
 
-            //работаем с первым листом данные Т13 
+            #region //работаем с первым листом Данные 
+            int arrCount = uploadCaptionExcel(daysCount, this.AccessibleName + "_Data");    //ReportTotal_Data загрузить данные заголовка 
+            uploadTableExcel(daysCount, this.AccessibleName + "_Data");                     //ReportTotal_Data загрузить данные проходов из БД
+
             workSheet = (Excel.Worksheet)excelApp.Worksheets[1];//.get_Item(1);   //Получаем первый лист документа (счет начинается с 1)
+            workSheet.Activate();
+            excelApp.ActiveWindow.Zoom = 80;                                //Масштаб листа
+//           excelApp.ActiveWindow.View = Excel.XlWindowView.xlPageBreakPreview;
 
             //RebuildSheet(workBook, "Journal", 3);                         // удалить все листы кроме текущего
             ((Excel.Range)workSheet.Cells).FormatConditions.Delete();       //удалить все форматы с листа
@@ -954,13 +974,13 @@ namespace TimeWorkTracking
             style.Font.Name = "Calibri";//"Times New Roman";
             style.Font.Size = 10;// 11;
 
-            toolStripStatusLabelInfo.Text = "Настройка листа";
+            toolStripStatusLabelInfo.Text = "Настройка листа данных";
             //ширина колонок
             ((Excel.Range)workSheet.Cells).Style = "reportStyle";
             ((Excel.Range)workSheet.Columns[1]).ColumnWidth = 2;
             ((Excel.Range)workSheet.Columns[1 + 2 + captionData.GetUpperBound(1)]).EntireColumn.ColumnWidth = 2;
 
-            toolStripStatusLabelInfo.Text = "Настройка границ листа";
+            toolStripStatusLabelInfo.Text = "Настройка границ листа данных";
             //настройки печати
             double interval = excelApp.CentimetersToPoints(0.2);
             workSheet.PageSetup.LeftMargin = interval;
@@ -977,7 +997,7 @@ namespace TimeWorkTracking
             workSheet.PageSetup.RightFooter = "Страница &P из &N";
 
 
-            toolStripStatusLabelInfo.Text = "Настройка ориентации листа и ограничений";
+            toolStripStatusLabelInfo.Text = "Настройка ориентации листа данных и ограничений";
             workSheet.PageSetup.Orientation = Excel.XlPageOrientation.xlLandscape;
             workSheet.PageSetup.Zoom = 83;// false;                                       // 83; //% от натуральной величины
                                           //            workSheet.PageSetup.FitToPagesWide = 1;                                 //не более чем на количество страниц в ширину           
@@ -1228,10 +1248,164 @@ namespace TimeWorkTracking
             workSheet.Application.ActiveWindow.SplitColumn = 1;
             workSheet.Application.ActiveWindow.FreezePanes = true;
 
+            #endregion
+
+            #region //работаем со вторым листом Время
+
+            arrCount = uploadCaptionExcel(daysCount, this.AccessibleName + "_Time");    //ReportTotal_Time загрузить данные заголовка 
+            uploadTableExcel(daysCount, this.AccessibleName + "_Time");                 //ReportTotal_Time загрузить данные контроллеров времени из БД
+
+            workSheet = (Excel.Worksheet)excelApp.Worksheets[2];//.get_Item(2);   //Получаем первый лист документа (счет начинается с 1)
+            workSheet.Activate();
+            excelApp.ActiveWindow.Zoom = 80;                                //Масштаб листа
+//           excelApp.ActiveWindow.View = Excel.XlWindowView.xlPageBreakPreview;
+
+            ((Excel.Range)workSheet.Cells).FormatConditions.Delete();       //удалить все форматы с листа
+
+            /*
+            //оформление листа и применение стиля
+            Excel.Style style = workBook.Styles.Add("reportStyle");
+            style.Font.Name = "Times New Roman";
+            style.Font.Size = 11;
+            */
+
+            toolStripStatusLabelInfo.Text = "Настройка листа";
+            //ширина колонок
+            ((Excel.Range)workSheet.Cells).Style = "reportStyle";
+            ((Excel.Range)workSheet.Columns[1]).ColumnWidth = 2;
+            ((Excel.Range)workSheet.Columns[1 + 2 + captionData.GetUpperBound(1)]).EntireColumn.ColumnWidth = 2;
+
+            toolStripStatusLabelInfo.Text = "Настройка границ листа";
+            //настройки печати
+            interval = excelApp.CentimetersToPoints(0.2);
+            workSheet.PageSetup.LeftMargin = interval;
+            workSheet.PageSetup.RightMargin = interval;
+            workSheet.PageSetup.TopMargin = interval;
+            workSheet.PageSetup.BottomMargin = excelApp.CentimetersToPoints(1.3);
+            workSheet.PageSetup.HeaderMargin = 0;// excelApp.InchesToPoints(0);
+            workSheet.PageSetup.FooterMargin = interval;
+            workSheet.PageSetup.PrintTitleRows = "$1:$11";                                      //печать заголовков на каждой странице
+            workSheet.PageSetup.PrintTitleColumns = "";
+            workSheet.PageSetup.FirstPageNumber = (int)Excel.Constants.xlAutomatic; //номер первой страници
+                                                                                    //            workSheet.PageSetup.CenterFooter = "Страница  &P из &N";
+            workSheet.PageSetup.LeftFooter = "&BДля служебного использования&B";
+            workSheet.PageSetup.CenterFooter = "&D";
+            workSheet.PageSetup.RightFooter = "Страница &P из &N";
+
+
+            toolStripStatusLabelInfo.Text = "Настройка ориентации листа и ограничений";
+            workSheet.PageSetup.Orientation = Excel.XlPageOrientation.xlLandscape;
+            workSheet.PageSetup.Zoom = 83;// false;                                       // 83; //% от натуральной величины
+                                          //            workSheet.PageSetup.FitToPagesWide = 1;                                 //не более чем на количество страниц в ширину           
+                                          //            workSheet.PageSetup.FitToPagesTall = 1;                                 //не более чем на количество страниц в высоту    
+
+            //поехали
+            toolStripStatusLabelInfo.Text = "Скрыть лишние строки";
+            ((Excel.Range)workSheet.Rows[2]).EntireRow.Hidden = true;               //скрыть строку
+            ((Excel.Range)workSheet.Rows[3]).EntireRow.Hidden = true;
+            ((Excel.Range)workSheet.Rows[6]).EntireRow.Hidden = true;
+
+            toolStripStatusLabelInfo.Text = "Создание заголовка";
+            //диапазон для заголовка (главная надпись) (2 строки)
+            workRange = workSheet.Range[workSheet.Cells[4, 2 - 1], workSheet.Cells[5, 2 + captionData.GetUpperBound(1) + 1]];
+            workRange.Font.Name = "Times New Roman";
+            workRange.Font.Size = 11;
+            ((Excel.Range)workRange.Rows[1]).Merge(mis);                        //объединить строку диапазона
+            ((Excel.Range)workRange.Rows[2]).Merge(mis);                        //объединить строку диапазона
+            workRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            workRange.VerticalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            workRange.Font.Bold = true;
+            workRange.Font.Name = "Times New Roman";
+            workRange.Font.Size = 14;
+            workRange.Cells[1, 1] = "Контроль рабочего времени сотрудников " + Properties.Settings.Default.companyName;   //наименование компании
+            workRange.Cells[2, 1] = "Период: " + mcReport.SelectionStart.ToString("dd.MM.yyyy") + " - " + mcReport.SelectionEnd.ToString("dd.MM.yyyy");
+
+            toolStripStatusLabelInfo.Text = "Создание шапки таблицы и строк данных";
+            //диапазон для шапки таблицы и 3х первых строк данных
+            workRange = workSheet.Range[workSheet.Cells[8, 2], workSheet.Cells[13, 1 + captionData.GetUpperBound(1) + 3]];    //+1 на строку данных
+                                                                                                                              //                ((Excel.Range)workRange.Rows).AutoFit();                                                    //автоувеличение строк в заголовке
+            workRange.Font.Name = "Times New Roman";
+            workRange.Font.Size = 11;
+            workRange.Interior.TintAndShade = 0;// '0.2
+            workRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            workRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+            workRange.WrapText = true;
+            workRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;                               //нарисуем все рамки
+
+            //настройка ширины колонок и высоты строк диапазона 
+            ((Excel.Range)workRange.Columns[1]).ColumnWidth = 3.5;          //ширина колонки с номером
+            ((Excel.Range)workRange.Columns[2]).ColumnWidth = 38.5;         //ширина колонки ФИО 
+            ((Excel.Range)workRange.Rows[1]).RowHeight = 28.5;              //высота первой строки
+                                                                            //                ((Excel.Range)workRange.Rows[5]).RowHeight = 20;                //высота строки данных
+                                                                            //                ((Excel.Range)workRange.Rows[6]).RowHeight = 20;                //высота строки данных
+            colsChar =
+                NumberToLetters(((Excel.Range)workRange.Columns[3]).Column) + ":" +
+                NumberToLetters(((Excel.Range)workRange.Columns[3 + daysCount * 2 - 1]).Column);
+            ((Excel.Range)workSheet.Columns[colsChar]).ColumnWidth = 8.5;   //ширина колонок с датами 
+                                                                            //управление шрифтами и выравниванием
+            ((Excel.Range)workRange.Rows[1]).Font.Bold = true;              //первая строка шапки
+            ((Excel.Range)workRange.Rows[2]).Font.Size = 9;                 //вторая строка шапки
+            ((Excel.Range)workRange.Rows["3:4"]).Font.Bold = true;          //первая строка шапки
+            ((Excel.Range)workSheet.Range[workRange.Cells[2, 3], workRange.Cells[2, workRange.Columns.Count]]).VerticalAlignment = Excel.XlVAlign.xlVAlignTop;
+            ((Excel.Range)workRange.Rows[5]).Font.Size = 11;                                            //пятая строка шапки (строка данных)
+            ((Excel.Range)workRange.Range[workSheet.Cells[5, 1], workSheet.Cells[6, 2]]).Font.Bold = true;
+            ((Excel.Range)workRange.Cells[5, 2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+            ((Excel.Range)workSheet.Range[workRange.Cells[5, 3], workRange.Cells[5, workRange.Columns.Count]]).Font.Size = 16;
+            //заливка цветом
+            ((Excel.Range)workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1, 2]]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);   //заливка первой строки цветом
+            ((Excel.Range)workSheet.Range[workRange.Cells[1, 3], workRange.Cells[1, workRange.Columns.Count]]).Interior.Color = ColorTranslator.ToOle(Color.LightGreen);
+            ((Excel.Range)workRange.Rows["3:4"]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);
+            ((Excel.Range)workSheet.Range[workRange.Cells[5, 3], workRange.Cells[5, workRange.Columns.Count]]).Font.Color = ColorTranslator.ToOle(Color.Gainsboro);//.WhiteSmoke);//.LightGray);
+                                                                                                                                                                   //строка данных значения по умолчанию
+            workRange.Rows[5] = "00:00";
+            /*
+                        toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
+                        //условное форматирование диапазона 
+                        Excel.FormatConditions fcs = ((Excel.Range)workRange.Rows[1]).EntireRow.FormatConditions;
+                        Excel.FormatCondition fc = (Excel.FormatCondition)fcs.Add(
+                            Type: Excel.XlFormatConditionType.xlExpression,
+                            mis, //Excel.XlFormatConditionOperator.xlEqual,
+                            Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A9))",
+                            mis, mis, mis, mis, mis);
+
+                        fc.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
+                        fc.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
+                        //              fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
+                        fc.Interior.TintAndShade = 0.599963377788629;
+                        fc.StopIfTrue = false;
+            */
+            toolStripStatusLabelInfo.Text = "Настройка объединения ячеек";
+            //настройка ширины колонок и объединение ячеек диапазона
+            workSheet.Range[workRange.Cells[1, 1], workRange.Cells[4, 1]].Merge(mis);
+            workSheet.Range[workRange.Cells[1, 2], workRange.Cells[4, 2]].Merge(mis);
+            workSheet.Range[workRange.Cells[5, 1], workRange.Cells[6, 1]].Merge(mis);
+            workSheet.Range[workRange.Cells[5, 2], workRange.Cells[6, 2]].Merge(mis);
+
+            int j = 2;
+            for (int i = 1; i <= captionData.GetUpperBound(1) / 2; i++)
+            {
+                workSheet.Range[workRange.Cells[1, i + j], workRange.Cells[1, i + j + 1]].Merge(mis);
+                workSheet.Range[workRange.Cells[2, i + j], workRange.Cells[2, i + j + 1]].Merge(mis);
+                workSheet.Range[workRange.Cells[4, i + j], workRange.Cells[4, i + j + 1]].Merge(mis);
+                workSheet.Range[workRange.Cells[6, i + j], workRange.Cells[6, i + j + 1]].Merge(mis);
+                j += 1;
+            }
+
+            toolStripStatusLabelInfo.Text = "Вставка данных заголовка";
+            //вставим данные в заголовок одним куском
+            workRange.Resize[
+                captionData.GetUpperBound(0) + 1,
+                captionData.GetUpperBound(1) + 1
+                ].Value = captionData;
+
+            #endregion
+
+            ((Excel.Worksheet)excelApp.Worksheets[1]).Activate();           //уйдем на первый лист
+
             toolStripStatusLabelInfo.Text = "Файл подготовлен";
             //Настройки Application вернуть обратно
-            excelApp.DisplayAlerts = true;                                 //Разрешить отображение окон с сообщениями
-            excelApp.ScreenUpdating = true;                                //Зазрешить перерисовку экрана    
+            excelApp.DisplayAlerts = true;                                  //Разрешить отображение окон с сообщениями
+            excelApp.ScreenUpdating = true;                                 //Зазрешить перерисовку экрана    
 
             excelApp.Visible = true;
             //            excelApp.WindowState = Excel.XlWindowState.xlMinimized;         //Свернуть окно 
