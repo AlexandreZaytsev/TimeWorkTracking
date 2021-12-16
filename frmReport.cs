@@ -315,7 +315,7 @@ namespace TimeWorkTracking
                 case "ReportTotal_Data":    //ReportTotal":
                     string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
                     //Загрузить массив сводных данных для тотального
-                    totalReportData = clMsSqlDatabase.TableRequest(cs, "EXEC twt_TotalReport '" + mcReport.SelectionStart.ToString("yyyyMMdd") + "','" + mcReport.SelectionEnd.ToString("yyyyMMdd") + "'");
+                    totalReportData = clMsSqlDatabase.TableRequest(cs, "EXEC twt_TotalReport '" + mcReport.SelectionStart.ToString("yyyyMMdd") + "','" + mcReport.SelectionEnd.ToString("yyyyMMdd") + "', 0");
                     tableData = new string[totalReportData.Rows.Count * 2, 2 + lenDays + 3 + dtSpecialMarks.Rows.Count - 1 + 2 + 1];   //Создаём новый двумерный массив
                     //var tableData = new[,];//[totalReportData.Rows.Count * 2, 2 + lenDays + 3 + dtSpecialMarks.Rows.Count - 1 + 2 + 1];
 
@@ -441,7 +441,42 @@ namespace TimeWorkTracking
                     }
                     break;
                 case "ReportTotal_Time":    //ReportTotal":
+                    cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+                    //Загрузить массив сводных данных для тотального
+                    totalReportData = clMsSqlDatabase.TableRequest(cs, "EXEC twt_TotalReport '" + mcReport.SelectionStart.ToString("yyyyMMdd") + "','" + mcReport.SelectionEnd.ToString("yyyyMMdd") + "', 1");
+                    tableData = new string[totalReportData.Rows.Count * 3, 3 + lenDays];   //Создаём новый двумерный массив
 
+                    j = 0;
+                    for (int i = 0; i < totalReportData.Rows.Count; i++)            //Цикл по строкам отчета
+                    {
+                        DataRow drow = totalReportData.Rows[i];
+                        if (drow.RowState != DataRowState.Deleted)                  // Only row that have not been deleted
+                        {
+                            tableData[i + j, 0] = (i + 1).ToString();
+                            tableData[i + j, 1] = drow[0].ToString();               //фио
+
+                            tableData[i + j + 0, 2] = "График";               
+                            tableData[i + j + 1, 2] = "Регистратор";               
+                            tableData[i + j + 2, 2] = "СКУД";
+
+                            for (int col = 0; col < lenDays - 1; col++)             //Цикл по колонкам календаря отчета
+                            {
+                                if (drow[4 + col] != System.DBNull.Value)           //Если данные для обработки на дату есть 
+                                {
+                                    //распакуем пришедшие данные в массив
+                                    string[] splitValue = drow[4 + col].ToString().Substring(1, drow[4 + col].ToString().Length - 2).Split(new[] { "|" }, StringSplitOptions.None);
+                                    tableData[i + j + 0, 3 + col] = splitValue[0];
+                                    tableData[i + j + 0, 3 + col + 1] = splitValue[1];
+                                    tableData[i + j + 1, 3 + col] = splitValue[2];
+                                    tableData[i + j + 1, 3 + col + 1] = splitValue[3];
+                                    tableData[i + j + 2, 3 + col] = splitValue[4];
+                                    tableData[i + j + 2, 3 + col + 1] = splitValue[5];
+
+                                }
+                            }
+                            j += 2;
+                        }
+                    }
                     break;
             }
             return usersData.Rows.Count;
@@ -1339,22 +1374,19 @@ namespace TimeWorkTracking
             ((Excel.Range)workRange.Columns[3]).ColumnWidth = 12.5;         //ширина колонки контроллер времени 
 
             ((Excel.Range)workRange.Rows[1]).RowHeight = 28.5;              //высота первой строки
-//            ((Excel.Range)workRange.Rows[5]).RowHeight = 20;                //высота строки данных
-//            ((Excel.Range)workRange.Rows[6]).RowHeight = 20;                //высота строки данных
+//            ((Excel.Range)workRange.Rows["4:6"]).RowHeight = 15;            //высота 3х строк данных
+
             colsChar =
                 NumberToLetters(((Excel.Range)workRange.Columns[4]).Column) + ":" +
                 NumberToLetters(((Excel.Range)workRange.Columns[4 + daysCount * 2 - 1]).Column);
-            ((Excel.Range)workSheet.Columns[colsChar]).ColumnWidth = 7;// 8.5;   //ширина колонок с датами 
+            ((Excel.Range)workSheet.Columns[colsChar]).ColumnWidth = 6;     //ширина колонок с датами 
 
             //управление шрифтами и выравниванием
-            ((Excel.Range)workRange.Rows[1]).Font.Bold = true;              //первая строка шапки
-            ((Excel.Range)workRange.Rows[2]).Font.Size = 9;                 //вторая строка шапки
-            ((Excel.Range)workRange.Rows[3]).Font.Size = 9;                 //третья строка шапки
+//            ((Excel.Range)workRange.Rows[1]).Font.Bold = true;              //первая строка шапки
+            ((Excel.Range)workRange.Rows["2:3"]).Font.Size = 9;             //вторая и третья строка шапки
+            ((Excel.Range)workSheet.Range[workRange.Cells[2, 3], workRange.Cells[2, workRange.Columns.Count]]).VerticalAlignment = Excel.XlVAlign.xlVAlignTop;
 
-            //            ((Excel.Range)workRange.Rows[3]).Font.Bold = true;              //третья строка шапки
-            ((Excel.Range)workSheet.Range[workRange.Cells[3, 3], workRange.Cells[3, workRange.Columns.Count]]).VerticalAlignment = Excel.XlVAlign.xlVAlignTop;
-
-            ((Excel.Range)workRange.Rows[5]).Font.Size = 11;                //пятая строка шапки (строка данных)
+//            ((Excel.Range)workRange.Rows[5]).Font.Size = 11;                //пятая строка шапки (строка данных)
             ((Excel.Range)workRange.Range[workSheet.Cells[5, 1], workSheet.Cells[6, 2]]).Font.Bold = true;
 //            ((Excel.Range)workRange.Cells[5, 2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
 //            ((Excel.Range)workSheet.Range[workRange.Cells[5, 3], workRange.Cells[5, workRange.Columns.Count]]).Font.Size = 16;
@@ -1368,12 +1400,10 @@ namespace TimeWorkTracking
             //           ((Excel.Range)workSheet.Range[workRange.Cells[5, 3], workRange.Cells[5, workRange.Columns.Count]]).Font.Color = ColorTranslator.ToOle(Color.Gainsboro);//.WhiteSmoke);//.LightGray);
             //строка данных значения по умолчанию
             ((Excel.Range)workRange.Rows["4:6"]).NumberFormat = "@";
-            workRange.Rows[4] = "00:00";
-            workRange.Rows[5] = "00:00";
-            workRange.Rows[6] = "00:00";
-            workRange.Cells[4, 3] = "График";
-            workRange.Cells[5, 3] = "Регистратор";
-            workRange.Cells[6, 3] = "СКУД"; 
+//            workRange.Rows["4:6"] = "00:00";
+//            workRange.Cells[4, 3] = "График";
+//            workRange.Cells[5, 3] = "Регистратор";
+//            workRange.Cells[6, 3] = "СКУД"; 
 
             toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
             //условное форматирование диапазона 
@@ -1408,6 +1438,20 @@ namespace TimeWorkTracking
                 captionData.GetUpperBound(0) + 1,
                 captionData.GetUpperBound(1) + 1
                 ].Value = captionData;
+
+            toolStripStatusLabelInfo.Text = "Вставка данных таблицы";
+            //расширим форматированную таблицу данных
+            Excel.Range fullTable = tableResize(
+                workSheet,
+                workSheet.Range[
+                    workSheet.Cells[workRange.Row + workRange.Rows.Count - 3, workRange.Column],
+                    workSheet.Cells[workRange.Row + workRange.Rows.Count - 1, workRange.Column + workRange.Columns.Count - 1]],
+                tableData.GetUpperBound(0) + 1
+                );
+            fullTable.Value = tableData;
+
+            toolStripStatusLabelInfo.Text = "Дополнительное форматирование";
+            fullTable.Rows.RowHeight = 15;// 20;  //восстановить высоту строк в диапазоне данных
 
             #endregion
 
