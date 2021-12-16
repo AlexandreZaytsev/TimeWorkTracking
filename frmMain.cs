@@ -66,7 +66,7 @@ namespace TimeWorkTracking
                 cbSMarks.SelectedValue = 1;                                 //встать на первый элемент   
 
                 InitializeListView();
-                LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
+                LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormDate('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
                 mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
             }
             else
@@ -477,7 +477,7 @@ namespace TimeWorkTracking
 
             webInfoDay.DocumentText = pCalendar.getDateInfoHTML(e.Start);
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
+            LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormDate('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
 
             if (index != -1)
             {                                                               //выделить строку по индексу
@@ -854,7 +854,7 @@ namespace TimeWorkTracking
             if (!writeOnly)
             {
                 //обновление информации регистрации списка сотрудников
-                LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + keyDate + "','') order by fio"));
+                LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormDate('" + keyDate + "','') order by fio"));
                 lstwDataBaseMain.Items[index].Selected = true;
                 lstwDataBaseMain.HideSelection = false;                             //оставить выделение строки при потере фокуса ListView
                 lstwDataBaseMain.EnsureVisible(index);                              //показать в области видимости окна
@@ -921,7 +921,7 @@ namespace TimeWorkTracking
                     "and passId = '" + keyUser + "'";                       //*внешний id сотрудника
             clMsSqlDatabase.RequestNonQuery(cs, sql, false);
 
-            LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + keyDate + "','') order by fio"));
+            LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormDate('" + keyDate + "','') order by fio"));
             lstwDataBaseMain.Items[index].Selected = true;
             lstwDataBaseMain.HideSelection = false;                         //оставить выделение строки при потере фокуса ListView
             lstwDataBaseMain.EnsureVisible(index);                          //показать в области видимости окна
@@ -1177,7 +1177,7 @@ namespace TimeWorkTracking
         private void CallbackImport(string controlName, string controlParentName, Dictionary<String, String> param)
         {
             string cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
-            LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormData('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
+            LoadListUser(clMsSqlDatabase.TableRequest(cs, "select * from twt_GetPassFormDate('" + mcRegDate.SelectionStart.ToString("yyyyMMdd") + "','') order by fio"));
             mainPanelRegistration.Enabled = lstwDataBaseMain.Items.Count > 0;
         }
 

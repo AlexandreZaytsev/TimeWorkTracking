@@ -769,7 +769,7 @@ namespace TimeWorkTracking
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "frmSetting";
-            this.Text = "Общиен настройки Импорт Экспорт данных";
+            this.Text = "Общие настройки Импорт Экспорт данных";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSetting_FormClosing);
             this.Load += new System.EventHandler(this.frmSetting_Load);
             this.mainPanelSetting.ResumeLayout(false);

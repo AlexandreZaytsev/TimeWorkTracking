@@ -495,7 +495,7 @@ namespace TimeWorkTracking
                         ")";
                     sqlCommand.ExecuteNonQuery();
 
-                    //UDF информация о дате календаря (пользовательски функции для ускорения процесса выборки)
+                    //UDF информация о дате календаря (пользовательские функции для ускорения процесса выборки)
                     sqlCommand.CommandText = "Create function twt_GetDateInfo\r\n(\r\n@Name varchar(20) = '', \r\n@Date varchar(4) = ''\r\n)" +
                         "\r\n/*" +
                         "\r\n возвращает информацию о дате" +
@@ -521,7 +521,7 @@ namespace TimeWorkTracking
                         "\r\n)";
                     sqlCommand.ExecuteNonQuery();
 
-                    //UDF информация о сотрудниках (пользовательски функции для ускорения процесса выборки)
+                    //UDF информация о сотрудниках (пользовательские функции для ускорения процесса выборки)
                     sqlCommand.CommandText = "Create function twt_GetUserInfo\r\n(\r\n@extUserID varchar(20) = ''\r\n)" +
                         "\r\n/*" +
                         "\r\n возвращает информацию о сотруднике по внешнему идентификатору" +
@@ -550,8 +550,8 @@ namespace TimeWorkTracking
                         "\r\n)";
                     sqlCommand.ExecuteNonQuery();
 
-                    //UDF информация о проходах на дату (пользовательски функции для ускорения процесса выборки)
-                    sqlCommand.CommandText = "Create function twt_GetPassFormData\r\n(\r\n@bDate datetime, \r\n@extUserID varchar(20) = ''\r\n)" +
+                    //UDF информация о проходах на дату (пользовательские функции для ускорения процесса выборки)
+                    sqlCommand.CommandText = "Create function twt_GetPassFormDate\r\n(\r\n@bDate datetime, \r\n@extUserID varchar(20) = ''\r\n)" +
                         "\r\n/*" +
                         "\r\n возвращает данные для формы регистрации по запрашиваемой дате и активным пользователям" +
                         "\r\n   - если пользователь есть в истории проходов - время из истории (таблица EventsPass)" +
@@ -615,10 +615,11 @@ namespace TimeWorkTracking
                         "\r\n   END ";
                     sqlCommand.ExecuteNonQuery();
 
-                    //UDF заполняет календарь дат данными проходов (вспомогательная функция для тотального отчета)
-                    sqlCommand.CommandText = "Create function twt_uploadCalendar\r\n(\r\n@fromdate datetime, \r\n@todate datetime\r\n)" +
+                    //UDF заполняет календарь дат данными проходов (вспомогательная функция для тотального отчета первый лист Т13)
+                    sqlCommand.CommandText = "Create function twt_uploadCalendarPassData\r\n(\r\n@fromdate datetime, \r\n@todate datetime\r\n)" +
                         "\r\n/*" +
-                        "\r\n возвращает таблицу календаря (колонки - даты) с данными проходов (id юзера для синхронизации + данные с разделителями" +
+                        "\r\n возвращает таблицу календаря (колонки - даты) с данными проходов " +
+                        "\r\n (id юзера для синхронизации + данные с разделителями) " +
                         "\r\n*/" +
                         "\r\nReturns table as Return " +
                         "\r\n   ( " +
@@ -627,10 +628,10 @@ namespace TimeWorkTracking
                         "\r\n       pass.pivotStr   --!!! внимание ограничение на длину строки 50 символов (дальше Pivot не обрабатывает) " +
                         "\r\n   From " +
                         "\r\n       (Select * From getCalendar(@fromdate, @todate)) as calendar --получить даты календаря " +
-                        "\r\n           left join " +
-                        "\r\n       (Select                                                     --дополнить их данными таблицы проходов " +
+                        "\r\n       left join                                                   --дополнить их сводными данными проходов " +
+                        "\r\n       (Select                                                     --получить сводные данные проходов " +
                         "\r\n           e.pDate passDate,                                       --дата прохода " +
-                        "\r\n           u.usId userId,                                          --id фио " +
+                        "\r\n           u.usId userId,                                          --внешний id сотрудника " +
                         "\r\n           '|' + CONVERT(varchar(10), e.timeScheduleWithoutLunch)  --время без обеда " +
                         "\r\n           + '|' + CONVERT(varchar(10), e.timeScheduleLess)        --время недоработки " +
                         "\r\n           + '|' + CONVERT(varchar(10), e.timeScheduleOver)        --время переработки " +
@@ -639,15 +640,15 @@ namespace TimeWorkTracking
                         "\r\n           + '|' + CONVERT(varchar(10), e.totalHoursOutsideWork)   --общее время вне рамок рабочего дня " +
                         "\r\n           + '|' pivotStr " +
                         "\r\n       From " +
-                        "\r\n           (Select " +
-                        "\r\n               us.extId usId                                       --id фио " +
+                        "\r\n           (Select                                                 --получить данные сотрудников " +
+                        "\r\n               us.extId usId                                       --внешний id сотрудника " +
                         "\r\n           From Users us " +
                         "\r\n           Where " +
                         "\r\n               us.uses = 1) as u " +
-                        "\r\n       left join " +
-                        "\r\n           (Select  " +
+                        "\r\n       left join                                                   --дополнить их данными проходов и специальных отметок " +
+                        "\r\n           (Select                                                 --получить данные проходов и специальных отметок	 " +
                         "\r\n               ep.passDate pDate,                                  --дата прохода " +
-                        "\r\n               ep.passId usId,                                     --id фио " +
+                        "\r\n               ep.passId usId,                                     --внешний id сотрудника " +
                         "\r\n               ep.timeScheduleWithoutLunch,                        --время без обеда " +
                         "\r\n               ep.timeScheduleLess,                                --время недоработки " +
                         "\r\n               ep.timeScheduleOver,                                --время переработки " +
@@ -662,8 +663,64 @@ namespace TimeWorkTracking
                         "\r\n   ) ";
                     sqlCommand.ExecuteNonQuery();
 
+                    //UDF заполняет календарь дат временем проходов (вспомогательная функция для тотального отчета второй лист информационный время из 3х источников)
+                    sqlCommand.CommandText = "Create function twt_uploadCalendarTimeData\r\n(\r\n@fromdate datetime, \r\n@todate datetime\r\n)" +
+                        "\r\n/*" +
+                        "\r\n возвращает таблицу календаря (колонки - даты) с данными проходов " +
+                        "\r\n рабочий график | реальные проходы | данные СКУД " +
+                        "\r\n (id юзера для синхронизации + данные с разделителями) " +
+                        "\r\n*/" +
+                        "\r\nReturns table as Return " +
+                        "\r\n   ( " +
+                        "\r\n   Select calendar.dt daysCalendar, " +
+                        "\r\n       pass.userId, " +
+                        "\r\n       pass.pivotStr   --!!! внимание ограничение на длину строки 50 символов (дальше Pivot не обрабатывает) " +
+                        "\r\n   From " +
+                        "\r\n       (Select * From getCalendar(@fromdate, @todate)) as calendar         --получить даты календаря " +
+                        "\r\n       left join                                                           --дополнить их сводными данными проходов " +
+                        "\r\n       (Select                                                             --получить сводные данные проходов " +
+                        "\r\n           e.pDate passDate,                                               --дата прохода " +
+                        "\r\n           u.usId userId,                                                  --внешний id сотрудника " +
+                        "\r\n           '|' + CONVERT(nvarchar(5), u.timeStart, 8)				        --график время входа " +
+                        "\r\n           + '|' + CONVERT(nvarchar(5), u.timeStop, 8)						--график время выхода " +
+                        "\r\n           + '|' + CONVERT(nvarchar(5), e.passTimeStart, 8)				--проход время входа " +
+                        "\r\n           + '|' + CONVERT(nvarchar(5), e.passTimeStop, 8)                 --проход время выхода " +
+                        "\r\n           + '|' + COALESCE(CONVERT(nvarchar(5), t.pacsTimeStart, 8), '')  --скуд время входа " +
+                        "\r\n           + '|' + COALESCE(CONVERT(nvarchar(5), t.pacsTimeStop, 8), '')	--скуд время выхода " +
+                        "\r\n           + '|' pivotStr " +
+                        "\r\n       From " +
+                        "\r\n           (Select                                                         --получить данные сотрудников " +
+                        "\r\n               extId usId,													--внешний id сотрудника " +
+                        "\r\n               timeStart,													--график время входа " +
+                        "\r\n               timeStop													--график время выхода  " +
+                        "\r\n           From Users " +
+                        "\r\n           Where " +
+                        "\r\n               uses = 1) as u " +
+                        "\r\n       left join                                                           --дополнить их данными проходов " +
+                        "\r\n           (Select                                                         --получить данные проходов " +
+                        "\r\n               passDate pDate,												--дата прохода  " +
+                        "\r\n               passId usId,												--внешний id сотрудника " +
+                        "\r\n               passTimeStart,												--проход время входа " +
+                        "\r\n               passTimeStop												--проход время выхода " +
+                        "\r\n           From EventsPass " +
+                        "\r\n           Where " +
+                        "\r\n               passDate between @fromdate and @todate) as e " +
+                        "\r\n          on u.usId = e.usId " +
+                        "\r\n       left join                                                           --дополнить их данными скуд " +
+                        "\r\n           (Select															--получить данные скуд " +
+                        "\r\n               passId usId,												--внешний id сотрудника " +
+                        "\r\n               pacsTimeStart,											    --скуд время входа " +
+                        "\r\n               pacsTimeStop												--скуд время выхода " +
+                        "\r\n           From TimeProvider												--скуд время выхода " +
+                        "\r\n           Where passDate between @fromdate and @todate) as t " +
+                        "\r\n          on u.usId = t.usId " +
+                        "\r\n       ) as pass " +
+                        "\r\n   on pass.passDate=calendar.dt " +
+                        "\r\n   ) ";
+                    sqlCommand.ExecuteNonQuery();
+
                     //SP формирование итогового сводного отчета за период (вспомогательная процедура для тотального отчета)
-                    sqlCommand.CommandText = "Create PROCEDURE twt_TotalReport\r\n(\r\n@fromdate NVARCHAR(100), \r\n@todate NVARCHAR(100)\r\n)" +
+                    sqlCommand.CommandText = "Create PROCEDURE twt_TotalReport\r\n(\r\n@fromdate NVARCHAR(100), \r\n@todate NVARCHAR(100), \r\n@mode int = 0\r\n) " +
                         "\r\n/*" +
                         "\r\n создает таблицу календаря для динамического формирования столбцов временной таблицы отчета и pivot запроса" +
                         "\r\n загружает календарь событий (не более 500 дат)(id юзера для синхронизации + данные с разделителями)" +
@@ -710,7 +767,11 @@ namespace TimeWorkTracking
                         "\r\n           END " +
                         "\r\n   --Формируем строку с запросом PIVOT и вставкой в таблицу Report " +
                         "\r\n       DECLARE @TableSRC NVARCHAR(100)--Таблица источник(Представление) " +
-                        "\r\n       SET @TableSRC = '(select * from twt_uploadCalendar(''' + @fromdate + ''', ''' + @todate + ''')) pivotSrc'; " +
+                        "\r\n       if @mode = 0                                                --данные проходов Т13 " +
+                        "\r\n           SET @TableSRC = '(select * from twt_uploadCalendarPassData(''' + @fromdate + ''', ''' + @todate + ''')) pivotSrc'; " +
+                        "\r\n       else                                                        --данные проходов времена " +
+                        "\r\n           SET @TableSRC = '(select * from twt_uploadCalendarTimeData(''' + @fromdate + ''', ''' + @todate + ''')) pivotSrc';  " +
+                        "\r\n" +
                         "\r\n       SET @Query = N'SELECT userId, ' + @colNamesHeaderPivot + '  " +
                         "\r\n                       FROM(SELECT userId, daysCalendar, pivotStr'  " +
                         "\r\n                       + ' FROM ' + @TableSRC + ') AS SRC " +
@@ -786,7 +847,7 @@ namespace TimeWorkTracking
                 using (var sqlCommand = sqlConnection.CreateCommand())
                 {
                     sqlCommand.CommandText = "DELETE FROM " + tableName + ";\r\n" +
-                                             "DBCC CHECKIDENT('" + tableName + "', RESEED, 0)";
+                                             "DBCC CHECKIDENT('" + tableName + "', RESEED, 1)"; //сбрасываем именно на 1
                     sqlCommand.ExecuteScalar();
                 }
                 sqlConnection.Close();
@@ -935,7 +996,7 @@ namespace TimeWorkTracking
         /// <summary>
         /// создать БД по строке подключения
         /// </summary>
-        /// <param name="connectionString">строка соединения</param>
+        /// <param name="connectionstring">строка соединения</param>
         /// <param name="mode">режим инициализации</param>
         public static void CreateDataBase(string connectionstring, bool mode)
         {
