@@ -479,6 +479,13 @@ namespace TimeWorkTracking
                         }
                     }
                     break;
+                case "ReportTotal_Pass":    //ReportTotal":
+                    cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
+                    //Загрузить массив данных о проходах за период времени
+                    totalReportData = clMsSqlDatabase.TableRequest(cs, "Select * from twt_GetPassFormDate('" + mcReport.SelectionStart.ToString("yyyyMMdd") + "','" + mcReport.SelectionEnd.ToString("yyyyMMdd") + "', '')");
+
+                    break;
+
             }
             return usersData.Rows.Count;
         }
@@ -992,11 +999,13 @@ namespace TimeWorkTracking
             //Переименовать листы
             ((Excel.Worksheet)excelApp.Worksheets[1]).Name = "Report";
             ((Excel.Worksheet)excelApp.Worksheets[2]).Name = "Time";
-            ((Excel.Worksheet)excelApp.Worksheets[3]).Name = "Data";
+            ((Excel.Worksheet)excelApp.Worksheets[3]).Name = "Pass";
 
             #region //работаем с первым листом Данные 
+            
             int arrCount = uploadCaptionExcel(daysCount, this.AccessibleName + "_Report");    //ReportTotal_Data загрузить данные заголовка 
             uploadTableExcel(daysCount, this.AccessibleName + "_Report");                     //ReportTotal_Data загрузить данные проходов из БД
+
 
             workSheet = (Excel.Worksheet)excelApp.Worksheets[1];//.get_Item(1);   //Получаем первый лист документа (счет начинается с 1)
             workSheet.Activate();
@@ -1450,6 +1459,18 @@ namespace TimeWorkTracking
             workSheet.Application.ActiveWindow.SplitRow = fullTable.Row-1;
             workSheet.Application.ActiveWindow.SplitColumn = 4;
             workSheet.Application.ActiveWindow.FreezePanes = true;
+
+            #endregion
+
+            #region //работаем с третьим листом Проходы
+
+            uploadTableExcel(daysCount, this.AccessibleName + "_Pass");                 //ReportTotal_Time загрузить данные контроллеров времени из БД
+
+            workSheet = (Excel.Worksheet)excelApp.Worksheets[3];//.get_Item(2);   //Получаем первый лист документа (счет начинается с 1)
+            workSheet.Activate();
+            excelApp.ActiveWindow.Zoom = 80;                                        //Масштаб листа
+                                                                                    //           excelApp.ActiveWindow.View = Excel.XlWindowView.xlPageBreakPreview;
+            ((Excel.Range)workSheet.Cells).FormatConditions.Delete();               //удалить все форматы с листа
 
             #endregion
 
