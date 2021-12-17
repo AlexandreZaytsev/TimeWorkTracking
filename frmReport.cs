@@ -1283,7 +1283,7 @@ namespace TimeWorkTracking
             workSheet.Application.ActiveWindow.WindowState = Microsoft.Office.Interop.Excel.XlWindowState.xlMaximized;      //окно должно быть активно
             workSheet.Application.ActiveWindow.FreezePanes = false;
             workSheet.Application.ActiveWindow.SplitRow = tbSmartReport.HeaderRowRange.Row;
-            workSheet.Application.ActiveWindow.SplitColumn = 1;
+            workSheet.Application.ActiveWindow.SplitColumn = 3;
             workSheet.Application.ActiveWindow.FreezePanes = true;
 
             #endregion
@@ -1368,6 +1368,8 @@ namespace TimeWorkTracking
             ((Excel.Range)workRange.Columns[2]).ColumnWidth = 38.5;         //ширина колонки ФИО 
             ((Excel.Range)workRange.Columns[3]).ColumnWidth = 12.5;         //ширина колонки контроллер времени 
             ((Excel.Range)workRange.Rows[1]).RowHeight = 28.5;              //высота первой строки
+            ((Excel.Range)workRange.Rows[3]).RowHeight = 12.75;             //высота третьей строки
+
             colsChar =
                 NumberToLetters(((Excel.Range)workRange.Columns[4]).Column) + ":" +
                 NumberToLetters(((Excel.Range)workRange.Columns[4 + daysCount * 2 - 1]).Column);
@@ -1416,6 +1418,8 @@ namespace TimeWorkTracking
             {
                 workSheet.Range[workRange.Cells[1, i + j], workRange.Cells[1, i + j + 1]].Merge(mis);
                 workSheet.Range[workRange.Cells[2, i + j], workRange.Cells[2, i + j + 1]].Merge(mis);
+
+                workSheet.Range[workRange.Cells[3, i + j], workRange.Cells[6, i + j + 1]].Borders[Excel.XlBordersIndex.xlInsideVertical].Weight = Excel.XlBorderWeight.xlHairline;
                 j += 1;
             }
 
@@ -1439,6 +1443,13 @@ namespace TimeWorkTracking
 
             toolStripStatusLabelInfo.Text = "Дополнительное форматирование";
             fullTable.Rows.RowHeight = 15;// .75;// 20;  //восстановить высоту строк в диапазоне данных
+
+            //фиксация заголовка на странице
+            workSheet.Application.ActiveWindow.WindowState = Microsoft.Office.Interop.Excel.XlWindowState.xlMaximized;      //окно должно быть активно
+            workSheet.Application.ActiveWindow.FreezePanes = false;
+            workSheet.Application.ActiveWindow.SplitRow = fullTable.Row-1;
+            workSheet.Application.ActiveWindow.SplitColumn = 4;
+            workSheet.Application.ActiveWindow.FreezePanes = true;
 
             #endregion
 
