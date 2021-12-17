@@ -1377,16 +1377,9 @@ namespace TimeWorkTracking
             ((Excel.Range)workRange.Rows["2:4"]).Font.Size = 9;             //вторая и третья строка шапки и первая строка данных
             ((Excel.Range)workSheet.Range[workRange.Cells[2, 3], workRange.Cells[2, workRange.Columns.Count]]).VerticalAlignment = Excel.XlVAlign.xlVAlignTop;
 
-//            ((Excel.Range)workRange.Rows[5]).Font.Size = 11;                //пятая строка шапки (строка данных)
-//            ((Excel.Range)workRange.Range[workSheet.Cells[4, 1], workSheet.Cells[4, 2]]).Font.Bold = true;
             ((Excel.Range)workRange.Cells[4, 2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-            ((Excel.Range)workRange.Cells[4, 2]).Font.Size = 12;
-
-//            ((Excel.Range)workRange.Rows[5]).Font.Bold = true;
-            ((Excel.Range)workRange.Rows[5]).Font.Size = 12;
-
-            //            ((Excel.Range)workRange.Cells[5, 2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-            //            ((Excel.Range)workSheet.Range[workRange.Cells[5, 3], workRange.Cells[5, workRange.Columns.Count]]).Font.Size = 16;
+            ((Excel.Range)workRange.Cells[4, 2]).Font.Size = 12;            //ФИО
+            ((Excel.Range)workRange.Rows[5]).Font.Size = 12;                //строка регистратора
 
             //заливка цветом
             ((Excel.Range)workSheet.Range[workRange.Cells[1, 1], workRange.Cells[1, 3]]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);   //заливка первой строки цветом
@@ -1395,6 +1388,7 @@ namespace TimeWorkTracking
             ((Excel.Range)workRange.Rows[3]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);
             ((Excel.Range)workRange.Rows[5]).Interior.Color = ColorTranslator.ToOle(Color.LightGray);
             //           ((Excel.Range)workSheet.Range[workRange.Cells[5, 3], workRange.Cells[5, workRange.Columns.Count]]).Font.Color = ColorTranslator.ToOle(Color.Gainsboro);//.WhiteSmoke);//.LightGray);
+
             //строка данных значения по умолчанию
             ((Excel.Range)workRange.Rows["4:6"]).NumberFormat = "@";
 
@@ -1444,7 +1438,7 @@ namespace TimeWorkTracking
             fullTable.Value = tableData;
 
             toolStripStatusLabelInfo.Text = "Дополнительное форматирование";
-            fullTable.Rows.RowHeight = 15.75;// 20;  //восстановить высоту строк в диапазоне данных
+            fullTable.Rows.RowHeight = 15;// .75;// 20;  //восстановить высоту строк в диапазоне данных
 
             #endregion
 
