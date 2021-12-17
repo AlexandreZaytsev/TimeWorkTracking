@@ -66,18 +66,18 @@ namespace TimeWorkTracking.Properties {
         ///
         ///Минимальные системные требования
         /// Клиент: 
-        ///  - Windows 8
-        ///  - .NET Framework 3.5   	
+        ///  - Windows 8 и выше
+        ///  - .NET Framework 3.5 и выше   	
         ///  - MS Office 2010 (для импорта/бланков/отчетов)
         /// Сервер: 
-        ///  - наличие в сети MSSQLServer/Standard/Express/2000
+        ///  - наличие в сети MSSQLServer/Standard/Express/2005 и выше
         /// Сервис:
-        ///  - наличие (не обязательно) доствупа с сервису
+        ///  - наличие (не обязательно) доступа к сервису
         ///    СКУД Proxway (https://proxway-ble.ru/)
         ///
         ///Права доступа:
         /// для Пользователя
-        ///  - Регистрация времени вхо [остаток строки не уместился]&quot;;.
+        ///  - Рег [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string about {
             get {
