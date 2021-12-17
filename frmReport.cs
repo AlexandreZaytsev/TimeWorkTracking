@@ -483,9 +483,7 @@ namespace TimeWorkTracking
                     cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
                     //Загрузить массив данных о проходах за период времени
                     totalReportData = clMsSqlDatabase.TableRequest(cs, "Select * from twt_GetPassFormDate('" + mcReport.SelectionStart.ToString("yyyyMMdd") + "','" + mcReport.SelectionEnd.ToString("yyyyMMdd") + "', '')");
-
                     break;
-
             }
             return usersData.Rows.Count;
         }
@@ -1464,13 +1462,40 @@ namespace TimeWorkTracking
 
             #region //работаем с третьим листом Проходы
 
-            uploadTableExcel(daysCount, this.AccessibleName + "_Pass");                 //ReportTotal_Time загрузить данные контроллеров времени из БД
+            uploadTableExcel(daysCount, this.AccessibleName + "_Pass");             //ReportTotal_Time загрузить данные контроллеров времени из БД
 
-            workSheet = (Excel.Worksheet)excelApp.Worksheets[3];//.get_Item(2);   //Получаем первый лист документа (счет начинается с 1)
+            workSheet = (Excel.Worksheet)excelApp.Worksheets[3];//.get_Item(2);     //Получаем первый лист документа (счет начинается с 1)
             workSheet.Activate();
             excelApp.ActiveWindow.Zoom = 80;                                        //Масштаб листа
                                                                                     //           excelApp.ActiveWindow.View = Excel.XlWindowView.xlPageBreakPreview;
             ((Excel.Range)workSheet.Cells).FormatConditions.Delete();               //удалить все форматы с листа
+
+            int ColumnsCount;
+            //цикл по всем листам и заполнение их данными из таблиц (имя листа=имятаблицы)
+            if (totalReportData == null || (ColumnsCount = totalReportData.Columns.Count) == 0)
+                        throw new Exception("ExportToExcel: Null or empty input table!\n");
+
+                    object[] Header = new object[ColumnsCount];
+
+                    // column headings               
+                    for (int i = 0; i < ColumnsCount; i++)
+                        Header[i] = totalReportData.Columns[i].ColumnName;
+
+                    Excel.Range HeaderRange = workSheet.get_Range((Excel.Range)(workSheet.Cells[1, 1]), (Excel.Range)(workSheet.Cells[1, ColumnsCount]));
+                    HeaderRange.Value = Header;
+                    HeaderRange.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightGray);
+                    HeaderRange.Font.Bold = true;
+
+                    // DataCells
+                    int RowsCount = totalReportData.Rows.Count;
+                    object[,] Cells = new object[RowsCount, ColumnsCount];
+
+                    for (j = 0; j < RowsCount; j++)
+                    {
+                        for (int i = 0; i < ColumnsCount; i++)
+                            Cells[j, i] = totalReportData.Rows[j][i];
+                    }
+                    workSheet.get_Range((Excel.Range)(workSheet.Cells[2, 1]), (Excel.Range)(workSheet.Cells[RowsCount + 1, ColumnsCount])).Value = Cells;
 
             #endregion
 
