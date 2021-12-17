@@ -551,9 +551,9 @@ namespace TimeWorkTracking
                     sqlCommand.ExecuteNonQuery();
 
                     //UDF информация о проходах на дату (пользовательские функции для ускорения процесса выборки)
-                    sqlCommand.CommandText = "Create function twt_GetPassFormDate\r\n(\r\n@bDate datetime, \r\n@extUserID varchar(20) = ''\r\n)" +
+                    sqlCommand.CommandText = "Create function twt_GetPassFormDate\r\n(\r\n@fromdate datetime, \r\n@todate datetime, \r\n@extUserID varchar(20) = ''\r\n)" +
                         "\r\n/*" +
-                        "\r\n возвращает данные для формы регистрации по запрашиваемой дате и активным пользователям" +
+                        "\r\n возвращает данные для формы регистрации по запрашиваемому диапазону дат и активным пользователям по внешнему id" +
                         "\r\n   - если пользователь есть в истории проходов - время из истории (таблица EventsPass)" +
                         "\r\n   - если пользователя нет в истории проходов - время из рабочего графика (таблица Users)" +
                         "\r\n*/" +
@@ -590,12 +590,12 @@ namespace TimeWorkTracking
                         "\r\n  left join " +
                         "\r\n  (Select * " +
                         "\r\n     From EventsPass " +
-                        "\r\n    Where passDate = @bDate) as e --cast('2021/01/02' as date)) as e " +
+                        "\r\n    Where passDate between @fromdate and @todate) as e " +
                         "\r\n  on u.ExtId = e.passId " +
                         "\r\n  left join " +
                         "\r\n  (Select * " +
                         "\r\n     From TimeProvider " +
-                        "\r\n    Where passDate = @bDate) as p " +
+                        "\r\n    Where passDate between @fromdate and @todate) as p " +
                         "\r\n  on u.ExtId = p.passId";
                     sqlCommand.ExecuteNonQuery();
 
@@ -681,39 +681,40 @@ namespace TimeWorkTracking
                         "\r\n       (Select                                                             --получить сводные данные проходов " +
                         "\r\n           e.pDate passDate,                                               --дата прохода " +
                         "\r\n           u.usId userId,                                                  --внешний id сотрудника " +
-                        "\r\n           '|' + CONVERT(nvarchar(5), u.timeStart, 8)				        --график время входа " +
-                        "\r\n           + '|' + CONVERT(nvarchar(5), u.timeStop, 8)						--график время выхода " +
-                        "\r\n           + '|' + CONVERT(nvarchar(5), e.passTimeStart, 8)				--проход время входа " +
+                        "\r\n           '|' + CONVERT(nvarchar(5), u.timeStart, 8)                      --график время входа " +
+                        "\r\n           + '|' + CONVERT(nvarchar(5), u.timeStop, 8)                     --график время выхода " +
+                        "\r\n           + '|' + CONVERT(nvarchar(5), e.passTimeStart, 8)                --проход время входа " +
                         "\r\n           + '|' + CONVERT(nvarchar(5), e.passTimeStop, 8)                 --проход время выхода " +
                         "\r\n           + '|' + COALESCE(CONVERT(nvarchar(5), t.pacsTimeStart, 8), '')  --скуд время входа " +
-                        "\r\n           + '|' + COALESCE(CONVERT(nvarchar(5), t.pacsTimeStop, 8), '')	--скуд время выхода " +
+                        "\r\n           + '|' + COALESCE(CONVERT(nvarchar(5), t.pacsTimeStop, 8), '')   --скуд время выхода " +
                         "\r\n           + '|' pivotStr " +
                         "\r\n       From " +
                         "\r\n           (Select                                                         --получить данные сотрудников " +
-                        "\r\n               extId usId,													--внешний id сотрудника " +
-                        "\r\n               timeStart,													--график время входа " +
-                        "\r\n               timeStop													--график время выхода  " +
+                        "\r\n               extId usId,                                                 --внешний id сотрудника " +
+                        "\r\n               timeStart,                                                  --график время входа " +
+                        "\r\n               timeStop                                                    --график время выхода  " +
                         "\r\n           From Users " +
                         "\r\n           Where " +
                         "\r\n               uses = 1) as u " +
                         "\r\n       left join                                                           --дополнить их данными проходов " +
                         "\r\n           (Select                                                         --получить данные проходов " +
-                        "\r\n               passDate pDate,												--дата прохода  " +
-                        "\r\n               passId usId,												--внешний id сотрудника " +
-                        "\r\n               passTimeStart,												--проход время входа " +
-                        "\r\n               passTimeStop												--проход время выхода " +
+                        "\r\n               passDate pDate,                                             --дата прохода  " +
+                        "\r\n               passId usId,                                                --внешний id сотрудника " +
+                        "\r\n               passTimeStart,                                              --проход время входа " +
+                        "\r\n               passTimeStop                                                --проход время выхода " +
                         "\r\n           From EventsPass " +
                         "\r\n           Where " +
                         "\r\n               passDate between @fromdate and @todate) as e " +
                         "\r\n          on u.usId = e.usId " +
                         "\r\n       left join                                                           --дополнить их данными скуд " +
-                        "\r\n           (Select															--получить данные скуд " +
-                        "\r\n               passId usId,												--внешний id сотрудника " +
-                        "\r\n               pacsTimeStart,											    --скуд время входа " +
-                        "\r\n               pacsTimeStop												--скуд время выхода " +
-                        "\r\n           From TimeProvider												--скуд время выхода " +
+                        "\r\n           (Select                                                         --получить данные скуд " +
+                        "\r\n               passDate pDate,                                             --дата прохода  " +
+                        "\r\n               passId usId,                                                --внешний id сотрудника " +
+                        "\r\n               pacsTimeStart,                                              --скуд время входа " +
+                        "\r\n               pacsTimeStop                                                --скуд время выхода " +
+                        "\r\n           From TimeProvider                                               --скуд время выхода " +
                         "\r\n           Where passDate between @fromdate and @todate) as t " +
-                        "\r\n          on u.usId = t.usId " +
+                        "\r\n          on u.usId = t.usId and e.pDate = t.pDate " +
                         "\r\n       ) as pass " +
                         "\r\n   on pass.passDate=calendar.dt " +
                         "\r\n   ) ";
@@ -846,8 +847,16 @@ namespace TimeWorkTracking
                 sqlConnection.Open();
                 using (var sqlCommand = sqlConnection.CreateCommand())
                 {
-                    sqlCommand.CommandText = "DELETE FROM " + tableName + ";\r\n" +
-                                             "DBCC CHECKIDENT('" + tableName + "', RESEED, 1)"; //сбрасываем именно на 1
+                    //если таблицы изначально были пустые то сбрасывать на 1
+                    //если изначально таблицы были заполнены то сбрасывать на 0
+                    sqlCommand.CommandText = "SELECT * FROM " + tableName +
+                                             "\r\nIF @@ROWCOUNT = 0" +
+                                             "\r\n      DBCC CHECKIDENT('" + tableName + "', RESEED, 1)" +
+                                             "\r\n  ELSE" +
+                                             "\r\n  BEGIN" +
+                                             "\r\n      DELETE FROM " + tableName + ";" +
+                                             "\r\n      DBCC CHECKIDENT('" + tableName + "', RESEED, 0)" +
+                                             "\r\n  END"; 
                     sqlCommand.ExecuteScalar();
                 }
                 sqlConnection.Close();
