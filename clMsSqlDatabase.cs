@@ -570,6 +570,7 @@ namespace TimeWorkTracking
                         "\r\n  , e.passTimeStart passTimeIn " +
                         "\r\n  , e.passTimeStop passTimeOut " +
                         "\r\n  , e.specmarkId " +
+                        "\r\n  , s.specmarkLetter " +
                         "\r\n  , e.specmarkNote " +
                         "\r\n  , e.specmarkTimeStart markTimeIn " +
                         "\r\n  , e.specmarkTimeStop markTimeOut " +
@@ -592,6 +593,11 @@ namespace TimeWorkTracking
                         "\r\n     From EventsPass " +
                         "\r\n    Where passDate between @fromdate and @todate) as e " +
                         "\r\n  on u.ExtId = e.passId " +
+                        "\r\n  left join " +
+                        "\r\n  (Select id " +
+                        "\r\n  , letterCode specmarkLetter " +
+                        "\r\n     From SpecialMarks) as s " +
+                        "\r\n  on s.id = e.specmarkId " +
                         "\r\n  left join " +
                         "\r\n  (Select * " +
                         "\r\n     From TimeProvider " +
