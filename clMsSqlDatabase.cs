@@ -602,7 +602,7 @@ namespace TimeWorkTracking
                         "\r\n  (Select * " +
                         "\r\n     From TimeProvider " +
                         "\r\n    Where passDate between @fromdate and @todate) as p " +
-                        "\r\n  on u.ExtId = p.passId";
+                        "\r\n  on u.ExtId = p.passId and e.passDate = p.passDate";
                     sqlCommand.ExecuteNonQuery();
 
                     //UDF календарь дат (вспомогательная функция для тотального отчета)

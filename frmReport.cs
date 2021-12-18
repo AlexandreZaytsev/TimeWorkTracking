@@ -482,7 +482,22 @@ namespace TimeWorkTracking
                 case "ReportTotal_Pass":    //ReportTotal":
                     cs = Properties.Settings.Default.twtConnectionSrting;    //connection string
                     //Загрузить массив данных о проходах за период времени
-                    totalReportData = clMsSqlDatabase.TableRequest(cs, "Select * from twt_GetPassFormDate('" + mcReport.SelectionStart.ToString("yyyyMMdd") + "','" + mcReport.SelectionEnd.ToString("yyyyMMdd") + "', '')");
+                    totalReportData = clMsSqlDatabase.TableRequest(cs, 
+                        "Select " +
+                        "\r\n   passDate дата_прохода " +
+                        "\r\n , fio фио " +
+                        "\r\n , userTimeIn время_входа " +
+                        "\r\n , userTimeOut время_выхода " +
+                        "\r\n , noLunch без_обеда " +
+                        "\r\n , workSchemeId почасовой_поминутный " +
+                        "\r\n , specmarkLetter код_специальных_отметок " +
+                        "\r\n , timeScheduleFact минут_отработано_всего " +
+                        "\r\n , timeScheduleWithoutLunch минут_без_обеда_и_сокращений " +
+                        "\r\n , timeScheduleLess минут_недоработка " +
+                        "\r\n , timeScheduleOver минут_переработка " +
+                        "\r\n , totalHoursInWork минут_в_рабочее_время " +
+                        "\r\n , totalHoursOutsideWork минут_во_вне_рабочего_времени " +
+                        "from twt_GetPassFormDate('" + mcReport.SelectionStart.ToString("yyyyMMdd") + "','" + mcReport.SelectionEnd.ToString("yyyyMMdd") + "', '')");
                     break;
             }
             return usersData.Rows.Count;
