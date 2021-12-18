@@ -197,7 +197,7 @@ namespace TimeWorkTracking
         /// <param name="e"></param>
         private void tbName_TextChanged(object sender, EventArgs e)
         {
-            if (tbName.Text.Trim() == "-")
+            if (tbName.Text.Trim() == "Работа в дневное время")
             {
                 panel1.Enabled = false;                                         //значение не радактируется
                 btPanel.Enabled = false;
