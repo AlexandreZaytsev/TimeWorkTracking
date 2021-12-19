@@ -531,15 +531,16 @@ namespace TimeWorkTracking
                         vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //Время прихода
                         vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
                         WritePassInfo(
-                            vDate,
-                            vDateIn,
-                            vDateOut,
+                            vDate,                                                  //дата прохода
+                            vDateIn,                                                //время входа
+                            vDateOut,                                               //время выхода
                             (int)((DataRowView)cbSMarks.SelectedItem).Row["id"],
                             "-",
                             "-",
                             tbNote.Text.Trim(),
                             false,
-                            mcRegDate.SelectionStart);                              //добавить/обновить запись прохода
+                            mcRegDate.SelectionStart                                //текущая дата календаря регистрации
+                            );                                                      //добавить/обновить запись прохода
                         WritePacsInfo(vDate);                                       //добавить/обновить информацию провайдера СКУД
                         break;
 
