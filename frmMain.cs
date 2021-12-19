@@ -527,6 +527,7 @@ namespace TimeWorkTracking
                 switch ((int)cbSMarks.SelectedValue)
                 {
                     case 1:                                                         //спец отметка Явка
+                        //ИСПОЛЬЗУЕМ ВРЕМЯ ИЗ ФОРМЫ
                         vDate = mcRegDate.SelectionStart;                           //дата из формы + время их формы
                         vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //Время прихода
                         vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
@@ -551,6 +552,7 @@ namespace TimeWorkTracking
 
                         if (spCount == 0)                                           //спец отметки в пределах дня    
                         {
+                            //ИСПОЛЬЗУЕМ ВРЕМЯ ИЗ ФОРМЫ
                             vDate = DateTime.Parse(vSpDateIn);                      //дата из начала спец отметок + время их формы
                             vDateIn = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")); //Время прихода
                             vDateOut = DateTime.Parse(vDate.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"));  //Время ухода
@@ -584,10 +586,11 @@ namespace TimeWorkTracking
                                     tbNote.Text.Trim(),
                                     false,
                                     mcRegDate.SelectionStart);                      //добавить/обновить запись прохода
-                            WritePacsInfo(vDate);                               //добавить/обновить информацию провайдера СКУД
+                            WritePacsInfo(vDate);                                   //добавить/обновить информацию провайдера СКУД
                         }
                         else                                                        //спец отметки более одного дня
                         {
+                            //ИСПОЛЬЗУЕМ ВРЕМЯ ПО РАБОЧЕМУ ГРАФИКУ (НЕ ИЗ ФОРМЫ)
                             timeIn = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[3].Text;      //Время начала работы по графику
                             timeOut = lstwDataBaseMain.Items[lstwDataBaseMain.extSelectedIndex()].SubItems[4].Text;     //Время окончания работы по графику
 
