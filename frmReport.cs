@@ -490,7 +490,7 @@ namespace TimeWorkTracking
 //                        "\r\n , userTimeOut время_выхода " +
                         "\r\n , noLunch без_обеда " +
                         "\r\n , workSchemeId почасовой_поминутный " +
-                        "\r\n , specmarkLetter отметока " +
+                        "\r\n , specmarkLetter спец_отметка " +
                         "\r\n , timeScheduleFact минут_отработано_всего " +
                         "\r\n , timeScheduleWithoutLunch минут_без_обеда_и_сокращений " +
                         "\r\n , timeScheduleLess минут_недоработка " +
@@ -1000,7 +1000,7 @@ namespace TimeWorkTracking
             excelApp = new Excel.Application
             {
                 Visible = false,                                            //Отобразить Excel
-                SheetsInNewWorkbook = 3                                     //Количество листов в рабочей книге    
+                SheetsInNewWorkbook = 4                                     //Количество листов в рабочей книге    
             };
 
             toolStripStatusLabelInfo.Text = "Создание рабочей книги";
@@ -1013,9 +1013,10 @@ namespace TimeWorkTracking
             ((Excel.Worksheet)excelApp.Worksheets[1]).Name = "Report";
             ((Excel.Worksheet)excelApp.Worksheets[2]).Name = "Time";
             ((Excel.Worksheet)excelApp.Worksheets[3]).Name = "Pass";
+            ((Excel.Worksheet)excelApp.Worksheets[4]).Name = "PivotTable";
 
             #region //работаем с первым листом Данные 
-            
+
             int arrCount = uploadCaptionExcel(daysCount, this.AccessibleName + "_Report");    //ReportTotal_Data загрузить данные заголовка 
             uploadTableExcel(daysCount, this.AccessibleName + "_Report");                     //ReportTotal_Data загрузить данные проходов из БД
 
@@ -1511,6 +1512,32 @@ namespace TimeWorkTracking
                             Cells[j, i] = totalReportData.Rows[j][i];
                     }
                     workSheet.get_Range((Excel.Range)(workSheet.Cells[2, 1]), (Excel.Range)(workSheet.Cells[RowsCount + 1, ColumnsCount])).Value = Cells;
+            //присвоить диапазону данных с заголовком имя
+                workRange = workSheet.get_Range((Excel.Range)(workSheet.Cells[1, 1]), (Excel.Range)(workSheet.Cells[RowsCount + 1, ColumnsCount]));
+                workRange.Name = "PassData";
+
+            toolStripStatusLabelInfo.Text = "Настройка сводной таблицы и диаграммы";
+            workSheet.Visible = Excel.XlSheetVisibility.xlSheetHidden;              //скрыть лист
+            workSheet = (Excel.Worksheet)excelApp.Worksheets[4];//.get_Item(2);     //Получаем первый лист документа (счет начинается с 1)
+            workSheet.Activate();
+
+            // Create the Pivot Table
+            //https://www.add-in-express.com/creating-addins-blog/2011/10/17/excel-pivottables-slicers-programmatically/
+            Excel.PivotTable pivotTable = (Excel.PivotTable)workBook.PivotCaches().
+                    Create(Excel.XlPivotTableSourceType.xlDatabase, "PassData").//, Excel.XlPivotTableVersionList.xlPivotTableVersion12).
+                    CreatePivotTable("PivotTable!R1C1", "tablePassData");//, mis, Excel.XlPivotTableVersionList.xlPivotTableVersion12);
+                                                                     // Set the Pivot Fields
+            Excel.PivotFields pivotFields = (Excel.PivotFields)pivotTable.PivotFields();
+
+            Excel.PivotField pivotField = (Excel.PivotField)pivotFields.Item("фио");
+            pivotField.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
+            pivotField = (Excel.PivotField)pivotFields.Item("спец_отметка");
+            pivotField.Orientation = Excel.XlPivotFieldOrientation.xlColumnField;
+            pivotField = (Excel.PivotField)pivotFields.Item("дата_прохода");
+            pivotField.Orientation = Excel.XlPivotFieldOrientation.xlPageField;
+
+            pivotTable.AddDataField((Excel.PivotField)pivotFields.Item("минут_отработано_всего"),
+                        "Сумма по полю минут_отработано_всего", Excel.XlConsolidationFunction.xlSum);
 
             #endregion
 
