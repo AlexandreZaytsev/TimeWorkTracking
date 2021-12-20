@@ -28,8 +28,10 @@ namespace TimeWorkTracking
         private Excel.Style xlsStyle = null;                //Excel Style
         private Excel.FormatCondition xlsFormatCond = null; //Excel FormatCondition
         private Excel.ListObject xlsSmartTable = null;      //Excel SmartTable
-        private Excel.PivotTable xlsPivotTable = null;      //Excel PivotTable
         private Excel.Databar xlsDatabar;                   //Excel Databar итоговые формулы в умной таблице
+        private Excel.PivotTable xlsPivotTable = null;      //Excel PivotTable
+        private Excel.PivotFields xlsPivotFields = null;
+        private Excel.PivotField xlsPivotField = null;
         private Excel.ColorScale xlsColor = null;           //Excel ColorScale
 //        private Excel.XlBorderWeight brdWeight = null;      //Excel BorderWeight
 
@@ -1560,16 +1562,15 @@ namespace TimeWorkTracking
                         Create(Excel.XlPivotTableSourceType.xlDatabase, "PassData").//, Excel.XlPivotTableVersionList.xlPivotTableVersion12).
                         CreatePivotTable("PivotTable!R1C1", "tablePassData");//, mis, Excel.XlPivotTableVersionList.xlPivotTableVersion12);
                                                                              // Set the Pivot Fields
-                Excel.PivotFields pivotFields = (Excel.PivotFields)xlsPivotTable.PivotFields();
+                xlsPivotFields = (Excel.PivotFields)xlsPivotTable.PivotFields();
+                xlsPivotField = (Excel.PivotField)xlsPivotFields.Item("фио");
+                xlsPivotField.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
+                xlsPivotField = (Excel.PivotField)xlsPivotFields.Item("спец_отметка");
+                xlsPivotField.Orientation = Excel.XlPivotFieldOrientation.xlColumnField;
+                xlsPivotField = (Excel.PivotField)xlsPivotFields.Item("дата_прохода");
+                xlsPivotField.Orientation = Excel.XlPivotFieldOrientation.xlPageField;
 
-                Excel.PivotField pivotField = (Excel.PivotField)pivotFields.Item("фио");
-                pivotField.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
-                pivotField = (Excel.PivotField)pivotFields.Item("спец_отметка");
-                pivotField.Orientation = Excel.XlPivotFieldOrientation.xlColumnField;
-                pivotField = (Excel.PivotField)pivotFields.Item("дата_прохода");
-                pivotField.Orientation = Excel.XlPivotFieldOrientation.xlPageField;
-
-                xlsPivotTable.AddDataField((Excel.PivotField)pivotFields.Item("минут_отработано_всего"),
+                xlsPivotTable.AddDataField((Excel.PivotField)xlsPivotFields.Item("минут_отработано_всего"),
                             "Сумма по полю минут_отработано_всего", Excel.XlConsolidationFunction.xlSum);
 
                 // Create the Chart Diagram from Pivot Table
@@ -1592,6 +1593,10 @@ namespace TimeWorkTracking
             }
             finally
             {
+                if (xlsPivotField != null)
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(xlsPivotField);
+                if (xlsPivotFields != null)
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(xlsPivotFields);
                 if (xlsDatabar != null)
                     System.Runtime.InteropServices.Marshal.ReleaseComObject(xlsDatabar);
                 if (xlsColor != null)
