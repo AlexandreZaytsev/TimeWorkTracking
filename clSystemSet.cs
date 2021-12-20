@@ -159,9 +159,12 @@ namespace TimeWorkTracking
                     "В системе отсутствует провайдер\r\n" +
                     " - Microsoft.ACE.OLEDB.12.0\r\n\r\n" +
                     "функционал Экспорт/Импорт/Отчеты\r\n - недоступен\r\n" +
-                    "установите пожалуйста MS Excel2010 или выше",
-                    "Ошибка окружения", MessageBoxButtons.OK, MessageBoxIcon.Exclamation
+                    "установите пожалуйста MS Excel2010 или выше"
+                    , "Ошибка окружения"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Exclamation
                     );
+//                BringToFront();                                                     //вернуть форму на передний план
                 return false;
             }
             else

@@ -90,7 +90,14 @@ namespace TimeWorkTracking
             if (msg != "")
             {
                 msg += "\r\n\r\nперейдите в настройки программы\r\n(под аминистратором)\r\nи настройте соединение";
-                MessageBox.Show(this, msg, "Ошибка соединения", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(
+                    this
+                    , msg
+                    , "Ошибка соединения"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Exclamation
+                    );
+                BringToFront();                                                     //вернуть форму на передний план
             }
         }
 
@@ -516,11 +523,12 @@ namespace TimeWorkTracking
                     "Специальная отметка не указана" + "\r\n" +
                     "  возможно Вы пытаетесь перезаписать старые данные" + "\r\n" +
                     "  крайне не рекомендуем этим заниматься" + "\r\n\r\n" +
-                    "операция будет отменена" + "\r\n",
-                    "Попытка вмешательства в историю",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
+                    "операция будет отменена" + "\r\n"
+                    , "Попытка вмешательства в историю"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Warning
                     );
+                BringToFront();                                                     //вернуть форму на передний план
             }
             else
             {
@@ -567,13 +575,14 @@ namespace TimeWorkTracking
                                     "  " + DateTime.Parse(vSpDateIn).ToString("dd.MM.yyyy") + " - дата начала Специальных отметок" + "\r\n" +
                                     "не совпадают" + "\r\n" +
                                     " *данные будут записаны на Дату начала Специальных отметок" + "\r\n\r\n" +
-                                    "Продолжить?" + "\r\n",
-                                    "Изменение даты регистрации",
-                                    MessageBoxButtons.YesNo,
-                                    MessageBoxIcon.Information,
-                                    MessageBoxDefaultButton.Button2,
-                                    MessageBoxOptions.DefaultDesktopOnly
+                                    "Продолжить?" + "\r\n"
+                                    , "Изменение даты регистрации"
+                                    , MessageBoxButtons.YesNo
+                                    , MessageBoxIcon.Information
+                                    , MessageBoxDefaultButton.Button2
+//                                    ,MessageBoxOptions.ServiceNotification //.DefaultDesktopOnly
                                     );
+                                BringToFront();                                                 //вернуть форму на передний план
                             }
                             if (response == DialogResult.Yes)
                                 WritePassInfo(
@@ -610,14 +619,17 @@ namespace TimeWorkTracking
                                 " *данные будут записаны на данный период с использованием времени из графика сотрудника " +
                                 DateTime.Parse(timeIn).ToString("HH:mm") + "-" + DateTime.Parse(timeOut).ToString("HH:mm") + "\r\n\r\n" +
                                 "Продолжить?" + "\r\n";
+
                             response = MessageBox.Show(
-                                    msg,
-                                    "Изменение даты регистрации",
-                                    MessageBoxButtons.YesNo,
-                                    MessageBoxIcon.Information,
-                                    MessageBoxDefaultButton.Button2,
-                                    MessageBoxOptions.DefaultDesktopOnly
+                                    msg
+                                    ,"Изменение даты регистрации"
+                                    ,MessageBoxButtons.YesNo
+                                    ,MessageBoxIcon.Information
+                                    ,MessageBoxDefaultButton.Button2
+                                    //,MessageBoxOptions.ServiceNotification //.DefaultDesktopOnly
                                     );
+                            BringToFront();                                                 //вернуть форму на передний план
+
                             if (response == DialogResult.Yes)
                             {
                                 for (int i = 0; i <= spCount; i++)                          //цикл по всем датам диапазона спец отметок начиная со следующего дня 
@@ -1021,7 +1033,14 @@ namespace TimeWorkTracking
                 if (DateTime.Compare(DateTime.Parse(smDStart.Value.ToString("yyyy-MM-dd ") + smTStart.Value.ToString("HH:mm ")),
                                  DateTime.Parse(smDStop.Value.ToString("yyyy-MM-dd ") + smTStop.Value.ToString("HH:mm "))) > 0)
                 {
-                    MessageBox.Show("Дата/Время окончания периода должно быть больше Даты/Времени начала периода", "Ошибка установки диапазона дат", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show(
+                        "Дата/Время окончания периода должно быть больше Даты/Времени начала периода"
+                        , "Ошибка установки диапазона дат"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Exclamation
+                        );
+                    BringToFront();                                                     //вернуть форму на передний план
+
                     btPanel.Enabled = false;
                 }
                 else
@@ -1039,7 +1058,14 @@ namespace TimeWorkTracking
                 if (DateTime.Compare(DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyy-MM-dd") + " " + udBeforeH.Value.ToString("HH") + ":" + udBeforeM.Value.ToString("mm")),
                                      DateTime.Parse(mcRegDate.SelectionStart.ToString("yyyy-MM-dd") + " " + udAfterH.Value.ToString("HH") + ":" + udAfterM.Value.ToString("mm"))) > 0)
                 {
-                    MessageBox.Show("Время Входа должно быть меньше времени Выхода", "Ошибка установки времени", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show(
+                        "Время Входа должно быть меньше времени Выхода"
+                        , "Ошибка установки времени"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Exclamation
+                        );
+                    BringToFront();                                                     //вернуть форму на передний план
+
                     btPanel.Enabled = false;
                 }
                 else

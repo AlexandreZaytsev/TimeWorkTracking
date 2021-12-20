@@ -222,12 +222,13 @@ namespace TimeWorkTracking
             {
                 MessageBox.Show(
                     ex.Message,
-                    "Ошибка ответа сервера",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning,
-                    MessageBoxDefaultButton.Button1,
-                    MessageBoxOptions.ServiceNotification
+                    "Ошибка ответа сервера"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Warning
+                    , MessageBoxDefaultButton.Button1
+                    , MessageBoxOptions.ServiceNotification
                     );
+//                BringToFront();                                                     //вернуть форму на передний план
             }
             return ret;
         }
@@ -456,12 +457,13 @@ namespace TimeWorkTracking
                         "   ФИО сотрудника        : '" + pacsStruct.getUserName + "'" + "\r\n" +
                         "   id сотрудника из Лоции: '" + pacsStruct.getUserCrmId + "'" + "\r\n" +
                         "   id сотрудника из Excel: '" + pacsStruct.getUserExtId + "'" + "\r\n" +
-                        "\r\n" + msg, "Пользователи СКУД ProwWay",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning,
-                        MessageBoxDefaultButton.Button1,
-                        MessageBoxOptions.ServiceNotification
+                        "\r\n" + msg, "Пользователи СКУД ProwWay"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Warning
+                        , MessageBoxDefaultButton.Button1
+                        , MessageBoxOptions.ServiceNotification
                         );
+//                    BringToFront();                                                     //вернуть форму на передний план
                 }
 
                 //-------------выход

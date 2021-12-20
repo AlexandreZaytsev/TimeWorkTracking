@@ -42,11 +42,18 @@ namespace TimeWorkTracking
         private void btTestConnectionPacs_Click(object sender, EventArgs e)
         {
             UriBuilder uriPacs = GetFormConnectionString();
-            if (!clSystemSet.CheckPing(uriPacs.Host))
-                MessageBox.Show("Cетевое имя сервера PACS\r\n  " +
-                            tbHostNamePACS.Text +
-                            "- недоступно\r\n",
-                            "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            if (!clSystemSet.CheckPing(uriPacs.Host)) 
+            {
+                MessageBox.Show(
+                    "Cетевое имя сервера PACS\r\n  " +
+                    tbHostNamePACS.Text +
+                    "- недоступно\r\n"
+                    , "Проверка соединения"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Warning
+                    );
+                BringToFront();                                                     //вернуть форму на передний план
+            }
             else
                 TestFormConnectionPACS(uriPacs);        //проверить соединение по настройкам формы
         }
@@ -101,10 +108,13 @@ namespace TimeWorkTracking
                     ret = true;
                     break;
             }
-            MessageBox.Show(Messages.ToString(),
-                            "Подключение к Базе Данных",
-                             MessageBoxButtons.OK,
-                             MessageBoxIcon.Warning);
+            MessageBox.Show(
+                Messages.ToString()
+                , "Подключение к Базе Данных"
+                , MessageBoxButtons.OK
+                , MessageBoxIcon.Warning
+                );
+            BringToFront();                                                     //вернуть форму на передний план
 
             Properties.Settings.Default.pacsConnectionString = statusDB;
             //PACS DataBase

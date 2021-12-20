@@ -62,11 +62,18 @@ namespace TimeWorkTracking
         /// <param name="e"></param>
         private void btTestConnectionTwt_Click(object sender, EventArgs e)
         {
-            if (!clSystemSet.CheckPing(tbServerTWT.Text))
-                MessageBox.Show("Cетевое имя сервера SQL\r\n  " +
-                                tbServerTWT.Text +
-                                "- недоступно\r\n",
-                                "Проверка соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            if (!clSystemSet.CheckPing(tbServerTWT.Text)) 
+            {
+                MessageBox.Show(
+                    "Cетевое имя сервера SQL\r\n  " +
+                    tbServerTWT.Text +
+                    "- недоступно\r\n"
+                    , "Проверка соединения"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Warning
+                    );
+                BringToFront();                                                     //вернуть форму на передний план
+            }
             else
                 TestFormConnectionTwt();        //проверить соединение по настройкам формы
         }
@@ -134,10 +141,13 @@ namespace TimeWorkTracking
                     ret = true;
                     break;
             }
-            MessageBox.Show(Messages.ToString(),
-                            "Подключение к Базе Данных",
-                             MessageBoxButtons.OK,
-                             MessageBoxIcon.Warning);
+            MessageBox.Show(
+                Messages.ToString()
+                , "Подключение к Базе Данных"
+                , MessageBoxButtons.OK
+                , MessageBoxIcon.Warning
+                );
+            BringToFront();                                                     //вернуть форму на передний план
 
             Properties.Settings.Default.twtConnectionSrting = statusDB;
             //TimeWorkTracking DataBase
@@ -194,12 +204,14 @@ namespace TimeWorkTracking
             {
                 bool mode = false;
                 DialogResult result = MessageBox.Show(
-                    "Загрузить минимальные настройки данных?",
-                    "Создание структуры Базы Данных",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Information,
-                    MessageBoxDefaultButton.Button2,
-                    MessageBoxOptions.DefaultDesktopOnly);
+                    "Загрузить минимальные настройки данных?"
+                    , "Создание структуры Базы Данных"
+                    , MessageBoxButtons.YesNo
+                    , MessageBoxIcon.Information
+                    , MessageBoxDefaultButton.Button2
+                    , MessageBoxOptions.DefaultDesktopOnly
+                    );
+                BringToFront();                                                     //вернуть форму на передний план
 
                 if (result == DialogResult.Yes)
                     mode = true;

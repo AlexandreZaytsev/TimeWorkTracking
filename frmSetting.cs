@@ -439,13 +439,15 @@ namespace TimeWorkTracking
                 "таблицы будут очищены и перезаписаны!!!" + "\r\n\r\n" +
                 "*при активации флага - только очистка" + "\r\n" +
                 "таблицы будут просто очищены" + "\r\n\r\n" +
-                "Продолжить?" + "\r\n",
-                "Импорт данных из Excel",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Information,
-                MessageBoxDefaultButton.Button2,
-                MessageBoxOptions.DefaultDesktopOnly
+                "Продолжить?" + "\r\n"
+                , "Импорт данных из Excel"
+                , MessageBoxButtons.YesNo
+                , MessageBoxIcon.Information
+                , MessageBoxDefaultButton.Button2
+//                , MessageBoxOptions.DefaultDesktopOnly
                 );
+            BringToFront();                                                     //вернуть форму на передний план
+
             if (response == DialogResult.Yes)
             {
                 string cs = Properties.Settings.Default.twtConnectionSrting;
@@ -610,13 +612,15 @@ namespace TimeWorkTracking
             DialogResult response = MessageBox.Show(
                 "Все данные всех Таблиц БД\r\n" +
                 "будут экспортированы в файл Excel" + "\r\n\r\n" +
-                "Продолжить?" + "\r\n",
-                "Экспорт данных в Excel",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Information,
-                MessageBoxDefaultButton.Button2,
-                MessageBoxOptions.DefaultDesktopOnly
+                "Продолжить?" + "\r\n"
+                , "Экспорт данных в Excel"
+                , MessageBoxButtons.YesNo
+                , MessageBoxIcon.Information
+                , MessageBoxDefaultButton.Button2
+//                , MessageBoxOptions.DefaultDesktopOnly
                 );
+            BringToFront();                                                     //вернуть форму на передний план
+
             if (response == DialogResult.Yes)
             {
                 List<string> arguments = new List<string>
@@ -808,12 +812,14 @@ namespace TimeWorkTracking
                 "  Users      (Список сотрудников)\r\n" +
                 " будут перезаписаны!!!" + "\r\n\r\n" +
                 "Продолжить?" + "\r\n",
-                "Начальное заполнение данных",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Information,
-                MessageBoxDefaultButton.Button2,
-                MessageBoxOptions.DefaultDesktopOnly
+                "Начальное заполнение данных"
+                , MessageBoxButtons.YesNo
+                , MessageBoxIcon.Information
+                , MessageBoxDefaultButton.Button2
+//                , MessageBoxOptions.DefaultDesktopOnly
                 );
+            BringToFront();                                                     //вернуть форму на передний план
+
             if (response == DialogResult.Yes)
             {
                 List<string> arguments = new List<string>
@@ -953,12 +959,14 @@ namespace TimeWorkTracking
                 "  EventsPass (События проходов)\r\n" +
                 "  будет перезаписана!!!" + "\r\n\r\n" +
                 "Продолжить?" + "\r\n",
-                "Начальное заполнение данных",
-            MessageBoxButtons.YesNo,
-            MessageBoxIcon.Information,
-            MessageBoxDefaultButton.Button2,
-            MessageBoxOptions.DefaultDesktopOnly
+                "Начальное заполнение данных"
+                , MessageBoxButtons.YesNo
+                , MessageBoxIcon.Information
+                , MessageBoxDefaultButton.Button2
+//                , MessageBoxOptions.DefaultDesktopOnly
             );
+            BringToFront();                                                     //вернуть форму на передний план
+
             if (response == DialogResult.Yes)
             {
                 List<string> arguments = new List<string>

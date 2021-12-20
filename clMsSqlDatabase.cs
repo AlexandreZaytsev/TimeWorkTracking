@@ -46,11 +46,13 @@ namespace TimeWorkTracking
                             "Procedure: " + ex.Errors[i].Procedure + "\n");
                     }
                     MessageBox.Show(errorMessages.ToString(),
-                                   "Подключение к Базе Данных",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Exclamation,
-                                    MessageBoxDefaultButton.Button1,
-                                    MessageBoxOptions.ServiceNotification);
+                                   "Подключение к Базе Данных"
+                                   , MessageBoxButtons.OK
+                                   , MessageBoxIcon.Exclamation
+                                   , MessageBoxDefaultButton.Button1
+                                   , MessageBoxOptions.ServiceNotification
+                                   );
+//                    BringToFront();                                                     //вернуть форму на передний план
                 }
                 finally
                 {
