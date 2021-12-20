@@ -29,6 +29,9 @@ namespace TimeWorkTracking
         private Excel.FormatCondition xlsFormatCond = null; //Excel FormatCondition
         private Excel.ListObject xlsSmartTable = null;      //Excel SmartTable
         private Excel.PivotTable xlsPivotTable = null;      //Excel PivotTable
+        private Excel.Databar xlsDatabar;                   //Excel Databar итоговые формулы в умной таблице
+        private Excel.ColorScale xlsColor = null;           //Excel ColorScale
+//        private Excel.XlBorderWeight brdWeight = null;      //Excel BorderWeight
 
         readonly object mis = Type.Missing;
 
@@ -670,11 +673,8 @@ namespace TimeWorkTracking
 
                 toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
                 //условное форматирование диапазона 
-                xlsFormatCond = (Excel.FormatCondition)((Excel.Range)xlsRange.Rows[1]).EntireRow.FormatConditions.Add(
-                    Type: Excel.XlFormatConditionType.xlExpression,
-                    mis, //Excel.XlFormatConditionOperator.xlNotEqual,//.xlEqual,
-                    Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A9))",
-                    mis, mis, mis, mis, mis);
+                xlsFormatCond = (Excel.FormatCondition)((Excel.Range)xlsRange.Rows[1]).EntireRow.FormatConditions.
+                    Add(Type: Excel.XlFormatConditionType.xlExpression, mis, Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A9))", mis, mis, mis, mis, mis);
 
                 xlsFormatCond.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
                 xlsFormatCond.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
@@ -907,11 +907,8 @@ namespace TimeWorkTracking
 
                 toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
                 //условное форматирование диапазона 
-                xlsFormatCond = (Excel.FormatCondition)((Excel.Range)xlsRange.Rows[1]).EntireRow.FormatConditions.Add(
-                    Type: Excel.XlFormatConditionType.xlExpression,
-                    mis, //Excel.XlFormatConditionOperator.xlEqual,
-                    Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A9))",
-                    mis, mis, mis, mis, mis);
+                xlsFormatCond = (Excel.FormatCondition)((Excel.Range)xlsRange.Rows[1]).EntireRow.FormatConditions.
+                    Add(Type: Excel.XlFormatConditionType.xlExpression, mis, Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A9))", mis, mis, mis, mis, mis);
 
                 xlsFormatCond.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
                 xlsFormatCond.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
@@ -1190,62 +1187,59 @@ namespace TimeWorkTracking
                 // colsChar =
                 //     NumberToLetters(((Excel.Range)tbSmartReport.HeaderRowRange.Columns[3]).Column) + ":" +
                 //     NumberToLetters(((Excel.Range)tbSmartReport.HeaderRowRange.Columns[3 + daysCount - 1]).Column);
-                Excel.FormatConditions fcs = ((Excel.Range)xlsSmartTable.HeaderRowRange.Columns[colsChar]).EntireRow.FormatConditions;
                 //Excel.FormatConditions fcs = ((Excel.Range)tbSmartReport.HeaderRowRange[tbSmartReport.HeaderRowRange.Cells[0, 3], tbSmartReport.HeaderRowRange.Cells[0, 3 + daysCount - 1]]).FormatConditions;
-                Excel.FormatCondition fcHeader = (Excel.FormatCondition)fcs.Add(Type: Excel.XlFormatConditionType.xlExpression, mis, Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A8))", mis, mis, mis, mis, mis);
+                xlsFormatCond = (Excel.FormatCondition)((Excel.Range)xlsSmartTable.HeaderRowRange.Columns[colsChar]).EntireRow.FormatConditions.Add(Type: Excel.XlFormatConditionType.xlExpression, mis, Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A8))", mis, mis, mis, mis, mis);
                 //xlsRange.Cells[2, 3], xlsRange.Cells[2, xlsRange.Columns.Count]]
-                fcHeader.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
-                fcHeader.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
+                xlsFormatCond.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
+                xlsFormatCond.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
                 //fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
-                fcHeader.Interior.TintAndShade = 0.599963377788629;
-                fcHeader.StopIfTrue = false;
-
+                xlsFormatCond.Interior.TintAndShade = 0.599963377788629;
+                xlsFormatCond.StopIfTrue = false;
 
                 //условное форматирование колонок данных
-                Excel.ColorScale cfColorScale;
+                ;
                 //Явка формат цветом
-                cfColorScale = (Excel.ColorScale)xlsSmartTable.ListColumns[headerIndex["Я"] + 1].DataBodyRange.FormatConditions.AddColorScale(2);
-                cfColorScale.ColorScaleCriteria[1].Type = Excel.XlConditionValueTypes.xlConditionValueLowestValue;
-                cfColorScale.ColorScaleCriteria[1].FormatColor.Color = 10285055;// Color.FromArgb(min, 0, 0);
-                cfColorScale.ColorScaleCriteria[2].Type = Excel.XlConditionValueTypes.xlConditionValueHighestValue;
-                cfColorScale.ColorScaleCriteria[2].FormatColor.Color = 8109667;// Color.FromArgb(min, 0, 0);
+                xlsColor = (Excel.ColorScale)xlsSmartTable.ListColumns[headerIndex["Я"] + 1].DataBodyRange.FormatConditions.AddColorScale(2);
+                xlsColor.ColorScaleCriteria[1].Type = Excel.XlConditionValueTypes.xlConditionValueLowestValue;
+                xlsColor.ColorScaleCriteria[1].FormatColor.Color = 10285055;// Color.FromArgb(min, 0, 0);
+                xlsColor.ColorScaleCriteria[2].Type = Excel.XlConditionValueTypes.xlConditionValueHighestValue;
+                xlsColor.ColorScaleCriteria[2].FormatColor.Color = 8109667;// Color.FromArgb(min, 0, 0);
 
                 //Недоработка формат значением
-                Excel.Databar cfDatabar;
-                cfDatabar = (Excel.Databar)xlsSmartTable.ListColumns[headerIndex["less"] + 1].DataBodyRange.FormatConditions.AddDatabar();
-                cfDatabar.MinPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMin);
-                cfDatabar.MaxPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMax);
-                cfDatabar.BarFillType = Excel.XlDataBarFillType.xlDataBarFillGradient;
-                cfDatabar.Direction = (int)Excel.Constants.xlRTL;
-                cfDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderNone;//.xlDataBarBorderSolid;
-                ((Excel.FormatColor)cfDatabar.BarColor).Color = 5920255;
+                xlsDatabar = (Excel.Databar)xlsSmartTable.ListColumns[headerIndex["less"] + 1].DataBodyRange.FormatConditions.AddDatabar();
+                xlsDatabar.MinPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMin);
+                xlsDatabar.MaxPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMax);
+                xlsDatabar.BarFillType = Excel.XlDataBarFillType.xlDataBarFillGradient;
+                xlsDatabar.Direction = (int)Excel.Constants.xlRTL;
+                xlsDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderNone;//.xlDataBarBorderSolid;
+                ((Excel.FormatColor)xlsDatabar.BarColor).Color = 5920255;
 
                 //Переработка формат значением
-                cfDatabar = (Excel.Databar)xlsSmartTable.ListColumns[headerIndex["over"] + 1].DataBodyRange.FormatConditions.AddDatabar();
-                cfDatabar.MinPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMin);
-                cfDatabar.MaxPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMax);
-                cfDatabar.BarFillType = Excel.XlDataBarFillType.xlDataBarFillGradient;
-                cfDatabar.Direction = (int)Excel.Constants.xlContext;
-                cfDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderNone;//.xlDataBarBorderSolid;
-                ((Excel.FormatColor)cfDatabar.BarColor).Color = 15698432;
+                xlsDatabar = (Excel.Databar)xlsSmartTable.ListColumns[headerIndex["over"] + 1].DataBodyRange.FormatConditions.AddDatabar();
+                xlsDatabar.MinPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMin);
+                xlsDatabar.MaxPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMax);
+                xlsDatabar.BarFillType = Excel.XlDataBarFillType.xlDataBarFillGradient;
+                xlsDatabar.Direction = (int)Excel.Constants.xlContext;
+                xlsDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderNone;//.xlDataBarBorderSolid;
+                ((Excel.FormatColor)xlsDatabar.BarColor).Color = 15698432;
 
                 //Работа в рабочем графике формат значением
-                cfDatabar = (Excel.Databar)xlsSmartTable.ListColumns[headerIndex["sum"] + 1].DataBodyRange.FormatConditions.AddDatabar();
-                cfDatabar.MinPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMin);
-                cfDatabar.MaxPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMax);
-                cfDatabar.BarFillType = Excel.XlDataBarFillType.xlDataBarFillGradient;
-                cfDatabar.Direction = (int)Excel.Constants.xlContext;
-                cfDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderNone;//.xlDataBarBorderSolid;
-                ((Excel.FormatColor)cfDatabar.BarColor).Color = 8700771;
+                xlsDatabar = (Excel.Databar)xlsSmartTable.ListColumns[headerIndex["sum"] + 1].DataBodyRange.FormatConditions.AddDatabar();
+                xlsDatabar.MinPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMin);
+                xlsDatabar.MaxPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMax);
+                xlsDatabar.BarFillType = Excel.XlDataBarFillType.xlDataBarFillGradient;
+                xlsDatabar.Direction = (int)Excel.Constants.xlContext;
+                xlsDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderNone;//.xlDataBarBorderSolid;
+                ((Excel.FormatColor)xlsDatabar.BarColor).Color = 8700771;
 
                 //Работа вне рабочем графике формат значением
-                cfDatabar = (Excel.Databar)xlsSmartTable.ListColumns[headerIndex["ext"] + 1].DataBodyRange.FormatConditions.AddDatabar();
-                cfDatabar.MinPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMin);
-                cfDatabar.MaxPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMax);
-                cfDatabar.BarFillType = Excel.XlDataBarFillType.xlDataBarFillGradient;
-                cfDatabar.Direction = (int)Excel.Constants.xlContext;
-                cfDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderNone;//.xlDataBarBorderSolid;
-                ((Excel.FormatColor)cfDatabar.BarColor).Color = 2668287;
+                xlsDatabar = (Excel.Databar)xlsSmartTable.ListColumns[headerIndex["ext"] + 1].DataBodyRange.FormatConditions.AddDatabar();
+                xlsDatabar.MinPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMin);
+                xlsDatabar.MaxPoint.Modify(Excel.XlConditionValueTypes.xlConditionValueAutomaticMax);
+                xlsDatabar.BarFillType = Excel.XlDataBarFillType.xlDataBarFillGradient;
+                xlsDatabar.Direction = (int)Excel.Constants.xlContext;
+                xlsDatabar.BarBorder.Type = Excel.XlDataBarBorderType.xlDataBarBorderNone;//.xlDataBarBorderSolid;
+                ((Excel.FormatColor)xlsDatabar.BarColor).Color = 2668287;
 
                 /*
                     //попытка ускориться - вместо цикла передать диапазон строк
@@ -1458,13 +1452,13 @@ namespace TimeWorkTracking
 
                 toolStripStatusLabelInfo.Text = "Вставка условного форматирования шапки таблицы";
                 //условное форматирование диапазона 
-                Excel.FormatConditions fcs1 = ((Excel.Range)xlsSheet.Range[xlsRange.Cells[1, 4], xlsRange.Cells[1, 4 + daysCount * 2 - 1]]).EntireRow.FormatConditions;
-                Excel.FormatCondition fc = (Excel.FormatCondition)fcs1.Add(Type: Excel.XlFormatConditionType.xlExpression, mis, Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A9))", mis, mis, mis, mis, mis);
-                fc.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
-                fc.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
+                xlsFormatCond = (Excel.FormatCondition)((Excel.Range)xlsSheet.Range[xlsRange.Cells[1, 4], xlsRange.Cells[1, 4 + daysCount * 2 - 1]]).EntireRow.FormatConditions.
+                    Add(Type: Excel.XlFormatConditionType.xlExpression, mis, Formula1: "=ЕЧИСЛО(НАЙТИ(\"Рабочий\";A9))", mis, mis, mis, mis, mis);
+                xlsFormatCond.Interior.PatternColorIndex = Excel.Constants.xlAutomatic;
+                xlsFormatCond.Interior.ThemeColor = Excel.XlThemeColor.xlThemeColorAccent3;
                 //              fc.Interior.Color = ColorTranslator.ToWin32(Color.White);
-                fc.Interior.TintAndShade = 0.599963377788629;
-                fc.StopIfTrue = false;
+                xlsFormatCond.Interior.TintAndShade = 0.599963377788629;
+                xlsFormatCond.StopIfTrue = false;
 
                 toolStripStatusLabelInfo.Text = "Настройка объединения ячеек";
                 //настройка ширины колонок и объединение ячеек диапазона
@@ -1598,6 +1592,10 @@ namespace TimeWorkTracking
             }
             finally
             {
+                if (xlsDatabar != null)
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(xlsDatabar);
+                if (xlsColor != null)
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(xlsColor);
                 if (xlsSmartTable != null)
                     System.Runtime.InteropServices.Marshal.ReleaseComObject(xlsSmartTable);
                 if (xlsPivotTable != null)
