@@ -69,6 +69,6 @@ TimeWorkTracking простое клиент серверное приложен
 ![image](https://user-images.githubusercontent.com/16114000/145944184-9c648405-451f-4c5d-a4d9-cc8059a75f93.png)
 ![image](https://user-images.githubusercontent.com/16114000/145951718-5fdef3aa-9bb0-4d52-8fbb-18cd7c1800a7.png)
 ![image](https://user-images.githubusercontent.com/16114000/146530181-d29c9482-1be1-4ebf-9dd3-7b54bf362694.png)
-![image](https://user-images.githubusercontent.com/16114000/146750156-902b0bec-6739-42ec-af42-878e3cbfb2ae.png)
+
 
 
