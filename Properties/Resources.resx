@@ -199,79 +199,11 @@
   <data name="closed_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\closed_48.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="footer1" xml:space="preserve">
-    <value>  &lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="form" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\form.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="form_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\form.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="header" xml:space="preserve">
-    <value>&lt;html&gt;
- &lt;head&gt;
-  &lt;meta charset = 'utf-8'/&gt;
-  &lt;title&gt; Гороскоп Дни рождения&lt;/title&gt;
-  &lt;style type = 'text/css'&gt;
-   body {
-    font-family:'Times New Roman', 'Sans-Serif', 'Lucida Sans Unicode', 'Lucida Grande'; ;
-    font-weight: normal;
-    } 
-   .fix {
-    font-size: 14px;
-    width: 100 %;
-    background: white;
-    padding: 4px 20px;
-    -moz-box-sizing: border-box; /* Для Firefox */
-    -webkit-box-sizing: border-box; /* Для Safari и Chrome */
-    box-sizing: border-box; /* Для IE и Opera */
-    text-align: right;
-    top: 0;
-    left: 0;
-    position: fixed;
-    font-style: italic;
-    color: #039;
-    border-bottom: 1px solid #6678b1;
-    white-space: nowrap;
-    } 
-   table {
-    font-size: 14px;
-    background: white;
-    width: 100 %;
-    border-collapse: collapse;
-    text-align: left;
-    } 
-   ul {
-    font-size: 14px;
-    margin: 4px;
-    padding: 2px 2px 2px 20px;
-    } 
-   td {
-    padding: 2px 4px 2px 4px;
-    transition: .3s linear;
-    border-bottom: 1px solid #ccc;
-    } 
-   .td_err {
-    border-bottom: 0px; ;
-    } 
-   tr:hover td {
-    background: #e8edff;
-    } 
-   ul.dropdown li: hover {
-    background: #e8edff;
-    } 
-   td:first-child {
-    width: 45px;
-    } 
-   .colortext {
-    color: #006400;
-    font-weight: 500;
-    }
-  &lt;/style&gt;
- &lt;/head&gt;
- &lt;body&gt;</value>
   </data>
   <data name="heat" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\heat.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
