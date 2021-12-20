@@ -29,11 +29,12 @@ namespace TimeWorkTracking
         private Excel.FormatCondition xlsFormatCond = null; //Excel FormatCondition
         private Excel.ListObject xlsSmartTable = null;      //Excel SmartTable
         private Excel.Databar xlsDatabar;                   //Excel Databar итоговые формулы в умной таблице
-        private Excel.PivotTable xlsPivotTable = null;      //Excel PivotTable
+        private Excel.PivotTable xlsPivotTable = null;      //Excel PivotTable Сводная таблица
         private Excel.PivotFields xlsPivotFields = null;
         private Excel.PivotField xlsPivotField = null;
         private Excel.ColorScale xlsColor = null;           //Excel ColorScale
-//        private Excel.XlBorderWeight brdWeight = null;      //Excel BorderWeight
+                                                            //        private Excel.XlBorderWeight brdWeight = null;      //Excel BorderWeight
+        private Excel.Chart xlsChart = null;                //Excel Chart Диаграмма
 
         readonly object mis = Type.Missing;
 
@@ -183,7 +184,8 @@ namespace TimeWorkTracking
         /// <summary>
         /// Загрузить массив данных для заголовка Excel (с учетом объединенных ячеек - спользуем первое значение)
         /// </summary>
-        /// <param name="lengthDays"></param>
+        /// <param name="lengthDays">длина диапазона дат</param>
+        /// <param name="name">наименование области данных</param>
         /// <returns></returns>
         private int uploadCaptionExcel(int lengthDays, string name)
         {
@@ -285,6 +287,7 @@ namespace TimeWorkTracking
         /// Загрузить массив данных для таблицы Excel (с учетом объединенных ячеек - спользуем первое значение)
         /// </summary>
         /// <param name="lenDays"></param>
+        /// <param name="name">наименование области данных</param>
         /// <returns></returns>
         private int uploadTableExcel(int lenDays, string name)
         {
@@ -1575,8 +1578,10 @@ namespace TimeWorkTracking
 
                 // Create the Chart Diagram from Pivot Table
                 //https://www.add-in-express.com/creating-addins-blog/2013/10/22/change-excel-charts-programmatically/
-
-
+                xlsChart = xlsSheet.Shapes.AddChart(Excel.XlChartType.xlColumnStacked, 100, 5, 800, 700).Chart;
+                xlsChart.SetSourceData((Excel.Range)xlsPivotTable.TableRange1, Excel.XlRowCol.xlRows);
+                xlsChart.ApplyLayout(5);
+                xlsChart.ChartTitle.Text = "Специальные отметки (минуты)";
 
                 #endregion
 
@@ -1593,6 +1598,8 @@ namespace TimeWorkTracking
             }
             finally
             {
+                if (xlsChart != null)
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(xlsChart);
                 if (xlsPivotField != null)
                     System.Runtime.InteropServices.Marshal.ReleaseComObject(xlsPivotField);
                 if (xlsPivotFields != null)
