@@ -301,26 +301,27 @@ namespace TimeWorkTracking
         //---------------------------------------------------------------------------------------------------------------------
 
         /// <summary>
-        /// редактирование поля Исходная дата
+        /// редактирование поля Исходная (dtSource Календарная) дата праздника
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void dtSource_ValueChanged(object sender, EventArgs e)
         {
-            lbDirect.Text = dtWork.Value != dtSource.Value ? "ï" : "ó";
             bool selDate = false;
-            dtWork.Value = dtSource.Value;                              //установить реальную дату по исходной
-            string fd = ((DateTime)dtSource.Value).ToString("d MMMMM");
+            lbDirect.Text = dtWork.Value != dtSource.Value ? "ï" : "ó"; //обновить стрелку между Рабочей (dtWork) и Исходной (dtSource) датой праздника
 
+            dtWork.Value = dtSource.Value;                              //сбросить Рабочую (dtWork) дату праздника на Исходную (dtSource) дату праздника
+            string fd = ((DateTime)dtSource.Value).ToString("d MMMMM"); //отрежем от Исходной (dtSource) даты праздника - год (сравнение только по дню и месяцу)
+                                                                        //
+            int ind = lstwDataBaseDaysCalendar.extSelectedIndex();      //текущий индекс выделенной строки календаря дат
             if (!lstwDataBaseDaysCalendar.Focused)                      //если календарь дат не активен (не в фокусе)   
             {
                 for (int index = 0; index <= lstwDataBaseDaysCalendar.Items.Count - 1; index++)
                 {                                                       //цикл по календарю дат
                     if (lstwDataBaseDaysCalendar.Items[index].SubItems[1].Text == fd)
-                    {                                                   //если день найден
+                    {                                                   //если выбранный день не найден в календаре дат (по полю dtSource без года) на текущих год
                         selDate = true;
                         lstwDataBaseDaysCalendar.Items[index].Selected = true;
-                        lstwDataBaseDaysCalendar.EnsureVisible(index);  //показать в области видимости окна
+                        lstwDataBaseDaysCalendar.EnsureVisible(index);  //показать в области видимости окна (календаря дат)
+                        break;
                     }
                     else                                                //если день не найден и имеет дату
                     {
@@ -333,13 +334,12 @@ namespace TimeWorkTracking
         }
 
         /// <summary>
-        /// Редактирование ключевого поля (Реальная дата)
+        /// Редактирование ключевого Рабочая (Реальная) дата праздника
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void dtWork_ValueChanged(object sender, EventArgs e)
         {
-            lbDirect.Text = dtWork.Value != dtSource.Value ? "ï" : "ó";
+            lbDirect.Text = dtWork.Value != dtSource.Value ? "ï" : "ó"; //обновить стрелку между Рабочей (dtWork) и Исходной (dtSource) датой праздника
+
             if (lstwDataBaseCalendar.extFindListByColValue(1, dtWork.Value.ToString("yyyy-MM-dd")) >= 0)
             {
                 lbdtWork.Font = new System.Drawing.Font(lbdtSource.Font, System.Drawing.FontStyle.Bold);
@@ -359,8 +359,6 @@ namespace TimeWorkTracking
         /// <summary>
         /// запись доступна для использования (чекбокс)
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void chUse_CheckedChanged_1(object sender, EventArgs e)
         {
             chUse.ImageIndex = chUse.Checked ? 1 : 0;
@@ -403,8 +401,6 @@ namespace TimeWorkTracking
         /// <summary>
         /// кнопка Обновить запись в БД
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void btUpdate_Click(object sender, EventArgs e)
         {
             string key = dtWork.Value.ToString("yyyy-MM-dd");               //ключевое поле
@@ -429,8 +425,6 @@ namespace TimeWorkTracking
         /// <summary>
         /// кнопка Удалить запись в БД
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void btDelete_Click(object sender, EventArgs e)
         {
             //string key = dtWork.Value.ToString("yyyy-MM-dd");               //ключевое поле
