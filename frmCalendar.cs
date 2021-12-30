@@ -280,7 +280,7 @@ namespace TimeWorkTracking
                     }
                     else
                     {                                                           //установить текущую дату
-                        dtSource.Value = DateTime.Today;
+                   //     dtSource.Value = DateTime.Today;
                     }
                 }
             }
@@ -315,18 +315,18 @@ namespace TimeWorkTracking
             if (!lstwDataBaseDaysCalendar.Focused)                      //если календарь дат не активен (не в фокусе)   
             {
                 for (int index = 0; index <= lstwDataBaseDaysCalendar.Items.Count - 1; index++)
-                {                                                       //цикл по календарю дат
+                {                                                       //цикл по календарю дат (набором типовых дат праздников)
                     if (lstwDataBaseDaysCalendar.Items[index].SubItems[1].Text == fd)
-                    {                                                   //если выбранный день не найден в календаре дат (по полю dtSource без года) на текущих год
+                    {                                                   //если выбранный день найден в календаре дат (по полю dtSource без года)
                         selDate = true;
                         lstwDataBaseDaysCalendar.Items[index].Selected = true;
                         lstwDataBaseDaysCalendar.EnsureVisible(index);  //показать в области видимости окна (календаря дат)
                         break;
                     }
-                    else                                                //если день не найден и имеет дату
-                    {
-                        if (lstwDataBaseDaysCalendar.Items[index].SubItems[1].Text != "-")
-                            lstwDataBaseDaysCalendar.Items[index].Selected = false;
+                    else                                                
+                    {                                                   //если выбранный НЕ день найден в календаре дат (по полю dtSource без года) 
+//                        if (lstwDataBaseDaysCalendar.Items[index].SubItems[1].Text != "-")  //это день без определенной даты
+//                            lstwDataBaseDaysCalendar.Items[index].Selected = false;
                     }
                 }
                 lbdtSource.Font = selDate ? new System.Drawing.Font(lbdtSource.Font, System.Drawing.FontStyle.Bold) : new System.Drawing.Font(lbdtSource.Font, System.Drawing.FontStyle.Regular);
